@@ -19,11 +19,7 @@ Load the `secret-scanning` skill before proceeding. Its pattern tables define wh
 
 ### 1. Detect Convention
 
-If not already known from the calling workflow (e.g. `git-commit`), run the detection script:
-
-```bash
-~/.claude/skills/github-pr/scripts/detect-convention.sh
-```
+If not already known from the calling workflow (e.g. `git-commit`), use the `detect-convention` skill to determine the convention and default branch.
 
 If it outputs a convention name, load the corresponding `<convention>-conventions` skill.
 If it fails, proceed without convention-specific rules.
@@ -34,9 +30,7 @@ If it fails, proceed without convention-specific rules.
 git branch --show-current
 ```
 
-If on `main` or `master`, check the detected convention:
-- If convention is `shellicar-config` → allowed, continue
-- Otherwise → verify this is intentional before proceeding
+If a convention is loaded, follow its branch protection rules to determine whether direct pushes are allowed to this branch. Generally, branches like `main` or `epic/*` are protected and require PRs.
 
 ### 3. Identify Commits to Push
 

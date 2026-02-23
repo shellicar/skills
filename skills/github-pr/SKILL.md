@@ -18,10 +18,11 @@ This skill uses helper scripts in `~/.claude/skills/github-pr/scripts/`:
 
 | Script | Purpose | Fallback if Missing |
 |--------|---------|---------------------|
-| `detect-convention.sh` | Detects project convention from git remote | Ask user which convention to use |
-| `git-ancestor.sh` | Finds base branch via merge-base analysis | Use `git merge-base HEAD main` manually |
+| `git-ancestor.sh` | Finds base branch via merge-base analysis | Use `git merge-base HEAD <default-branch>` manually |
 | `git-summary.sh` | Generates change summary (staged, commits, diff) | Run git commands directly |
 | `git-context.sh` | Gets repository context | Use `git remote get-url origin` |
+
+Convention detection is handled by the `detect-convention` skill.
 
 If scripts are missing, fall back to manual git commands or ask the user for context.
 
@@ -33,7 +34,7 @@ If scripts are missing, fall back to manual git commands or ask the user for con
 git branch --show-current
 ```
 
-If on `main` or `master`, **STOP** — a PR cannot be created from the default branch. Ask the user to create a feature branch first.
+If on the default branch, **STOP** — a PR cannot be created from the default branch. Ask the user to create a feature branch first.
 
 Also check if the branch has already been merged (e.g. squash-merged via PR):
 
@@ -41,18 +42,13 @@ Also check if the branch has already been merged (e.g. squash-merged via PR):
 gh pr list --head <branch-name> --state merged --json number,title
 ```
 
-If a merged PR exists for this branch, **STOP** — inform the user this branch was already merged. They need to switch to main, pull, and create a new branch for further work.
+If a merged PR exists for this branch, **STOP** — inform the user this branch was already merged. They need to pull and create a new branch for further work.
 
 ### 2. Detect Convention
 
-Run the detection script to determine which convention applies:
+Use the `detect-convention` skill to determine which convention applies.
 
-```bash
-~/.claude/skills/github-pr/scripts/detect-convention.sh
-```
-
-This outputs the convention name (e.g., `shellicar`, `eagers`, `hopeventures`) or fails if no match.
-Load the corresponding `<convention>-conventions` skill based on the output.
+Load the corresponding `<convention>-conventions` skill based on the convention name.
 
 ### 3. Determine Ancestor Branch
 
@@ -202,10 +198,10 @@ This shows the failed step's logs, which usually reveals the root cause (e.g., a
 After diagnosis, report:
 - Which check(s) failed
 - The root cause from the logs
-- Whether the failure is **introduced by this PR** or **pre-existing on main**
+- Whether the failure is **introduced by this PR** or **pre-existing on the default branch**
 - Recommended action (fix in this PR, fix in a separate PR first, etc.)
 
-If the failure is pre-existing on main, recommend fixing it in a separate branch/PR so it unblocks all PRs, not just this one.
+If the failure is pre-existing on the default branch, recommend fixing it in a separate branch/PR so it unblocks all PRs, not just this one.
 
 ## Post-Merge Cleanup (GitHub)
 
@@ -213,18 +209,18 @@ After a PR is merged, clean up branches:
 
 ### 1. Verify Branch Content is Merged
 
-Check that the branch changes exist in main (handles squash merges):
+Check that the branch changes exist in the default branch (handles squash merges):
 
 ```bash
 # Fetch latest
 git fetch origin
 
 # Get branch diff content
-BASE=$(git merge-base HEAD origin/main)
+BASE=$(git merge-base HEAD origin/<default-branch>)
 BRANCH_DIFF=$(git diff $BASE HEAD | sed -n '/^---/!p' | sed -n '/^+++/!p' | sed -n '/^@@/!p' | sed -n '/^index /!p')
 
-# Check if main contains the same changes
-# (Compare against recent commits in main)
+# Check if the default branch contains the same changes
+# (Compare against recent commits in the default branch)
 ```
 
 Alternatively, use `~/dotfiles/git-check.sh <branch>` if available.
@@ -244,7 +240,7 @@ git fetch -p
 ### 4. Delete Local Branch
 
 ```bash
-git switch main
+git switch <default-branch>
 git branch -D <branch-name>
 ```
 
@@ -257,7 +253,7 @@ After merge is confirmed, use `AskUserQuestion` with **two questions**:
    - "Skip release" - No release now
 
 2. **Cleanup**: "Clean up branches?"
-   - "Clean up branches" - Delete remote and local branches, switch to main
+   - "Clean up branches" - Delete remote and local branches, switch to default branch
    - "Keep branches" - Leave branches for manual cleanup
 
 ## Convention Requirements

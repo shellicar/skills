@@ -19,11 +19,7 @@ Always `cd` to the project directory first, then use bare `git` commands (e.g., 
 
 1. **Detect convention**
 
-    Run the detection script:
-
-    ```bash
-    ~/.claude/skills/github-pr/scripts/detect-convention.sh
-    ```
+    Use the `detect-convention` skill to determine the convention and default branch.
 
     If it outputs a convention name, load the corresponding `<convention>-conventions` skill.
     If it fails, proceed without convention-specific rules.
@@ -34,7 +30,7 @@ Always `cd` to the project directory first, then use bare `git` commands (e.g., 
     git branch --show-current
     ```
 
-    If not on `main`/`master`, check if the branch has already been merged:
+    Check if the branch has already been merged:
 
     **GitHub:**
     ```bash
@@ -44,15 +40,15 @@ Always `cd` to the project directory first, then use bare `git` commands (e.g., 
     **Azure DevOps:**
     Use the `repo_list_pull_requests_by_repo_or_project` MCP tool (or `az repos pr list`) filtered by source branch and completed status.
 
-    If a merged PR exists for this branch, **STOP** — inform the Supreme Commander this branch was already merged. They need to switch to main, pull, and create a new branch for further work.
+    If a merged PR exists for this branch, **STOP** — inform the Supreme Commander this branch was already merged. They need to pull and create a new branch for further work.
 
 3. **Check branch protection**
 
-    If on `main` or `master`:
-    - If convention is `shellicar-config` → allowed, continue
-    - Otherwise → **STOP** and ask the Supreme Commander to create a new branch
+    If a convention is loaded, follow its branch protection rules to determine whether the current branch allows direct commits.
 
-    Do NOT commit directly to main/master (except for config repos). Offer to create a branch:
+    If no convention is loaded, generally branches like `main` or `epic/*` are protected. Check whether the branch is a default/protected branch and ask the Supreme Commander before committing directly.
+
+    If the branch is protected, offer to create a branch:
     ```bash
     git checkout -b <branch-name>
     ```

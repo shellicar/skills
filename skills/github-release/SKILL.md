@@ -53,11 +53,7 @@ Use `AskUserQuestion` to ask which repo to release, listing available repos.
 
 ### 2. Detect Convention
 
-```bash
-~/.claude/skills/github-pr/scripts/detect-convention.sh
-```
-
-Must be a GitHub repo (shellicar or shellicar-oss convention).
+Use the `detect-convention` skill. Must be a GitHub repo (shellicar or shellicar-oss convention).
 
 ### 3. Get Version from package.json
 

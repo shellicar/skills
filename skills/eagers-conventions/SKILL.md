@@ -57,6 +57,20 @@ main ← PR target for feature branches
 
 When the epic is complete, PR the epic branch into `main`.
 
+### Branch Protection Check
+
+Before committing directly to any branch, check if it has branch policies requiring PRs. Both `main` and `epic/*` branches typically have policies.
+
+To check, get the repository GUID and query policies for the current branch. See `azure-devops-repos` skill for details on `--repository-id` and `--branch` usage.
+
+```bash
+CURRENT_BRANCH=$(git branch --show-current)
+REPO_ID=$(az repos show --repository <repo-name> --project "<project>" --query id -o tsv)
+az repos policy list --branch "$CURRENT_BRANCH" --repository-id "$REPO_ID" --project "<project>" -o json
+```
+
+If the branch has **any enabled, blocking policies** (e.g. "Minimum number of reviewers", "Required reviewers"), do NOT commit directly. Instead, create a feature branch and PR into it.
+
 ### Branch Naming Rules
 - No work item IDs in branch names (IDs can change, work can be reassigned)
 - Work item linking belongs in PRs, not branch names

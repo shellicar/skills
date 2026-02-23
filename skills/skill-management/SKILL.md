@@ -116,12 +116,10 @@ When creating or updating skills:
 
 ## Convention Detection
 
-Convention skills use `user-invocable: false` because they're loaded by a detection mechanism, not directly invoked. The detection script determines which convention applies based on:
+Convention skills use `user-invocable: false` because they're loaded by the `detect-convention` skill, not directly invoked. The detection determines which convention applies based on:
 - Git remote URL
 - Repository structure
 - Other contextual signals
-
-Located at: `~/.claude/skills/github-pr/scripts/detect-convention.sh`
 
 ## Supporting Files
 

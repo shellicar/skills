@@ -10,7 +10,7 @@ Configure GitHub repo settings and branch rulesets. Convention skills define WHA
 
 ## Workflow
 
-1. Detect convention via `~/.claude/skills/github-pr/scripts/detect-convention.sh`
+1. Detect convention using the `detect-convention` skill
 2. Load the convention skill to get desired settings
 3. Fetch current settings and compare
 4. Apply changes and verify
