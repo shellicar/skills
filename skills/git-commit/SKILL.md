@@ -7,13 +7,28 @@ description: Create a git commit with a concise message. Use when committing cha
 
 Create a commit from staged changes with a concise, single-line message.
 
+## Why Steps Are Not Skippable
+
+The Supreme Commander works interactively — the working tree, staging area, and even the branch can change between any two steps. Time may pass between interactions; between asking about unstaged files and verifying staging, the Supreme Commander may have shipped an entire feature, switched branches, or edited files externally. Steps that appear redundant (e.g., re-checking staging) exist as verification gates to catch changes that happened in the meantime. Do not optimise them away.
+
 ## Working Directory
 
 Always `cd` to the project directory first, then use bare `git` commands (e.g., `git status`, not `git -C /path status`). This ensures commands match auto-approve patterns in the user's permission settings.
 
 ## Steps
 
-1. **Verify current branch**
+1. **Detect convention**
+
+    Run the detection script:
+
+    ```bash
+    ~/.claude/skills/github-pr/scripts/detect-convention.sh
+    ```
+
+    If it outputs a convention name, load the corresponding `<convention>-conventions` skill.
+    If it fails, proceed without convention-specific rules.
+
+2. **Verify current branch**
 
     ```bash
     git branch --show-current
@@ -21,28 +36,43 @@ Always `cd` to the project directory first, then use bare `git` commands (e.g., 
 
     If not on `main`/`master`, check if the branch has already been merged:
 
+    **GitHub:**
     ```bash
     gh pr list --head <branch-name> --state merged --json number,title
     ```
 
-    If a merged PR exists for this branch, **STOP** — inform the user this branch was already merged. They need to switch to main, pull, and create a new branch for further work.
+    **Azure DevOps:**
+    Use the `repo_list_pull_requests_by_repo_or_project` MCP tool (or `az repos pr list`) filtered by source branch and completed status.
 
-2. **Check for staged changes**
+    If a merged PR exists for this branch, **STOP** — inform the Supreme Commander this branch was already merged. They need to switch to main, pull, and create a new branch for further work.
+
+3. **Check branch protection**
+
+    If on `main` or `master`:
+    - If convention is `shellicar-config` → allowed, continue
+    - Otherwise → **STOP** and ask the Supreme Commander to create a new branch
+
+    Do NOT commit directly to main/master (except for config repos). Offer to create a branch:
+    ```bash
+    git checkout -b <branch-name>
+    ```
+
+4. **Check for staged changes**
 
     ```bash
     git diff --staged --stat
     ```
 
-    If nothing staged, inform the user.
+    If nothing staged, inform the Supreme Commander.
 
-3. **Check for unstaged, untracked, and gitignored changes**
+5. **Check for unstaged, untracked, and gitignored changes**
 
     ```bash
     git status
     ```
 
     If unstaged or untracked changes exist:
-    - Show the user WHAT the changes are (diff content for modified files, file list for untracked)
+    - Show the Supreme Commander WHAT the changes are (diff content for modified files, file list for untracked)
     - Use `AskUserQuestion` with options like "Stage them", "Leave unstaged"
     - Stage additional files if requested
 
@@ -52,9 +82,9 @@ Always `cd` to the project directory first, then use bare `git` commands (e.g., 
     git check-ignore <file-path>
     ```
 
-    If a file you edited is ignored, warn the user — they may need to `git add -f` it. This is especially important for files like `.claude/CLAUDE.md` or other config files that may be globally gitignored but intended for the repo.
+    If a file you edited is ignored, warn the Supreme Commander — they may need to `git add -f` it. This is especially important for files like `.claude/CLAUDE.md` or other config files that may be globally gitignored but intended for the repo.
 
-4. **Verify staging is correct**
+6. **Verify staging is correct**
 
     After staging, run:
     ```bash
@@ -67,55 +97,36 @@ Always `cd` to the project directory first, then use bare `git` commands (e.g., 
     - If a file you staged still shows unstaged changes, investigate — it may have been modified after staging
     - Use `AskUserQuestion` to confirm with the user before proceeding
 
-5. **Read the staged diff content**
+7. **Read the staged diff content**
 
     ```bash
     git diff --staged
     ```
 
-6. **Detect convention**
-    Run the detection script:
+8. **Secret and PII scanning**
 
-    ```bash
-    ~/.claude/skills/github-pr/scripts/detect-convention.sh
-    ```
+    Load the `secret-scanning` skill and apply its pattern tables and Finding Disposition Process to the staged diff from step 7.
 
-    If it outputs a convention name, load the corresponding `<convention>-conventions` skill.
-    If it fails, proceed without convention-specific rules.
+    If findings exist, present them and wait for confirmation before proceeding. Do not silently commit files containing matches.
 
-7. **Check branch protection**
-
-    ```bash
-    git branch --show-current
-    ```
-
-    If on `main` or `master`:
-    - If convention is `shellicar-config` → allowed, continue
-    - Otherwise → **STOP** and ask user to create a new branch
-
-    Do NOT commit directly to main/master (except for config repos). Offer to create a branch:
-    ```bash
-    git checkout -b <branch-name>
-    ```
-
-8. **Generate commit message**
+9. **Generate commit message**
     - Concise, single line
     - Imperative mood ("Add feature" not "Added feature")
     - No period at end
     - Keep under 50 characters (hard limit: 72)
     - Detail belongs in PRs, not commits
 
-9. **Show the user the proposed commit message and ask for confirmation**
+10. **Show the proposed commit message and ask for confirmation**
 
     Use `AskUserQuestion` with options like "Commit", "Edit message", "Cancel"
 
-10. **Commit**
+11. **Commit**
 
     ```bash
     git commit -m "message"
     ```
 
-11. **Verify commit**
+12. **Verify commit**
 
     ```bash
     git log -1 --format="%h %s"
@@ -123,44 +134,11 @@ Always `cd` to the project directory first, then use bare `git` commands (e.g., 
 
     Confirm the commit was created with the expected message.
 
-12. **Pre-push review**
+13. **Offer to push**
 
-    List commits that will be pushed:
+    Use `AskUserQuestion` with options like "Push" and "Don't push".
 
-    ```bash
-    git log @{u}..HEAD --oneline
-    ```
-
-    If no upstream exists (new branch), use `git log --oneline -10` and confirm scope with user.
-
-    Then review each commit's diff individually:
-
-    ```bash
-    git show <hash>
-    ```
-
-    Check **every** commit for:
-    - No sensitive content (secrets, credentials, API keys, tokens, `.env` files)
-    - No unintended files included
-    - All changes are accounted for
-
-    A secret added in one commit and removed in a later commit is still in the pushed history. Each commit must be clean.
-
-    Report findings to the user before pushing.
-
-13. **Check for divergence**
-
-    ```bash
-    git rev-list --left-right --count @{u}...HEAD
-    ```
-
-    Output is `<behind>\t<ahead>`. If the first number (behind) is `0`, a regular `git push` will work. If it is non-zero, the branch has diverged from the remote — **STOP** and inform the user, as this may require manual intervention.
-
-14. **Push**
-
-    ```bash
-    git push
-    ```
+    If push requested, invoke the `git-push` skill to handle pre-push scanning, divergence checks, and push execution.
 
 ## IDE Diagnostics
 
