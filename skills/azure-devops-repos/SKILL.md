@@ -79,6 +79,10 @@ az rest --method PATCH \
   }]'
 ```
 
+### MCP String Formatting
+
+**NEVER** use `\n` escape sequences in MCP tool string parameters (descriptions, comments, etc.). MCP tools accept actual newlines in the parameter value — use real line breaks. Using `\n` results in literal backslash-n appearing in the rendered output.
+
 ## Linking Work Items to PRs
 
 - **PBI**: Link in the PR description using `#1234` syntax (auto-linked by Azure DevOps)

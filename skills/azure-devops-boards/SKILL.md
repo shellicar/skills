@@ -86,6 +86,36 @@ do
 done
 ```
 
+### Work Item Descriptions
+
+All work items (any type) **MUST** have a description when created or updated. The description should contain enough information for someone reading it in the future to understand the purpose and scope without additional context. Do not create work items with empty descriptions.
+
+### Work Item State
+
+Do NOT change work item state (e.g. New → Active → Done) unless the Supreme Commander explicitly requests it.
+
+### Work Item Creation Checklist (MANDATORY)
+
+Before creating ANY work item, you **MUST** complete these steps in order:
+
+1. **Know the hierarchy**: Identify the parent work item (PBI for Tasks, Feature for PBIs, Epic for Features, Initiative for Epics). Query the parent with `expand: "relations"` to confirm it exists and get its area path and iteration.
+
+2. **Know the fields**: Get the parent's area path, iteration path, and project. The new work item MUST match (Tasks inherit from their PBI, PBIs from their Feature's area/iteration pattern).
+
+3. **Create with description**: Every work item MUST have a meaningful description at creation time. NEVER create a work item and add the description later — include it in the `wit_create_work_item` call.
+
+4. **Parent IMMEDIATELY**: After creation, the VERY NEXT action MUST be parenting the work item using `wit_work_items_link` with `type: "parent"`. Do NOT perform any other action (linking to PRs, updating fields, etc.) until the parent link is confirmed. An orphaned work item is a broken work item.
+
+**NEVER create orphaned work items**. If you cannot determine the parent, STOP and ask the Supreme Commander before creating anything.
+
+**The correct creation sequence is always:**
+```
+1. Query parent work item (get area, iteration, project)
+2. Create work item (with description, matching area/iteration)
+3. Parent it (wit_work_items_link, type: "parent")
+4. Only THEN proceed with other operations (PR links, etc.)
+```
+
 ## Work Item Hierarchy
 
 See `work-organisation` skill for hierarchy definitions (Initiative/Epic/Feature/PBI/Task), design principles, naming conventions, and the three independent dimensions (hierarchy, area path, iteration).
