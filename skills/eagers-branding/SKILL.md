@@ -24,11 +24,14 @@ When used in prose, aim to use **bold text** if the design/format allows.
 
 ## Font
 
-- **Primary font family**: Greycliff
+- **Primary font family**: Greycliff — chosen for legibility, openness, and clean lines
+- **Greycliff must not be distorted, squashed, or stretched in any way**
 - **Weights**: Extra Bold (headlines), Medium (reversed/legibility), Light (body text)
 - **Body text**: Greycliff Light, accented text in Greycliff Extra Bold
 - **Headlines**: Greycliff Extra Bold
+- **Reversed text**: Use Greycliff Medium when legibility is required on reversed (light-on-dark) text
 - **Leading**: 4pt (e.g. 10/14pt), spacing 'Optical', tracked to -20ems
+- **Paragraphs**: Keep short, preferably spaced by a line break. If space is limited, use a 3mm first-line indent instead. Do not mix these styles.
 - **Email font**: Arial (Bold and Regular)
 
 ## Colours
@@ -50,20 +53,36 @@ Secondary colours support the primary palette and should **never dominate or be 
 - ![Pink](swatches/pink.svg) **Pink** — `#E57AB1` · RGB 229, 122, 177 · CMYK 5, 65, 0, 0
 - ![Aqua](swatches/aqua.svg) **Aqua** — `#56C5D0` · RGB 86, 197, 208 · CMYK 60, 0, 20, 0
 
-## Logo Rules
+## Logo
 
-- Use the **landscape** version whenever possible (preferred)
-- **Portrait** version only when width restrictions compromise the landscape version
+### Variants
+
+**Landscape** (preferred — use whenever possible):
+
+![easyauto123 logo landscape](images/logo-landscape.svg)
+
+- `EA123-LOGO-NEW-Landscape-Master` (dark blue lozenge/keyline on white or light backgrounds)
+- `EA123-LOGO-NEW-Landscape-for yellow background` (white lozenge/keyline on yellow background)
+
+The lozenge and keyline should contrast with the background used.
+
+### Spacing
+
+The easyauto123 logo must command its own space. The clear space area around the logo is defined by the **height of the '123'** at the same scale as the logo. No other design elements should enter this space.
+
+### Dos & Don'ts
+
 - Logos must always be used **complete** — never compressed, distorted, recoloured, or tinted
-- **Clear space**: Defined by the height of the '123' at the same scale as the logo. No other design elements should enter this space.
+- Never stretch, squash, or alter the proportions
+- The brand name in text is always written as `easyauto123` — no capital letters or spaces
+- It is never `EasyAuto123`, `easyauto`, or `ea123`
+- Aim to use **bold text** and colour if the design allows
 
 ## Tone
 
+When writing customer-facing content (email templates, notifications, SMS, UI copy):
+
 - Friendly and professional
-- Succinct and to the point
-- Clear subject lines
-- Always re-read and spell-check
-
-## Contact
-
-For brand queries: marketing@easyauto123.com.au
+- Succinct, to the point, and relevant to the topic
+- Clear and professional subject lines for emails
+- Spell-check all content before use
