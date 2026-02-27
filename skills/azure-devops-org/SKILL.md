@@ -59,12 +59,7 @@ Delivery plans visualise work across teams on a timeline. Items appear based on 
 
 ### Backlog Visibility Rules
 
-Each team should only enable the backlog levels relevant to their role:
-
-- **Portfolio/Management team**: All levels enabled — Initiatives, Epics, Features, PBIs (for visibility across the whole project)
-- **Feature teams**: Features + PBIs only — Initiatives and Epics disabled (focused on delivery scope)
-
-This keeps backlogs focused and prevents feature teams from being overwhelmed by items they don't own. Management teams use the higher levels to track progress across feature teams.
+See `work-organisation` skill for the philosophy behind backlog visibility (portfolio vs feature teams) and the hierarchical team pattern.
 
 The `backlogVisibilities` field controls which backlog levels a team sees. Common categories:
 
@@ -101,26 +96,9 @@ az rest --method GET \
 
 ## Hierarchical Team Pattern
 
-**Portfolio/Management team**:
-- All backlog levels enabled (for visibility across the whole project)
-- All area paths with `includeChildren: true`
-- Sees everything, manages at Initiative/Epic level, uses lower levels for visibility
+See `work-organisation` skill for the full hierarchical team pattern (portfolio vs area-based vs iteration-based teams, "Future" iteration).
 
-**Feature teams (area-based)**:
-- Features + PBIs only (Initiative/Epic disabled)
-- Own area path only with `includeChildren: true`
-- Focused on their delivery scope
-
-**Feature teams (iteration-based)**:
-- All area paths shared (same as portfolio team)
-- Each team owns specific iterations (e.g., Project team owns FPR iterations, Support team owns Support iterations)
-- This keeps area paths independent (area = which app/component, iteration = when/type of work)
-- **Trade-off**: Backlogs work correctly, but delivery plans need tag-based workaround (see Delivery Plans above)
-
-**"Future" iteration** (optional):
-- Parking place for ideas not yet scheduled
-- Items sit at a `Future` iteration path until assigned to a specific sprint/cycle
-- Keeps items out of active team backlogs while remaining visible to the portfolio team
+**Trade-off for iteration-based teams**: Backlogs work correctly, but delivery plans need tag-based workaround (see Delivery Plans above).
 
 **Reference**: [Configure hierarchical teams](https://learn.microsoft.com/en-us/azure/devops/boards/plans/configure-hierarchical-teams?view=azure-devops) | [Portfolio management](https://learn.microsoft.com/en-us/azure/devops/boards/plans/portfolio-management?view=azure-devops) | [Visibility across teams](https://learn.microsoft.com/en-us/azure/devops/boards/plans/visibility-across-teams?view=azure-devops) | [Agile culture](https://learn.microsoft.com/en-us/azure/devops/boards/plans/agile-culture?view=azure-devops)
 

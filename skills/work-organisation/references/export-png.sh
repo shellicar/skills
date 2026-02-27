@@ -3,7 +3,7 @@
 set -e
 
 if ! command -v drawio >/dev/null 2>&1; then
-    echo "Error: drawio not found. See the azure-devops-boards skill for install instructions." >&2
+    echo "Error: drawio not found. See the work-organisation skill for install instructions." >&2
     exit 1
 fi
 

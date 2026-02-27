@@ -67,16 +67,11 @@ After the Supreme Commander approves each fix:
 
 ## Description Writing Conventions
 
-### PBIs and Bugs (stakeholder-friendly)
-- Describe the **what** and **why** — stakeholders may read these
-- Use plain language, avoid implementation jargon
-- Structure with `<br><br>` for paragraph breaks, `<ul><li>` for lists, `<b>` for emphasis
-- For Bugs, use `<h2>` sections: Problem, Root Cause, Fix
+See `work-organisation` skill for description conventions by audience (PBI/Bug = stakeholder-friendly, Task = implementation-oriented). See `writing-style` skill for tone and examples.
 
-### Tasks (implementation-oriented)
-- Describe the **how** — these are for developers
-- Can reference code, resolvers, handlers by name
-- Include technical context that helps future-you understand the work
+### Formatting
+- Structure HTML descriptions with `<br><br>` for paragraph breaks, `<ul><li>` for lists, `<b>` for emphasis
+- For Bugs, use `<h2>` sections: Problem, Root Cause, Fix
 
 ### Verification Tasks
 - Explain what is being verified and **why** it matters
