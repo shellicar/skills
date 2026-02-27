@@ -85,27 +85,11 @@ This outputs:
 
 #### PR Description Style Guide
 
-Keep descriptions **short and scannable**. The PR title already conveys the purpose — the body adds only what the title can't.
-
-**Format**:
-```markdown
-## Summary
-
-- Bullet point of key change 1
-- Bullet point of key change 2
-- Bullet point of key change 3
-```
-
-**Rules**:
-- Use `## Summary` heading with a bullet list
-- **3-5 bullets maximum** — one short phrase per bullet, not full sentences
-- Describe **what** was done, not **how** it was implemented (e.g., "Add env scrubbing for sandbox" not "Create ENV_PASSTHROUGH Set and buildSandboxEnv() function that filters process.env")
-- Each bullet should describe a meaningful change, not individual file edits
-- Group related changes into a single bullet (e.g., "Add X with Y and Z" not three separate bullets)
-- Do NOT list every file changed or every minor detail
-- Do NOT add lengthy explanations, rationale, or background context
-- Do NOT include test plans, implementation notes, or technical deep-dives
-- If a change is trivial enough that the title says it all, an empty body is fine
+See `writing-style` skill for the full style guide. Key points:
+- Describe **what** was done, not **how** it was implemented
+- `## Summary` heading with 3-5 bullet points maximum
+- Short phrases, not full sentences
+- If the title says it all, an empty body is fine
 
 ### 6. Create or Update PR
 

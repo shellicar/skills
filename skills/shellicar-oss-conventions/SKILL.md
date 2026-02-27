@@ -27,9 +27,9 @@ Match when:
 
 ## Commit Messages
 
-- Concise, single line
-- Imperative mood
+- Concise, single line, imperative mood
 - No prefix conventions required
+- See `writing-style` skill for tone and examples
 
 ## Assignee
 
@@ -96,6 +96,8 @@ Link related issues in the PR description using [GitHub closing keywords](https:
 Use `Refs #123` to reference an issue without closing it.
 
 ## PR Description Format
+
+Follow the `writing-style` skill for content. Use this template:
 
 ```markdown
 ## Summary

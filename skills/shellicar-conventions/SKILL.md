@@ -27,11 +27,13 @@ Match when:
 
 ## Commit Messages
 
-- Concise, single line
-- Imperative mood
+- Concise, single line, imperative mood
 - No prefix conventions required
+- See `writing-style` skill for tone and examples
 
 ## PR Description Format
+
+Follow the `writing-style` skill for content. Use this template:
 
 ```markdown
 ## Summary

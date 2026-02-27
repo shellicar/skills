@@ -78,11 +78,13 @@ If the branch has **any enabled, blocking policies** (e.g. "Minimum number of re
 
 ## Commit Messages
 
-- Concise, single line
-- Imperative mood
+- Concise, single line, imperative mood
 - Work item reference optional in commits (required in PR)
+- See `writing-style` skill for tone and examples
 
 ## PR Description Format
+
+Follow the `writing-style` skill for content. Use this template:
 
 ```markdown
 ## Summary

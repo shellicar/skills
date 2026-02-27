@@ -35,20 +35,18 @@ The following repos allow direct commits to main (no branch required):
 
 ## Commit Messages
 
-- Concise, single line
-- Stakeholder-friendly - focus on "what changed" not implementation details
-- Imperative mood
+- Concise, single line, imperative mood
 - Work item reference optional in commits (required in PR)
-
-**Good**: `Recalculate group status when facilitator licence changes`
-**Bad**: `Add handleFacilitator to ProgramGroupViewProcessor`
+- See `writing-style` skill for tone and examples
 
 ## PR Description Format
+
+Follow the `writing-style` skill for content. Use this template:
 
 ```markdown
 ## Summary
 
-Brief description of the changes - focus on "why" and "what", not implementation details.
+Brief description of the changes.
 
 ## Related Work Items
 
@@ -58,51 +56,18 @@ Brief description of the changes - focus on "why" and "what", not implementation
 
 ## Changes
 
-- Change 1 (describe the effect, not the code)
+- Change 1
 - Change 2
 ```
 
 **Notes**:
 - Work item links (`#1234`) must be on separate lines with blank lines between for proper rendering
-- Test Plan section is optional - omit unless explicitly needed
-- Changes should describe effects, not implementation (e.g., "Recalculate group status when facilitator profile updates" not "Wire up handler in ProcessViewHandler")
+- Test Plan section is optional — omit unless explicitly needed
 
 ## Work Item Linking
 
-Two types of linking serve different purposes:
+See `azure-devops-repos` skill for the full PR completion workflow and CLI commands.
 
-1. **PR description** → Reference **PBIs** (Product Backlog Items)
-   - Use `#1234` format in the description text
-   - PBIs represent the deliverable work visible to stakeholders
-   - Azure DevOps auto-links these references
-
-2. **CLI linking** → Link **Tasks**
-   - Use `az repos pr work-item add --id PR_ID --work-items TASK_ID`
-   - Tasks represent the implementation steps
-   - This tracks which tasks are completed by the PR
-
-**In commits**: Work item references are optional
-
-## CLI Commands
-
-```bash
-# Create PR
-az repos pr create --title "Title" --description "$(cat description.md)"
-
-# Link tasks to PR
-az repos pr work-item add --id PR_ID --work-items TASK_ID
-
-# Set auto-complete (use script, NOT az cli directly)
-~/.claude/skills/azure-devops-repos/scripts/pr-merge-message.sh --org hopeventures --id PR_ID --set-auto-complete
-
-# Update PR
-az repos pr update --id ID --title "Title" --description "$(cat description.md)"
-
-# List PRs
-az repos pr list --status active
-
-# View PR
-az repos pr show --id ID
-```
-
-**Auto-complete**: Use the `pr-merge-message.sh` script, NOT `az repos pr update --auto-complete`. The CLI clears the merge commit message. The script sets auto-complete with squash, transition-work-items, AND the merge commit message together.
+- **PR description** → Reference **PBIs** using `#1234` format
+- **CLI linking** → Link **Tasks** via `az repos pr work-item add`
+- **In commits**: Work item references are optional

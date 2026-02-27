@@ -552,31 +552,7 @@ This applies everywhere: descriptions, comments, and any HTML field. See also [W
 
 ### Writing Style
 
-Write descriptions like a professional speaking to a colleague, not notes or bullet points.
-
-**DO**:
-```
-Handle js-joda types from the create buy a car schema.
-Refactor to use record based mapping and fix the date formatting.
-```
-
-**DON'T**:
-```
-Schema now uses js-joda types.
-mapToJson must handle them.
-Refactored to give static errors when unmapped types are added.
-```
-
-The bad example reads like disconnected notes. The good example states what was done in clear sentences.
-
-Say what it is without saying how you did it. Don't abstract things, don't dumb it down, don't try to sound smart.
-
-### Task Titles
-
-Task titles should describe the **effect** or **goal**, not the implementation:
-
-**Good**: `Recalculate group status when facilitator licence changes`
-**Bad**: `Add handleFacilitator to ProgramGroupViewProcessor`
+See `writing-style` skill for titles, descriptions, and general tone.
 
 Stakeholders read these titles - focus on what changes from their perspective, not what code you're writing.
 
