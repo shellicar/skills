@@ -6,7 +6,9 @@ user-invocable: false
 
 # Work Organisation
 
-How work is structured, named, and organised in Azure DevOps. This skill defines the **philosophy** — the "why" and "what" of hierarchy design. For CLI commands and mechanics, see `azure-devops-boards`. For writing style, see `writing-style`.
+**Scope: How work is structured, named, and organised — the philosophy behind hierarchy design. No CLI commands.**
+
+For CLI commands and mechanics, see `azure-devops-boards`. For writing style, see `writing-style`.
 
 ## Work Item Hierarchy
 

@@ -6,7 +6,9 @@ user-invocable: false
 
 # Writing Style
 
-Universal writing style for all user-facing text. The core principle: **describe the effect, not the implementation**.
+**Scope: How to write user-facing text — tone and content guidance, not templates or formatting.**
+
+The core principle: **describe the effect, not the implementation**.
 
 ## The Rule
 

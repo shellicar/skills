@@ -5,7 +5,9 @@ description: Audit and improve Azure DevOps work item quality across iterations.
 
 # Work Item Hygiene
 
-Audit work items across active iterations for quality, completeness, and consistency. Present findings for review rather than auto-fixing — the Supreme Commander decides what to change.
+**Scope: Audit checks and quality standards for work item fields across iterations.**
+
+Audit work items for quality, completeness, and consistency. Present findings for review rather than auto-fixing — the Supreme Commander decides what to change.
 
 ## Audit Workflow
 
@@ -35,7 +37,13 @@ Then batch-fetch with `az boards work-item show --id <ID>` (or loop over IDs) in
 
 Check each item against these criteria:
 
-**Area path**: Must match parent PBI's area path. Root-level project paths are almost always wrong — items should be under a child area path (e.g. `Project\FeatureArea`).
+**Area path (leaf items)**: PBIs and Tasks should be under a specific child area path (e.g. `Project\FeatureArea`), not the root project path. Tasks should match their parent PBI's area path.
+
+**Area path (portfolio items)**: Initiatives, Epics, and Features on a non-root area path may be incorrect — these are cross-cutting and typically belong at the root. Not a hard rule, but worth flagging for review.
+
+**Iteration path (leaf items)**: PBIs and Tasks should be in a specific leaf iteration (e.g. `Project\Sprint 1`), not the root iteration. Root iteration means unscheduled — check if this is intentional.
+
+**Iteration path (portfolio items)**: Initiatives, Epics, and Features on a non-root iteration may be incorrect — these are cross-cutting and typically sit at the root iteration.
 
 **Title quality**: Should be specific and actionable. "Create templates" is vague; "Create attendance email templates and enum values" is clear.
 
