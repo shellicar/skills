@@ -1,11 +1,13 @@
 ---
-name: azure-devops-org
-description: Azure DevOps project organisation and team configuration. Use when discovering project structure (teams, area paths, iteration paths), configuring team settings (backlog visibility, area assignments), applying standard backlog column options, auditing for orphaned work items, or setting up hierarchical team patterns (portfolio teams vs feature teams).
+name: azure-devops-config
+description: Azure DevOps project structure and team configuration. Use when discovering teams, area paths, iteration paths, configuring team settings (backlog visibility, area assignments), applying standard backlog column options, setting up delivery plans, or configuring hierarchical team patterns (portfolio teams vs feature teams).
 ---
 
-# Azure DevOps Organisation
+# Azure DevOps Configuration
 
-Project structure, team configuration, and organisational health. For work item CRUD see `azure-devops-boards`, for PRs see `azure-devops-repos`.
+**Scope:** CLI commands and REST API calls for configuring Azure DevOps project structure — teams, area/iteration paths, backlog visibility, delivery plans, and column layouts. Work item audits live in `work-item-hygiene`. Organisational philosophy lives in `work-organisation`.
+
+Project structure and team configuration. For work item CRUD see `azure-devops-boards`, for PRs see `azure-devops-repos`.
 
 For org/project detection and the common resource ID, see `azure-devops`.
 
@@ -102,31 +104,9 @@ See `work-organisation` skill for the full hierarchical team pattern (portfolio 
 
 **Reference**: [Configure hierarchical teams](https://learn.microsoft.com/en-us/azure/devops/boards/plans/configure-hierarchical-teams?view=azure-devops) | [Portfolio management](https://learn.microsoft.com/en-us/azure/devops/boards/plans/portfolio-management?view=azure-devops) | [Visibility across teams](https://learn.microsoft.com/en-us/azure/devops/boards/plans/visibility-across-teams?view=azure-devops) | [Agile culture](https://learn.microsoft.com/en-us/azure/devops/boards/plans/agile-culture?view=azure-devops)
 
-## Audit / Health Checks
+## Uncovered Area Paths
 
-**Note**: Use `-o json` for audit queries. The `-o table` format drops fields from `az boards query` results.
-
-### Orphaned work items (no parent, excluding top-level)
-Top-level items (Initiatives) are expected to have no parent. Exclude them and Tasks:
-```bash
-az boards query --wiql "SELECT [System.Id], [System.Title], [System.WorkItemType], [System.AreaPath] \
-  FROM WorkItems WHERE [System.Parent] = '' AND [System.State] <> 'Removed' \
-  AND [System.State] <> 'Done' AND [System.WorkItemType] <> 'Task' \
-  AND [System.WorkItemType] <> 'Initiative' \
-  ORDER BY [System.WorkItemType]" --project {project} --org https://dev.azure.com/{org} -o json
-```
-
-### Items on root area path (not assigned to a sub-area)
-These items are likely from before a team hierarchy was set up and may not be visible on any feature team's backlog:
-```bash
-az boards query --wiql "SELECT [System.Id], [System.Title], [System.WorkItemType] \
-  FROM WorkItems WHERE [System.AreaPath] = '{project}' \
-  AND [System.State] <> 'Removed' AND [System.State] <> 'Done' \
-  ORDER BY [System.WorkItemType]" --project {project} --org https://dev.azure.com/{org} -o json
-```
-
-### Uncovered area paths
-Compare area path hierarchy against all teams' `teamfieldvalues` to find paths no team covers.
+Compare area path hierarchy against all teams' `teamfieldvalues` to find paths no team covers. For work item health checks (orphaned items, root area path items), see `work-item-hygiene`.
 
 ## Backlog Column Configuration
 

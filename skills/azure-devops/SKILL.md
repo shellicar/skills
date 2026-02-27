@@ -27,7 +27,7 @@ If no Azure DevOps remote found, use `AskUserQuestion` to ask for org and projec
 
 | Skill | Section | Use For |
 |-------|---------|---------|
-| `azure-devops-org` | Organisation | Teams, area paths, iterations, backlog visibility, column config, audits |
+| `azure-devops-config` | Configuration | Teams, area paths, iterations, backlog visibility, delivery plans, column config |
 | `azure-devops-boards` | Boards | Work items, hierarchy, migrations, descriptions |
 | `azure-devops-repos` | Repos | PRs, work item linking, merge workflows |
 | `azure-devops-pipelines` | Pipelines | Pipeline runs, configuration, triggers, policies |

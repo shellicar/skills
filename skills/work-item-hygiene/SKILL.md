@@ -41,6 +41,23 @@ Check each item against these criteria:
 
 **Area path (portfolio items)**: Initiatives, Epics, and Features on a non-root area path may be incorrect — these are cross-cutting and typically belong at the root. Not a hard rule, but worth flagging for review.
 
+**Items on root area path**: Items sitting on the root project area path (not assigned to a sub-area) are likely from before a team hierarchy was set up and may not be visible on any feature team's backlog:
+```bash
+az boards query --wiql "SELECT [System.Id], [System.Title], [System.WorkItemType] \
+  FROM WorkItems WHERE [System.AreaPath] = '{project}' \
+  AND [System.State] <> 'Removed' AND [System.State] <> 'Done' \
+  ORDER BY [System.WorkItemType]" --project {project} --org https://dev.azure.com/{org} -o json
+```
+
+**Orphaned work items**: Items with no parent link (excluding top-level Initiatives, which are expected to have none). Orphaned items may have lost their hierarchy context:
+```bash
+az boards query --wiql "SELECT [System.Id], [System.Title], [System.WorkItemType], [System.AreaPath] \
+  FROM WorkItems WHERE [System.Parent] = '' AND [System.State] <> 'Removed' \
+  AND [System.State] <> 'Done' AND [System.WorkItemType] <> 'Task' \
+  AND [System.WorkItemType] <> 'Initiative' \
+  ORDER BY [System.WorkItemType]" --project {project} --org https://dev.azure.com/{org} -o json
+```
+
 **Iteration path (leaf items)**: PBIs and Tasks should be in a specific leaf iteration (e.g. `Project\Sprint 1`), not the root iteration. Root iteration means unscheduled — check if this is intentional.
 
 **Iteration path (portfolio items)**: Initiatives, Epics, and Features on a non-root iteration may be incorrect — these are cross-cutting and typically sit at the root iteration.
@@ -60,8 +77,8 @@ Check each item against these criteria:
 ### 4. Present Findings
 
 Present findings to the Supreme Commander grouped by severity:
-- **Fix immediately**: Area path violations, wrong description field (Bug in System.Description)
-- **Review together**: Missing descriptions, inadequate descriptions, vague titles
+- **Fix immediately**: Area path violations, wrong description field (Bug in System.Description), orphaned items
+- **Review together**: Missing descriptions, inadequate descriptions, vague titles, items on root area path
 - **Discuss**: Removed items, scope questions, items that may need reclassification
 
 Go through items one-by-one rather than in tables — tables don't render well for review.
