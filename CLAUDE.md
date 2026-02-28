@@ -8,7 +8,7 @@ The commander-protocol skill defines the authority structure. Load it once at th
 
 ## Response Markers
 
-Start every response with `Brewing.` and end with `Served.`
+Start every response with `🫖 Brewing.` and end with `☕ Served.`
 
 These are scanning aids — they make it easy to spot where responses begin and end in long conversations.
 
