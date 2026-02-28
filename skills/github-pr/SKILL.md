@@ -18,70 +18,79 @@ Always `cd` to the project directory first, then use bare `git` and `gh` command
 
 This skill uses helper scripts in `~/.claude/skills/github-pr/scripts/`:
 
-| Script | Purpose | Fallback if Missing |
-|--------|---------|---------------------|
-| `git-ancestor.sh` | Finds base branch via merge-base analysis | Use `git merge-base HEAD <default-branch>` manually |
-| `git-summary.sh` | Generates change summary (staged, commits, diff) | Run git commands directly |
-| `git-context.sh` | Gets repository context | Use `git remote get-url origin` |
+| Script | Purpose |
+|--------|---------|
+| `github-pr-info.sh` | Gather all PR state: branch, merged PR, existing PR, ancestor, commits, diffstat |
+| `create-github-pr.sh` | Create PR with enforced required parameters (--title, --body, --milestone, --assignee) |
 
 Convention detection is handled by the `detect-convention` skill.
 
-If scripts are missing, fall back to manual git commands or ask the user for context.
-
 ## Usage
 
-### 1. Verify Current Branch
-
-```bash
-git branch --show-current
-```
-
-If on the default branch, **STOP** — a PR cannot be created from the default branch. Ask the user to create a feature branch first.
-
-Also check if the branch has already been merged (e.g. squash-merged via PR):
-
-```bash
-gh pr list --head <branch-name> --state merged --json number,title
-```
-
-If a merged PR exists for this branch, **STOP** — inform the user this branch was already merged. They need to pull and create a new branch for further work.
-
-### 2. Detect Convention
+### 1. Detect Convention
 
 Use the `detect-convention` skill to determine which convention applies.
 
 Load the corresponding `<convention>-conventions` skill based on the convention name.
 
-### 3. Determine Ancestor Branch
+### 2. Gather PR State
 
-Run the ancestor detection script:
-
-```bash
-~/.claude/skills/github-pr/scripts/git-ancestor.sh
-```
-
-This finds the correct base branch using merge-base analysis, detecting epic branches when present.
-
-### 4. Generate Change Summary
-
-Run the summary script:
+Run the gather script to collect all PR-related state in one call:
 
 ```bash
-~/.claude/skills/github-pr/scripts/git-summary.sh
+~/.claude/skills/github-pr/scripts/github-pr-info.sh
 ```
 
-This outputs:
-- Ancestor branch detected
-- Staged changes
-- Commits since ancestor
-- Diff stats from ancestor
+The script outputs structured sections: `BRANCH`, `DEFAULT_BRANCH`, `MERGED_PR`, `EXISTING_PR`, `ANCESTOR`, `COMMITS`, `DIFFSTAT`.
+
+### 3. Analyse the Gathered State
+
+From the script output, check the following — stop and inform the Supreme Commander if any fail:
+
+- **On default branch**: If `BRANCH` equals `DEFAULT_BRANCH`, STOP — a PR cannot be created from the default branch.
+- **Already merged**: If `MERGED_PR` is not empty, STOP — the branch was already merged. Inform the Supreme Commander.
+- **Existing PR**: If `EXISTING_PR` is not empty, this is an update — use `gh pr edit` instead of creating a new PR.
+- **No commits**: If `COMMITS` is empty, STOP — there is nothing to create a PR for.
 
 ### 5. Create PR Content
 
-**CVE/security branches** (`security/` prefix): Use the commit message as both the PR title and body.
+**Title**: Short summary (under 70 characters), imperative mood.
 
-**All other branches**: Based on loaded convention skill:
-- **Title**: Short summary of the branch purpose (under 70 characters)
+**Body**: Depends on the type of changes. See scenarios below.
+
+#### Scenario: Security / maintenance release
+
+Use when the branch contains audit fixes, dependency updates, or both (typically from the `maintenance-release` skill).
+
+```markdown
+## Summary
+
+- Fix N vulnerabilities (X high, Y moderate, Z low) via pnpm overrides
+- Update @shellicar/build-clean to 1.2.4, @shellicar/build-graphql to 1.4.3
+- Update all minor/patch dependencies
+
+## Security Advisories
+
+- [GHSA-xxxx-xxxx-xxxx](https://github.com/advisories/GHSA-xxxx-xxxx-xxxx) package-name vulnerability title
+- [GHSA-yyyy-yyyy-yyyy](https://github.com/advisories/GHSA-yyyy-yyyy-yyyy) package-name vulnerability title
+```
+
+**Key rules:**
+- Every unique GHSA MUST be listed individually with a link
+- Use the GHSA ID as the link text (not the CVE ID)
+- Include a short description: package name + vulnerability type
+- The Summary section describes what was done at a high level
+- Deduplicate: if the same GHSA appears for multiple version ranges, list it once
+
+#### Scenario: Version bump
+
+Use when the PR only bumps the version and updates CHANGELOG.
+
+The commit message is sufficient as both the title and body (e.g. "Bump version to 1.2.4").
+
+#### Scenario: Feature / fix / other
+
+Based on loaded convention skill:
 - **Description**: See style guide below
 - **Work Items**: Link format per convention (e.g., `#123`, `AB#1234`)
 
@@ -104,17 +113,20 @@ Follow the milestone skill's workflow:
 
 ### 7. Create or Update PR
 
-Pass the body directly via `--body` with a quoted string. Do NOT use temp files, `--body-file`, HEREDOCs, or `$(cat ...)` substitution.
+**GitHub** (create) — use the enforcement script:
 
-**GitHub** (create):
 ```bash
-gh pr create --title "Title" --body "Description" --assignee @me --milestone "1.3" --label dependencies
+~/.claude/skills/github-pr/scripts/create-github-pr.sh \
+  --title "Title" \
+  --body "Description" \
+  --milestone "1.3" \
+  --assignee "@me" \
+  --label "dependencies"
 ```
 
-Every `gh pr create` MUST include:
-- `--assignee @me`
-- `--milestone "<milestone>"` (resolved in step 6)
-- `--label <label>` (when applicable, e.g. `dependencies` for maintenance releases)
+The script requires `--title`, `--body`, `--milestone`, and `--assignee`. It will reject the call if any are missing. `--label` is optional and repeatable.
+
+Do NOT use `gh pr create` directly — the enforcement script exists to prevent skipping required parameters.
 
 **GitHub** (update):
 ```bash
