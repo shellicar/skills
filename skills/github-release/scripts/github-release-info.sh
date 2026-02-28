@@ -63,9 +63,9 @@ fi
 # CHANGELOG check
 section "CHANGELOG"
 if [ -f CHANGELOG.md ]; then
-  if grep -q "## $VERSION" CHANGELOG.md 2>/dev/null; then
+  if grep -q "## \[$VERSION\]" CHANGELOG.md 2>/dev/null; then
     echo "found"
-    grep "## $VERSION" CHANGELOG.md
+    grep "## \[$VERSION\]" CHANGELOG.md
   else
     echo "MISSING: no entry for $VERSION in CHANGELOG.md"
   fi
@@ -73,13 +73,9 @@ else
   echo "MISSING: no CHANGELOG.md file"
 fi
 
-# Milestone
+# Open milestones
 section "MILESTONE"
-if [ -n "$VERSION" ] && [ "$VERSION" != "null" ]; then
-  gh api "repos/$OWNER/$REPO/milestones" --jq ".[] | select(.title == \"$VERSION\")" 2>/dev/null || echo "not found"
-else
-  echo "SKIP: no version"
-fi
+gh api "repos/$OWNER/$REPO/milestones" --jq '.[] | {title: .title, number: .number, open_issues: .open_issues, closed_issues: .closed_issues}' 2>/dev/null || echo "none"
 
 # Existing release
 section "EXISTING"

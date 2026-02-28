@@ -53,11 +53,6 @@ else
   echo "SKIP: no package name found"
 fi
 
-# Milestone
+# Open milestones
 section "MILESTONE"
-MILESTONE_JSON=$(gh api "repos/$OWNER/$REPO/milestones" --jq ".[] | select(.title == \"$VERSION\")" 2>/dev/null || echo "")
-if [ -n "$MILESTONE_JSON" ]; then
-  echo "$MILESTONE_JSON" | jq '{number: .number, title: .title, state: .state, open_issues: .open_issues, closed_issues: .closed_issues}'
-else
-  echo "not found"
-fi
+gh api "repos/$OWNER/$REPO/milestones" --jq '.[] | {title: .title, number: .number, state: .state, open_issues: .open_issues, closed_issues: .closed_issues}' 2>/dev/null || echo "none"

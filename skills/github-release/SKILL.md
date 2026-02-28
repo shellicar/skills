@@ -35,14 +35,13 @@ This skill can be invoked:
 
 ## Progress Tracking
 
-Create TODOs at the start of this workflow. The post-release steps (monitor workflow, verify npm, close milestone) are easy to lose track of if the conversation goes on a tangent — TODOs persist and serve as reminders.
+Create TODOs at the start of this workflow. The post-release steps (monitor workflow, verify npm) are easy to lose track of if the conversation goes on a tangent — TODOs persist and serve as reminders.
 
 ```
 - Gather pre-release state and verify preconditions
 - Create release
 - Review release notes
 - Verify npm publish succeeded
-- Close milestone
 ```
 
 ## Steps
@@ -120,17 +119,7 @@ From the output:
 
 - **Workflow**: If in progress, wait and re-run the script. If failed, report to user — they may need to fix and re-run (`gh run rerun <run-id>`).
 - **NPM**: Confirm the version is live. If pending, wait and re-run.
-- **Milestone**: Note the milestone number for closing.
-
-### 8. Close milestone
-
-Once npm publish is confirmed:
-
-```bash
-gh api repos/{owner}/{repo}/milestones/{number} -X PATCH -f state=closed
-```
-
-Report milestone closed to user.
+- **Milestone**: See `github-milestone` skill. Do **not** auto-close for patch releases — milestones use `x.y` format and stay open across the minor series.
 
 ## Integration with Other Skills
 
