@@ -9,136 +9,82 @@ description: Create a git commit with a concise message. Use when committing cha
 
 Create a commit from staged changes with a concise, single-line message.
 
-## Why Steps Are Not Skippable
-
-The Supreme Commander works interactively — the working tree, staging area, and even the branch can change between any two steps. Time may pass between interactions; between asking about unstaged files and verifying staging, the Supreme Commander may have shipped an entire feature, switched branches, or edited files externally. Steps that appear redundant (e.g., re-checking staging) exist as verification gates to catch changes that happened in the meantime. Do not optimise them away.
-
 ## Working Directory
 
 Always `cd` to the project directory first, then use bare `git` commands (e.g., `git status`, not `git -C /path status`). This ensures commands match auto-approve patterns in the user's permission settings.
 
 ## Steps
 
-1. **Detect convention**
+### 1. Detect convention
 
-    Use the `detect-convention` skill to determine the convention and default branch.
+Use the `detect-convention` skill to determine the convention and default branch.
 
-    If it outputs a convention name, load the corresponding `<convention>-conventions` skill.
-    If it fails, proceed without convention-specific rules.
+If it outputs a convention name, load the corresponding `<convention>-conventions` skill.
+If it fails, proceed without convention-specific rules.
 
-2. **Verify current branch**
+### 2. Gather git state
 
-    ```bash
-    git branch --show-current
-    ```
+Run the gather script to collect all git state in one call:
 
-    Check if the branch has already been merged:
+**GitHub:**
+```bash
+~/.claude/skills/git-commit/scripts/git-commit-info.sh --github
+```
 
-    **GitHub:**
-    ```bash
-    gh pr list --head <branch-name> --state merged --json number,title
-    ```
+**Azure DevOps:**
+```bash
+~/.claude/skills/git-commit/scripts/git-commit-info.sh --azure-devops --project <Project>
+```
 
-    **Azure DevOps:**
-    ```bash
-    az repos pr list --source-branch <branch-name> --status completed --project <Project> -o json
-    ```
+**Unknown/no convention:**
+```bash
+~/.claude/skills/git-commit/scripts/git-commit-info.sh
+```
 
-    If a merged PR exists for this branch, **STOP** — inform the Supreme Commander this branch was already merged. They need to pull and create a new branch for further work.
+The script outputs structured sections: `BRANCH`, `MERGED_PR`, `STAGED_STAT`, `STATUS`, `STAGED_DIFF`, `RECENT_LOG`.
 
-3. **Check branch protection**
+### 3. Analyse the gathered state
 
-    If a convention is loaded, follow its branch protection rules to determine whether the current branch allows direct commits.
+From the script output, check the following — stop and inform the Supreme Commander if any fail:
 
-    If no convention is loaded, generally branches like `main` or `epic/*` are protected. Check whether the branch is a default/protected branch and ask the Supreme Commander before committing directly.
+- **Merged PR**: If `MERGED_PR` shows a completed PR for this branch, STOP — the branch was already merged.
+- **Branch protection**: If the convention has branch protection rules, check whether the current branch allows direct commits. If protected, offer to create a branch.
+- **No staged changes**: If `STAGED_STAT` is empty, inform the Supreme Commander.
+- **Unstaged/untracked changes**: If `STATUS` shows unstaged or untracked files, show the Supreme Commander and use `AskUserQuestion` with options like "Stage them", "Leave unstaged". If files are staged, re-run the gather script after staging to get the updated diff.
 
-    If the branch is protected, offer to create a branch:
-    ```bash
-    git checkout -b <branch-name>
-    ```
+**Gitignored file check**: If you edited any files during this conversation, verify they are visible to git. Run `git check-ignore <file-path>` for any files you changed that don't appear in the status. If ignored, warn the Supreme Commander.
 
-4. **Check for staged changes**
+### 4. Secret and PII scanning
 
-    ```bash
-    git diff --staged --stat
-    ```
+Load the `secret-scanning` skill and apply its pattern tables and Finding Disposition Process to the `STAGED_DIFF` from the gather output.
 
-    If nothing staged, inform the Supreme Commander.
+If findings exist, present them and wait for confirmation before proceeding. Do not silently commit files containing matches.
 
-5. **Check for unstaged, untracked, and gitignored changes**
+### 5. Generate commit message
 
-    ```bash
-    git status
-    ```
+- Concise, single line
+- Imperative mood ("Add feature" not "Added feature")
+- No period at end
+- Keep under 50 characters (hard limit: 72)
+- Detail belongs in PRs, not commits
 
-    If unstaged or untracked changes exist:
-    - Show the Supreme Commander WHAT the changes are (diff content for modified files, file list for untracked)
-    - Use `AskUserQuestion` with options like "Stage them", "Leave unstaged"
-    - Stage additional files if requested
+### 6. Confirm and commit
 
-    **Gitignored file check**: If you edited any files during this conversation, verify they are visible to git. A file may be gitignored (by `.gitignore` or global gitignore) and silently excluded from `git status`. To check, run:
+Use `AskUserQuestion` with the proposed commit message and options like "Commit", "Edit message", "Cancel".
 
-    ```bash
-    git check-ignore <file-path>
-    ```
+```bash
+git commit -m "message"
+```
 
-    If a file you edited is ignored, warn the Supreme Commander — they may need to `git add -f` it. This is especially important for files like `.claude/CLAUDE.md` or other config files that may be globally gitignored but intended for the repo.
+### 7. Verify and offer push
 
-6. **Verify staging is correct**
+```bash
+git log -1 --format="%h %s"
+```
 
-    After staging, run:
-    ```bash
-    git diff --staged --stat
-    git status
-    ```
+Confirm the commit was created with the expected message.
 
-    - Confirm staged changes match what was intended
-    - If unstaged or untracked changes remain, verify they are expected (i.e. files the user chose to leave unstaged)
-    - If a file you staged still shows unstaged changes, investigate — it may have been modified after staging
-    - Use `AskUserQuestion` to confirm with the user before proceeding
-
-7. **Read the staged diff content**
-
-    ```bash
-    git diff --staged
-    ```
-
-8. **Secret and PII scanning**
-
-    Load the `secret-scanning` skill and apply its pattern tables and Finding Disposition Process to the staged diff from step 7.
-
-    If findings exist, present them and wait for confirmation before proceeding. Do not silently commit files containing matches.
-
-9. **Generate commit message**
-    - Concise, single line
-    - Imperative mood ("Add feature" not "Added feature")
-    - No period at end
-    - Keep under 50 characters (hard limit: 72)
-    - Detail belongs in PRs, not commits
-
-10. **Show the proposed commit message and ask for confirmation**
-
-    Use `AskUserQuestion` with options like "Commit", "Edit message", "Cancel"
-
-11. **Commit**
-
-    ```bash
-    git commit -m "message"
-    ```
-
-12. **Verify commit**
-
-    ```bash
-    git log -1 --format="%h %s"
-    ```
-
-    Confirm the commit was created with the expected message.
-
-13. **Offer to push**
-
-    Use `AskUserQuestion` with options like "Push" and "Don't push".
-
-    If push requested, invoke the `git-push` skill to handle pre-push scanning, divergence checks, and push execution.
+Use `AskUserQuestion` with options like "Push" and "Don't push". If push requested, invoke the `git-push` skill.
 
 ## IDE Diagnostics
 

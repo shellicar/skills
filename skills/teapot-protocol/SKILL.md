@@ -1,6 +1,6 @@
 ---
 name: teapot-protocol
-description: "MANDATORY: Must be read at the start of every response. Defines teapot mode mechanics, brewing cycle, compliance verification, and whistling requirements."
+description: Teapot mode ritual with brewing cycle, compliance verification, and whistling. Load when the Supreme Commander requests teapot mode or you want stricter self-checking.
 user-invocable: false
 ---
 

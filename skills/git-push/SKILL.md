@@ -13,71 +13,66 @@ Push local commits to the remote with mandatory secret and PII scanning.
 
 Always `cd` to the project directory first, then use bare `git` commands (e.g., `git push`, not `git -C /path push`). This ensures commands match auto-approve patterns in the user's permission settings.
 
-## Prerequisites
-
-Load the `secret-scanning` skill before proceeding. Its pattern tables define what to scan for.
-
 ## Steps
 
-### 1. Detect Convention
+### 1. Detect convention
 
 If not already known from the calling workflow (e.g. `git-commit`), use the `detect-convention` skill to determine the convention and default branch.
 
 If it outputs a convention name, load the corresponding `<convention>-conventions` skill.
 If it fails, proceed without convention-specific rules.
 
-### 2. Verify Current Branch
+### 2. Gather git state
+
+Run the gather script to collect push state in one call:
 
 ```bash
-git branch --show-current
+~/.claude/skills/git-push/scripts/git-push-info.sh
 ```
 
-If a convention is loaded, follow its branch protection rules to determine whether direct pushes are allowed to this branch. Generally, branches like `main` or `epic/*` are protected and require PRs.
+The script outputs structured sections: `BRANCH`, `HAS_UPSTREAM`, `COMMITS_TO_PUSH`, `DIVERGENCE`, `DIFFSTAT`.
 
-### 3. Identify Commits to Push
+### 3. Analyse the gathered state
 
-**Existing upstream:**
+From the script output, check the following — stop and inform the Supreme Commander if any fail:
+
+- **Branch protection**: If a convention is loaded, check whether direct pushes are allowed to this branch. Generally, branches like `main` or `epic/*` are protected and require PRs.
+- **No commits to push**: If `COMMITS_TO_PUSH` is empty, inform the Supreme Commander and stop.
+- **Divergence**: If `DIVERGENCE` shows behind count > 0, the branch has diverged — STOP and inform the Supreme Commander, as this may require manual intervention (rebase, merge, or force push).
+
+### 4. Triage files for secret scanning
+
+Review the `DIFFSTAT` section. For each commit, identify files that need scanning vs files that can be skipped:
+
+**Skip** (no secret risk):
+- Lock files (`*.lock`, `package-lock.json`, `pnpm-lock.yaml`)
+- Minified/bundled files (`*.min.js`, `*.min.css`, `dist/*`)
+- Binary files (images, fonts, archives)
+- Large generated files (migration SQL dumps, test fixtures > 1000 lines)
+
+**Scan** (potential secret risk):
+- Source code, config files, scripts, environment files
+- Any file that could contain credentials, API keys, tokens, or PII
+
+### 5. Secret and PII scanning
+
+Load the `secret-scanning` skill. Fetch diffs only for commits/files that need scanning:
 
 ```bash
-git log @{u}..HEAD --oneline
+~/.claude/skills/git-push/scripts/git-push-diffs.sh <hash> [<hash> ...]
 ```
 
-**New branch (no upstream):**
+Use `--exclude <glob>` to skip files identified in step 4:
 
 ```bash
-git log --oneline -10
+~/.claude/skills/git-push/scripts/git-push-diffs.sh --exclude '*.lock' --exclude 'dist/*' <hash> [<hash> ...]
 ```
 
-Confirm scope with the Supreme Commander for new branches.
-
-If there are no commits to push, inform the Supreme Commander and stop.
-
-### 4. Secret and PII Scanning
-
-Review each commit's diff individually:
-
-```bash
-git show <hash>
-```
-
-Load the `secret-scanning` skill and apply its pattern tables and Finding Disposition Process to each commit's diff.
+Apply the pattern tables and Finding Disposition Process to each commit's diff.
 
 **Important**: A secret added in one commit and removed in a later commit is still in the pushed history. Each commit must be clean.
 
 Do NOT silently push code containing matches. Present findings and wait for confirmation from the Supreme Commander before proceeding.
-
-### 5. Check for Divergence
-
-```bash
-git rev-list --left-right --count @{u}...HEAD
-```
-
-Output is `<behind>\t<ahead>`.
-
-- **Behind is 0**: Safe to push with `git push`
-- **Behind is non-zero**: Branch has diverged from the remote — **STOP** and inform the Supreme Commander, as this may require manual intervention (rebase, merge, or force push)
-
-For new branches (no upstream), this check is skipped.
 
 ### 6. Push
 
@@ -85,13 +80,13 @@ For new branches (no upstream), this check is skipped.
 git push
 ```
 
-For new branches:
+For new branches (no upstream):
 
 ```bash
 git push -u origin <branch-name>
 ```
 
-### 7. Verify Push
+### 7. Verify and offer PR
 
 ```bash
 git log @{u}..HEAD --oneline
@@ -99,14 +94,7 @@ git log @{u}..HEAD --oneline
 
 Should show no commits (all pushed). If commits remain, report the issue.
 
-### 8. Offer to Create PR
-
-Use `AskUserQuestion` with options like "Create PR" and "Skip".
-
-If the Supreme Commander requests a PR, invoke the appropriate skill based on the loaded convention:
-- **GitHub conventions** → use the `github-pr` skill
-- **Azure DevOps conventions** → use the `azure-devops-repos` skill
-
-If no convention is loaded, infer from the git remote URL:
-- `github.com` → `github-pr`
-- `dev.azure.com` → `azure-devops-repos`
+Use `AskUserQuestion` with options like "Create PR" and "Skip". If the Supreme Commander requests a PR, invoke the appropriate skill:
+- **GitHub conventions** → `github-pr`
+- **Azure DevOps conventions** → `azure-devops-repos`
+- **No convention** → infer from remote URL (`github.com` → `github-pr`, `dev.azure.com` → `azure-devops-repos`)
