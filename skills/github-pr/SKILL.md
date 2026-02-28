@@ -99,10 +99,14 @@ Pass the body directly via `--body` with a quoted string. Do NOT use temp files,
 
 **GitHub** (via convention):
 ```bash
-gh pr create --title "Title" --body "Description"
+gh pr create --title "Title" --body "Description" --assignee @me
 # or
 gh pr edit --title "Title" --body "Description"
 ```
+
+Always include `--assignee @me` when creating a PR.
+
+After creating a PR, **always link the PR URL** back to the user so they can review it.
 
 **Azure DevOps** (via convention):
 ```bash
@@ -113,32 +117,12 @@ az repos pr update --id ID --title "Title" --description "Description"
 
 ## Milestones (GitHub)
 
-If a version is known (e.g., from `github-version` skill), create/use a milestone:
+Use the `github-milestone` skill for milestone format, creation, and management.
 
-```bash
-# Check if milestone exists
-gh api repos/{owner}/{repo}/milestones --jq '.[] | select(.title=="1.2.1")'
+If a version is known, derive the milestone and attach it to the PR. If no version is known, use `AskUserQuestion`:
 
-# Create if needed
-gh api repos/{owner}/{repo}/milestones -f title="1.2.1"
-
-# Create PR with milestone
-gh pr create --title "Title" --body "Description" --milestone "1.2.1"
-```
-
-### When Version Is Not Known
-
-If the PR is being created without a version bump (e.g., changes only, version management later), use `AskUserQuestion` to confirm:
-
-```text
-No version has been determined for this PR.
-
-Would you like to:
-1. Proceed without a milestone (version management later)
-2. Run github-version first to determine the version
-```
-
-This ensures the user consciously decides whether to proceed without a milestone.
+- "Proceed without milestone" - Version management later
+- "Run github-version first" - Determine the version before creating the PR
 
 ## Auto-Merge (GitHub)
 

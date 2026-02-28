@@ -62,32 +62,11 @@ gh pr edit --add-label "bug"
 
 ## PR Workflow
 
-### 1. Check for Milestone
+### 1. Milestone
 
-Before creating a PR, ensure a milestone exists for the next version:
+Use the `github-milestone` skill for milestone management (format, creation, linking).
 
-```bash
-gh api repos/{owner}/{repo}/milestones --jq '.[].title'
-```
-
-If no milestone exists for the next version, create one:
-
-```bash
-gh api repos/{owner}/{repo}/milestones --method POST -f title="1.2.0"
-```
-
-**Version format**: Use `x.y.z` (no `v` prefix).
-
-### 2. Link PR to Milestone
-
-When creating/updating the PR, attach the milestone:
-
-```bash
-gh pr create --title "Title" --body "Description" --milestone "1.2.0"
-gh pr edit --add-milestone "1.2.0"
-```
-
-### 3. Reference Issues
+### 2. Reference Issues
 
 Link related issues in the PR description using [GitHub closing keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword):
 
@@ -125,21 +104,16 @@ Include `Co-Authored-By: Claude <noreply@anthropic.com>` in the PR description (
 ## Issue and Milestone Linking
 
 - **Issues**: Reference with closing keywords (`closes`, `fixes`, `resolves`) or `Refs #123` for non-closing references
-- **Milestones**: Every PR must be linked to a version milestone
+- **Milestones**: Every PR must be linked to a milestone (see `github-milestone` skill)
 
 ## CLI Commands
 
 ```bash
-# Milestones
-gh api repos/{owner}/{repo}/milestones --jq '.[].title'
-gh api repos/{owner}/{repo}/milestones --method POST -f title="1.2.0"
-
-# Create PR with milestone, assignee, and label
-gh pr create --title "Title" --body "Description" --milestone "1.2.0" --assignee shellicar --label "bug"
+# Create PR with assignee and label (milestone via github-milestone skill)
+gh pr create --title "Title" --body "Description" --assignee @me --label "bug"
 
 # Update PR
 gh pr edit --title "New title" --body "New description"
-gh pr edit --add-milestone "1.2.0"
 gh pr edit --add-assignee shellicar
 gh pr edit --add-label "bug"
 

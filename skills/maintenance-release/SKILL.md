@@ -12,14 +12,30 @@ Perform a maintenance release by gathering security and dependency information, 
 ## Quick Start
 
 ```
-1. Verify preconditions (clean tree, on main, synced)
-2. Run `pnpm audit` and `pnpm outdated`
+1. Verify preconditions (on main, synced) — handle ecosystem dirty tree
+2. Run `pnpm audit` and `pnpm exec npm-check-updates --workspaces`
 3. Present findings and propose update plan
-4. Execute: `pnpm update` or targeted updates
-5. Run `pnpm build && pnpm test`
-6. Optionally invoke `github-version` for release
-7. Commit and create PR via `github-pr`
+4. Fix audit: pnpm audit --fix → nuke lockfile+node_modules → reinstall → verify
+5. Update deps: ncu (analyze first, user picks, reject syncpack + majors)
+6. Post-ncu fixups: corepack up + biome migrate
+7. Run `pnpm build` and `pnpm test`
+8. Optionally invoke `github-version` for release
+9. Commit and create PR via `github-pr`
 ```
+
+## Helper Scripts
+
+Scripts in `~/repos/@shellicar/ecosystem/scripts/`:
+
+| Script | Purpose |
+|--------|---------|
+| `fix-audit.sh` | Fix audit vulnerabilities with clean override resolution (handles pnpm#6774) |
+| `fix-ghsa.mjs` | Apply targeted pnpm overrides from GHSA vulnerability data |
+| `post-ncu.sh` | Restore corepack SHA + run biome migrate after ncu |
+| `ensure-labels.sh` | Create standard GitHub labels (dependencies, bug, etc.) |
+| `preflight.sh` | Pre-flight checks: git state, audit, updates, version |
+| `verify.sh` | Run build + test, only show output on failure (context-efficient) |
+| `post-merge.sh` | Post-merge cleanup: pull main, prune, delete merged branch |
 
 ## Scope
 
@@ -27,26 +43,58 @@ Perform a maintenance release by gathering security and dependency information, 
 - Security fixes (CVEs)
 - Dependency updates (major/minor/patch)
 
+## Progress Tracking
+
+Create a TODO list at the start of the workflow to track progress through each phase. Update it as you go — mark each step complete immediately after finishing, not in batches.
+
+Initial TODOs (adjust based on what preflight reveals):
+
+```
+- Run preflight checks
+- Present findings and recommend plan
+- Fix audit vulnerabilities
+- Update dependencies (ncu)
+- Post-ncu fixups (corepack, biome)
+- Verify (build + test)
+- Update CHANGELOG and bump version
+- Commit, push, create PR
+- Wait for merge, create release, clean up
+```
+
+Drop steps that don't apply (e.g. skip "Fix audit" if no vulnerabilities, skip "Update dependencies" if everything is current). Add steps if needed (e.g. "Apply targeted GHSA overrides" if fix-audit.sh doesn't resolve everything).
+
 ## Phase 0: Pre-flight Checks
 
-Before starting maintenance, verify the repository meets these preconditions.
+Run the pre-flight script to gather all state in one call:
+
+```bash
+~/repos/@shellicar/ecosystem/scripts/preflight.sh
+```
+
+This reports: branch, sync status, working tree, stale branches, audit vulnerabilities, available updates, and current version.
 
 ### Preconditions
 
 1. **On default branch** (`main` or `master`)
-2. **Clean working tree** (no uncommitted changes)
+2. **Clean working tree** (no uncommitted changes — see Ecosystem Dirty Tree below)
 3. **Synced with remote** (local matches origin)
 4. **No stale branches** (previous work has been merged/cleaned)
 
-### Verification Commands
+### Ecosystem Dirty Tree
 
-```bash
-git branch --show-current    # Should be main
-git status                   # Should be clean
-git fetch origin
-git pull                     # Should be up to date
-git branch -a                # Check for stale branches
-```
+After `pnpm install`, lefthook may create/move files (e.g. `scripts/verify-version.sh` → `.lefthook/pre-push/verify-version.sh`). This is an **ecosystem-wide migration pattern** — the same change appears in every repo.
+
+These changes are **expected** and should be included in the maintenance release commit. They are not "real" uncommitted work.
+
+**How to handle:**
+1. Run `git status` after `pnpm install`
+2. If changes are limited to lefthook/ecosystem files → include in maintenance PR
+3. If changes include real work-in-progress → inform user, do not proceed
+
+**Typical ecosystem files:**
+- `lefthook.yml` (config changes)
+- `.lefthook/` directory (script relocation)
+- `scripts/*.sh` (deletions when moved to `.lefthook/`)
 
 ### If Preconditions Not Met
 
@@ -54,13 +102,11 @@ Report to user what needs to be addressed before proceeding. Do not continue unt
 
 ## Phase 1: Information Gathering
 
+The `preflight.sh` output already includes audit results and available updates. Use that output for this phase — no need to re-run those commands.
+
 ### 1.1 Check for CVEs
 
-```bash
-pnpm audit 2>&1
-```
-
-Parse output to identify:
+From the preflight audit output, identify:
 
 - Severity (critical, high, moderate, low)
 - Affected packages
@@ -131,35 +177,33 @@ This shows the CVE is in a dev dependency chain → lower risk.
 
 Check ALL packages in the workspace, not just the root.
 
-#### Option 1: pnpm outdated (recursive)
+**Important**: `pnpm outdated` respects semver ranges in package.json — it won't show that `vitest@3.0` is available if your range is `^2.x`. Use `npm-check-updates` instead for a complete picture.
+
+#### Preferred: npm-check-updates (ncu)
 
 ```bash
-pnpm outdated -r
-```
+# Preview available updates (DO NOT use -u flag yet)
+pnpm exec npm-check-updates --workspaces
 
-#### Option 2: Custom updates script (if defined)
-
-```bash
-# Check if script exists
-grep '"updates"' package.json
-
-# Run it (typically runs ncu --workspaces)
+# Or if custom script exists:
 pnpm updates
 ```
 
-#### Option 3: npm-check-updates directly
+**Always exclude syncpack** from auto-updates — major bumps cause breaking changes:
 
 ```bash
-# If installed as devDependency
-pnpm exec npm-check-updates --workspaces
-
-# Or run without installing
-pnpm dlx npm-check-updates --workspaces
+pnpm exec npm-check-updates --workspaces --reject syncpack
 ```
+
+**Never run ncu with `-u` yourself.** Instead:
+1. Run without `-u` to see what's available
+2. Analyze and recommend which to include/skip (see Phase 2)
+3. Present recommendation to user via `AskUserQuestion`
+4. User runs ncu interactively or with specific filters
 
 #### Categorize Results
 
-- **Major**: Breaking changes, require individual consideration
+- **Major**: Breaking changes, require individual consideration — **skip by default** in maintenance releases
 - **Minor**: New features, backwards compatible
 - **Patch**: Bug fixes only
 
@@ -186,6 +230,7 @@ Note: A CVE in an internal tool (e.g., `tools/verify-version.sh` deps) is still 
 
 #### Special Package Rules
 
+- `syncpack` - **never auto-update** (major bumps break; always `--reject syncpack`)
 - `@types/node` - always safe to update (types only, recommended)
 - `@types/*` - should align with main package version
 - Build tools (esbuild, tsup, vitest) - dev only, can be more aggressive
@@ -326,60 +371,117 @@ Adjust the plan accordingly and confirm before proceeding.
 
 ### 4.1 Apply Security Fixes
 
+Use the `fix-audit.sh` helper script:
+
 ```bash
-pnpm audit --fix
+~/repos/@shellicar/ecosystem/scripts/fix-audit.sh
 ```
 
-This typically updates the lock file to use patched versions.
+This runs `pnpm audit --fix`, then nukes lockfile + node_modules and reinstalls to work around the pnpm override chaining bug ([pnpm#6774](https://github.com/pnpm/pnpm/issues/6774)), then verifies the audit is clean.
 
-If `pnpm audit --fix` doesn't resolve the CVE:
+If `fix-audit.sh` reports vulnerabilities still present:
+1. Use `fix-ghsa.mjs` to apply targeted overrides for specific GHSAs
+2. Then re-run `fix-audit.sh` to verify
 
-1. Report the issue to the user
-2. Delegate manual intervention (e.g., `pnpm-workspace.yaml` overrides, package.json overrides)
-3. User will guide next steps
+```bash
+# Apply targeted override for a specific GHSA
+echo '[{"pkg":"koa","vulnerable":">= 3.0.0, < 3.1.2","patched":"3.1.2"}]' \
+  | node ~/repos/@shellicar/ecosystem/scripts/fix-ghsa.mjs pnpm-workspace.yaml
+```
+
+If neither approach resolves the CVE, inform the user for manual intervention.
+
+#### Known Issue: pnpm Override Chaining Bug
+
+pnpm overrides don't re-evaluate after a first override changes the resolved version. For example, if you have:
+- `koa@<2.16.4: '>=2.16.4'` (resolves koa to 3.0.3, crossing major boundary)
+- `koa@>=3.0.0 <3.1.2: '>=3.1.2'` (should catch 3.0.3 but doesn't chain)
+
+The **only reliable workaround** is deleting both `pnpm-lock.yaml` AND `node_modules` then reinstalling. The `fix-audit.sh` script handles this automatically.
+
+See: https://github.com/pnpm/pnpm/issues/6774
 
 ### 4.2 Apply Selected Updates
 
-```bash
-# For specific packages
-pnpm update <package>@<version>
+**Do NOT run ncu with `-u` directly.** The preflight output already shows all available updates. Use that to determine the update strategy.
 
-# For all minor/patch
-pnpm update
+#### Analyze the preflight ncu output
+
+Look for packages that need special handling:
+
+- **Pinned versions** (no `^` or `~` prefix, e.g. `4.5.1`) — these are intentional, skip them
+- **Major bumps** — skip by default in maintenance releases
+- **syncpack** — always reject
+
+#### Provide exact commands
+
+Based on the analysis, provide the user with **non-interactive** commands to run. Never rely on interactive selection — it's error-prone.
+
+**Simple case** (no pinned versions to worry about):
+
+```bash
+pnpm exec npm-check-updates --workspaces -u --reject syncpack
 ```
 
-### 4.3 Verify
+**When some packages must be skipped** (pinned versions or majors):
 
 ```bash
-pnpm install
+# Update everything except the problem packages
+pnpm exec npm-check-updates --workspaces -u --reject syncpack,<pkg1>,<pkg2>
 
-# Lint/format (use biome directly - more portable than custom scripts)
-pnpm biome ci
-# or: pnpm biome check
-# or: pnpm biome check --fix
-
-[ -x node_modules/.bin/knip ] && pnpm knip
-[ -x node_modules/.bin/dpdm ] && pnpm circular
-
-# If script fails but binary exists, check package.json scripts.
-# Package may be installed without a script configured - use AskUserQuestion.
-
-pnpm test      # run tests
-pnpm build     # verify build
+# Then update skipped packages only in specific workspaces that use ^
+pnpm --filter <workspace-name> add <pkg>@^<version> -D
 ```
+
+Example: if `@azure/cosmos` is pinned at `4.5.1` in an example workspace but uses `^4.9.0` elsewhere:
+
+```bash
+# Update everything except @azure/cosmos and syncpack
+pnpm exec npm-check-updates --workspaces -u --reject syncpack,@azure/cosmos
+
+# Then update @azure/cosmos only in workspaces that use ^ ranges
+pnpm --filter @shellicar/cosmos-query-builder add @azure/cosmos@^4.9.1 -D
+pnpm --filter @shellicar/cosmos-query-builder-examples-cjs add @azure/cosmos@^4.9.1 -D
+```
+
+#### Verify the diff
+
+After the user runs the commands, verify `git diff` on package.json files to confirm:
+- No pinned versions were changed
+- No major bumps were introduced
+- All expected packages were updated
+
+### 4.3 Post-ncu Fixups
+
+After ncu updates package versions, two things typically break:
+
+1. **packageManager SHA hash** — ncu strips the corepack SHA from the `packageManager` field
+2. **biome.json schema** — if biome was updated, the schema URL is stale
+
+Use the `post-ncu.sh` helper script:
+
+```bash
+~/repos/@shellicar/ecosystem/scripts/post-ncu.sh
+```
+
+Or manually:
+```bash
+corepack up                    # Restore packageManager SHA
+pnpm biome migrate             # Update biome.json schema
+pnpm install                   # Update lockfile
+```
+
+### 4.4 Verify
+
+```bash
+~/repos/@shellicar/ecosystem/scripts/verify.sh
+```
+
+This runs `pnpm build` and `pnpm test`, capturing output. On success it prints a one-line summary per step (minimal context). On failure it shows the full output for diagnosis.
+
+Options: `--build` (build only), `--test` (test only).
 
 If verification fails, report to user and await guidance.
-
-### 4.4 Check for Version Scripts
-
-Some repositories have version verification scripts:
-
-```bash
-# If exists
-./scripts/verify-version.sh
-```
-
-Run if present, skip if not.
 
 ### 4.5 Version and Changelog (optional)
 
@@ -444,17 +546,60 @@ Update minor and patch dependencies
 Security fixes and dependency updates
 ```
 
-### 5.3 Ask About PR
+### 5.3 Ensure Labels Exist
 
-```text
-Changes are ready to commit.
+Before creating a PR, ensure standard labels exist on the repository:
 
-Would you like to:
-1. Commit only (I'll create PR later)
-2. Commit and create PR (invoke github-pr skill)
+```bash
+~/repos/@shellicar/ecosystem/scripts/ensure-labels.sh --repo <repo-name>
 ```
 
-If user chooses PR, delegate to the `github-pr` skill.
+This script is idempotent and can be auto-approved in settings.json.
+
+### 5.4 Create PR
+
+Use `AskUserQuestion` to confirm:
+
+- "Commit and create PR" - Proceed with commit, push, and PR creation
+- "Commit only" - Commit changes without creating a PR
+
+If creating a PR, use the `github-pr` skill. Ensure the PR includes:
+
+- **Assignee**: `--assignee @me`
+- **Milestone**: Use the `github-milestone` skill to find/create the milestone
+- **Label**: `--label dependencies`
+
+After PR creation, **always link the PR URL** back to the user so they can review it.
+
+## Phase 6: Post-Merge
+
+After the PR is merged, complete the release:
+
+### 6.1 Wait for Merge
+
+Check PR status:
+
+```bash
+gh pr view <number> --json state,mergedAt
+```
+
+If auto-merge is enabled, the PR will merge once checks pass. Do not proceed until `state` is `MERGED`.
+
+### 6.2 Create Release
+
+Invoke the `github-release` skill to create a GitHub release, which triggers npm publish.
+
+### 6.3 Milestone
+
+Do **not** close the milestone after a patch release. See the `github-milestone` skill — milestones use `x.y` format and stay open across the minor series.
+
+### 6.4 Clean Up Branches
+
+```bash
+~/repos/@shellicar/ecosystem/scripts/post-merge.sh --branch <branch-name>
+```
+
+This verifies the branch has a merged PR, switches to main, pulls, prunes remotes, and deletes the local branch. Safe to auto-approve because it only deletes branches with confirmed merged PRs.
 
 ## Notes
 
