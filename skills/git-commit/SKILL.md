@@ -81,6 +81,17 @@ Use `AskUserQuestion` with options like "Push" and "Don't push". If push request
 
 If the commit fails due to pre-commit hooks:
 
+### Strictly forbidden
+
+These are non-negotiable. Read them BEFORE attempting any fix.
+
+- `--unsafe` or any biome unsafe fix flags — forbidden under **all** circumstances
+- `npx` / `pnpx` — tools are already installed; using these wastes time downloading and may produce wrong results
+- `git add -A` / `git add .` — stages everything including unrelated changes. Always `git add` specific files.
+- Manually editing files to pass hooks **without permission** — you may ask, but you do not fix without asking
+- `--filter` for running package scripts — `cd` into the package directory instead
+- If a fixer command fails (wrong invocation, path issues, unexpected error), **STOP and ask the Supreme Commander**. Do not improvise alternative tools or workarounds.
+
 ### Step 1: Identify available fixers
 
 Read the hook configuration (e.g., `lefthook.yml`) and `package.json` scripts to determine which tools are configured and what fix commands are available. This is a quick read — do not investigate beyond these files. If it's not obvious what to run, ask the Supreme Commander.
@@ -93,23 +104,29 @@ Get the list of changed files from `git diff --cached --name-only` and pass them
 
 #### Biome
 
+Run from the project root:
+
 ```bash
 pnpm biome check --diagnostic-level=error --write <file1> <file2> ...
 ```
 
 #### ESLint
 
+`cd` into the package directory that owns the files, then run with paths relative to that package:
+
 ```bash
-pnpm run lint --fix -- <file1> <file2> ...
-# or
-pnpm run lint -- --fix <file1> <file2> ...
+cd packages/<package-name>
+pnpm eslint --fix <relative-file1> <relative-file2> ...
 ```
 
-### Step 2: Re-stage and retry
+Do NOT use `pnpm run lint` — the script wraps `eslint .` which conflicts with passing individual files.
+Do NOT use `--filter` — it does not reliably pass arguments through to the underlying script.
+
+### Step 3: Re-stage and retry
 
 Stage the fixed files, then create a **NEW commit** (do not amend — the previous commit didn't happen).
 
-### Step 3: Verify
+### Step 4: Verify
 
 Verify with commands that do not flood output:
 
@@ -117,18 +134,12 @@ Verify with commands that do not flood output:
 pnpm biome check --diagnostic-level=error
 ```
 
-### Step 4: If automated fixers couldn't resolve everything
+### Step 5: If automated fixers couldn't resolve everything
 
 Check whether the remaining issues are in files **outside** the changeset (i.e., pre-existing issues in files we are not checking in).
 
 - **Issues outside our changeset**: `--no-verify` is allowed, but you **MUST** ask the Supreme Commander for permission first.
 - **Issues inside our changeset**: Either ask the Supreme Commander for permission to manually fix (explain what you would change), or hand over to the Supreme Commander. Mention all remaining issues.
-
-### Strictly forbidden
-
-- `--unsafe` or any biome unsafe fix flags — forbidden under **all** circumstances
-- `npx` / `pnpx` — tools are already installed; using these wastes time downloading and may produce wrong results
-- Manually editing files to pass hooks **without permission** — you may ask, but you do not fix without asking
 
 When files are edited, IDE diagnostics may appear. Handle them as follows:
 
