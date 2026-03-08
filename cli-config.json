@@ -6,5 +6,6 @@
   "extendedPermissionTimeoutMs": 120000,
   "drowningThreshold": 15,
   "autoApproveEdits": true,
-  "autoApproveReads": true
+  "autoApproveReads": true,
+  "questionTimeoutMs": 60000
 }

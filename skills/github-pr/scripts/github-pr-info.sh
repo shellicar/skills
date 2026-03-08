@@ -56,5 +56,9 @@ echo "--- COMMITS ---"
 git log --oneline "$ANCESTOR..HEAD" 2>/dev/null || true
 
 echo ""
+echo "--- MILESTONES ---"
+gh api repos/{owner}/{repo}/milestones --method GET -f state=all --jq '.[] | {number, title, state, open_issues, closed_issues}' 2>/dev/null || true
+
+echo ""
 echo "--- DIFFSTAT ---"
 git diff "$ANCESTOR...HEAD" --stat 2>/dev/null || true
