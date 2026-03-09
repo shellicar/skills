@@ -15,14 +15,7 @@ Always `cd` to the project directory first, then use bare `git` commands (e.g., 
 
 ## Steps
 
-### 1. Detect convention
-
-Use the `detect-convention` skill to determine the convention and default branch.
-
-If it outputs a convention name, load the corresponding `<convention>-conventions` skill.
-If it fails, proceed without convention-specific rules.
-
-### 2. Gather git state
+### 1. Gather git state
 
 Run the gather script to collect all git state in one call:
 
@@ -30,28 +23,30 @@ Run the gather script to collect all git state in one call:
 ~/.claude/skills/git-commit/scripts/git-commit-info.sh
 ```
 
-The script auto-detects the platform (GitHub or Azure DevOps) and project name from `git remote get-url origin`.
+The script auto-detects the platform (GitHub or Azure DevOps) and project name from `git remote get-url origin`. It also calls `detect-convention` internally and outputs `Convention: <name>` in the header.
 
-The script outputs structured sections: `BRANCH`, `MERGED_PR`, `STAGED_STAT`, `STATUS`, `RECENT_LOG`.
+The script outputs structured sections: `BRANCH`, `PROTECTED_BRANCHES`, `MERGED_PR`, `STAGED_STAT`, `STATUS`, `RECENT_LOG`.
 
-### 3. Analyse the gathered state
+After running the script, load the `<convention>-conventions` skill if `Convention:` is present in the output. If not present, proceed without convention-specific rules.
+
+### 2. Analyse the gathered state
 
 From the script output, check the following — stop and inform the Supreme Commander if any fail:
 
+- **Branch protection** *(check this first)*: If `BRANCH` appears in `PROTECTED_BRANCHES` (and `PROTECTED_BRANCHES` is not `none`), **STOP immediately** — do not proceed. Inform the Supreme Commander that direct commits to this branch are not allowed, and offer to create a new branch.
 - **Merged PR**: If `MERGED_PR` shows a completed PR for this branch, STOP — the branch was already merged.
-- **Branch protection**: If the convention has branch protection rules, check whether the current branch allows direct commits. If protected, offer to create a branch.
 - **No staged changes**: If `STAGED_STAT` is empty, inform the Supreme Commander.
 - **Unstaged/untracked changes**: If `STATUS` shows unstaged or untracked files, show the Supreme Commander and use `AskUserQuestion` with options like "Stage them", "Leave unstaged". If files are staged, re-run the gather script after staging to get the updated diff.
 
 **Gitignored file check**: If you edited any files during this conversation, verify they are visible to git. Run `git check-ignore <file-path>` for any files you changed that don't appear in the status. If ignored, warn the Supreme Commander.
 
-### 4. Secret and PII scanning
+### 3. Secret and PII scanning
 
 Load the `secret-scanning` skill and scan staged files before committing.
 
 If findings exist, present them and wait for confirmation before proceeding. Do not silently commit files containing matches.
 
-### 5. Generate commit message
+### 4. Generate commit message
 
 - Concise, single line
 - Imperative mood ("Add feature" not "Added feature")
@@ -59,7 +54,7 @@ If findings exist, present them and wait for confirmation before proceeding. Do 
 - Keep under 50 characters (hard limit: 72)
 - Detail belongs in PRs, not commits
 
-### 6. Confirm and commit
+### 5. Confirm and commit
 
 Use `AskUserQuestion` with the proposed commit message and options like "Commit", "Edit message", "Cancel".
 
@@ -67,7 +62,7 @@ Use `AskUserQuestion` with the proposed commit message and options like "Commit"
 git commit -m "message"
 ```
 
-### 7. Verify and offer push
+### 6. Verify and offer push
 
 ```bash
 git log -1 --format="%h %s"

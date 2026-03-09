@@ -17,6 +17,17 @@
 
 set -e
 
+# Detect convention (name, default branch, protected branches)
+DETECT_SCRIPT="$HOME/.claude/skills/detect-convention/scripts/detect-convention.sh"
+CONVENTION=""
+PROTECTED_BRANCHES="none"
+if [ -f "$DETECT_SCRIPT" ]; then
+  CONVENTION_OUTPUT=$("$DETECT_SCRIPT" 2>/dev/null || echo "")
+  CONVENTION=$(echo "$CONVENTION_OUTPUT" | sed -n '1p')
+  PROTECTED_BRANCHES=$(echo "$CONVENTION_OUTPUT" | sed -n '3p')
+  [ -z "$PROTECTED_BRANCHES" ] && PROTECTED_BRANCHES="none"
+fi
+
 # Auto-detect platform and project from git remote
 REMOTE_URL=$(git remote get-url origin)
 PLATFORM=""
@@ -46,6 +57,9 @@ echo "Platform: $PLATFORM"
 if [ -n "$PROJECT" ]; then
   echo "Project: $PROJECT"
 fi
+if [ -n "$CONVENTION" ]; then
+  echo "Convention: $CONVENTION"
+fi
 
 section() {
   printf '\n--- %s ---\n' "$1"
@@ -55,6 +69,10 @@ section() {
 section "BRANCH"
 BRANCH=$(git branch --show-current)
 echo "$BRANCH"
+
+# Protected branches
+section "PROTECTED_BRANCHES"
+echo "$PROTECTED_BRANCHES"
 
 # Merged PR check
 section "MERGED_PR"
