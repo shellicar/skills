@@ -37,7 +37,7 @@ case "$REMOTE_URL" in
   *github.com*)
     PLATFORM="github"
     PROTECTED_BRANCHES=$(gh api repos/{owner}/{repo}/branches \
-      --jq '[.[] | select(.protected) | .name]' 2>/dev/null || echo '[]')
+      --jq '[.[] | select(.protected) | .name]' 2>/dev/null) || PROTECTED_BRANCHES='[]'
     ;;
   *dev.azure.com*)
     PLATFORM="azure-devops"
@@ -55,17 +55,17 @@ BRANCH=$(git branch --show-current)
 # Open PR
 OPEN_PR='[]'
 if [ "$PLATFORM" = "github" ]; then
-  OPEN_PR=$(gh pr list --head "$BRANCH" --state open --json number,title,url 2>/dev/null || echo '[]')
+  OPEN_PR=$(gh pr list --head "$BRANCH" --state open --json number,title,url 2>/dev/null) || OPEN_PR='[]'
 elif [ "$PLATFORM" = "azure-devops" ]; then
-  OPEN_PR=$(az repos pr list --source-branch "$BRANCH" --status active --project "$PROJECT" -o json 2>/dev/null || echo '[]')
+  OPEN_PR=$(az repos pr list --source-branch "$BRANCH" --status active --project "$PROJECT" -o json 2>/dev/null) || OPEN_PR='[]'
 fi
 
 # Merged PR
 MERGED_PR='[]'
 if [ "$PLATFORM" = "github" ]; then
-  MERGED_PR=$(gh pr list --head "$BRANCH" --state merged --json number,title 2>/dev/null || echo '[]')
+  MERGED_PR=$(gh pr list --head "$BRANCH" --state merged --json number,title 2>/dev/null) || MERGED_PR='[]'
 elif [ "$PLATFORM" = "azure-devops" ]; then
-  MERGED_PR=$(az repos pr list --source-branch "$BRANCH" --status completed --project "$PROJECT" -o json 2>/dev/null || echo '[]')
+  MERGED_PR=$(az repos pr list --source-branch "$BRANCH" --status completed --project "$PROJECT" -o json 2>/dev/null) || MERGED_PR='[]'
 fi
 
 # Upstream detection
@@ -122,26 +122,26 @@ jq -n \
   --arg project "$PROJECT" \
   --arg convention "$CONVENTION" \
   --arg branch "$BRANCH" \
-  --argjson protected_branches "$PROTECTED_BRANCHES" \
-  --argjson open_pr "$OPEN_PR" \
-  --argjson merged_pr "$MERGED_PR" \
-  --argjson has_upstream "$HAS_UPSTREAM" \
+  --arg protected_branches "$PROTECTED_BRANCHES" \
+  --arg open_pr "$OPEN_PR" \
+  --arg merged_pr "$MERGED_PR" \
+  --arg has_upstream "$HAS_UPSTREAM" \
   --arg upstream "$UPSTREAM" \
-  --argjson commits_to_push "$COMMITS_TO_PUSH" \
-  --argjson divergence_behind "$DIVERGENCE_BEHIND" \
-  --argjson divergence_ahead "$DIVERGENCE_AHEAD" \
-  --argjson commits_detail "$COMMITS_DETAIL" \
+  --arg commits_to_push "$COMMITS_TO_PUSH" \
+  --arg divergence_behind "$DIVERGENCE_BEHIND" \
+  --arg divergence_ahead "$DIVERGENCE_AHEAD" \
+  --arg commits_detail "$COMMITS_DETAIL" \
   '{
     platform: $platform,
     project: (if $project == "" then null else $project end),
     convention: (if $convention == "" then null else $convention end),
     branch: $branch,
-    protected_branches: $protected_branches,
-    open_pr: $open_pr,
-    merged_pr: $merged_pr,
-    has_upstream: $has_upstream,
+    protected_branches: ($protected_branches | fromjson? // []),
+    open_pr: ($open_pr | fromjson? // []),
+    merged_pr: ($merged_pr | fromjson? // []),
+    has_upstream: ($has_upstream | fromjson? // false),
     upstream: (if $upstream == "" then null else $upstream end),
-    commits_to_push: $commits_to_push,
-    divergence: {behind: $divergence_behind, ahead: $divergence_ahead},
-    commits_detail: $commits_detail
+    commits_to_push: ($commits_to_push | fromjson? // []),
+    divergence: {behind: ($divergence_behind | fromjson? // 0), ahead: ($divergence_ahead | fromjson? // 0)},
+    commits_detail: ($commits_detail | fromjson? // [])
   }'

@@ -80,20 +80,20 @@ jq -n \
   --arg convention "$CONVENTION" \
   --arg branch "$BRANCH" \
   --arg default_branch "$DEFAULT" \
-  --argjson merged_pr "$MERGED_PR" \
-  --argjson existing_pr "$EXISTING_PR" \
+  --arg merged_pr "$MERGED_PR" \
+  --arg existing_pr "$EXISTING_PR" \
   --arg ancestor "$ANCESTOR" \
-  --argjson commits "$COMMITS" \
-  --argjson milestones "$MILESTONES" \
-  --argjson diffstat "$DIFFSTAT" \
+  --arg commits "$COMMITS" \
+  --arg milestones "$MILESTONES" \
+  --arg diffstat "$DIFFSTAT" \
   '{
     convention: (if $convention == "" then null else $convention end),
     branch: $branch,
     default_branch: $default_branch,
-    merged_pr: $merged_pr,
-    existing_pr: $existing_pr,
+    merged_pr: ($merged_pr | fromjson? // []),
+    existing_pr: ($existing_pr | fromjson? // null),
     ancestor: $ancestor,
-    commits: $commits,
-    milestones: $milestones,
-    diffstat: $diffstat
+    commits: ($commits | fromjson? // []),
+    milestones: ($milestones | fromjson? // []),
+    diffstat: ($diffstat | fromjson? // [])
   }'
