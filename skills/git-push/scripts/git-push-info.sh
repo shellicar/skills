@@ -13,16 +13,36 @@
 
 set -e
 
-# Detect convention (name, default branch, protected branches)
+# Detect convention name
 DETECT_SCRIPT="$HOME/.claude/skills/detect-convention/scripts/detect-convention.sh"
 CONVENTION=""
-PROTECTED_BRANCHES="none"
 if [ -f "$DETECT_SCRIPT" ]; then
   CONVENTION_OUTPUT=$("$DETECT_SCRIPT" 2>/dev/null || echo "")
   CONVENTION=$(echo "$CONVENTION_OUTPUT" | sed -n '1p')
-  PROTECTED_BRANCHES=$(echo "$CONVENTION_OUTPUT" | sed -n '3p')
-  [ -z "$PROTECTED_BRANCHES" ] && PROTECTED_BRANCHES="none"
 fi
+
+# Detect platform and protected branches via API
+REMOTE_URL=$(git remote get-url origin 2>/dev/null || echo "")
+PLATFORM=""
+PROJECT=""
+PROTECTED_BRANCHES="none"
+case "$REMOTE_URL" in
+  *github.com*)
+    PLATFORM="github"
+    PROTECTED_BRANCHES=$(gh api repos/{owner}/{repo}/branches \
+      --jq '[.[] | select(.protected) | .name] | join(", ")' 2>/dev/null || echo "")
+    ;;
+  *dev.azure.com*)
+    PLATFORM="azure-devops"
+    ORG=$(echo "$REMOTE_URL" | sed 's|.*dev\.azure\.com/||' | cut -d'/' -f1)
+    PROJECT=$(echo "$REMOTE_URL" | sed 's|.*dev\.azure\.com/[^/]*/||' | sed 's|/_git/.*||')
+    PROTECTED_BRANCHES=$(az rest --method GET \
+      --url "https://dev.azure.com/$ORG/$PROJECT/_apis/policy/configurations?api-version=7.1" \
+      --resource 499b84ac-1321-427f-aa17-267ca6975798 2>/dev/null \
+      | jq -r '[.value[] | .settings.scope[]? | .refName // empty | select(startswith("refs/heads/")) | ltrimstr("refs/heads/")] | unique | join(", ")' 2>/dev/null || echo "")
+    ;;
+esac
+[ -z "$PROTECTED_BRANCHES" ] && PROTECTED_BRANCHES="none"
 
 if [ -n "$CONVENTION" ]; then
   echo "Convention: $CONVENTION"
