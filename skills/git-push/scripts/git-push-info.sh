@@ -10,15 +10,21 @@
 #   convention        - detected convention name (null if none)
 #   branch            - current branch name
 #   protected_branches - array of protected branch names
-#   open_pr           - array of open PRs for this branch
-#   merged_pr         - array of merged PRs for this branch
+#   open_pr           - array of open PRs for this branch [{id, title}]
+#   merged_pr         - array of merged PRs for this branch [{id, title}]
 #   has_upstream      - boolean: whether branch has a tracking remote
 #   upstream          - upstream branch name (null if none)
-#   commits_to_push   - array of commits not yet pushed (oneline strings)
+#   upstream_status   - "active" (tracking ref exists), "gone" (deleted on remote), "none" (never set)
+#   commits_to_push   - array of local commits [{hash, message}]
 #   divergence        - {behind, ahead} counts relative to upstream
-#   commits_detail    - per-commit file changes [{hash, message, files: [{insertions, deletions, path}]}]
+#
+# Exit codes:
+#   0 - success
+#   2 - upstream is gone (remote branch was deleted) — stderr has error message
 
 set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Detect convention name
 DETECT_SCRIPT="$HOME/.claude/skills/detect-convention/scripts/detect-convention.sh"
@@ -27,61 +33,82 @@ if [ -f "$DETECT_SCRIPT" ]; then
   CONVENTION=$("$DETECT_SCRIPT" 2>/dev/null | sed -n '1p' || echo "")
 fi
 
-# Detect platform and protected branches via API
+# Detect platform from remote URL
 REMOTE_URL=$(git remote get-url origin)
 PLATFORM=""
 PROJECT=""
-PROTECTED_BRANCHES='[]'
 
 case "$REMOTE_URL" in
   *github.com*)
     PLATFORM="github"
-    PROTECTED_BRANCHES=$(gh api repos/{owner}/{repo}/branches \
-      --jq '[.[] | select(.protected) | .name]' 2>/dev/null) || PROTECTED_BRANCHES='[]'
     ;;
   *dev.azure.com*)
     PLATFORM="azure-devops"
-    ORG=$(echo "$REMOTE_URL" | sed 's|.*dev\.azure\.com/||' | cut -d'/' -f1)
     PROJECT=$(echo "$REMOTE_URL" | sed 's|.*dev\.azure\.com/[^/]*/||' | sed 's|/_git/.*||')
-    PROTECTED_BRANCHES=$(az rest --method GET \
-      --url "https://dev.azure.com/$ORG/$PROJECT/_apis/policy/configurations?api-version=7.1" \
-      --resource 499b84ac-1321-427f-aa17-267ca6975798 2>/dev/null \
-      | jq '[.value[] | .settings.scope[]? | .refName // empty | select(startswith("refs/heads/")) | ltrimstr("refs/heads/")] | unique' 2>/dev/null || echo '[]')
     ;;
 esac
 
 BRANCH=$(git branch --show-current)
 
-# Open PR
-OPEN_PR='[]'
+# Platform-specific info (protected branches, PRs)
+PLATFORM_JSON='{"protected_branches":[],"open_pr":[],"merged_pr":[]}'
 if [ "$PLATFORM" = "github" ]; then
-  OPEN_PR=$(gh pr list --head "$BRANCH" --state open --json number,title,url 2>/dev/null) || OPEN_PR='[]'
+  PLATFORM_JSON=$("$SCRIPT_DIR/git-push-info-github.sh" "$BRANCH" 2>/dev/null) || PLATFORM_JSON='{"protected_branches":[],"open_pr":[],"merged_pr":[]}'
 elif [ "$PLATFORM" = "azure-devops" ]; then
-  OPEN_PR=$(az repos pr list --source-branch "$BRANCH" --status active --project "$PROJECT" -o json 2>/dev/null) || OPEN_PR='[]'
+  ORG=$(echo "$REMOTE_URL" | sed 's|.*dev\.azure\.com/||' | cut -d'/' -f1)
+  PLATFORM_JSON=$("$SCRIPT_DIR/git-push-info-ado.sh" "$BRANCH" "$ORG" "$PROJECT" 2>/dev/null) || PLATFORM_JSON='{"protected_branches":[],"open_pr":[],"merged_pr":[]}'
 fi
 
-# Merged PR
-MERGED_PR='[]'
-if [ "$PLATFORM" = "github" ]; then
-  MERGED_PR=$(gh pr list --head "$BRANCH" --state merged --json number,title 2>/dev/null) || MERGED_PR='[]'
-elif [ "$PLATFORM" = "azure-devops" ]; then
-  MERGED_PR=$(az repos pr list --source-branch "$BRANCH" --status completed --project "$PROJECT" -o json 2>/dev/null) || MERGED_PR='[]'
-fi
-
-# Upstream detection
+# Upstream detection: none / active / gone
+# Use for-each-ref to get upstream info (works even when upstream is gone)
 HAS_UPSTREAM=false
 UPSTREAM=""
-if git rev-parse --abbrev-ref "@{u}" >/dev/null 2>&1; then
+UPSTREAM_STATUS="none"
+UPSTREAM_REF=$(git for-each-ref --format='%(upstream)' "refs/heads/$BRANCH" 2>/dev/null || true)
+UPSTREAM_TRACK=$(git for-each-ref --format='%(upstream:track)' "refs/heads/$BRANCH" 2>/dev/null || true)
+
+if [ -n "$UPSTREAM_REF" ]; then
   HAS_UPSTREAM=true
-  UPSTREAM=$(git rev-parse --abbrev-ref "@{u}")
+  # Convert refs/remotes/origin/branch to origin/branch
+  UPSTREAM=$(echo "$UPSTREAM_REF" | sed 's|^refs/remotes/||')
+  case "$UPSTREAM_TRACK" in
+    *gone*)
+      UPSTREAM_STATUS="gone"
+      printf 'error: upstream branch "%s" is gone (deleted on remote).\n' "$UPSTREAM" >&2
+      printf 'The local branch still tracks it, but the remote ref no longer exists.\n' >&2
+      printf 'Action: delete the local branch or reset its upstream.\n' >&2
+      exit 2
+      ;;
+    *)
+      UPSTREAM_STATUS="active"
+      ;;
+  esac
 fi
 
-# Commits to push
-COMMITS_TO_PUSH='[]'
+# Determine commit range base
+# If upstream exists and is active, use @{u}
+# Otherwise, use git-find-fork-point.sh to find the nearest remote ancestor
+COMMIT_BASE=""
 if [ "$HAS_UPSTREAM" = true ]; then
-  COMMITS_TO_PUSH=$(git log @{u}..HEAD --oneline | jq -Rs 'split("\n") | map(select(. != ""))' || echo '[]')
+  COMMIT_BASE="@{u}"
 else
-  COMMITS_TO_PUSH=$(git log --oneline -10 | jq -Rs 'split("\n") | map(select(. != ""))' || echo '[]')
+  FORK_SCRIPT="$SCRIPT_DIR/git-find-fork-point.sh"
+  if [ -f "$FORK_SCRIPT" ]; then
+    FORK_JSON=$("$FORK_SCRIPT" 2>/dev/null || true)
+    if [ -n "$FORK_JSON" ]; then
+      FORK_HASH=$(echo "$FORK_JSON" | jq -r '.fork_point // empty' 2>/dev/null || true)
+      if [ -n "$FORK_HASH" ]; then
+        COMMIT_BASE=$(git rev-parse "$FORK_HASH" 2>/dev/null || true)
+      fi
+    fi
+  fi
+fi
+
+# Commits to push (structured: hash + message)
+COMMITS_TO_PUSH='[]'
+if [ -n "$COMMIT_BASE" ]; then
+  COMMITS_TO_PUSH=$(git log --format='%h%x00%s' "${COMMIT_BASE}..HEAD" \
+    | jq -Rs '[split("\n")[] | select(. != "") | split("\u0000") | {hash: .[0], message: .[1]}]' || echo '[]')
 fi
 
 # Divergence (behind/ahead)
@@ -93,55 +120,30 @@ if [ "$HAS_UPSTREAM" = true ]; then
   DIVERGENCE_AHEAD=$(echo "$DIVERGENCE" | cut -f2)
 fi
 
-# Per-commit file changes (numstat: binary files use null for counts)
-if [ "$HAS_UPSTREAM" = true ]; then
-  HASHES=$(git log @{u}..HEAD --format="%H")
-else
-  HASHES=$(git log --format="%H" -10)
-fi
-
-COMMITS_DETAIL='[]'
-if [ -n "$HASHES" ]; then
-  COMMITS_DETAIL=$(echo "$HASHES" | while read -r hash; do
-    HASH_SHORT=$(git log -1 --format='%h' "$hash")
-    MSG=$(git log -1 --format='%s' "$hash")
-    FILES=$(git diff-tree --no-commit-id -r --numstat "$hash" \
-      | jq -Rs '[split("\n")[] | select(. != "") | split("\t") | {
-          insertions: (.[0] | if . == "-" then null else tonumber end),
-          deletions:  (.[1] | if . == "-" then null else tonumber end),
-          path: .[2]
-        }]' || echo '[]')
-    jq -n --arg hash "$HASH_SHORT" --arg message "$MSG" --argjson files "$FILES" \
-      '{hash: $hash, message: $message, files: $files}'
-  done | jq -s '.' || echo '[]')
-fi
-
 # Build JSON
 jq -n \
   --arg platform "$PLATFORM" \
   --arg project "$PROJECT" \
   --arg convention "$CONVENTION" \
   --arg branch "$BRANCH" \
-  --arg protected_branches "$PROTECTED_BRANCHES" \
-  --arg open_pr "$OPEN_PR" \
-  --arg merged_pr "$MERGED_PR" \
+  --argjson platform_info "$PLATFORM_JSON" \
   --arg has_upstream "$HAS_UPSTREAM" \
   --arg upstream "$UPSTREAM" \
-  --arg commits_to_push "$COMMITS_TO_PUSH" \
+  --arg upstream_status "$UPSTREAM_STATUS" \
+  --argjson commits_to_push "$COMMITS_TO_PUSH" \
   --arg divergence_behind "$DIVERGENCE_BEHIND" \
   --arg divergence_ahead "$DIVERGENCE_AHEAD" \
-  --arg commits_detail "$COMMITS_DETAIL" \
   '{
     platform: $platform,
     project: (if $project == "" then null else $project end),
     convention: (if $convention == "" then null else $convention end),
     branch: $branch,
-    protected_branches: ($protected_branches | fromjson? // []),
-    open_pr: ($open_pr | fromjson? // []),
-    merged_pr: ($merged_pr | fromjson? // []),
+    protected_branches: $platform_info.protected_branches,
+    open_pr: $platform_info.open_pr,
+    merged_pr: $platform_info.merged_pr,
     has_upstream: ($has_upstream | fromjson? // false),
     upstream: (if $upstream == "" then null else $upstream end),
-    commits_to_push: ($commits_to_push | fromjson? // []),
-    divergence: {behind: ($divergence_behind | fromjson? // 0), ahead: ($divergence_ahead | fromjson? // 0)},
-    commits_detail: ($commits_detail | fromjson? // [])
+    upstream_status: $upstream_status,
+    commits_to_push: $commits_to_push,
+    divergence: {behind: ($divergence_behind | fromjson? // 0), ahead: ($divergence_ahead | fromjson? // 0)}
   }'

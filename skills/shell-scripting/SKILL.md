@@ -51,6 +51,27 @@ if [ $status -ne 0 ]; then
 fi
 ```
 
+## Script Directory
+
+When a script needs to reference sibling scripts or files relative to itself, resolve the script's directory first:
+
+```sh
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+```
+
+Then use `$SCRIPT_DIR` for relative references:
+
+```sh
+# CORRECT - relative to script location
+"$SCRIPT_DIR/helper.sh"
+"$SCRIPT_DIR/../data/config.json"
+
+# WRONG - hardcoded absolute paths break if moved
+"$HOME/.claude/skills/my-skill/scripts/helper.sh"
+```
+
+Use `$HOME` only for paths in a different skill or truly global locations.
+
 ## POSIX Compatibility
 
 ### Test Constructs

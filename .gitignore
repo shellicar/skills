@@ -16,9 +16,13 @@ statsig/
 tasks/
 telemetry/
 todos/
-.credentials.json
 node_modules/
 image-cache/
+context-mode/
+
+.credentials.json
 settings.local.json
 audit.jsonl
 cli-session
+*.bak
+mcp-needs-auth-cache.json

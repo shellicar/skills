@@ -25,7 +25,9 @@ Run the gather script to collect push state in one call:
 
 The script calls `detect-convention` internally.
 
-The script outputs a single JSON object with fields: `platform`, `project`, `convention`, `branch`, `protected_branches`, `open_pr`, `merged_pr`, `has_upstream`, `upstream`, `commits_to_push`, `divergence`, `commits_detail`.
+The script outputs a single JSON object with fields: `platform`, `project`, `convention`, `branch`, `protected_branches`, `open_pr`, `merged_pr`, `has_upstream`, `upstream`, `upstream_status`, `commits_to_push`, `divergence`, `commits_detail`.
+
+The script exits with code 2 if the upstream branch is gone (deleted on remote). In this case, no JSON is output — only an error message on stderr. STOP and inform the Supreme Commander.
 
 After running the script, load the `<convention>-conventions` skill if `.convention` is non-null. If null, proceed without convention-specific rules.
 
@@ -34,6 +36,7 @@ After running the script, load the `<convention>-conventions` skill if `.convent
 From the JSON output, check the following — stop and inform the Supreme Commander if any fail:
 
 - **Branch protection** *(check this first)*: If `.branch` appears in `.protected_branches` (and the array is non-empty), **STOP immediately** — direct pushes to this branch are not allowed. Inform the Supreme Commander and offer to create a branch or open a PR.
+- **Upstream gone**: If the script exited with code 2, the upstream branch was deleted on the remote. **STOP** — inform the Supreme Commander that the remote tracking branch no longer exists and the local branch needs its upstream reset or should be deleted.
 - **No commits to push**: If `.commits_to_push` is empty (`[]`), inform the Supreme Commander and stop.
 - **Divergence**: If `.divergence.behind > 0`, the branch has diverged — STOP and inform the Supreme Commander, as this may require manual intervention (rebase, merge, or force push).
 

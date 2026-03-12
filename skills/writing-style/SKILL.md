@@ -10,6 +10,16 @@ user-invocable: false
 
 The core principle: **describe the effect, not the implementation**.
 
+## Forbidden Style
+
+- **Em dashes** (`—`): never use. Rewrite the sentence instead.
+
+**Bad**: `The private key never leaves the client — producing a signature that identifies the signer.`
+**Good**: `The private key never leaves the client. This produces a signature that identifies the signer.`
+
+**Bad**: `Signing mode is driven by the API — not set by the caller.`
+**Good**: `Signing mode is driven by the API, not set by the caller.`
+
 ## The Rule
 
 Say **what changed and why** — not **how you implemented it**. The audience is someone reading a title, description, or commit message to understand what happened. They don't need to know which functions you wrote, which files you touched, or which patterns you used.
