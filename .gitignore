@@ -24,5 +24,10 @@ context-mode/
 settings.local.json
 audit.jsonl
 cli-session
-*.bak
 mcp-needs-auth-cache.json
+context-mode/
+*.bak
+
+# Claude harness — Stage 2
+!.claude/*/
+!.claude/**/*.md
