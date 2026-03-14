@@ -21,6 +21,7 @@
 # Exit codes:
 #   0 - success
 #   2 - upstream is gone (remote branch was deleted) — stderr has error message
+#   3 - branch was already merged — stderr has error message
 
 set -e
 
@@ -57,6 +58,18 @@ if [ "$PLATFORM" = "github" ]; then
 elif [ "$PLATFORM" = "azure-devops" ]; then
   ORG=$(echo "$REMOTE_URL" | sed 's|.*dev\.azure\.com/||' | cut -d'/' -f1)
   PLATFORM_JSON=$("$SCRIPT_DIR/git-push-info-ado.sh" "$BRANCH" "$ORG" "$PROJECT" 2>/dev/null) || PLATFORM_JSON='{"protected_branches":[],"open_pr":[],"merged_pr":[]}'
+fi
+
+# Prune stale remote refs so upstream:track reflects reality
+git fetch -p origin 2>/dev/null || true
+
+# Exit if branch was already merged
+MERGED_PR_COUNT=$(printf '%s' "$PLATFORM_JSON" | jq '.merged_pr | length')
+if [ "$MERGED_PR_COUNT" -gt 0 ]; then
+  MERGED_TITLE=$(printf '%s' "$PLATFORM_JSON" | jq -r '.merged_pr[0].title')
+  printf 'error: this branch was already merged (PR: "%s").\n' "$MERGED_TITLE" >&2
+  printf 'Rebase onto main before pushing new work from this branch.\n' >&2
+  exit 3
 fi
 
 # Upstream detection: none / active / gone

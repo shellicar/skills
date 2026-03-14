@@ -77,7 +77,7 @@ When multiple findings are in the same block (e.g. multiple PII values in one JS
 
 **Step 3: Ask the Supreme Commander to resolve each finding**
 
-After presenting the table, use the `ask_questions` tool to collect a decision for each finding. Present one question per finding (batch up to 4 at a time). Each question must:
+After presenting the table, use the `AskUserQuestion` tool to collect a decision for each finding. Present one question per finding (batch up to 4 at a time). Each question must:
 
 - State the finding (file, Rule ID, value)
 - State the suggested disposition and remediation action (if Remediate)

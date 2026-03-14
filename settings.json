@@ -15,8 +15,8 @@
       "Bash(~/.claude/skills/git-push/scripts/*.sh *)",
       "Bash(~/.claude/skills/git-push/scripts/*.sh)",
       "Bash(~/.claude/skills/github-pr/scripts/*.sh)",
-      "Bash(~/repos/@shellicar/ecosystem/scripts/*.sh)",
       "Bash(~/repos/@shellicar/ecosystem/scripts/*.sh *)",
+      "Bash(~/repos/@shellicar/ecosystem/scripts/*.sh)",
       "Bash(az --version:*)",
       "Bash(az * --help *)",
       "Bash(az * --help)",
@@ -67,6 +67,9 @@
       "mcp__context7__query-docs",
       "mcp__context7__resolve-library-id",
       "mcp__ide__getDiagnostics",
+      "mcp__plugin_context-mode_context-mode__ctx_batch_execute",
+      "mcp__plugin_context-mode_context-mode__ctx_execute",
+      "mcp__plugin_context-mode_context-mode__ctx_search",
       "mcp__plugin_context7__resolve-library-id",
       "mcp__plugin_context7_context7__query-docs",
       "Read(/var/folders/s9/*/T/tmp.*)",
@@ -79,7 +82,6 @@
     "deny": [
       "Bash(*--unsafe*)",
       "Bash(*\"System.Parent=[0-9]+\"*)",
-      "Edit(./ecosystem/scripts)",
       "Edit(.git)",
       "Edit(**/package.json)",
       "Edit(~/.bash_logout)",
@@ -128,7 +130,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node /Users/shellicar/.claude/plugins/cache/context-mode/context-mode/1.0.17/hooks/pretooluse.mjs"
+            "command": "node \"/home/stephen/.claude/plugins/cache/context-mode/context-mode/1.0.18/hooks/pretooluse.mjs\""
           }
         ]
       }
@@ -139,7 +141,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/shellicar/.claude/plugins/cache/context-mode/context-mode/1.0.17/hooks/sessionstart.mjs\""
+            "command": "node \"/home/stephen/.claude/plugins/cache/context-mode/context-mode/1.0.18/hooks/sessionstart.mjs\""
           }
         ]
       }
@@ -150,10 +152,16 @@
     "command": "~/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true,
-    "agent-sdk-dev@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "context-mode@context-mode": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/anthropics/claude-plugins-official.git"
+      }
+    }
   },
   "spinnerVerbs": {
     "mode": "replace",
@@ -161,7 +169,5 @@
       "Working"
     ]
   },
-  "promptSuggestionEnabled": false,
-  "autoUpdatesChannel": "stable",
-  "minimumVersion": "2.1.42"
+  "autoUpdatesChannel": "latest"
 }

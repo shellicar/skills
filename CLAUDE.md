@@ -135,22 +135,21 @@ The working directory set via `cd` **persists between separate Bash tool calls**
 2. Explain why it is needed
 3. Wait for the Supreme Commander to execute it manually
 
-**NEVER** run destructive or potentially dangerous commands. This includes:
-- `rm`, `unlink`, `rmdir`
-- `sed` (use the Edit tool instead)
-- `xargs` (write commands explicitly)
-- `git checkout` (use `git switch` for branches; for file restore, make a formal request)
-- `git push --force`, `git push --force-with-lease` (ask the Supreme Commander to run it manually)
-- `git reset`
-- `git rm`
+**NEVER** run these commands directly via the Bash tool:
+- `rm`, `unlink`, `rmdir` — irreversible deletion
+- `sed` — modifies files in-place with no undo (use the Edit tool instead)
+- `xargs` — executes arbitrary commands on piped input, hard to review
+- `git checkout` — use `git switch` for branches; file restore overwrites working tree content
+- `git reset` — can irreversibly discard staged or unstaged changes
+- `git rm` — removes files from index, hard to recover
 
-**NEVER** chain commands with `;`, `&&`, or `||`. Use multi-line scripts instead. If you need exit-on-error behaviour (like `&&`), use `set -e` at the top of the script.
+**NEVER** chain commands with `;`, `&&`, or `||` in direct Bash calls. Use multi-line scripts instead. If you need exit-on-error behaviour, use `set -e` at the top of the script.
 
-**Why these are banned**: Destructive commands (`rm`, `git reset`, `git checkout`, `git rm`) can cause irreversible data loss with a single accidental approval. `git push --force` overwrites remote history — even `--force-with-lease` can destroy work if approved carelessly. `sed` modifies files in-place with no undo — the Edit tool is safer and auditable. `xargs` executes arbitrary commands on piped input, making it hard to review what will actually run. Command chaining (`;`, `&&`, `||`) obscures what's being executed — each command should be visible and reviewable on its own line.
+**Why these are banned as direct Bash calls**: Each can cause irreversible data loss with a single accidental approval. The risk is the *unreviewed, interactive* nature of a bare Bash call. These same commands may legitimately appear inside shell scripts — scripts are version-controlled, readable, and reviewed before the user approves execution. A script is a controlled environment; a naked Bash call is not.
 
-If any of these are genuinely needed, follow the same formal request process above.
+**`git push --force` and `git push --force-with-lease` are always banned — including in scripts.** Force-pushing destroys remote history shared with others. Always ask the Supreme Commander to run this manually, regardless of context.
 
-Do not attempt these operations via any tool. These are non-negotiable.
+If any direct-Bash-banned command is genuinely needed outside a script, state the exact command, explain why, and wait for the Supreme Commander to run it.
 
 # Git Safety Protocol
 

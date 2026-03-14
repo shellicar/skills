@@ -23,8 +23,11 @@ Match when:
 
 ## Branch Naming
 
-- `feature/<name>`
-- `fix/<name>`
+- `feature/<name>` — new features
+- `fix/<name>` — bug fixes
+- `docs/<name>` — documentation changes
+- `security/<name>` — security fixes and vulnerability patches
+- No shorthand prefixes (`feat/`, `chore/`, etc.) — use full words only
 - `main` (default branch)
 
 ## Commit Messages
@@ -50,8 +53,10 @@ Apply labels based on the nature of the changes. Use the branch prefix as a star
 |------------------|-------|
 | `fix/` branch, bug fixes | `bug` |
 | `feature/` branch, new features | `enhancement` |
+| `docs/` branch, documentation-only | `documentation` |
+| `security/` branch, via pnpm overrides / dependency pins | `dependencies` |
+| `security/` branch, via code changes | `bug` |
 | Dependency updates | `dependencies` |
-| Documentation-only changes | `documentation` |
 
 Multiple labels can apply (e.g., a bug fix that also updates docs could get `bug`).
 

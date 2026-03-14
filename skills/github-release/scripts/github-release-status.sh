@@ -36,10 +36,17 @@ WORKFLOW=$(gh run list --workflow=npm-publish.yml --limit=1 \
   --json status,conclusion,databaseId,displayTitle 2>/dev/null | jq '.[0] // null')
 
 # npm availability
+# Determine npm dist-tag from version (e.g. 1.0.0-alpha.65 → alpha, 1.0.0-preview.1 → preview, 1.0.0 → latest)
+NPM_TAG=$(echo "$VERSION" | sed -n 's/^[0-9]*\.[0-9]*\.[0-9]*-\(.*\)\.[0-9]*$/\1/p')
+if [ -z "$NPM_TAG" ]; then
+  NPM_TAG="latest"
+fi
+
+# npm availability
 NPM_LATEST=""
 NPM_PUBLISHED="false"
 if [ -n "$PKG_NAME" ] && [ "$PKG_NAME" != "null" ]; then
-  NPM_LATEST=$(npm view "$PKG_NAME" version 2>/dev/null || echo "")
+  NPM_LATEST=$(npm view "$PKG_NAME" "dist-tags.$NPM_TAG" 2>/dev/null || echo "")
   if [ "$NPM_LATEST" = "$VERSION" ]; then
     NPM_PUBLISHED="true"
   fi
