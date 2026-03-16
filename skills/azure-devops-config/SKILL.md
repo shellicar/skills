@@ -28,9 +28,7 @@ az boards iteration team list --team <Team> --project <Project> -o table
 az boards area team list --team "<Team Name>" --project <Project> -o json
 
 # Team settings - requires REST API
-az rest --method GET \
-  --uri 'https://dev.azure.com/{org}/{project}/{team_name}/_apis/work/teamsettings' \
-  --resource '499b84ac-1321-427f-aa17-267ca6975798'
+echo '{"org":"{org}","project":"{project}/{team_name}","method":"GET","path":"work/teamsettings"}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 ### Team Backlog Filtering
@@ -75,25 +73,24 @@ The `backlogVisibilities` field controls which backlog levels a team sees. Commo
 **IMPORTANT**: PATCH on `backlogVisibilities` **replaces** the entire object, not merges. Always send ALL categories:
 
 ```bash
-az rest --method PATCH \
-  --uri 'https://dev.azure.com/{org}/{project}/{team_name}/_apis/work/teamsettings' \
-  --resource '499b84ac-1321-427f-aa17-267ca6975798' \
-  --headers 'Content-Type=application/json' \
-  --body '{"backlogVisibilities":{"Custom.{guid}":true,"Microsoft.EpicCategory":true,"Microsoft.FeatureCategory":true,"Microsoft.RequirementCategory":true}}'
+~/.claude/skills/azure-devops/scripts/ado-rest.sh << 'EOF'
+{
+  "org": "{org}", "project": "{project}/{team_name}", "method": "PATCH",
+  "path": "work/teamsettings",
+  "headers": {"Content-Type": "application/json"},
+  "body": {"backlogVisibilities": {"Custom.{guid}": true, "Microsoft.EpicCategory": true, "Microsoft.FeatureCategory": true, "Microsoft.RequirementCategory": true}}
+}
+EOF
 ```
 
 ## Area Paths & Iteration Paths
 
 ```bash
 # Full area path hierarchy
-az rest --method GET \
-  --uri 'https://dev.azure.com/{org}/{project}/_apis/wit/classificationNodes/Areas?$depth=10' \
-  --resource '499b84ac-1321-427f-aa17-267ca6975798'
+echo '{"org":"{org}","project":"{project}","method":"GET","path":"wit/classificationNodes/Areas","params":{"$depth":"10"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 
 # Full iteration hierarchy
-az rest --method GET \
-  --uri 'https://dev.azure.com/{org}/{project}/_apis/wit/classificationNodes/Iterations?$depth=10' \
-  --resource '499b84ac-1321-427f-aa17-267ca6975798'
+echo '{"org":"{org}","project":"{project}","method":"GET","path":"wit/classificationNodes/Iterations","params":{"$depth":"10"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 ## Hierarchical Team Pattern
@@ -159,9 +156,7 @@ Apply standard column layouts across all teams. See [references/backlog-columns.
 Query all branch policies for a project:
 
 ```bash
-$ADO_REST --method GET \
-  --path 'https://dev.azure.com/{org}/{project}/_apis/policy/configurations' \
-  --param 'api-version=7.1'
+echo '{"org":"{org}","project":"{project}","method":"GET","path":"policy/configurations","params":{"api-version":"7.1"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 Common policy types:
@@ -179,29 +174,23 @@ Use the REST API to create and update policies. Each policy type has a specific 
 
 ```bash
 # Create a policy configuration
-az rest --method POST \
-  --url "https://dev.azure.com/{org}/{project}/_apis/policy/configurations?api-version=7.1" \
-  --resource 499b84ac-1321-427f-aa17-267ca6975798 \
-  --body '{
-    "isEnabled": true,
-    "isBlocking": true,
+~/.claude/skills/azure-devops/scripts/ado-rest.sh << 'EOF'
+{
+  "org": "{org}", "project": "{project}", "method": "POST",
+  "path": "policy/configurations", "params": {"api-version": "7.1"},
+  "body": {
+    "isEnabled": true, "isBlocking": true,
     "type": {"id": "<policy-type-id>"},
     "settings": {
-      "minimumApproverCount": 1,
-      "creatorVoteCounts": false,
-      "scope": [{
-        "repositoryId": "<repo-id>",
-        "refName": "refs/heads/main",
-        "matchKind": "exact"
-      }]
+      "minimumApproverCount": 1, "creatorVoteCounts": false,
+      "scope": [{"repositoryId": "<repo-id>", "refName": "refs/heads/main", "matchKind": "exact"}]
     }
-  }'
+  }
+}
+EOF
 
 # Update a policy
-az rest --method PUT \
-  --url "https://dev.azure.com/{org}/{project}/_apis/policy/configurations/{policy-id}?api-version=7.1" \
-  --resource 499b84ac-1321-427f-aa17-267ca6975798 \
-  --body '{ ... }'
+echo '{"org":"{org}","project":"{project}","method":"PUT","path":"policy/configurations/{policy-id}","params":{"api-version":"7.1"},"body":{}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 ### Querying Repo ID
@@ -209,9 +198,7 @@ az rest --method PUT \
 Policies require `repositoryId`. To find it:
 
 ```bash
-$ADO_REST --method GET \
-  --path 'https://dev.azure.com/{org}/{project}/_apis/git/repositories/{repo}' \
-  --param 'api-version=7.1' | jq '.id'
+echo '{"org":"{org}","project":"{project}","method":"GET","path":"git/repositories/{repo}","params":{"api-version":"7.1"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh | jq '.id'
 ```
 
 ### Branch Scoping

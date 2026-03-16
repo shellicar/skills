@@ -1,82 +1,99 @@
 #!/bin/sh
-# Azure DevOps REST API wrapper
-# Constructs authenticated az rest calls with proper URL encoding
-# Usage: ado-rest.sh --method METHOD --path PATH [--param KEY=VALUE]... [--temp-file] [-- extra az rest args...]
-
-set -e
+# Azure DevOps REST API wrapper - JSON stdin interface
+# Usage: echo '{"org":"...","project":"...","method":"GET","path":"_apis/..."}' | ado-rest.sh
+#
+# Required fields: org, project, method, path
+# Optional fields: params (object), body (any JSON), headers (object)
+#
+# Exit codes:
+#   1 = invalid JSON input
+#   2 = missing required field
+#   3 = az rest call failed (details on stderr)
+#   4 = response is not valid JSON (response on stderr)
 
 RESOURCE="499b84ac-1321-427f-aa17-267ca6975798"
-METHOD=""
-METHOD_SET=0
-PATH_SEGMENT=""
-PARAMS=""
-TEMP_FILE=""
+BODY_FILE=""
 
-while [ $# -gt 0 ]; do
-  case "$1" in
-    --method)
-      if [ "$METHOD_SET" -eq 1 ]; then
-        echo "Error: --method specified more than once" >&2; exit 1
-      fi
-      METHOD="$2"; METHOD_SET=1; shift 2 ;;
-    --path)    PATH_SEGMENT="$2"; shift 2 ;;
-    --param)
-      if [ -z "$PARAMS" ]; then
-        PARAMS="$2"
-      else
-        PARAMS="${PARAMS}&${2}"
-      fi
-      shift 2
-      ;;
-    --temp-file) TEMP_FILE="$(mktemp)"; shift 1 ;;
-    --)        shift; break ;;
-    *)         echo "Unknown argument: $1" >&2; exit 1 ;;
-  esac
-done
-
-# Validate
-if [ -z "$METHOD" ]; then
-  echo "Error: --method is required" >&2
-  echo "Usage: ado-rest.sh --method GET --path https://dev.azure.com/org/project/_apis/... [--param key=value]..." >&2
+# Read stdin
+INPUT=$(cat)
+if [ -z "$INPUT" ]; then
+  printf 'Error: no input on stdin\n' >&2
   exit 1
 fi
 
-if [ -z "$PATH_SEGMENT" ]; then
-  echo "Error: --path is required" >&2
-  echo "Usage: ado-rest.sh --method GET --path https://dev.azure.com/org/project/_apis/... [--param key=value]..." >&2
+# Validate JSON
+if ! printf '%s' "$INPUT" | jq empty 2>/dev/null; then
+  printf 'Error: invalid JSON input\n' >&2
   exit 1
 fi
 
-# Sanitise: reject shell metacharacters in path and params
-for val in "$PATH_SEGMENT" "$PARAMS"; do
-  case "$val" in
-    *\;*|*\`*|*\$\(*|*\|*) echo "Error: invalid characters in argument" >&2; exit 1 ;;
-  esac
-done
+# Extract required fields
+ORG=$(printf '%s' "$INPUT" | jq -r '.org // ""')
+PROJECT=$(printf '%s' "$INPUT" | jq -r '.project // ""')
+METHOD=$(printf '%s' "$INPUT" | jq -r '.method // ""')
+API_PATH=$(printf '%s' "$INPUT" | jq -r '.path // ""')
 
-# Build URI
+# Validate required fields
+if [ -z "$ORG" ];      then printf 'Error: missing required field: org\n'     >&2; exit 2; fi
+if [ -z "$METHOD" ];   then printf 'Error: missing required field: method\n'  >&2; exit 2; fi
+if [ -z "$API_PATH" ]; then printf 'Error: missing required field: path\n'    >&2; exit 2; fi
+
+# Build URL
+if [ -n "$PROJECT" ]; then
+  BASE_URL="https://dev.azure.com/${ORG}/${PROJECT}/_apis/${API_PATH}"
+else
+  BASE_URL="https://dev.azure.com/${ORG}/_apis/${API_PATH}"
+fi
+
+# Append query params (object keys/values joined as key=value&...)
+PARAMS=$(printf '%s' "$INPUT" | jq -r 'if .params then (.params | to_entries | map("\(.key)=\(.value)") | join("&")) else "" end')
 if [ -n "$PARAMS" ]; then
-  URI="${PATH_SEGMENT}?${PARAMS}"
+  URI="${BASE_URL}?${PARAMS}"
 else
-  URI="$PATH_SEGMENT"
+  URI="$BASE_URL"
 fi
 
-# Execute - "$@" preserves quoting of remaining args
-set +e
-if [ -n "$TEMP_FILE" ]; then
-  az rest --method "$METHOD" --uri "$URI" --resource "$RESOURCE" "$@" > "$TEMP_FILE"
-  STATUS=$?
-else
-  az rest --method "$METHOD" --uri "$URI" --resource "$RESOURCE" "$@"
-  STATUS=$?
+# Build az rest arg list
+set -- --method "$METHOD" --uri "$URI" --resource "$RESOURCE"
+
+# Body: write to temp file and pass as @file
+if printf '%s' "$INPUT" | jq -e 'has("body")' > /dev/null 2>&1; then
+  BODY=$(printf '%s' "$INPUT" | jq -c '.body')
+  BODY_FILE=$(mktemp)
+  printf '%s' "$BODY" > "$BODY_FILE"
+  set -- "$@" --body "@${BODY_FILE}"
 fi
+
+# Headers: each key=value as its own --headers flag
+if printf '%s' "$INPUT" | jq -e 'has("headers")' > /dev/null 2>&1; then
+  while IFS= read -r header; do
+    [ -n "$header" ] && set -- "$@" --headers "$header"
+  done << EOF
+$(printf '%s' "$INPUT" | jq -r '.headers | to_entries[] | "\(.key)=\(.value)"')
+EOF
+fi
+
+# Execute
+set +e
+RESULT=$(az rest "$@" 2>&1)
+STATUS=$?
 set -e
 
-if [ $STATUS -ne 0 ]; then
-  echo "❌ az rest failed (exit $STATUS): $METHOD $URI" >&2
-  exit $STATUS
+# Cleanup
+if [ -n "$BODY_FILE" ]; then
+  rm -f "$BODY_FILE"
 fi
 
-if [ -n "$TEMP_FILE" ]; then
-  echo "$TEMP_FILE"
+if [ $STATUS -ne 0 ]; then
+  printf '❌ az rest failed (exit %s): %s %s\n' "$STATUS" "$METHOD" "$URI" >&2
+  exit 3
 fi
+
+# Validate response is JSON
+if ! printf '%s' "$RESULT" | jq empty 2>/dev/null; then
+  printf 'Error: response is not valid JSON\n' >&2
+  printf '%s\n' "$RESULT" >&2
+  exit 4
+fi
+
+printf '%s\n' "$RESULT"

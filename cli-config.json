@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/shellicar/claude-cli/main/schema/cli-config.schema.json",
   "model": "claude-sonnet-4-6",
+  "compactModel": "claude-haiku-4-5",
   "maxTurns": 100,
   "permissionTimeoutMs": 30000,
   "extendedPermissionTimeoutMs": 120000,

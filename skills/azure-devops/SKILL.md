@@ -34,35 +34,25 @@ If no Azure DevOps remote found, use `AskUserQuestion` to ask for org and projec
 
 ## REST API Wrapper
 
-Use `scripts/ado-rest.sh` for all `az rest` calls. It handles authentication (resource ID), URL construction, and input sanitisation:
+Use `scripts/ado-rest.sh` for all REST calls. Takes JSON on stdin, handles authentication, URL construction, and sanitisation. `org` and `method` and `path` are required; `project` is optional (omit for org-level APIs).
 
 ```bash
-# Simple GET (no query params)
-~/.claude/skills/azure-devops/scripts/ado-rest.sh \
-  --method GET \
-  --path 'https://dev.azure.com/{org}/_apis/projects/{project}/teams'
+# Simple GET — org-level (no project)
+echo '{"org":"{org}","method":"GET","path":"projects"}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 
-# GET with query params (avoids & permission issues)
-~/.claude/skills/azure-devops/scripts/ado-rest.sh \
-  --method GET \
-  --path 'https://dev.azure.com/{org}/{project}/_apis/wit/classificationNodes/Areas' \
-  --param '$depth=10'
+# GET with query params
+echo '{"org":"{org}","project":"{project}","method":"GET","path":"wit/classificationNodes/Areas","params":{"$depth":"10"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 
-# GET column options for a team (confirm existing backlog column config)
-~/.claude/skills/azure-devops/scripts/ado-rest.sh \
-  --method GET \
-  --path 'https://dev.azure.com/{org}/_apis/Settings/WebTeam/{team_id}/Entries/me/Agile/BacklogsHub/ColumnOptions'
-
-# Non-GET with extra az rest args
-~/.claude/skills/azure-devops/scripts/ado-rest.sh \
-  --method PATCH \
-  --path 'https://dev.azure.com/{org}/{project}/{team}/_apis/work/teamsettings' \
-  -- --headers 'Content-Type=application/json' --body '{"backlogVisibilities":{...}}'
+# PATCH with body and headers (team is appended to project segment)
+~/.claude/skills/azure-devops/scripts/ado-rest.sh << 'EOF'
+{
+  "org": "{org}", "project": "{project}/{team}", "method": "PATCH",
+  "path": "work/teamsettings",
+  "headers": {"Content-Type": "application/json"},
+  "body": {"backlogVisibilities": {"Microsoft.EpicCategory": true}}
+}
+EOF
 ```
-
-**Why**: Claude Code's permission matcher treats `&` as a shell operator, prompting for approval even inside quoted strings. The script constructs multi-param URLs internally, bypassing this limitation.
-
-For simple single-param URLs, direct `az rest` calls still work fine.
 
 ## Troubleshooting: Token Expiry
 

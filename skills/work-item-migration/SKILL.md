@@ -18,15 +18,18 @@ Use REST API to move a work item to a different project. Update three fields tog
 - `System.IterationPath` - valid iteration path in target project
 
 ```bash
-az rest --method PATCH \
-  --uri "https://dev.azure.com/{org}/_apis/wit/workitems/{id}?api-version=7.1" \
-  --resource "499b84ac-1321-427f-aa17-267ca6975798" \
-  --headers "Content-Type=application/json-patch+json" \
-  --body '[
+~/.claude/skills/azure-devops/scripts/ado-rest.sh << 'EOF'
+{
+  "org": "{org}", "method": "PATCH",
+  "path": "wit/workitems/{id}", "params": {"api-version": "7.1"},
+  "headers": {"Content-Type": "application/json-patch+json"},
+  "body": [
     {"op": "add", "path": "/fields/System.TeamProject", "value": "{TargetProject}"},
     {"op": "add", "path": "/fields/System.AreaPath", "value": "{TargetProject}\\{Area}"},
     {"op": "add", "path": "/fields/System.IterationPath", "value": "{TargetProject}\\{Iteration}"}
-  ]'
+  ]
+}
+EOF
 ```
 
 **Important**:
@@ -113,11 +116,7 @@ When an equivalent work item already exists in the target project:
 Use HTML format with `data-vss-mention` attribute for proper rendering:
 
 ```bash
-az rest --method POST \
-  --uri "https://dev.azure.com/{org}/{project}/_apis/wit/workItems/{id}/comments?api-version=7.1-preview.4" \
-  --resource "499b84ac-1321-427f-aa17-267ca6975798" \
-  --headers "Content-Type=application/json" \
-  --body '{"text": "<div>Continued in <a href=\"https://dev.azure.com/{org}/{targetProject}/_workitems/edit/{targetId}/\" data-vss-mention=\"version:1.0\">#{targetId}</a> ({Title}) in {targetProject} project as part of work item migration.</div>"}'
+echo '{"org":"{org}","project":"{project}","method":"POST","path":"wit/workItems/{id}/comments","params":{"api-version":"7.1-preview.4"},"headers":{"Content-Type":"application/json"},"body":{"text":"<div>Continued in <a href=\"https://dev.azure.com/{org}/{targetProject}/_workitems/edit/{targetId}/\" data-vss-mention=\"version:1.0\">#{targetId}</a> ({Title}) in {targetProject} project as part of work item migration.</div>"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 **Note**: Plain text `#1234` does NOT auto-link for cross-project references. Must use full HTML anchor tag.

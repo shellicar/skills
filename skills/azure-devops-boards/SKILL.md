@@ -47,12 +47,8 @@ az boards work-item relation add --id <ID> --relation-type "parent" --target-id 
 # Remove parent relationship
 az boards work-item relation remove --id <ID> --relation-type "parent" --target-id <PARENT_ID> -y
 
-# Add comment (use az rest — no native CLI command for comments)
-az rest --method POST \
-  --uri "https://dev.azure.com/{org}/{project}/_apis/wit/workItems/{id}/comments?api-version=7.1-preview.4" \
-  --resource "499b84ac-1321-427f-aa17-267ca6975798" \
-  --headers "Content-Type=application/json" \
-  --body '{"text": "<div>Comment text here.</div>"}'
+# Add comment (no native CLI command for comments)
+echo '{"org":"{org}","project":"{project}","method":"POST","path":"wit/workItems/{id}/comments","params":{"api-version":"7.1-preview.4"},"headers":{"Content-Type":"application/json"},"body":{"text":"<div>Comment text here.</div>"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 ### CLI Gotchas

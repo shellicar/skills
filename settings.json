@@ -130,7 +130,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/home/stephen/.claude/plugins/cache/context-mode/context-mode/1.0.18/hooks/pretooluse.mjs\""
+            "command": "node \"$HOME/.claude/plugins/cache/context-mode/context-mode/1.0.22/hooks/pretooluse.mjs\""
           }
         ]
       }
@@ -141,7 +141,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/home/stephen/.claude/plugins/cache/context-mode/context-mode/1.0.18/hooks/sessionstart.mjs\""
+            "command": "node \"$HOME/.claude/plugins/cache/context-mode/context-mode/1.0.22/hooks/sessionstart.mjs\""
           }
         ]
       }

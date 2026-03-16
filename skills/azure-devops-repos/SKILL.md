@@ -22,62 +22,45 @@ Ask what they need help with if not clear from context.
 
 ## Pull Requests
 
-All PR operations use `az rest` (via `ado-rest.sh`) instead of `az repos`. The `az devops` extension has unreliable authentication — `az rest` with `--resource` uses the standard `az login` AAD token directly.
+All PR operations use `ado-rest.sh` instead of `az repos`. The `az devops` extension has unreliable authentication — `ado-rest.sh` uses the standard `az login` AAD token directly.
 
 ```bash
-ADO_REST=~/.claude/skills/azure-devops/scripts/ado-rest.sh
-BASE="https://dev.azure.com/{org}/{project}/_apis/git/repositories/{repo}"
-
 # List active PRs
-$ADO_REST --method GET \
-  --path "$BASE/pullrequests" \
-  --param 'searchCriteria.status=active' \
-  --param 'api-version=7.1'
+echo '{"org":"{org}","project":"{project}","method":"GET","path":"git/repositories/{repo}/pullrequests","params":{"searchCriteria.status":"active","api-version":"7.1"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 
 # Show PR details
-$ADO_REST --method GET \
-  --path "$BASE/pullrequests/{id}" \
-  --param 'api-version=7.1'
+echo '{"org":"{org}","project":"{project}","method":"GET","path":"git/repositories/{repo}/pullrequests/{id}","params":{"api-version":"7.1"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 
 # Create PR
-az rest --method POST \
-  --url "$BASE/pullrequests?api-version=7.1" \
-  --resource 499b84ac-1321-427f-aa17-267ca6975798 \
-  --body '{
-    "sourceRefName": "refs/heads/<branch>",
-    "targetRefName": "refs/heads/main",
-    "title": "Title",
-    "description": "Description"
-  }'
+~/.claude/skills/azure-devops/scripts/ado-rest.sh << 'EOF'
+{
+  "org": "{org}", "project": "{project}", "method": "POST",
+  "path": "git/repositories/{repo}/pullrequests", "params": {"api-version": "7.1"},
+  "body": {"sourceRefName": "refs/heads/<branch>", "targetRefName": "refs/heads/main", "title": "Title", "description": "Description"}
+}
+EOF
 
-# Update PR (title, description, auto-complete, merge options)
-az rest --method PATCH \
-  --url "$BASE/pullrequests/{id}?api-version=7.1" \
-  --resource 499b84ac-1321-427f-aa17-267ca6975798 \
-  --body '{
+# Update PR (auto-complete, merge options)
+~/.claude/skills/azure-devops/scripts/ado-rest.sh << 'EOF'
+{
+  "org": "{org}", "project": "{project}", "method": "PATCH",
+  "path": "git/repositories/{repo}/pullrequests/{id}", "params": {"api-version": "7.1"},
+  "body": {
     "autoCompleteSetBy": {"id": "<user-id>"},
-    "completionOptions": {
-      "mergeStrategy": "squash",
-      "deleteSourceBranch": true,
-      "transitionWorkItems": true,
-      "mergeCommitMessage": "Merged PR {id}: {title}\n\n{description}"
-    }
-  }'
+    "completionOptions": {"mergeStrategy": "squash", "deleteSourceBranch": true, "transitionWorkItems": true}
+  }
+}
+EOF
 
 # Link work items to PR
-az rest --method PATCH \
-  --url "https://dev.azure.com/{org}/{project}/_apis/wit/workitems/{wi-id}?api-version=7.1" \
-  --resource 499b84ac-1321-427f-aa17-267ca6975798 \
-  --headers 'Content-Type=application/json-patch+json' \
-  --body '[{
-    "op": "add",
-    "path": "/relations/-",
-    "value": {
-      "rel": "ArtifactLink",
-      "url": "vstfs:///Git/PullRequestId/{project-id}%2F{repo-id}%2F{pr-id}",
-      "attributes": {"name": "Pull Request"}
-    }
-  }]'
+~/.claude/skills/azure-devops/scripts/ado-rest.sh << 'EOF'
+{
+  "org": "{org}", "project": "{project}", "method": "PATCH",
+  "path": "wit/workitems/{wi-id}", "params": {"api-version": "7.1"},
+  "headers": {"Content-Type": "application/json-patch+json"},
+  "body": [{"op": "add", "path": "/relations/-", "value": {"rel": "ArtifactLink", "url": "vstfs:///Git/PullRequestId/{project-id}%2F{repo-id}%2F{pr-id}", "attributes": {"name": "Pull Request"}}}]
+}
+EOF
 ```
 
 ## Linking Work Items to PRs

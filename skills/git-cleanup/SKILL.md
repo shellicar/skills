@@ -158,10 +158,7 @@ git log main --oneline --grep="PR-number-or-title" | head -1
 # e.g., 1ff3b1b6 Merged PR 503: Use temporal for survey workflow
 
 # Query the API with full commit hash
-az rest --method POST \
-  --uri "https://dev.azure.com/<org>/<project>/_apis/git/repositories/<repo>/pullrequestquery?api-version=7.1" \
-  --resource "499b84ac-1321-427f-aa17-267ca6975798" \
-  --body '{"queries": [{"items": ["<full-40-char-commit-hash>"], "type": "lastMergeCommit"}]}'
+echo '{"org":"<org>","project":"<project>","method":"POST","path":"git/repositories/<repo>/pullrequestquery","params":{"api-version":"7.1"},"body":{"queries":[{"items":["<full-40-char-commit-hash>"],"type":"lastMergeCommit"}]}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 This returns full PR details including `pullRequestId`, `sourceRefName`, and `lastMergeSourceCommit`.
@@ -217,9 +214,7 @@ If PR merged commit `abc123` but branch tip is `def456`:
 #### Get PR commit history
 
 ```bash
-az rest --method GET \
-  --uri "https://dev.azure.com/<org>/<project>/_apis/git/repositories/<repo>/pullRequests/<PR_ID>/commits?api-version=7.1" \
-  --resource "499b84ac-1321-427f-aa17-267ca6975798"
+echo '{"org":"<org>","project":"<project>","method":"GET","path":"git/repositories/<repo>/pullRequests/<PR_ID>/commits","params":{"api-version":"7.1"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 #### Search for branch tip in PR commit history
@@ -232,12 +227,7 @@ git rev-parse origin/feature/foo
 # e.g., cf7b9d85e8e441678030bacf6114818a6e8d2e5e
 
 # Get PR commits and search for it
-az rest --method GET \
-  --uri "https://dev.azure.com/<org>/<project>/_apis/git/repositories/<repo>/pullRequests/<PR_ID>/commits?api-version=7.1" \
-  --resource "499b84ac-1321-427f-aa17-267ca6975798" > /tmp/pr-commits.json
-
-# Search for the commit
-grep "cf7b9d85" /tmp/pr-commits.json
+echo '{"org":"<org>","project":"<project>","method":"GET","path":"git/repositories/<repo>/pullRequests/<PR_ID>/commits","params":{"api-version":"7.1"}}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh | jq '.value[].commitId' | grep "cf7b9d85"
 ```
 
 **If found** → The branch tip was included in the PR → Safe to delete original branch

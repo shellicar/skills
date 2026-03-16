@@ -42,7 +42,7 @@ Before each command, add a **comment explaining what it does**:
 
 ```bash
 # Portfolio Team - Initiative: without-parent, Epic/Feature/PBI: with-parent
-az rest --method PATCH ...
+echo '{"org":"...", "project":"...", "method":"PATCH", "path":"..."}' | ~/.claude/skills/azure-devops/scripts/ado-rest.sh
 ```
 
 This is especially important when running the same command template against multiple targets (teams, resources, etc.).

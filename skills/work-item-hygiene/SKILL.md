@@ -113,5 +113,5 @@ Always use rich links in descriptions, never plain `#123`:
 - `System.Description` is not rendered for Bug work items — use `Microsoft.VSTS.TCM.ReproSteps`
 - `System.Description` is a long-text field — cannot query `= ''` or check length in WIQL
 - `System.Parent` field on `az boards work-item create` doesn't reliably create hierarchy links — use `az boards work-item relation add` separately
-- When using `az rest` for HTML descriptions, use `<br>` or `<div>` for line breaks
+- When using `ado-rest.sh` for HTML descriptions, use `<br>` or `<div>` for line breaks
 - PR/task titles sometimes drift from actual scope during implementation — check titles match what was done, not what was planned
