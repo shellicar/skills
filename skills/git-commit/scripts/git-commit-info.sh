@@ -72,7 +72,8 @@ OPEN_PR='[]'
 if [ "$PLATFORM" = "github" ]; then
   OPEN_PR=$(gh pr list --head "$BRANCH" --state open --json number,title,url 2>/dev/null) || OPEN_PR='[]'
 elif [ "$PLATFORM" = "azure-devops" ]; then
-  OPEN_PR=$(az repos pr list --source-branch "$BRANCH" --status active --project "$PROJECT" -o json 2>/dev/null) || OPEN_PR='[]'
+  OPEN_PR=$(az repos pr list --source-branch "$BRANCH" --status active --project "$PROJECT" -o json 2>/dev/null \
+    | jq '[.[] | {id: .pullRequestId, title: .title}]' 2>/dev/null) || OPEN_PR='[]'
 fi
 
 # Merged PR
@@ -80,7 +81,8 @@ MERGED_PR='[]'
 if [ "$PLATFORM" = "github" ]; then
   MERGED_PR=$(gh pr list --head "$BRANCH" --state merged --json number,title 2>/dev/null) || MERGED_PR='[]'
 elif [ "$PLATFORM" = "azure-devops" ]; then
-  MERGED_PR=$(az repos pr list --source-branch "$BRANCH" --status completed --project "$PROJECT" -o json 2>/dev/null) || MERGED_PR='[]'
+  MERGED_PR=$(az repos pr list --source-branch "$BRANCH" --status completed --project "$PROJECT" -o json 2>/dev/null \
+    | jq '[.[] | {id: .pullRequestId, title: .title}]' 2>/dev/null) || MERGED_PR='[]'
 fi
 
 # Staged files (numstat: insertions, deletions, path — binary files use null)
@@ -90,15 +92,14 @@ STAGED_FILES=$(git diff --staged --numstat 2>/dev/null \
       deletions:  (.[1] | if . == "-" then null else tonumber end),
       path: .[2]
     }]' || echo '[]')
-# Working tree status (porcelain: unstaged changes and untracked files)
+# Working tree status (porcelain: grouped by change type)
 STATUS=$(git status --porcelain 2>/dev/null \
   | jq -Rs '[split("\n")[] | select(. != "")] | {
-      unstaged: [.[] | select(.[0:2] != "??" and .[1:2] != " ") | {
-        path: .[3:],
-        change: (.[1:2] | if . == "M" then "modified" elif . == "D" then "deleted" elif . == "A" then "added" else . end)
-      }],
+      modified:  [.[] | select(.[0:2] != "??" and .[1:2] == "M") | .[3:]],
+      deleted:   [.[] | select(.[0:2] != "??" and .[1:2] == "D") | .[3:]],
+      added:     [.[] | select(.[0:2] != "??" and .[1:2] == "A") | .[3:]],
       untracked: [.[] | select(.[0:2] == "??") | .[3:]]
-    }' || echo '{"unstaged":[],"untracked":[]}')
+    }' || echo '{"modified":[],"deleted":[],"added":[],"untracked":[]}')
 RECENT_LOG=$(git log --oneline -5 2>/dev/null | jq -Rs 'split("\n") | map(select(. != ""))' || echo '[]')
 
 # Build JSON
@@ -122,6 +123,6 @@ jq -n \
     open_pr: ($open_pr | fromjson? // []),
     merged_pr: ($merged_pr | fromjson? // []),
     staged_files: ($staged_files | fromjson? // []),
-    status: ($status | fromjson? // {unstaged:[],untracked:[]}),
+    status: ($status | fromjson? // {modified:[],deleted:[],added:[],untracked:[]}),
     recent_log: ($recent_log | fromjson? // [])
   }'
