@@ -82,9 +82,12 @@ The bad example describes the implementation. The good example describes the eff
 - No period at end
 - Keep under 50 characters (hard limit: 72)
 - Detail belongs in PRs, not commits
+- **No prefixes.** `feat:`, `fix:`, `chore:` and similar prefixes are Conventional Commits — a spec for automated version bumping. These projects don't use that tooling, so the prefixes serve no purpose and make commit messages harder to read.
 
 **Good**: `Recalculate group status when facilitator licence changes`
 **Bad**: `Add handleFacilitator to ProgramGroupViewProcessor`
+**Bad**: `fix: recalculate group status when facilitator licence changes`
+**Bad**: `chore: update dependencies`
 
 ## Work Item and Task Titles
 

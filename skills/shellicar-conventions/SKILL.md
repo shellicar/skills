@@ -30,7 +30,7 @@ Match when:
 ## Commit Messages
 
 - Concise, single line, imperative mood
-- No prefix conventions required
+- **No prefixes.** See `git-commit` skill.
 - See `writing-style` skill for tone and examples
 
 ## PR Description Format

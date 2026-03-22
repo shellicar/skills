@@ -149,5 +149,10 @@ Do NOT mention trivial non-error diagnostics to the user.
 Convention skills may define:
 
 - Work item ID in commit message (e.g., `AB#1234: Add feature`)
-- Prefix conventions (e.g., `feat:`, `fix:`)
 - Branch name requirements
+
+## No Commit Prefixes
+
+Conventional Commits is a spec designed for automated version bumping — `feat:` triggers a minor, `fix:` triggers a patch, `BREAKING CHANGE` triggers a major. These projects do not use `semantic-release`, `commitlint`, or any tooling that reads commit prefixes. The prefixes serve no purpose here and make commit messages harder to read.
+
+Do not use `feat:`, `fix:`, `chore:`, `build:`, `ci:`, `docs:`, `perf:`, `refactor:`, `revert:`, `style:`, `test:`, or any `type:` or `type(scope):` pattern.

@@ -33,7 +33,7 @@ Config repos use a simplified workflow:
 
 - Concise, single line
 - Imperative mood
-- No prefix conventions required
+- **No prefixes.** See `git-commit` skill.
 
 ## CLI Commands
 

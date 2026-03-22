@@ -27,13 +27,12 @@ Match when:
 - `fix/<name>` — bug fixes
 - `docs/<name>` — documentation changes
 - `security/<name>` — security fixes and vulnerability patches
-- No shorthand prefixes (`feat/`, `chore/`, etc.) — use full words only
 - `main` (default branch)
 
 ## Commit Messages
 
 - Concise, single line, imperative mood
-- No prefix conventions required
+- **No prefixes.** See `git-commit` skill.
 - See `writing-style` skill for tone and examples
 
 ## Assignee
