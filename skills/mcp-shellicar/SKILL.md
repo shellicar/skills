@@ -9,11 +9,13 @@ description: "What: mcp__shellicar__exec replaces the Bash tool — programs are
 
 ## Quick Reference
 
+Each step has a `commands` array. One command runs directly; two or more are connected as a pipeline (stdout → stdin).
+
 **Single command:**
 ```json
 {
   "description": "Check git status",
-  "steps": [{ "type": "command", "program": "git", "args": ["status"] }]
+  "steps": [{ "commands": [{ "program": "git", "args": ["status"] }] }]
 }
 ```
 
@@ -22,8 +24,8 @@ description: "What: mcp__shellicar__exec replaces the Bash tool — programs are
 {
   "description": "Build then test",
   "steps": [
-    { "type": "command", "program": "pnpm", "args": ["build"] },
-    { "type": "command", "program": "pnpm", "args": ["test"] }
+    { "commands": [{ "program": "pnpm", "args": ["build"] }] },
+    { "commands": [{ "program": "pnpm", "args": ["test"] }] }
   ]
 }
 ```
@@ -33,7 +35,6 @@ description: "What: mcp__shellicar__exec replaces the Bash tool — programs are
 {
   "description": "Count TODOs in src",
   "steps": [{
-    "type": "pipeline",
     "commands": [
       { "program": "grep", "args": ["-r", "TODO", "src/"] },
       { "program": "wc", "args": ["-l"] }
@@ -46,7 +47,7 @@ description: "What: mcp__shellicar__exec replaces the Bash tool — programs are
 ```json
 {
   "description": "Run inline node script",
-  "steps": [{ "type": "command", "program": "node", "args": [], "stdin": "console.log(process.version)" }]
+  "steps": [{ "commands": [{ "program": "node", "stdin": "console.log(process.version)" }] }]
 }
 ```
 
@@ -54,7 +55,7 @@ description: "What: mcp__shellicar__exec replaces the Bash tool — programs are
 ```json
 {
   "description": "Save curl response to file",
-  "steps": [{ "type": "command", "program": "curl", "args": ["-s", "https://api.example.com/data"], "redirect": { "path": "/tmp/response.json" } }]
+  "steps": [{ "commands": [{ "program": "curl", "args": ["-s", "https://api.example.com/data"], "redirect": { "path": "/tmp/response.json" } }] }]
 }
 ```
 
@@ -62,15 +63,23 @@ description: "What: mcp__shellicar__exec replaces the Bash tool — programs are
 ```json
 {
   "description": "Run with NODE_ENV=production",
-  "steps": [{ "type": "command", "program": "node", "args": ["app.js"], "env": { "NODE_ENV": "production" } }]
+  "steps": [{ "commands": [{ "program": "node", "args": ["app.js"], "env": { "NODE_ENV": "production" } }] }]
 }
 ```
 
-**Working directory override:**
+**Working directory (supports `~` and `$VAR`):**
 ```json
 {
   "description": "Build package in subdir",
-  "steps": [{ "type": "command", "program": "pnpm", "args": ["build"], "cwd": "/home/stephen/project/packages/api" }]
+  "steps": [{ "commands": [{ "program": "pnpm", "args": ["build"], "cwd": "~/project/packages/api" }] }]
+}
+```
+
+**Merge stderr into stdout (`merge_stderr`):**
+```json
+{
+  "description": "Capture all output together",
+  "steps": [{ "commands": [{ "program": "pnpm", "args": ["build"], "merge_stderr": true }] }]
 }
 ```
 
@@ -82,15 +91,15 @@ description: "What: mcp__shellicar__exec replaces the Bash tool — programs are
   "timeout": 300000,
   "steps": [
     {
-      "type": "command",
-      "program": "pnpm",
-      "args": ["turbo", "type-check"],
-      "cwd": "/absolute/path/to/project",
-      "env": { "NO_COLOR": "1", "FORCE_COLOR": "0" },
-      "redirect": { "path": "/tmp/tc-clean.txt", "stream": "both" }
+      "commands": [{
+        "program": "pnpm",
+        "args": ["turbo", "type-check"],
+        "cwd": "~/project",
+        "env": { "NO_COLOR": "1", "FORCE_COLOR": "0" },
+        "redirect": { "path": "/tmp/tc-clean.txt", "stream": "both" }
+      }]
     },
     {
-      "type": "pipeline",
       "commands": [
         { "program": "grep", "args": ["-E", "error TS|Tasks:|successful|failed|FAILED", "/tmp/tc-clean.txt"] },
         { "program": "tail", "args": ["-60"] }
@@ -106,7 +115,7 @@ Key points: `stream: "both"` captures stdout+stderr to file. Step 2 reads from t
 {
   "description": "Start dev server",
   "background": true,
-  "steps": [{ "type": "command", "program": "pnpm", "args": ["dev"] }]
+  "steps": [{ "commands": [{ "program": "pnpm", "args": ["dev"] }] }]
 }
 ```
 
@@ -114,20 +123,21 @@ Key points: `stream: "both"` captures stdout+stderr to file. Step 2 reads from t
 
 | Bash pattern | Exec equivalent |
 |---|---|
-| `git status` | `{ program: "git", args: ["status"] }` |
+| `git status` | `commands: [{ program: "git", args: ["status"] }]` |
 | `pnpm build && pnpm test` | Two steps, `chaining: "bail_on_error"` (default) |
 | `pnpm build; pnpm test` | Two steps, `chaining: "sequential"` |
-| `grep -r TODO src/ \| wc -l` | `type: "pipeline"` with two commands |
+| `grep -r TODO src/ \| wc -l` | One step with two commands in `commands[]` (pipeline) |
 | `cat <<EOF \| node` | Single command with `stdin` field |
 | `curl ... > /tmp/out.json` | Command with `redirect: { path: "/tmp/out.json" }` |
 | `NODE_ENV=prod node app.js` | Command with `env: { "NODE_ENV": "prod" }` |
-| `cd subdir && pnpm build` | Command with `cwd: "/absolute/path/to/subdir"` |
+| `cd subdir && pnpm build` | Command with `cwd: "~/subdir"` (`~` and `$VAR` supported) |
 | `command &` | Top-level `background: true` |
-| `~/.claude/skills/foo/scripts/bar.sh` | `program: "/home/stephen/.claude/skills/foo/scripts/bar.sh"` — use absolute path, no tilde |
+| `~/.claude/skills/foo/scripts/bar.sh` | `program: "~/.claude/skills/foo/scripts/bar.sh"` (`~` expanded in `program`) |
 | `echo "text" > file` | Use the Write tool instead |
 | `program: "/bin/bash", args: ["/path/script.sh"]` | `program: "/path/script.sh"` — call directly, no bash wrapper |
-| `program: "sh", stdin: "cd /path\ncmd ..."` | Decompose: `program: "cmd"`, `cwd`, `env`, `steps[]`, `type: "pipeline"` |
-| `echo '{"key":"val"}' \| ~/script.sh` | `program: "/abs/path/script.sh", stdin: "{\"key\":\"val\"}"` |
+| `program: "sh", stdin: "cd /path\ncmd ..."` | Decompose: `program: "cmd"`, `cwd`, `env`, `steps[]`, `commands[]` |
+| `echo '{"key":"val"}' \| ~/script.sh` | `program: "~/script.sh", stdin: "{\"key\":\"val\"}"` |
+| `cmd 2>&1` | `merge_stderr: true` on the command |
 | `${PIPESTATUS[0]}` | Not needed — exec reports each step's exit code separately |
 
 **Chaining modes:**
@@ -152,8 +162,8 @@ Built-in validation blocks these before execution:
 
 ## Gotchas
 
-- **No shell expansion anywhere**: `~`, `$VAR`, `*.ts` globs are NOT expanded in `program`, `args[]`, or `cwd`. Use absolute paths. Use `find` or a pipeline for globs. Invalid `cwd` causes a misleading "Command not found" error rather than a directory error.
-- **No `cd` persistence**: There is no shell session between steps. Use `cwd` per-step.
+- **Expansion**: `~` and `$VAR` are expanded in `program` and `cwd`. They are NOT expanded in `args[]` — use absolute paths or let the program resolve them. Glob patterns (`*.ts`) are never expanded.
+- **No `cd` persistence**: There is no shell session between steps. Use `cwd` per-command.
 - **ENOENT = exit 127**: Program not found on `$PATH` returns exit code 127.
-- **Pipeline stderr**: Only stdout is piped between pipeline commands. Each command's stderr is collected separately in output. Workaround: use `redirect: { stream: "both" }` to save combined output to a file, then read from the file in a subsequent step (see example above). A future `merge_stderr: true` flag per pipeline command would eliminate the temp file — implementation: `PassThrough` stream merging `child.stdout` and `child.stderr` before piping to the next command's stdin.
+- **Pipeline stderr**: Only stdout is piped between pipeline commands. Each command's stderr is collected separately. Use `merge_stderr: true` on a command to combine stderr into stdout before piping, or use `redirect: { stream: "both" }` to capture both to a file.
 - **No chaining syntax**: `&&`, `;`, `||`, `$()`, backticks — none of these work. Use `steps[]` with appropriate `chaining` mode.
