@@ -508,28 +508,21 @@ This allows flexibility - work can be merged without committing to a release.
 
 ### 5.1 Determine Branch Name
 
-Branch names must be unique - avoid generic names that would be reused.
+Branch naming is determined by the active convention skill. Use `detect-convention` to determine the correct prefix.
 
-#### Branch Prefixes
+If the convention skill does not prescribe branch prefixes, use:
 
-- `security/` - security fixes (CVEs)
-- `chore/` - dependency updates, maintenance
-- `fix/` - bug fixes (not for security or maintenance)
+- `security/` — CVE fixes, `pnpm audit` remediations
+- `feature/` — dependency updates, new tooling
+- `fix/` — fixing a bug in our code (not upstream dependencies)
 
-#### Include Context for Uniqueness
+Examples:
 
-Combine human-readable context with unique identifier:
-
-- **CVE with package**: `security/<package>-CVE-YYYY-NNNNN` (preferred for single CVE)
-- **Date-based**: `security/audit-YYYY-MM-DD` (for multiple CVEs or mixed)
-- **Package-based**: `chore/update-<package>-YYYY-MM-DD`
-
-#### Examples
-
-- Security fix for brace-expansion CVE-2026-25547 → `security/brace-expansion-CVE-2026-25547`
-- Multiple CVEs on 2026-02-04 → `security/audit-2026-02-04`
-- Dependency updates only → `chore/deps-update-2026-02-04`
-- Mixed (security + deps) → `security/audit-2026-02-04` (security takes precedence)
+- Single CVE in brace-expansion → `security/brace-expansion-CVE-2026-25547`
+- Multiple CVEs from pnpm audit → `security/audit-2026-02-04`
+- Mixed security + deps → `security/audit-2026-02-04` (security takes precedence)
+- Dependency updates only → `feature/update-dependencies-2026-02-04`
+- Single package update → `feature/update-undici-2026-02-04`
 
 ### 5.2 Generate Commit Message
 

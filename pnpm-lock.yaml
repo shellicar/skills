@@ -8,9 +8,6 @@ importers:
 
   .:
     devDependencies:
-      skills:
-        specifier: ^1.4.4
-        version: 1.4.4
       svgo:
         specifier: ^4.0.1
         version: 4.0.1
@@ -75,11 +72,6 @@ packages:
   sax@1.5.0:
     resolution: {integrity: sha512-21IYA3Q5cQf089Z6tgaUTr7lDAyzoTPx5HRtbhsME8Udispad8dC/+sziTNugOEx54ilvatQ9YCzl4KQLPcRHA==}
     engines: {node: '>=11.0.0'}
-
-  skills@1.4.4:
-    resolution: {integrity: sha512-Ihu9Nfp2Ff95254Wq73grr6hcwCQG1G0K7Ty+0/N7xiT6LG01+XY1FCdTBiGPVoIsCpG4WudJj6/LvHUZWxmCQ==}
-    engines: {node: '>=18'}
-    hasBin: true
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -151,8 +143,6 @@ snapshots:
   picocolors@1.1.1: {}
 
   sax@1.5.0: {}
-
-  skills@1.4.4: {}
 
   source-map-js@1.2.1: {}
 
