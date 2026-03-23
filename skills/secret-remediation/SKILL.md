@@ -1,7 +1,12 @@
 ---
 name: secret-remediation
-description: Scrub secrets and PII from git history using filter-branch. Use when secret-scanning finds values in git history that need removal, or when explicitly asked to rewrite history to remove sensitive values.
 user-invocable: false
+description: |
+  Rewrites git history to remove secrets and PII after secret-scanning identifies values in commits. Covers four push scenarios (main only, feature branch local-only, feature branch pushed, or both) and mandates credential rotation for any secret that reached a remote. Without it, history scrubbing is ad-hoc, rotation steps get skipped, and platform PR diffs are not accounted for in the remediation plan.
+  TRIGGER after secret-scanning detects secrets in git history that need removal.
+  DO NOT TRIGGER for working tree scanning or before secret-scanning has run.
+metadata:
+  category: workflow
 ---
 
 # Secret Remediation: Git History Scrubbing

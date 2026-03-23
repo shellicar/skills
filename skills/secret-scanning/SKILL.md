@@ -1,6 +1,10 @@
 ---
 name: secret-scanning
-description: "Secret and PII awareness for code generation, committing, and pushing.\nTRIGGER when: writing code/config/tests/examples, committing changes, pushing code, or scanning for hardcoded credentials and real PII.\nDO NOT TRIGGER when: reading files, exploring code, or non-code-generation tasks."
+description: |
+  Detects secrets and PII in code and commits using defined pattern tables, with a mandatory per-finding disposition process. Every finding must be explicitly resolved: no silent dismissal, no invented patterns. Without it, secrets enter commits unreported, findings get assumed safe without review, and pattern improvisation floods the report with false positives.
+  TRIGGER when writing code or config, committing, or pushing.
+metadata:
+  category: standards
 ---
 
 # Secret & PII Scanning Awareness

@@ -1,7 +1,11 @@
 ---
 name: mcp-context7
-description: Context7 MCP server for current library documentation. Use when generating config files, scaffolding projects, or working with libraries that may have updated since training.
 user-invocable: true
+description: |
+  Reference guide for using the Context7 MCP server: when to fetch docs, the two-step query flow (resolve library ID then query docs), installation, and version pinning. Without it, configs and scaffolding are generated from training data that may be wrong for the installed version.
+  TRIGGER when generating config files, scaffolding projects, or working with frequently-released libraries (biome, vite, vitest, etc.).
+metadata:
+  category: reference
 ---
 
 # Context7 MCP

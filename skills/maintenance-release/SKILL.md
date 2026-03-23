@@ -1,6 +1,11 @@
 ---
 name: maintenance-release
-description: Perform maintenance release with security fixes and dependency updates. Use when updating dependencies, applying security patches, or doing routine maintenance.
+description: |
+  Full dependency maintenance workflow for @shellicar npm packages: audit CVEs, gather available updates, propose a risk-tiered plan, execute security fixes and dependency updates, verify with build+test, then prepare a PR. Without it, syncpack auto-updates break builds, ncu runs with -u directly overwriting intentional pinned versions, and dependency tier ordering is ignored in multi-package ecosystems.
+  TRIGGER when performing a maintenance release, updating dependencies, or remediating CVEs.
+  DO NOT TRIGGER for single targeted dependency changes or non-npm projects.
+metadata:
+  category: workflow
 ---
 
 # Maintenance Release Workflow

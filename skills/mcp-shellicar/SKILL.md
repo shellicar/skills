@@ -1,6 +1,10 @@
 ---
 name: mcp-shellicar
-description: "What: mcp__shellicar__exec replaces the Bash tool — programs are spawned directly via child_process.spawn, no shell involved. When: TRIGGER when executing shell commands, running programs, calling git, running builds/tests/scripts, or any task that would normally use the Bash tool. DO NOT TRIGGER when reading files, editing code, searching code, or non-execution tasks. Why: NEVER use program: \"sh\" or program: \"/bin/bash\" — this recreates a shell and defeats the tool's purpose; use cwd, env, steps, pipeline, and stdin instead."
+description: |
+  Reference guide for mcp__shellicar__exec: Bash-to-exec translation table, pipeline and stdin patterns, chaining modes (bail_on_error, sequential, independent), blocked operations, and gotchas. Without it, Bash patterns get used in sessions where Bash is disallowed.
+  TRIGGER when mcp__shellicar__exec is available and Bash is disallowed, or when translating a Bash pattern to exec calls.
+metadata:
+  category: reference
 ---
 
 # Exec MCP Tool
