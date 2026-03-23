@@ -48,6 +48,8 @@ If findings exist, present them and wait for confirmation before proceeding. Do 
 
 ### 4. Generate commit message
 
+Load the `writing-style` skill.
+
 - Concise, single line
 - Imperative mood ("Add feature" not "Added feature")
 - No period at end

@@ -92,7 +92,7 @@ After the Supreme Commander approves each fix:
 
 ## Description Writing Conventions
 
-See `work-organisation` skill for description conventions by audience (PBI/Bug = stakeholder-friendly, Task = implementation-oriented). See `writing-style` skill for tone and examples.
+Load the `work-organisation` skill. Load the `writing-style` skill.
 
 ### Formatting
 - Structure HTML descriptions with `<br><br>` for paragraph breaks, `<ul><li>` for lists, `<b>` for emphasis

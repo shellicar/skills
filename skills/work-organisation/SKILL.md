@@ -210,7 +210,7 @@ This keeps backlogs focused and prevents feature teams from being overwhelmed by
 ### PBIs and Bugs (stakeholder-friendly)
 - Describe the **what** and **why** — stakeholders may read these
 - Use plain language, avoid implementation jargon
-- See `writing-style` skill for tone and examples
+- Load the `writing-style` skill.
 
 ### Tasks (implementation-oriented)
 - Describe the **how** — these are for developers

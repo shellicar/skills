@@ -31,7 +31,7 @@ Match when:
 
 - Concise, single line, imperative mood
 - **No prefixes.** See `git-commit` skill.
-- See `writing-style` skill for tone and examples
+- Load the `writing-style` skill.
 
 ## PR Description Format
 

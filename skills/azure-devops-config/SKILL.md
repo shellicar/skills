@@ -59,7 +59,7 @@ Delivery plans visualise work across teams on a timeline. Items appear based on 
 
 ### Backlog Visibility Rules
 
-See `work-organisation` skill for the philosophy behind backlog visibility (portfolio vs feature teams) and the hierarchical team pattern.
+Load the `work-organisation` skill.
 
 The `backlogVisibilities` field controls which backlog levels a team sees. Common categories:
 
@@ -95,7 +95,7 @@ echo '{"org":"{org}","project":"{project}","method":"GET","path":"wit/classifica
 
 ## Hierarchical Team Pattern
 
-See `work-organisation` skill for the full hierarchical team pattern (portfolio vs area-based vs iteration-based teams, "Future" iteration).
+Load the `work-organisation` skill.
 
 **Trade-off for iteration-based teams**: Backlogs work correctly, but delivery plans need tag-based workaround (see Delivery Plans above).
 

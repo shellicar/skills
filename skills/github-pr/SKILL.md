@@ -92,7 +92,9 @@ Based on loaded convention skill:
 
 #### PR Description Style Guide
 
-See `writing-style` skill for the full style guide. Key points:
+Load the `writing-style` skill.
+
+Key points:
 - Describe **what** was done, not **how** it was implemented
 - `## Summary` heading with 3-5 bullet points maximum
 - Short phrases, not full sentences

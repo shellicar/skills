@@ -114,9 +114,7 @@ Before creating ANY work item, you **MUST** complete these steps in order:
 
 ## Work Item Hierarchy
 
-See `work-organisation` skill for hierarchy definitions (Initiative/Epic/Feature/PBI/Task), design principles, naming conventions, and the three independent dimensions (hierarchy, area path, iteration).
-
-See `work-organisation` skill for hierarchy design principles, hierarchy diagrams, and the visual guide.
+Load the `work-organisation` skill.
 
 ### Cross-Team Dependencies
 
@@ -357,7 +355,7 @@ This applies everywhere: descriptions, comments, and any HTML field. See also [W
 
 ### Writing Style
 
-See `writing-style` skill for titles, descriptions, and general tone.
+Load the `writing-style` skill.
 
 Stakeholders read these titles - focus on what changes from their perspective, not what code you're writing.
 

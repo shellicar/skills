@@ -33,7 +33,7 @@ Match when:
 - Concise, single line, imperative mood
 - **No prefixes.** See `git-commit` skill.
 - Work item reference optional in commits (required in PR)
-- See `writing-style` skill for tone and examples
+- Load the `writing-style` skill.
 
 ## PR Description Format
 

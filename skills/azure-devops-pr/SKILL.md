@@ -10,6 +10,8 @@ user-invocable: true
 
 ## Workflow
 
+Load the `writing-style` skill.
+
 1. **Create PR** with title and description per writing-style. Mention the parent PBI/Bug with `#1234` in the `## Related Work Items` section. Do NOT include Task IDs in the description.
 
 2. **Link Task** to the PR:
