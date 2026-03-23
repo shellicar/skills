@@ -1,6 +1,10 @@
 ---
 name: azure-devops-boards
-description: "Work item operations and conventions for Azure DevOps. Without it, items get created orphaned, descriptions malform silently, and hierarchy rules get violated.\nTRIGGER when creating, querying, or updating work items.\nDO NOT TRIGGER for pipeline, repo, or project config operations."
+description: |
+  WHAT: Reference for Azure DevOps work item mechanics: creation sequence, description formatting, and relationship rules.
+  WHY: Prevents orphaned items, malformed descriptions, and hierarchy violations.
+  WHEN: TRIGGER when creating, querying, or updating work items.
+  DO NOT TRIGGER for pipeline, repo, or project config operations.
 metadata:
   category: reference
 ---

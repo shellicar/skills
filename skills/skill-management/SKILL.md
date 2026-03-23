@@ -55,22 +55,20 @@ The skill content (HOW) is loaded when invoked. The description never needs to e
 ### Pattern
 
 ```
-[Purpose and effect]. [Benefit, or consequence of not using it.]
-TRIGGER when [condition].
-DO NOT TRIGGER for [exclusion].  <- optional
-```
-
-An alternative with no ambiguity is to label each part explicitly:
-
-```
 WHAT: [purpose and effect]
-WHY: [benefit, or consequence of not using it]
+WHY: [benefit or consequence]
 WHEN: TRIGGER when [condition]
+DO NOT TRIGGER for [exclusion]  <- optional
 ```
 
-This removes the need to infer which sentence is the WHAT and which is the WHY.
+Use the labels. They are shorter than constructing prose that implies the same thing, and they remove all ambiguity about which sentence is the WHAT and which is the WHY.
 
-**About WHY**: Express what the skill prevents or enables, not the reason it was built. "Update SendGrid to use new template versions" (what it enables) is a good WHY; "update SendGrid for template enhancement functionality" (the reason it was prioritised) is not. The WHY should be a concrete outcome, not an abstract justification.
+**About WHY**: The concrete benefit or what the skill prevents. No required phrasing, but two phrases cover most cases:
+- `WHY: Ensures ...` (benefit framing: what the skill makes possible)
+- `WHY: Prevents ...` (consequence framing: what the skill stops from happening)
+- `WHY: [anything concrete]` (use whatever fits)
+
+What is NOT valid: abstract justification. "for template enhancement functionality" explains why a decision was made, not what actually happens.
 
 ### Principle: Describe purpose, not table of contents
 
@@ -178,13 +176,13 @@ Avoid hollow filler: words like "safely", "correctly", "reliably", and phrases l
 
 ### Description Patterns by Skill Type
 
-| Type | Pattern |
-|------|---------|
-| Workflow | "[What it orchestrates]. Without it, [consequence]. TRIGGER when [doing the thing]." |
-| Standards | "[What standards it enforces]. Without it, [consequence]. TRIGGER when [producing output it governs]." |
-| Reference | "[What reference it provides]. Without it, [consequence]. TRIGGER when [needing the reference]." |
-| Convention | "[What conventions it covers] for [project]. Without it, [consequence]. TRIGGER when detected as the active [convention-name] convention." |
-| Foundational | "[What it establishes]. Without it, [consequence]. TRIGGER on session start." |
+| Type | WHAT | WHY |
+|------|------|-----|
+| Workflow | What it orchestrates and why the workflow exists | Ensures correct outcome, or prevents the failure the workflow guards against |
+| Standards | What standards it enforces and for what output | Ensures output matches, or prevents the drift that happens without it |
+| Reference | What reference it provides and what it covers | Prevents improvisation or mistakes the reference is designed to avoid |
+| Convention | What conventions it covers for the project | Ensures correct conventions apply, or prevents wrong ones being used silently |
+| Foundational | What it establishes for the session | Ensures the session operates correctly from the start |
 
 ## Invocation Control
 

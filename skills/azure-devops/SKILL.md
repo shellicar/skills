@@ -1,6 +1,10 @@
 ---
 name: azure-devops
-description: "Detects the Azure DevOps org and project from git remote. Required by all Azure DevOps sub-skills. They cannot resolve the correct org/project without it.\nTRIGGER when starting any Azure DevOps task or when a sub-skill requires org/project detection.\nDO NOT TRIGGER when org/project context is already established."
+description: |
+  WHAT: Resolves the Azure DevOps org and project from git remote, providing the context all sub-skills need to target the right project.
+  WHY: Prevents sub-skills from having no org or project to operate against.
+  WHEN: TRIGGER when starting any Azure DevOps task or when a sub-skill requires org/project detection.
+  DO NOT TRIGGER when org/project context is already established.
 metadata:
   category: reference
 ---

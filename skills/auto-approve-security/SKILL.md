@@ -1,6 +1,9 @@
 ---
 name: auto-approve-security
-description: "Defines the zero-trust security model: what is and isn't auto-approved, why each rule exists, and known exploit chains with their mitigations. Without it, Claude cannot evaluate approval safety, flag unsafe patterns, or identify gaps in the security model.\nTRIGGER on session start."
+description: |
+ Documents the threat model behind the auto-approve permission system so Claude can evaluate new approval requests and flag security gaps.
+ Without it, approval decisions rely on intuition rather than proven constraints.
+ TRIGGER on session start.
 user-invocable: false
 metadata:
   category: foundational

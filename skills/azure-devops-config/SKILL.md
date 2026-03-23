@@ -1,6 +1,10 @@
 ---
 name: azure-devops-config
-description: "Configures Azure DevOps project structure. Wrong settings break team visibility, board layouts, and branch protection.\nTRIGGER when configuring teams, area paths, iteration paths, column layouts, or branch policies.\nDO NOT TRIGGER for PR creation, work item updates, or pipeline runs."
+description: |
+  WHAT: Reference for Azure DevOps project-level settings: how teams are configured, how backlogs are structured, and how branches are protected.
+  WHY: Wrong settings break team visibility, board layouts, and branch protection.
+  WHEN: TRIGGER when configuring teams, area paths, iteration paths, column layouts, or branch policies.
+  DO NOT TRIGGER for PR creation, work item updates, or pipeline runs.
 metadata:
   category: workflow
 ---

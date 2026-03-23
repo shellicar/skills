@@ -1,6 +1,10 @@
 ---
 name: azure-devops-pipelines
-description: "Pipeline execution, YAML trigger configuration, and build validation policies for Azure DevOps. Without it, CI trigger paths and branch policy paths drift out of sync, causing pipelines to miss PRs or file changes silently.\nTRIGGER when queuing or monitoring pipelines, configuring YAML triggers, or troubleshooting build validation.\nDO NOT TRIGGER for PR creation, work item updates, or project config."
+description: |
+  WHAT: Reference for Azure DevOps pipeline operations: how to run, configure, and keep YAML triggers in sync with build validation policies.
+  WHY: CI trigger paths and branch policy paths drift out of sync, causing pipelines to miss PRs or file changes silently.
+  WHEN: TRIGGER when queuing or monitoring pipelines, configuring YAML triggers, or troubleshooting build validation.
+  DO NOT TRIGGER for PR creation, work item updates, or project config.
 metadata:
   category: reference
 ---
