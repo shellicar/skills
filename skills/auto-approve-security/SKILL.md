@@ -1,7 +1,9 @@
 ---
 name: auto-approve-security
-description: "Zero-trust security model for auto-approved commands.\nTRIGGER when: running Bash commands, evaluating auto-approve safety, reviewing or modifying settings.json allow/deny rules, PreToolUse hooks, or assessing whether a command is safe to auto-approve.\nDO NOT TRIGGER when: reading files, editing code, or non-Bash tool operations.
+description: "Defines the zero-trust security model: what is and isn't auto-approved, why each rule exists, and known exploit chains with their mitigations. Without it, Claude cannot evaluate approval safety, flag unsafe patterns, or identify gaps in the security model.\nTRIGGER on session start."
 user-invocable: false
+metadata:
+  category: foundational
 ---
 
 # Auto-Approve Security Model

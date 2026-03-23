@@ -1,6 +1,8 @@
 ---
 name: azure-devops-boards
-description: Work items and backlog management in Azure DevOps. Use when creating/querying/updating work items, managing areas/iterations, organising backlogs, or formatting descriptions.
+description: "Work item operations and conventions for Azure DevOps. Without it, items get created orphaned, descriptions malform silently, and hierarchy rules get violated.\nTRIGGER when creating, querying, or updating work items.\nDO NOT TRIGGER for pipeline, repo, or project config operations."
+metadata:
+  category: reference
 ---
 
 # Azure DevOps Boards

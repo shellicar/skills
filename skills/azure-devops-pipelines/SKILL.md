@@ -1,6 +1,8 @@
 ---
 name: azure-devops-pipelines
-description: Pipeline runs and configuration in Azure DevOps. Use when queuing/monitoring pipelines, configuring YAML triggers, checking build validation policies, or troubleshooting why pipelines didn't trigger.
+description: "Pipeline execution, YAML trigger configuration, and build validation policies for Azure DevOps. Without it, CI trigger paths and branch policy paths drift out of sync, causing pipelines to miss PRs or file changes silently.\nTRIGGER when queuing or monitoring pipelines, configuring YAML triggers, or troubleshooting build validation.\nDO NOT TRIGGER for PR creation, work item updates, or project config."
+metadata:
+  category: reference
 ---
 
 # Azure DevOps Pipelines

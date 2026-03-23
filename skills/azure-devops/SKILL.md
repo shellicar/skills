@@ -1,6 +1,8 @@
 ---
 name: azure-devops
-description: Shared Azure DevOps foundation. Auto-detects org/project from git remote and routes to sub-skills. Use when working with any Azure DevOps project, or when unsure which sub-skill to use. Also loaded by sub-skills for org/project detection and REST API wrapper.
+description: "Detects the Azure DevOps org and project from git remote. Required by all Azure DevOps sub-skills. They cannot resolve the correct org/project without it.\nTRIGGER when starting any Azure DevOps task or when a sub-skill requires org/project detection.\nDO NOT TRIGGER when org/project context is already established."
+metadata:
+  category: reference
 ---
 
 # Azure DevOps
