@@ -57,6 +57,7 @@
       "mcp__ado__wit_get_work_item",
       "mcp__ado__wit_get_work_items_batch_by_ids",
       "mcp__ado__wit_link_work_item_to_pull_request",
+      "mcp__ado__wit_list_work_item_revisions",
       "mcp__ado__wit_update_work_item",
       "mcp__ado__wit_update_work_items_batch",
       "mcp__ado__wit_work_item_unlink",
@@ -117,6 +118,16 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/block_dangerous_commands.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|mcp__shellicar__exec",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/block_em_dashes.sh",
+            "statusMessage": "Checking for em dashes..."
           }
         ]
       }

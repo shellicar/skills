@@ -73,11 +73,16 @@ $(printf '%s' "$INPUT" | jq -r '.headers | to_entries[] | "\(.key)=\(.value)"')
 EOF
 fi
 
-# Execute
+# Execute — capture stdout and stderr separately so errors aren't silently dropped
+TMPOUT=$(mktemp)
+TMPERR=$(mktemp)
 set +e
-RESULT=$(az rest "$@" 2>&1)
+az rest "$@" >"$TMPOUT" 2>"$TMPERR"
 STATUS=$?
 set -e
+RESULT=$(cat "$TMPOUT")
+ERRMSG=$(cat "$TMPERR")
+rm -f "$TMPOUT" "$TMPERR"
 
 # Cleanup
 if [ -n "$BODY_FILE" ]; then
@@ -86,6 +91,11 @@ fi
 
 if [ $STATUS -ne 0 ]; then
   printf '❌ az rest failed (exit %s): %s %s\n' "$STATUS" "$METHOD" "$URI" >&2
+  # Strip HTML body — ADO returns a full HTML page for some 404s; only show the status line
+  SUMMARY=$(printf '%s' "$ERRMSG" | head -n1 | sed 's/([^{].*//')
+  if [ -n "$SUMMARY" ]; then
+    printf '%s\n' "$SUMMARY" >&2
+  fi
   exit 3
 fi
 
