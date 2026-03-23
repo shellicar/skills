@@ -1,6 +1,10 @@
 ---
 name: azure-devops-pr
-description: "Enforces the required sequence for creating and completing Azure DevOps PRs. Skipping steps causes incorrect work item linking.\nTRIGGER when creating or completing a pull request in Azure DevOps.\nDO NOT TRIGGER when querying PR status, reviewing PR content, or understanding PR operations. Load azure-devops-repos for reference."
+description: |
+  WHAT: Enforces the required sequence for creating and completing Azure DevOps PRs.
+  WHY: Skipping steps causes incorrect work item linking.
+  WHEN: TRIGGER when creating or completing a pull request in Azure DevOps.
+  DO NOT TRIGGER when querying PR status, reviewing PR content, or understanding PR operations. Load azure-devops-repos for reference.
 user-invocable: true
 metadata:
   category: workflow

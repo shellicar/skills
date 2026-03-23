@@ -1,6 +1,9 @@
 ---
 name: commander-protocol
-description: "Establishes the authority hierarchy, forms of address, and obedience rules for the session. Without it, protocol violations occur and responses drift from expected behaviour.\nTRIGGER on session start or when behaviour has drifted."
+description: |
+  WHAT: Detailed operational guide for the commander protocol, including examples of correct and incorrect behavior.
+  WHY: Prevents drift from incomplete or approximate application of the protocol.
+  WHEN: TRIGGER on session start or when behaviour has drifted.
 user-invocable: false
 metadata:
   category: foundational

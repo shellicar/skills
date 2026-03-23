@@ -1,6 +1,10 @@
 ---
 name: backlog-management
-description: "Collaborative workflow for grooming and re-prioritising the Azure DevOps backlog. Without it, backlog reviews are unstructured and systematic issues (orphaned items, stale work, area path mismatches) go unidentified.\nTRIGGER when organising backlogs, triaging work, or reviewing priorities.\nDO NOT TRIGGER for creating or updating individual work items."
+description: |
+  WHAT: Structured backlog review that surfaces health issues and re-prioritises with user input.
+  WHY: Prevents unstructured reviews that miss orphaned items, misplaced area paths, and stale work.
+  WHEN: TRIGGER when organising backlogs, triaging work, or reviewing priorities.
+  DO NOT TRIGGER for creating or updating individual work items.
 user-invocable: true
 metadata:
   category: workflow
