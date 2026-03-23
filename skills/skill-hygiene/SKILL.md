@@ -35,6 +35,14 @@ Patterns that indicate a skill needs attention. A smell is a signal worth invest
 
 **Unnecessary DO NOT TRIGGER**: Exclusions that don't describe a real known problem. If you can't immediately name a case where loading the skill caused harm, the clause is noise.
 
+### Validity Smells
+
+Signs that the skill itself needs rethinking, not just its description.
+
+**Can't answer WHAT/WHY/WHEN**: If you read the entire skill and still can't write a clear WHAT, WHY, and WHEN, the skill probably should not exist in its current form. WHAT unclear means no defined purpose. WHY unclear means it may not be needed. WHEN unclear means scope is undefined. Ask before writing a description that papers over the problem.
+
+**Overloaded WHY or WHEN**: If the WHY needs multiple sentences covering different benefits, or the WHEN lists many unrelated trigger conditions, the skill is probably two skills. A skill has one purpose, one primary benefit, and one domain of triggers. The single-category rule is the first signal: if you cannot assign one category, the skill is doing too much.
+
 ### Structural Smells
 
 **Stale cross-references**: References to skills that have been renamed or deleted.
