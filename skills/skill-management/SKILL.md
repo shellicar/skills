@@ -55,10 +55,22 @@ The skill content (HOW) is loaded when invoked. The description never needs to e
 ### Pattern
 
 ```
-[Purpose and effect]. Without it, [consequence].
+[Purpose and effect]. [Benefit, or consequence of not using it.]
 TRIGGER when [condition].
 DO NOT TRIGGER for [exclusion].  <- optional
 ```
+
+An alternative with no ambiguity is to label each part explicitly:
+
+```
+WHAT: [purpose and effect]
+WHY: [benefit, or consequence of not using it]
+WHEN: TRIGGER when [condition]
+```
+
+This removes the need to infer which sentence is the WHAT and which is the WHY.
+
+**About WHY**: Express what the skill prevents or enables, not the reason it was built. "Update SendGrid to use new template versions" (what it enables) is a good WHY; "update SendGrid for template enhancement functionality" (the reason it was prioritised) is not. The WHY should be a concrete outcome, not an abstract justification.
 
 ### Principle: Describe purpose, not table of contents
 
@@ -127,6 +139,42 @@ If the convention is called `shellicar-config`, the description says "shellicar-
 ```yaml
   TRIGGER when detected as the active shellicar-config convention.
 ```
+
+### Principle: WHAT and TRIGGER should not overlap
+
+If the TRIGGER already lists what the skill covers, the WHAT does not need to repeat those surfaces. WHAT explains the purpose; TRIGGER states the condition. Each sentence earns its space.
+
+**Bad** (WHAT duplicates the TRIGGER):
+```yaml
+description: |
+  Ensures commit messages, PR titles, and work item text describe effects, not implementation.
+  TRIGGER when writing commit messages, PR titles, or work item text.
+```
+
+**Good** (WHAT states the insight; TRIGGER lists the surfaces):
+```yaml
+description: |
+  Ensures written output explains what changed and what it enables, not how it was implemented.
+  TRIGGER when writing commit messages, PR titles, PR descriptions, or work item text.
+```
+
+### Principle: Anchor the WHAT on the core insight
+
+A good WHAT names the thing that makes the skill non-obvious: why the workflow exists rather than just doing the task directly, or what problem the skill solves that is not self-evident from the name.
+
+Generic outcomes do not reveal the insight. The core insight is what you would say to explain why the skill is needed.
+
+**Bad** (names the generic outcome):
+```yaml
+  Migrates Azure DevOps work items so they land in the right place.
+```
+
+**Good** (names the core insight):
+```yaml
+  A structured workflow for migrating work items where placement is the hard problem, not the move itself.
+```
+
+Avoid hollow filler: words like "safely", "correctly", "reliably", and phrases like "as the project grows" or "stays navigable" say nothing specific. Every skill is "safe" and "correct" by definition. Name the actual concern instead.
 
 ### Description Patterns by Skill Type
 

@@ -1,7 +1,11 @@
 ---
 name: work-item-migration
-description: Migrate and consolidate Azure DevOps work items between projects. Use when moving work items across projects, consolidating duplicates, restructuring hierarchy during migration, or changing work item types as part of a project migration.
+description: |
+  A structured workflow for migrating Azure DevOps work items where placement is the hard problem, not the move itself. Each item requires identifying the correct parent, area path, and iteration in the target project, which may require creating hierarchy that does not yet exist.
+  TRIGGER when moving work items between projects or consolidating duplicates.
 user-invocable: true
+metadata:
+  category: workflow
 ---
 
 # Work Item Migration

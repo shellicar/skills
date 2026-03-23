@@ -1,7 +1,11 @@
 ---
 name: work-organisation
-description: Work item hierarchy design, naming principles, and organisational philosophy for Azure DevOps. Use when planning hierarchy (epics, features, PBIs), naming work items, assigning area paths or iterations, or deciding where work belongs. Loaded by boards, org, and hygiene skills for context.
+description: |
+  Defines how to structure Azure DevOps work: hierarchy by capability ownership, area paths and iterations as independent dimensions. Without it, epics get named after technologies or motivations that change, and the hierarchy becomes a dumping ground rather than a stable map of who owns what.
+  TRIGGER when designing hierarchy, naming work items, or assigning area and iteration paths.
 user-invocable: false
+metadata:
+  category: standards
 ---
 
 # Work Organisation

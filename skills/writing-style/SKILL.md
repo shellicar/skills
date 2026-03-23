@@ -1,7 +1,11 @@
 ---
 name: writing-style
-description: "Writing style for PRs, commits, work items, and titles.\nTRIGGER when: writing commit messages, PR titles, PR descriptions, work item titles, work item descriptions, or any user-facing text.\nDO NOT TRIGGER when: writing code, reading files, researching, or non-text-writing tasks."
+description: |
+  Ensures written output explains what changed and what it enables, not how it was implemented. Without it, commit messages describe code structure or append vague justifications instead of communicating what actually changed.
+  TRIGGER when writing commit messages, PR titles, PR descriptions, or work item text.
 user-invocable: false
+metadata:
+  category: standards
 ---
 
 # Writing Style
