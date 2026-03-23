@@ -1,7 +1,9 @@
 ---
 name: eagers-branding
-description: "Eagers Automotive brand usage guidelines for easyauto123 and related sub-brands. Apply when writing text, descriptions, or code that references easyauto123, easypass, easydocs, or other easy-prefixed brand names."
+description: "Enforces correct casing and naming for Eagers Automotive sub-brands. Wrong brand names reach customers.\nTRIGGER when writing text, code, or docs referencing easyauto123, easypass, easydocs, or other easy-prefixed brands.\nDO NOT TRIGGER for non-Eagers work."
 user-invocable: false
+metadata:
+  category: standards
 ---
 
 # Eagers Branding Guidelines

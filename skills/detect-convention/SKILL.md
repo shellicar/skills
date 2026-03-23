@@ -1,7 +1,9 @@
 ---
 name: detect-convention
-description: Detect which project convention applies based on git remote and directory. Use when committing, pushing, creating PRs, or any workflow that needs to know the convention.
+description: "Identifies the active project convention from git remote so commit, PR, and branch rules apply correctly. Without it, wrong conventions get applied silently.\nTRIGGER when committing, pushing, or creating PRs.\nDO NOT TRIGGER for non-git operations."
 user-invocable: false
+metadata:
+  category: workflow
 ---
 
 # Convention Detection
