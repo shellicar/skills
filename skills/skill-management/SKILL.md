@@ -45,39 +45,98 @@ agent: Explore                      # Subagent type when context: fork
 
 ## Writing Good Descriptions
 
-**The description must answer TWO questions:**
-1. **WHAT** does this skill do?
-2. **WHEN** should it be used?
+**The description must answer THREE questions:**
+1. **WHAT** does this skill do? (its purpose and effect)
+2. **WHY** does it matter? (what goes wrong without it)
+3. **WHEN** should it be used? (TRIGGER conditions)
 
-The skill content (HOW) is loaded when invoked.
+The skill content (HOW) is loaded when invoked. The description never needs to explain it.
 
 ### Pattern
 
 ```
-[What it does]. [When to use it].
+[Purpose and effect]. Without it, [consequence].
+TRIGGER when [condition].
+DO NOT TRIGGER for [exclusion].  <- optional
 ```
 
-### Examples
+### Principle: Describe purpose, not table of contents
 
-**Good:**
+The description tells you why to load the skill, not what is inside it. Listing sections, fields, or internal structure makes the description a stale summary that competes with the skill itself.
+
+**Bad** (lists the table of contents):
 ```yaml
-description: Create a git commit with a concise message. Use when committing changes, asked to commit, or after completing a task.
+description: |
+  Reference for creating skills: directory structure, frontmatter fields
+  (name, description, user-invocable, disable-model-invocation), description
+  patterns, naming conventions, and the maintenance checklist.
 ```
+
+**Good** (describes the purpose):
+```yaml
+description: |
+  Authoring guide for Claude Code skills: how to write descriptions that
+  trigger correctly, choose invocation settings, organise and name skills,
+  and keep cross-references current.
+```
+
+### Principle: Describe structure, not specific values
+
+Descriptions that encode specific values (branch names, field names, exact rules) go out of date. Because they appear in the description, they get treated as authoritative even after the skill changes.
+
+**Bad** (encodes values that will drift):
+```yaml
+description: |
+  Git conventions for shellicar projects: branch naming (feature/, fix/),
+  PR description format (Summary + Changes sections), and repo settings.
+```
+
+**Good** (describes what areas are covered, without values):
+```yaml
+description: |
+  Git branch, commit, PR, and repo configuration conventions for shellicar
+  GitHub projects.
+```
+
+The same applies to implementation details: say "error handling" not "set -e"; say "scanning patterns" not "the specific regex table".
+
+### Principle: Convention TRIGGERs name the convention, not the detection criteria
+
+The detection criteria (which remote URL, which directory) live inside the skill and are evaluated by detect-convention. The TRIGGER should name the convention, not duplicate the detection logic.
+
+**Bad** (encodes the detection criteria):
+```yaml
+  TRIGGER when committing in ~/.claude or a dotfiles repo.
+```
+
+**Good** (names the convention):
+```yaml
+  TRIGGER when detected as the active shellicar-config convention.
+```
+
+### Principle: Don't qualify names with adjectives the convention doesn't have
+
+If the convention is called `shellicar-config`, the description says "shellicar-config convention". Adding qualifiers like "personal" or "private" introduces meaning that is not part of the name and may become wrong.
 
 **Bad:**
 ```yaml
-description: Create a git commit with a concise message
-# Missing: WHEN to use it
+  TRIGGER when detected as the active convention for a personal config repo.
+```
+
+**Good:**
+```yaml
+  TRIGGER when detected as the active shellicar-config convention.
 ```
 
 ### Description Patterns by Skill Type
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Task skills | "[Action]. Use when [trigger]." | "Create a GitHub release. Use when publishing a release or cutting a new version." |
-| Guideline skills | "[Guidelines for X]. Apply when [context]." | "Guidelines for POSIX shell scripts. Apply when writing or reviewing .sh files." |
-| Convention skills | "[Conventions for X]. Loaded when detected as the active convention." | "Git conventions for Flightrac. Loaded when detected as the active convention." |
-| Mandatory skills | "MANDATORY: Must be read at the start of every response. [What it defines]." | "MANDATORY: Must be read at the start of every response. Defines teapot mode mechanics." |
+| Type | Pattern |
+|------|---------|
+| Workflow | "[What it orchestrates]. Without it, [consequence]. TRIGGER when [doing the thing]." |
+| Standards | "[What standards it enforces]. Without it, [consequence]. TRIGGER when [producing output it governs]." |
+| Reference | "[What reference it provides]. Without it, [consequence]. TRIGGER when [needing the reference]." |
+| Convention | "[What conventions it covers] for [project]. Without it, [consequence]. TRIGGER when detected as the active [convention-name] convention." |
+| Foundational | "[What it establishes]. Without it, [consequence]. TRIGGER on session start." |
 
 ## Invocation Control
 
