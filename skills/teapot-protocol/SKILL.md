@@ -1,7 +1,11 @@
 ---
 name: teapot-protocol
-description: "Compliance verification protocol with brewing cycle and self-checking.\nAlways applies. Loaded automatically via CLAUDE.md brewing cycle rules.\nLoad explicitly when behaviour has drifted and the Supreme Commander requests a reload."
+description: |
+  The mental model behind the brewing cycle: why it exists, how compliance mode works, and how to correctly classify what is and is not a violation. Without it, violations get misidentified and drift goes uncaught.
+  TRIGGER on session start or when behaviour has drifted.
 user-invocable: false
+metadata:
+  category: foundational
 ---
 
 # Teapot Protocol: Detailed Guide

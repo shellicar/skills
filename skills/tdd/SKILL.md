@@ -1,7 +1,11 @@
 ---
 name: tdd
-description: Test-Driven Development workflow enforcement. Use when implementing features or fixing bugs to ensure tests are written first.
+description: |
+  Enforces the Red-Green-Refactor cycle with a mandatory stop between RED and GREEN phases for approval. Without it, implementation gets written before tests exist, losing the failing test that proves the change was needed.
+  TRIGGER when implementing features or fixing bugs.
 user-invocable: true
+metadata:
+  category: workflow
 ---
 
 # TDD (Test-Driven Development)

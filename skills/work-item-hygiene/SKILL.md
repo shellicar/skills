@@ -1,6 +1,11 @@
 ---
 name: work-item-hygiene
-description: Audit and improve Azure DevOps work item quality across iterations. Use when asked to review work items for missing/inadequate descriptions, vague titles, area path violations, removed items in active iterations, or general board hygiene. Also use when asked to do a "health check" or "hygiene audit" of work items.
+description: |
+  Keeps the Azure DevOps board clean and sprint planning reliable by finding and fixing quality issues such as area path violations, orphaned items, and inadequate descriptions. Findings are grouped by severity and presented for approval before fixes are applied.
+  TRIGGER when asked to review or health-check work items.
+  DO NOT TRIGGER for creating or updating individual work items.
+metadata:
+  category: workflow
 ---
 
 # Work Item Hygiene

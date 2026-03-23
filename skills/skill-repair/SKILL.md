@@ -1,9 +1,11 @@
 ---
 name: skill-repair
-description: >
-  Fix broken skills and scripts rather than working around them.
-  TRIGGER when: a skill script errors, has a syntax error, produces unexpected output, or skill instructions are unclear.
-  DO NOT TRIGGER when: skill is working normally.
+description: |
+  Keeps skill workflows trustworthy by requiring broken scripts and instructions to be fixed rather than worked around. Workarounds hide the problem, bypass built-in checks, and produce behaviour that diverges from the intended workflow.
+  TRIGGER when a skill script errors, has unexpected output, or skill instructions are unclear.
+  DO NOT TRIGGER when the skill is working normally.
+metadata:
+  category: workflow
 ---
 
 # Skill Repair

@@ -1,7 +1,11 @@
 ---
 name: typescript-standards
-description: TypeScript coding standards and requirements including banned types, iterative approach, satisfies usage, re-export rules, and testing patterns. Apply when writing or modifying TypeScript code.
+description: |
+  Defines how TypeScript is written here so Claude's output belongs in the codebase. Without it, generated code ignores established conventions and must be rewritten.
+  TRIGGER when writing or modifying TypeScript code.
 user-invocable: false
+metadata:
+  category: standards
 ---
 
 # TypeScript Coding Guidelines
