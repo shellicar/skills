@@ -1,7 +1,11 @@
 ---
 name: shellicar-config-conventions
-description: Git conventions for personal config repos (no PRs). Loaded when detected as the active convention.
+description: |
+  Git conventions for personal config repos: direct commits to main with no PRs, branches, or work items. Without it, unnecessary branches and PRs get created for simple config changes.
+  TRIGGER when detected as the active shellicar-config convention.
 user-invocable: false
+metadata:
+  category: standards
 ---
 
 # Shellicar Config Conventions

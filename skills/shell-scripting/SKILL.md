@@ -1,7 +1,11 @@
 ---
 name: shell-scripting
-description: Guidelines for portable, POSIX-compliant shell scripts. Apply when writing, reviewing, or modifying shell scripts or .sh files.
+description: |
+  Standards for writing portable, POSIX-compliant shell scripts: shebang, quoting, error handling, argument parsing, and a script template. Without it, scripts use bash-specific syntax that breaks on non-bash shells, unquoted variables that fail on paths with spaces, and error handling gaps that mask failures silently.
+  TRIGGER when writing or reviewing shell scripts.
 user-invocable: false
+metadata:
+  category: standards
 ---
 
 # Shell Scripting Guidelines

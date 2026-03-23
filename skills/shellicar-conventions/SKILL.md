@@ -1,7 +1,12 @@
 ---
 name: shellicar-conventions
-description: Git conventions for shellicar projects on GitHub. Loaded when detected as the active convention.
+description: |
+  Git branch, commit, PR, and repo configuration conventions for shellicar GitHub projects. Without it, PRs miss required format and repo settings drift.
+  TRIGGER when committing, pushing, or creating PRs in a shellicar GitHub project.
+  DO NOT TRIGGER for @shellicar OSS packages (use shellicar-oss-conventions).
 user-invocable: false
+metadata:
+  category: standards
 ---
 
 # Shellicar Conventions

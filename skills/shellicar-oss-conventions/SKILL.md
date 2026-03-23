@@ -1,7 +1,12 @@
 ---
 name: shellicar-oss-conventions
-description: Git conventions for @shellicar npm packages. Loaded when detected as the active convention.
+description: |
+  Git branch, commit, PR, label, and milestone conventions for @shellicar npm packages. Without it, PRs miss labels and milestones, breaking the release tracking workflow.
+  TRIGGER when committing, pushing, or creating PRs in a @shellicar npm package repo.
+  DO NOT TRIGGER for personal shellicar repos without a package scope.
 user-invocable: false
+metadata:
+  category: standards
 ---
 
 # @shellicar OSS Conventions

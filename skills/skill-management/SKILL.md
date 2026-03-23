@@ -1,7 +1,11 @@
 ---
 name: skill-management
-description: Guidelines for creating and maintaining Claude Code skills. Use when creating new skills, updating skill descriptions, or reviewing skill organization.
+description: |
+  Authoring guide for Claude Code skills: how to write descriptions that trigger correctly, choose invocation settings, organise and name skills, and keep cross-references current. Without it, new skills get wrong invocation settings, descriptions that never trigger, and stale cross-references.
+  TRIGGER when creating, updating, or auditing skills in this repository.
 user-invocable: false
+metadata:
+  category: reference
 ---
 
 # Skill Management
