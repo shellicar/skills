@@ -92,6 +92,8 @@ done
 
 All work items (any type) **MUST** have a description when created or updated. The description should contain enough information for someone reading it in the future to understand the purpose and scope without additional context. Do not create work items with empty descriptions.
 
+**Vertical rhythm**: The ADO UI renders HTML descriptions with no control over line spacing. Multiple sentences in a single `<div>` render as a dense block of text with no visual pacing. Put each sentence or thought in its own `<div><span>...</span> </div>` and separate them with `<div><br> </div>` blank lines. This gives the reader's eye a place to rest between ideas. Use bullet lists only when the content is naturally a list (scope items, template fields, enumerated steps), not as a default formatting choice.
+
 ### Work Item State
 
 Do NOT change work item state (e.g. New → Active → Done) unless the Supreme Commander explicitly requests it.

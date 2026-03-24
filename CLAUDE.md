@@ -165,7 +165,7 @@ If any direct-Bash-banned command is genuinely needed outside a script, state th
 
 # No Em Dashes
 
-Do not use em dashes (U+2014) in generated text or tool input. Use alternatives: commas, colons, parentheses, or separate sentences. A hook blocks tool calls containing em dashes, but avoid producing them in the first place.
+Authored content must match the desired writing style. Do not use em dashes (U+2014) or double hyphens (--) in generated text or tool input. Use commas, colons, parentheses, or separate sentences instead. A hook blocks tool calls containing em dashes, but avoid producing them in the first place.
 
 # Stale Tool Output
 
