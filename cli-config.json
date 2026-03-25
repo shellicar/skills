@@ -1,14 +1,32 @@
 {
   "$schema": "https://raw.githubusercontent.com/shellicar/claude-cli/main/schema/cli-config.schema.json",
-  "model": "claude-sonnet-4-6",
+  "autoApproveEdits": true,
+  "autoApproveReads": true,
   "compactModel": "claude-haiku-4-5",
+  "drowningThreshold": 15,
   "execPermissions": {
-    "presets": [
-      "defaults"
-    ],
     "approve": [
       {
         "program": "find"
+      },
+      {
+        "args": [
+          "push"
+        ],
+        "program": "git"
+      },
+      {
+        "args": [
+          "aversion",
+          "--no-git-tag-version"
+        ],
+        "program": "pnpm"
+      },
+      {
+        "args": [
+          "log"
+        ],
+        "program": "git"
       },
       {
         "program": "jq"
@@ -18,15 +36,58 @@
       },
       {
         "program": "ls"
+      },
+      {
+        "args": [
+          "release",
+          "view"
+        ],
+        "program": "gh"
+      },
+      {
+        "args": [
+          "diff"
+        ],
+        "program": "git"
+      },
+      {
+        "args": [
+          "fetch"
+        ],
+        "program": "git"
+      },
+      {
+        "args": [
+          "audit"
+        ],
+        "program": "pnpm"
+      },
+      {
+        "program": "grep"
+      },
+      {
+        "args": [
+          "pr",
+          "view"
+        ],
+        "program": "gh"
+      },
+      {
+        "args": [
+          "issue",
+          "view"
+        ],
+        "program": "gh"
       }
+    ],
+    "presets": [
+      "defaults"
     ]
   },
-  "shellicarMcp": true,
-  "maxTurns": 100,
-  "permissionTimeoutMs": 30000,
   "extendedPermissionTimeoutMs": 120000,
-  "drowningThreshold": 15,
-  "autoApproveEdits": true,
-  "autoApproveReads": true,
-  "questionTimeoutMs": 60000
+  "maxTurns": 100,
+  "model": "claude-sonnet-4-6",
+  "permissionTimeoutMs": 30000,
+  "questionTimeoutMs": 60000,
+  "shellicarMcp": true
 }
