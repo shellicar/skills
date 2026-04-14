@@ -8,58 +8,62 @@ set -e
 # Input JSON fields:
 #   title     (required) - PR title
 #   body      (required) - PR body (multiline supported)
-#   milestone (required) - Milestone title
 #   assignee  (required) - Assignee (@me or username)
-#   labels    (optional) - Array of label names
+#   labels    (required) - Array of label names
+#   milestone (optional) - Milestone title
 #
 # Example:
 #   jq -n '{
 #     title: "Fix login bug",
 #     body: "## Summary\n\n- Fix null pointer on login",
-#     milestone: "1.3",
 #     assignee: "@me",
+#     milestone: "1.3",
 #     labels: ["bug"]
 #   }' | create-github-pr.sh
-#
-# This script enforces that all required fields are provided.
-# It wraps gh pr create to prevent ad-hoc calls that skip required fields.
 
 INPUT=$(cat)
 
-# Extract required fields
+# Extract fields
 TITLE=$(printf '%s' "$INPUT" | jq -r '.title // empty')
 BODY=$(printf '%s' "$INPUT" | jq -r '.body // empty')
-MILESTONE=$(printf '%s' "$INPUT" | jq -r '.milestone // empty')
 ASSIGNEE=$(printf '%s' "$INPUT" | jq -r '.assignee // empty')
+MILESTONE=$(printf '%s' "$INPUT" | jq -r '.milestone // empty')
+
+# Labels (required, extract early for validation)
+LABELS=$(printf '%s' "$INPUT" | jq -r '.labels // empty')
+LABELS_COUNT=$(printf '%s' "$INPUT" | jq '.labels | length // 0' 2>/dev/null || echo 0)
 
 # Validate required fields
 MISSING=""
-[ -z "$TITLE" ]     && MISSING="$MISSING title"
-[ -z "$BODY" ]      && MISSING="$MISSING body"
-[ -z "$MILESTONE" ] && MISSING="$MISSING milestone"
-[ -z "$ASSIGNEE" ]  && MISSING="$MISSING assignee"
+[ -z "$TITLE" ]    && MISSING="$MISSING title"
+[ -z "$BODY" ]     && MISSING="$MISSING body"
+[ -z "$ASSIGNEE" ] && MISSING="$MISSING assignee"
+[ "$LABELS_COUNT" -eq 0 ] && MISSING="$MISSING labels"
 
 if [ -n "$MISSING" ]; then
   printf 'Error: Missing required fields:%s\n' "$MISSING" >&2
-  printf 'All of title, body, milestone, assignee are required.\n' >&2
-  printf 'Use the github-milestone skill to resolve the milestone before calling this script.\n' >&2
+  printf 'Required: title, body, assignee, labels. Optional: milestone.\n' >&2
   exit 1
 fi
 
-# Build label args from array
-LABEL_ARGS=""
+# Build optional args
+set --
+
+# Milestone (optional)
+if [ -n "$MILESTONE" ]; then
+  set -- "$@" --milestone "$MILESTONE"
+fi
+
+# Labels (optional, preserving labels with spaces)
 while IFS= read -r label; do
-  [ -n "$label" ] && LABEL_ARGS="$LABEL_ARGS --label $label"
+  [ -n "$label" ] && set -- "$@" --label "$label"
 done <<LABELS
 $(printf '%s' "$INPUT" | jq -r '.labels[]? // empty')
 LABELS
 
-# Execute gh pr create
-# LABEL_ARGS intentionally unquoted to split into separate --label flags
-# shellcheck disable=SC2086
+# Execute
 gh pr create \
   --title "$TITLE" \
   --body "$BODY" \
-  --milestone "$MILESTONE" \
   --assignee "$ASSIGNEE" \
-  $LABEL_ARGS
+  "$@"

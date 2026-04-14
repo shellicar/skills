@@ -1,59 +1,82 @@
 ---
 name: azure-devops-pr
 description: |
-  WHAT: Enforces the required sequence for creating and completing Azure DevOps PRs.
-  WHY: Skipping steps causes incorrect work item linking.
-  WHEN: TRIGGER when creating or completing a pull request in Azure DevOps.
-  DO NOT TRIGGER when querying PR status, reviewing PR content, or understanding PR operations. Load azure-devops-repos for reference.
-user-invocable: true
+  WHAT: Reference for Azure DevOps PR format and the script that creates PRs, links work items, and sets auto-complete in one call.
+  WHY: Wrong linking mechanism causes work items to appear in the wrong PR section.
+  WHEN: Consult when creating an Azure DevOps PR.
 metadata:
-  category: workflow
+  category: reference
 ---
 
-# Azure DevOps PR Workflow
+# Azure DevOps PR
 
-**This is the required sequence.** Follow every step in order. Do not skip steps. See `azure-devops-repos` for CLI command reference and work item linking rules.
+Reference for creating Azure DevOps pull requests. One script handles the full sequence.
 
-## Workflow
+## Creating a PR
 
-Load the `writing-style` skill.
+Pipe JSON into the script. It creates the PR, links the task, and sets auto-complete with the merge message.
 
-1. **Create PR** with title and description per writing-style. Mention the parent PBI/Bug with `#1234` in the `## Related Work Items` section. Do NOT include Task IDs in the description.
+```bash
+echo '{
+  "org": "hopeventures",
+  "project": "CircuitBreaker",
+  "repo": "CircuitBreaker",
+  "branch": "feature/facilitation/attendance-tracking",
+  "title": "Add attendance tracking to facilitation sessions",
+  "description": "## Summary\n\n- Add attendance tracking\n\n## Related Work Items\n\n#1234",
+  "task_id": "5678"
+}' | scripts/create-ado-pr.sh
+```
 
-2. **Link Task** to the PR:
+| Field | Required | Notes |
+|-------|----------|-------|
+| `org` | yes | ADO org name |
+| `project` | yes | Project name |
+| `repo` | yes | Repository name |
+| `branch` | yes | Source branch (without `refs/heads/`) |
+| `title` | yes | PR title |
+| `description` | yes | PR description (markdown) |
+| `task_id` | no | Task work item ID to link |
+| `target` | no | Target branch, defaults to `main` |
 
-   mcp__shellicar__exec:
+Output: JSON with `pr_id`, `pr_url`, `task_link` status, and `auto_complete` status.
 
-   ```json
-   {"steps":[{"commands":[{"program":"az","args":["repos","pr","work-item","add","--id","<PR_ID>","--work-items","<TASK_ID>","--org","https://dev.azure.com/{org}"]}]}]}
-   ```
+PR creation failure is a hard error (non-zero exit). Task linking and auto-complete failures are reported in the output but do not fail the script (the PR already exists).
 
-   ```bash
-   az repos pr work-item add --id <PR_ID> --work-items <TASK_ID> --org https://dev.azure.com/{org}
-   ```
+## PR Description Format
 
-3. **Preview merge message**:
+Load the `writing-style` skill for tone.
 
-   mcp__shellicar__exec:
+```markdown
+## Summary
 
-   ```json
-   {"steps":[{"commands":[{"program":"~/.claude/skills/azure-devops-repos/scripts/pr-merge-message.sh","stdin":"{\"org\":\"<ORG>\",\"id\":\"<PR_ID>\",\"mode\":\"show\"}"}]}]}
-   ```
+Brief description of the changes.
 
-   ```bash
-   echo '{"org":"<ORG>","id":"<PR_ID>","mode":"show"}' | pr-merge-message.sh
-   ```
+## Related Work Items
 
-4. **Set auto-complete with merge message**:
+#1234
 
-   mcp__shellicar__exec:
+#5678
 
-   ```json
-   {"steps":[{"commands":[{"program":"~/.claude/skills/azure-devops-repos/scripts/pr-merge-message.sh","stdin":"{\"org\":\"<ORG>\",\"id\":\"<PR_ID>\",\"mode\":\"set-auto-complete\"}"}]}]}
-   ```
+## Changes
 
-   ```bash
-   echo '{"org":"<ORG>","id":"<PR_ID>","mode":"set-auto-complete"}' | pr-merge-message.sh
-   ```
+- Change 1
+- Change 2
+```
 
-For CLI commands, work item linking rules, markdown formatting, and merge message script reference, see `azure-devops-repos`.
+Work item links (`#1234`) must be on separate lines with blank lines between.
+
+## Work Item Linking Rule
+
+Two types, two mechanisms:
+
+| Work item type | Where it goes | How |
+|---|---|---|
+| **PBI or Bug** (parent) | PR description, `## Related Work Items` | `#1234` syntax in description text |
+| **Task** (child) | Linked via script's `task_id` field | Script calls `az repos pr work-item add` |
+
+Only the PBI/Bug goes in the description. Never put Task IDs in the description.
+
+## Convention-Specific Rules
+
+Load the detected convention skill for branch naming and PR template sections.
