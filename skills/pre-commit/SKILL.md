@@ -18,10 +18,10 @@ This is informational, not a hard gate. Use the output to make a judgment call. 
 
 ```bash
 # Report what's staged
-scripts/pre-commit-check.sh
+./scripts/pre-commit-check.sh
 
 # Compare staged files against an expected list
-scripts/pre-commit-check.sh src/foo.ts src/bar.ts
+./scripts/pre-commit-check.sh src/foo.ts src/bar.ts
 ```
 
 Always exits 0. You decide whether to proceed based on the report.
