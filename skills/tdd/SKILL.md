@@ -1,207 +1,127 @@
 ---
 name: tdd
 description: |
-  Enforces the Red-Green-Refactor cycle with a mandatory stop between RED and GREEN phases for approval. Without it, implementation gets written before tests exist, losing the failing test that proves the change was needed.
-  TRIGGER when implementing features or fixing bugs.
+  Testing methodology and conventions: how to write tests that specify behaviour clearly. Without it, tests end up as unclear assertions that are hard to diagnose when they fail.
+  TRIGGER when writing or modifying tests.
 user-invocable: true
 metadata:
-  category: workflow
+  category: standards
 ---
 
-# TDD (Test-Driven Development)
+# Testing Conventions
 
-**Scope:** The Red-Green-Refactor cycle, when to write tests first, and the verification checklist. Testing patterns and coding standards live in typescript-standards.
+Tests specify how the system should behave. Clear tests make debugging failures straightforward.
 
-This skill enforces the TDD workflow: Red → Green → Refactor.
+## One assertion per test
 
-## Core Principle
+Each `it` block has a single assertion. When a test fails, you immediately know which behaviour broke.
 
-**NEVER write implementation code before the test exists and fails.**
-
-## Purpose of Tests
-
-Tests are the **specification** for how the system SHOULD behave - not documentation of how it currently behaves.
-
-### If behavior needs to change:
-
-1. **Change the TEST FIRST** - define the new expected behavior
-2. **Watch it fail** - confirms the implementation doesn't match the new spec
-3. **Update the implementation** - make it conform to the new spec
-4. **Watch it pass** - confirms the implementation now matches
-
-### NEVER do this:
-
-1. ❌ Update implementation first
-2. ❌ Then update tests to match
-
-This is backwards. It treats tests as documentation of implementation rather than specification of intent. If you update implementation first, you lose the failing test that PROVES the change was needed.
-
-**Tests define what the system SHOULD do. Implementation conforms to tests, not the other way around.**
-
-## The TDD Cycle
-
-### 1. RED: Write a Failing Test
-
-- Write the test FIRST
-- The test describes the expected behavior
-- Run the test to confirm it FAILS
-- If it passes, you either wrote the wrong test or the feature already exists
-
-### 2. GREEN: Make the Test Pass
-
-- Write the MINIMUM implementation to make the test pass
-- Do not over-engineer
-- Do not add features not covered by tests
-- Run the test to confirm it PASSES
-
-### 3. REFACTOR: Clean Up (Optional)
-
-- Improve code quality without changing behavior
-- All tests must still pass after refactoring
-- Only refactor when explicitly requested or clearly needed
-
-## Workflow Commands
-
-When the Supreme Commander invokes `/tdd`, follow this protocol:
-
-1. **Understand the requirement** - What behavior needs to be implemented?
-2. **Write the test** - Create a test that describes the expected behavior
-3. **Run the test** - Confirm it fails (RED phase)
-4. **STOP and report** - Wait for approval before implementing
-5. **Implement** - Only after approval, write the minimum code to pass
-6. **Run the test** - Confirm it passes (GREEN phase)
-7. **Report completion** - Tests pass, implementation complete
-
-## Violations
-
-The following are TDD violations:
-
-- Writing implementation before tests
-- Writing tests that already pass (unless verifying existing behavior)
-- Implementing more than what the test requires
-- Skipping the "run test to see it fail" step
-- Modifying implementation without running tests
-
-## Verification Checklist
-
-Before writing any implementation code, verify:
-
-### A failing test exists that PROVES this code is needed
-
-Run the test and confirm it fails. The failure message should indicate the missing behavior, not a syntax error or import issue.
-
-### The test fails for the RIGHT reason
-
-- **Good failure**: `expected undefined to equal '+61412345678'` (missing logic)
-- **Bad failure**: `Cannot find module './formatPhone'` (missing file - create stub first)
-
-### Each test checks ONE behavior
-
-Use `describe` blocks to group related tests, and separate `it` functions for each assertion.
-
-**Always use explicit `expected` and `actual` variables** - this makes tests much easier for humans to read and understand:
+Group related tests with `describe` blocks instead of combining assertions into one test:
 
 ```typescript
 describe('formatPhoneE164', () => {
-  it('formats Australian mobile to E.164', () => {
-    const expected = '+61412345678';
-
-    const actual = formatPhoneE164('0412 345 678', 'AU');
-
-    expect(actual).toBe(expected);
-  });
-
-  it('throws on invalid phone number', () => {
-    const actual = () => formatPhoneE164('invalid', 'AU');
-
-    expect(actual).toThrow();
-  });
-
-  it('throws on empty string', () => {
-    const actual = () => formatPhoneE164('', 'AU');
-
-    expect(actual).toThrow();
-  });
+  it('formats Australian mobile to E.164', () => { ... });
+  it('throws on invalid phone number', () => { ... });
+  it('throws on empty string', () => { ... });
 });
 ```
 
-See `typescript-standards` for additional testing patterns (factories, clocks, DI setup).
+## Expected/actual pattern
 
-### No `.skip` or `.only` left in test files
-
-Search before committing:
-```bash
-grep -r "\.only\|\.skip" --include="*.spec.ts"
-```
-
-### Test name describes the behavior
-
-Format: `it('[does something]')` or `it('[action] when [condition]')`
-- Good: `it('throws on invalid phone number')`
-- Bad: `it('test case 1')`
-
-## Integration with Other Protocols
-
-- TDD operates under Supreme Commander authority
-- When given a clear instruction to implement something, write the test FIRST
-- Report test failures before implementing
-- Wait for explicit approval to proceed to GREEN phase
-
-## Example Interaction
-
-**Supreme Commander**: Add a feature that formats phone numbers to E.164 format
-
----
-
-**Assistant (RED phase)**:
-
-At once, Your Excellency. I will write a test for phone number formatting.
-
-Writing test to `formatPhone.spec.ts`:
+Use explicit variables so the test reads clearly:
 
 ```typescript
-describe('formatPhoneE164', () => {
-  it('formats Australian mobile to E.164', () => {
-    const result = formatPhoneE164('0412 345 678', 'AU');
-    expect(result).toBe('+61412345678');
-  });
+it('formats Australian mobile to E.164', () => {
+  const expected = '+61412345678';
+
+  const actual = formatPhoneE164('0412 345 678', 'AU');
+
+  expect(actual).toBe(expected);
+});
+
+it('throws on invalid phone number', () => {
+  const actual = () => formatPhoneE164('invalid', 'AU');
+
+  expect(actual).toThrow();
 });
 ```
 
-Running test...
+## Test naming
 
-```
-FAIL  formatPhone.spec.ts
-ReferenceError: formatPhoneE164 is not defined
-```
-
-RED phase complete. Test fails as expected. Awaiting approval to implement.
-
----
-
-**Supreme Commander**: Proceed
-
----
-
-**Assistant (GREEN phase)**:
-
-Implementing minimum code to pass.
-
-Writing implementation to `formatPhone.ts`:
+Test names describe what is being tested, not how. Use present tense:
 
 ```typescript
-import { parsePhoneNumberWithError } from 'libphonenumber-js';
-
-export const formatPhoneE164 = (phone: string, country: string): string => {
-  return parsePhoneNumberWithError(phone, country).format('E.164');
-};
+it('formats Australian mobile to E.164', () => { });   // What it tests
+it('throws on invalid phone number', () => { });       // What it tests
+it('calls parsePhoneNumber and checks result', () => { }); // How it works
+it('test case 1', () => { });                           // Nothing
 ```
 
-Running test...
+## What a good failure looks like
 
+A test should fail because the behaviour is missing, not because of a structural problem.
+
+**Good failure** (missing logic):
 ```
-PASS  formatPhone.spec.ts
-✓ formats Australian mobile to E.164
+expected undefined to equal '+61412345678'
 ```
 
-GREEN phase complete. Phone number formatting implemented.
+**Bad failure** (missing file):
+```
+Cannot find module './formatPhone'
+```
+
+If the test fails for a structural reason (missing import, missing file), fix that first with a stub so the test can run and fail for the right reason.
+
+## Use `satisfies` for test data
+
+Test input data and mocks should use `satisfies` to ensure type correctness:
+
+```typescript
+const input = {
+  interactionId: 'de80e429-5d13-4536-b824-89e9c43c80fb',
+  step: WelcomeStep.Overview,
+} satisfies WelcomeNextInput;
+```
+
+## Factory functions for complex objects
+
+```typescript
+const createTestEntity = (clock: Clock): InteractionEntityV1 => ({
+  _id: toMongo(TEST_ENTITY_ID),
+  uniqueKey: 'test-key',
+  created: convert(clock.instant()).toDate(),
+  modified: convert(clock.instant()).toDate(),
+  interaction: createTestInteractionData(),
+} satisfies InteractionEntityV1);
+```
+
+## Fixed clocks for deterministic tests
+
+```typescript
+const fixedInstant = Instant.parse('2023-01-01T00:00:00Z');
+const clock = Clock.fixed(fixedInstant, ZoneId.UTC);
+```
+
+Or MockClock for tests requiring time advancement:
+
+```typescript
+const now = Instant.parse('2023-01-01T10:00:00Z');
+const clock = new MockClock(now);
+clock.advanceBy(Duration.ofSeconds(61));
+```
+
+## DI container setup
+
+```typescript
+beforeEach(() => {
+  const services = createServiceCollection();
+  services.register(Clock).to(Clock, () => mockClock).singleton();
+  services.register(IDatabase).to(MockDatabase, () => mockDatabase).singleton();
+
+  const container = services.buildProvider();
+  serviceUnderTest = container.resolve(MyService);
+});
+```
+
+

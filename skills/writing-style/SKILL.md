@@ -10,13 +10,13 @@ metadata:
 
 # Writing Style
 
-**Scope: How to write user-facing text — tone and content guidance, not templates or formatting.**
+**Scope: How to write user-facing text. Tone and content guidance, not templates or formatting.**
 
 The core principle: **describe the effect, not the implementation**.
 
-## Forbidden Style
+## Style rules
 
-- **Em dashes** (`—`): never use. Rewrite the sentence instead.
+Claude's output goes out under the SC's name. Match the SC's writing style. The SC doesn't use em dashes (`—`), so neither should you. Use commas, colons, parentheses, or separate sentences instead.
 
 **Bad**: `The private key never leaves the client — producing a signature that identifies the signer.`
 **Good**: `The private key never leaves the client. This produces a signature that identifies the signer.`
@@ -26,13 +26,13 @@ The core principle: **describe the effect, not the implementation**.
 
 ## The Rule
 
-Say **what changed and why** — not **how you implemented it**. The audience is someone reading a title, description, or commit message to understand what happened. They don't need to know which functions you wrote, which files you touched, or which patterns you used.
+Say **what changed and why**, not **how you implemented it**. The audience is someone reading a title, description, or commit message to understand what happened. They don't need to know which functions you wrote, which files you touched, or which patterns you used.
 
 This applies everywhere: PR titles, PR descriptions, commit messages, work item titles, and work item descriptions.
 
 ## PR Descriptions
 
-Keep descriptions **short and scannable**. The PR title already conveys the purpose — the body adds only what the title can't.
+Keep descriptions **short and scannable**. The PR title already conveys the purpose. The body adds only what the title can't.
 
 **Format**:
 ```markdown
@@ -45,7 +45,7 @@ Keep descriptions **short and scannable**. The PR title already conveys the purp
 
 **Rules**:
 - Use `## Summary` heading with a bullet list
-- **3-5 bullets maximum** — one short phrase per bullet, not full sentences
+- **3-5 bullets maximum**: one short phrase per bullet, not full sentences
 - Each bullet should describe a meaningful change, not individual file edits
 - Group related changes into a single bullet
 - Do NOT list every file changed or every minor detail
@@ -86,7 +86,7 @@ The bad example describes the implementation. The good example describes the eff
 - No period at end
 - Keep under 50 characters (hard limit: 72)
 - Detail belongs in PRs, not commits
-- **No prefixes.** `feat:`, `fix:`, `chore:` and similar prefixes are Conventional Commits — a spec for automated version bumping. These projects don't use that tooling, so the prefixes serve no purpose and make commit messages harder to read.
+- **No prefixes.** `feat:`, `fix:`, `chore:` and similar prefixes are Conventional Commits, a spec for automated version bumping. These projects don't use that tooling, so the prefixes serve no purpose and make commit messages harder to read.
 
 **Good**: `Recalculate group status when facilitator licence changes`
 **Bad**: `Add handleFacilitator to ProgramGroupViewProcessor`
@@ -100,7 +100,7 @@ Titles should describe the **effect** or **goal**, not the implementation.
 **Good**: `Recalculate group status when facilitator licence changes`
 **Bad**: `Add handleFacilitator to ProgramGroupViewProcessor`
 
-Stakeholders read these titles — focus on what changes from their perspective, not what code you're writing.
+Stakeholders read these titles. Focus on what changes from their perspective, not what code you're writing.
 
 ## Work Item Descriptions
 

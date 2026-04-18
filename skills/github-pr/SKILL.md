@@ -23,7 +23,7 @@ jq -n '{
   assignee: "@me",
   milestone: "1.3",
   labels: ["bug"]
-}' | scripts/create-github-pr.sh
+}' | ./scripts/create-github-pr.sh
 ```
 
 | Field | Required | Notes |

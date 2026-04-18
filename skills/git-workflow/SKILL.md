@@ -26,7 +26,7 @@ Load the `writing-style` skill for tone guidance.
 
 - Always `git add <file>` with explicit paths
 - Never `git add .`, `git add -A`, `git add *`
-- Run the pre-commit check after staging, before committing
+- Run the pre-commit check after staging to verify what's staged
 
 ## Pushing
 
@@ -44,46 +44,14 @@ git push
 
 ## Pre-commit Hook Failures
 
-If a pre-commit hook fails:
-
-### Forbidden
-
-- `--unsafe` or any biome unsafe fix flags
-- `npx` / `pnpx`
-- `git add .` / `git add -A`
-- Manually editing files to pass hooks without permission
-- `--filter` for running package scripts
-
-### Fix sequence
-
-1. Read hook config (`lefthook.yml`) and `package.json` scripts to find available fixers
-2. Run fixers on changed files only (not the entire project)
-3. Re-stage the fixed files
-4. Create a new commit (do not amend)
-
-#### Biome
-
-```bash
-pnpm biome check --diagnostic-level=error --write <file1> <file2> ...
-```
-
-#### ESLint
-
-```bash
-cd packages/<package-name>
-pnpm eslint --fix <relative-file1> <relative-file2> ...
-```
-
-### If fixers cannot resolve everything
-
-Check whether remaining issues are in files outside the changeset (pre-existing). If so, `--no-verify` is allowed but requires supervisor approval.
+If a pre-commit hook fails, stop and report the failure. If your role handles linting, fix the issue and create a new commit (do not amend the failed one). If not, report the failure to the supervisor.
 
 ## Convention Detection
 
 Run the detect-convention script to identify which convention applies:
 
 ```bash
-detect-convention/scripts/detect-convention.sh
+./detect-convention/scripts/detect-convention.sh
 ```
 
 Returns JSON with `convention` and `default_branch`. Load the matching `*-conventions` skill for branch naming, PR format, and work item linking rules.

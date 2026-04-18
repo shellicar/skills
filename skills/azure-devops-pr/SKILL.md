@@ -25,7 +25,7 @@ echo '{
   "title": "Add attendance tracking to facilitation sessions",
   "description": "## Summary\n\n- Add attendance tracking\n\n## Related Work Items\n\n#1234",
   "task_id": "5678"
-}' | scripts/create-ado-pr.sh
+}' | ./scripts/create-ado-pr.sh
 ```
 
 | Field | Required | Notes |
