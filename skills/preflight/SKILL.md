@@ -17,10 +17,10 @@ Run once at the start of your cast. Confirms the environment matches expectation
 
 ```bash
 # Verify current state
-./scripts/preflight.sh
+~/.claude/skills/preflight/scripts/preflight.sh
 
 # Create a branch and verify
-./scripts/preflight.sh --branch feature/my-work
+~/.claude/skills/preflight/scripts/preflight.sh --branch feature/my-work
 ```
 
 On success: JSON environment report on stdout. On failure: error message on stderr, non-zero exit.

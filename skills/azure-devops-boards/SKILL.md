@@ -43,7 +43,7 @@ az boards work-item relation remove --id <ID> --relation-type "parent" --target-
 az boards work-item update --id <ID> --fields "Microsoft.VSTS.Scheduling.StartDate="
 
 # Add comment (no native CLI command)
-echo '{"org":"{org}","project":"{project}","method":"POST","path":"wit/workItems/{id}/comments","params":{"api-version":"7.1-preview.4"},"headers":{"Content-Type":"application/json"},"body":{"text":"<div>Comment text here.</div>"}}' | ./scripts/ado-rest.sh
+echo '{"org":"{org}","project":"{project}","method":"POST","path":"wit/workItems/{id}/comments","params":{"api-version":"7.1-preview.4"},"headers":{"Content-Type":"application/json"},"body":{"text":"<div>Comment text here.</div>"}}' | ~/.claude/skills/azure-devops-boards/scripts/ado-rest.sh
 ```
 
 ## CLI Gotchas

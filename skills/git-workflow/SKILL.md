@@ -51,7 +51,7 @@ If a pre-commit hook fails, stop and report the failure. If your role handles li
 Run the detect-convention script to identify which convention applies:
 
 ```bash
-./detect-convention/scripts/detect-convention.sh
+~/.claude/skills/detect-convention/scripts/detect-convention.sh
 ```
 
 Returns JSON with `convention` and `default_branch`. Load the matching `*-conventions` skill for branch naming, PR format, and work item linking rules.
