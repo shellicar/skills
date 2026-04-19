@@ -30,7 +30,7 @@ Perform a maintenance release by gathering security and dependency information, 
 
 ## Helper Scripts
 
-Scripts in `~/repos/@shellicar/ecosystem/scripts/`:
+Scripts in `~/.claude/skills/maintenance-release/scripts/`:
 
 | Script | Purpose |
 |--------|---------|
@@ -38,7 +38,7 @@ Scripts in `~/repos/@shellicar/ecosystem/scripts/`:
 | `fix-ghsa.mjs` | Apply targeted pnpm overrides from GHSA vulnerability data |
 | `post-ncu.sh` | Restore corepack SHA + run biome migrate after ncu |
 | `ensure-labels.sh` | Create standard GitHub labels (dependencies, bug, etc.) |
-| `preflight.sh` | Pre-flight checks: git state, audit, updates, version |
+| `audit-check.sh` | Audit and update status: pnpm audit + ncu (git checks handled by `preflight` skill) |
 | `verify.sh` | Run build + test, only show output on failure (context-efficient) |
 | `post-merge.sh` | Post-merge cleanup: pull main, prune, delete merged branch |
 
@@ -70,13 +70,21 @@ Drop steps that don't apply (e.g. skip "Fix audit" if no vulnerabilities, skip "
 
 ## Phase 0: Pre-flight Checks
 
-Run the pre-flight script to gather all state in one call:
+Run the preflight skill to verify the git environment and create the branch:
 
 ```bash
-~/repos/@shellicar/ecosystem/scripts/preflight.sh
+~/.claude/skills/preflight/scripts/preflight.sh --branch <branch-name>
 ```
 
-This reports: branch, sync status, working tree, stale branches, audit vulnerabilities, available updates, and current version.
+This reports: branch, working tree state, identity, remote sync, and recent log. Hard-fails on unresolvable issues (bad identity, unreachable remote).
+
+Then run the maintenance audit check to gather security and update status:
+
+```bash
+~/.claude/skills/maintenance-release/scripts/audit-check.sh
+```
+
+This reports: audit status (clean/vulnerable), available updates, and current version.
 
 ### Preconditions
 
@@ -140,11 +148,6 @@ Example: CVE-2026-22036 ↔ GHSA-g9mf-h72j-4rw9
 ### 1.2 Check @shellicar Package Dependencies
 
 If a CVE is found, check if it affects other @shellicar packages. Most packages share similar dev/build dependencies, so a CVE in one likely affects all.
-
-```bash
-# Reference the dependency graph
-cat ~/repos/@shellicar/ecosystem/DEPENDENCY-GRAPH.md
-```
 
 **Important**: Update packages in dependency order (Tier 0 → Tier 1 → Tier 2). For example, if `build-clean` has a CVE fix, release it first before updating packages that depend on it.
 
@@ -379,7 +382,7 @@ Adjust the plan accordingly and confirm before proceeding.
 Use the `fix-audit.sh` helper script:
 
 ```bash
-~/repos/@shellicar/ecosystem/scripts/fix-audit.sh
+~/.claude/skills/maintenance-release/scripts/fix-audit.sh
 ```
 
 This runs `pnpm audit --fix`, then nukes lockfile + node_modules and reinstalls to work around the pnpm override chaining bug ([pnpm#6774](https://github.com/pnpm/pnpm/issues/6774)), then verifies the audit is clean.
@@ -391,7 +394,7 @@ If `fix-audit.sh` reports vulnerabilities still present:
 ```bash
 # Apply targeted override for a specific GHSA
 echo '[{"pkg":"koa","vulnerable":">= 3.0.0, < 3.1.2","patched":"3.1.2"}]' \
-  | node ~/repos/@shellicar/ecosystem/scripts/fix-ghsa.mjs pnpm-workspace.yaml
+  | node ~/.claude/skills/maintenance-release/scripts/fix-ghsa.mjs pnpm-workspace.yaml
 ```
 
 If neither approach resolves the CVE, inform the user for manual intervention.
@@ -466,7 +469,7 @@ After ncu updates package versions, two things typically break:
 Use the `post-ncu.sh` helper script:
 
 ```bash
-~/repos/@shellicar/ecosystem/scripts/post-ncu.sh
+~/.claude/skills/maintenance-release/scripts/post-ncu.sh
 ```
 
 Or manually:
@@ -479,7 +482,7 @@ pnpm install                   # Update lockfile
 ### 4.4 Verify
 
 ```bash
-~/repos/@shellicar/ecosystem/scripts/verify.sh
+~/.claude/skills/maintenance-release/scripts/verify.sh
 ```
 
 This runs `pnpm build` and `pnpm test`, capturing output. On success it prints a one-line summary per step (minimal context). On failure it shows the full output for diagnosis.
@@ -549,7 +552,7 @@ Security fixes and dependency updates
 Before creating a PR, ensure standard labels exist on the repository:
 
 ```bash
-~/repos/@shellicar/ecosystem/scripts/ensure-labels.sh --repo <repo-name>
+~/.claude/skills/maintenance-release/scripts/ensure-labels.sh --repo <repo-name>
 ```
 
 This script is idempotent and can be auto-approved in settings.json.
@@ -587,7 +590,7 @@ Do **not** close the milestone after a patch release. See the `github-milestone`
 ### 6.4 Clean Up Branches
 
 ```bash
-~/repos/@shellicar/ecosystem/scripts/post-merge.sh --branch <branch-name>
+~/.claude/skills/maintenance-release/scripts/post-merge.sh --branch <branch-name>
 ```
 
 This verifies the branch has a merged PR, switches to main, pulls, prunes remotes, and deletes the local branch. Safe to auto-approve because it only deletes branches with confirmed merged PRs.
