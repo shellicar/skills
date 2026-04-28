@@ -39,6 +39,15 @@ GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || {
 }
 cd "$GIT_ROOT"
 
+# Worktree detection: in a linked worktree, --git-dir differs from --git-common-dir
+GIT_DIR=$(git rev-parse --git-dir)
+GIT_COMMON_DIR=$(git rev-parse --git-common-dir)
+if [ "$GIT_DIR" != "$GIT_COMMON_DIR" ]; then
+  WORKTREE="true"
+else
+  WORKTREE="false"
+fi
+
 # Git identity
 GIT_NAME=$(git config user.name 2>/dev/null || true)
 GIT_EMAIL=$(git config user.email 2>/dev/null || true)
@@ -127,6 +136,7 @@ jq -n \
   --argjson unstaged "$UNSTAGED" \
   --argjson untracked "$UNTRACKED" \
   --argjson recent_log "$RECENT_LOG" \
+  --argjson worktree "$WORKTREE" \
   '{
     branch: $branch,
     branch_action: $branch_action,
@@ -134,6 +144,7 @@ jq -n \
     default_divergence: {ahead: $default_ahead, behind: $default_behind},
     convention: (if $convention == "" then null else $convention end),
     identity: {name: $git_name, email: $git_email},
+    worktree: $worktree,
     working_tree: {
       staged: $staged,
       unstaged: $unstaged,
