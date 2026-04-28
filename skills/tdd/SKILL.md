@@ -104,15 +104,22 @@ Cannot find module './formatPhone'
 
 If the test fails for a structural reason (missing import, missing file), fix that first with a stub so the test can run and fail for the right reason.
 
-## Use `satisfies` for test data
+## Use `satisfies`, not `as`, for test data
 
-Test input data and test doubles should use `satisfies` to ensure type correctness:
+`satisfies` checks the shape against the type while keeping the literal type of the object. The compiler catches missing or wrong fields. `as` skips the check entirely: the object is trusted to match the type regardless of what it actually contains. Test data assembled with `as` can be quietly wrong and the test still compiles.
 
 ```typescript
+// Good: compiler verifies the shape, object keeps its literal type
 const input = {
   interactionId: 'de80e429-5d13-4536-b824-89e9c43c80fb',
   step: WelcomeStep.Overview,
 } satisfies WelcomeNextInput;
+
+// Bad: compiler trusts you, no check happens
+const input = {
+  interactionId: 'de80e429-5d13-4536-b824-89e9c43c80fb',
+  step: WelcomeStep.Overview,
+} as WelcomeNextInput;
 ```
 
 ## Factory functions for complex objects
