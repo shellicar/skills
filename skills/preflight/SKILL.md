@@ -42,7 +42,7 @@ The JSON output gives you a complete picture of the environment:
 - **branch**: current branch name
 - **branch_action**: what happened (`none`, `already_on_branch`, `created`)
 - **default_branch**: the repo's default branch (e.g. `main`)
-- **default_divergence**: how far the local default branch is behind origin (a non-zero `behind` means local main is stale)
+- **default_divergence**: how far the current branch is behind origin's default branch (a non-zero `behind` means origin/main has commits your branch doesn't)
 - **convention**: detected convention name (load the matching `*-conventions` skill)
 - **identity**: git name and email
 - **worktree**: `true` if the current operation is in a linked git worktree, `false` if in the main worktree. By the SC's convention, a linked worktree means Claude is working in isolation and `co-working` is not loaded; the main worktree is the default co-working condition. The SC overrides explicitly when the default is wrong.

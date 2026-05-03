@@ -70,7 +70,10 @@ git fetch origin 2>/dev/null || {
 
 # Detect default branch
 DEFAULT=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
-DEFAULT=${DEFAULT:-main}
+if [ -z "$DEFAULT" ]; then
+  echo "Cannot determine default branch (origin/HEAD not set). Run: git remote set-head origin --auto" >&2
+  exit 1
+fi
 
 # --- Branch handling ---
 
@@ -78,6 +81,11 @@ CURRENT=$(git branch --show-current)
 BRANCH_ACTION="none"
 
 if [ -n "$BRANCH_NAME" ]; then
+  # Starting a new branch with uncommitted changes is always wrong
+  if [ -n "$(git diff --cached --name-only 2>/dev/null)" ] || [ -n "$(git diff --name-only 2>/dev/null)" ]; then
+    echo "Working tree is dirty. Cannot create branch '$BRANCH_NAME' with uncommitted changes." >&2
+    exit 1
+  fi
   if [ "$CURRENT" = "$BRANCH_NAME" ]; then
     BRANCH_ACTION="already_on_branch"
   else
@@ -97,13 +105,12 @@ STAGED=$(git diff --cached --name-only 2>/dev/null | jq -Rs '[split("\n")[] | se
 UNSTAGED=$(git diff --name-only 2>/dev/null | jq -Rs '[split("\n")[] | select(. != "")]')
 UNTRACKED=$(git ls-files --others --exclude-standard 2>/dev/null | head -20 | jq -Rs '[split("\n")[] | select(. != "")]')
 
-# Local default branch vs origin (is local main behind?)
-LOCAL_DEFAULT_SHA=$(git rev-parse "refs/heads/$DEFAULT" 2>/dev/null || echo "")
+# Current branch vs origin default (is the branch behind origin/main?)
 ORIGIN_DEFAULT_SHA=$(git rev-parse "refs/remotes/origin/$DEFAULT" 2>/dev/null || echo "")
 DEFAULT_BEHIND=0
 DEFAULT_AHEAD=0
-if [ -n "$LOCAL_DEFAULT_SHA" ] && [ -n "$ORIGIN_DEFAULT_SHA" ]; then
-  DIVERGENCE=$(git rev-list --left-right --count "refs/heads/$DEFAULT...refs/remotes/origin/$DEFAULT" 2>/dev/null || echo "0	0")
+if [ -n "$ORIGIN_DEFAULT_SHA" ]; then
+  DIVERGENCE=$(git rev-list --left-right --count "HEAD...refs/remotes/origin/$DEFAULT" 2>/dev/null || echo "0	0")
   DEFAULT_AHEAD=$(echo "$DIVERGENCE" | cut -f1)
   DEFAULT_BEHIND=$(echo "$DIVERGENCE" | cut -f2)
 fi

@@ -18,6 +18,12 @@ TypeScript's type system is the reason we use TypeScript. Work with it, not arou
 
 When you're stuck on a type problem, work iteratively: write the code, let the compiler tell you what's wrong, fix one error at a time. The type system is Turing complete. There is almost always a solution using generics, conditional types, mapped types, or utility types. If you genuinely can't find one, show what you tried and ask.
 
+### Let diagnostics drive type fixes
+
+Write code as if the types work. Use `TsDiagnostics` to find out if they don't. Only add a cast, annotation, or type assertion when the diagnostic tool reports an actual error at that location.
+
+Do not preemptively cast because you suspect a type might be a union, might be too broad, or might not have a property. That assumption is often wrong, and acting on it adds noise that obscures the real types. The compiler knows — ask it first.
+
 ### Types vs type constraints
 
 There is a difference between declaring what a value *is* and constraining what a generic *accepts*.
