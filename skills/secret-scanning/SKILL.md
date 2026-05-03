@@ -99,7 +99,7 @@ For each confirmed "Remediate" finding, execute the specified remediation action
 
 **Step 4a: Commit remediated changes**
 
-After remediation edits are applied, commit the changes. The working tree MUST be clean before history scrubbing can proceed (`git filter-branch` requires a clean working tree). Use the `git-commit` skill to commit.
+After remediation edits are applied, commit the changes. The working tree MUST be clean before history scrubbing can proceed (`git filter-branch` requires a clean working tree). Use `git-workflow` to commit.
 
 **Step 5: Post-remediation — gidetermine whether the remediated values exist in git history and whether they've been pushed.
 
@@ -173,15 +173,15 @@ Then proceed with the operation (commit/push/scan complete).
 
 Present all findings using the disposition process above. The goal is awareness — the Supreme Commander decides every disposition.
 
-### When Committing (via `git-commit` skill)
+### When Committing
 
-The `git-commit` skill scans staged files before committing. Present findings using the disposition process above. Do not commit until every finding has an explicit disposition.
+Scan staged files before committing. Present findings using the disposition process above. Do not commit until every finding has an explicit disposition.
 
 **Commit-context adjustments**: When scanning is triggered during a commit (not a standalone review), skip steps 4a and 5 of the disposition process. Remediation is applied directly to staged files before committing — there is no need to commit remediation separately or check git history, because the secret has not entered history yet.
 
-### When Pushing (via `git-push` skill)
+### When Pushing
 
-The `git-push` skill loads this skill and scans all commits being pushed. Present findings using the disposition process above. Do not push until every finding has an explicit disposition.
+Scan all commits being pushed. Present findings using the disposition process above. Do not push until every finding has an explicit disposition.
 
 ### File Selection for Scanning
 

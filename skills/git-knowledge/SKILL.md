@@ -11,7 +11,7 @@ metadata:
 
 # Git Knowledge
 
-**Scope:** How Git actually works — the relationship between working tree, index, and commits. This skill corrects common misconceptions that lead to unnecessary operations. It does NOT contain workflows — see `git-commit`, `git-push`, `git-cleanup` for those.
+**Scope:** How Git actually works — the relationship between working tree, index, and commits. This skill corrects common misconceptions that lead to unnecessary operations. It does NOT contain workflows — see `git-workflow`, `git-cleanup` for those.
 
 ## The Three States
 

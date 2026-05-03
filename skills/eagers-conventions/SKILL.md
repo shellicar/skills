@@ -85,7 +85,7 @@ If the branch has **any enabled, blocking policies** (e.g. "Minimum number of re
 ## Commit Messages
 
 - Concise, single line, imperative mood
-- **No prefixes.** See `git-commit` skill.
+- **No prefixes.** See `git-workflow` skill.
 - Work item reference optional in commits (required in PR)
 - Load the `writing-style` skill.
 

@@ -36,7 +36,7 @@ Match when:
 ## Commit Messages
 
 - Concise, single line, imperative mood
-- **No prefixes.** See `git-commit` skill.
+- **No prefixes.** See `git-workflow` skill.
 - Load the `writing-style` skill.
 
 ## PR Description Format

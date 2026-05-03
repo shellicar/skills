@@ -139,7 +139,7 @@ From the output:
 
 **Typical flow:**
 ```
-maintenance-release → github-version → git-commit → github-pr → [PR merged] → github-release
+maintenance-release → github-version → git-workflow → github-pr → [PR merged] → github-release
 ```
 
 When called after other skills, version context flows through the conversation - no need to re-discover.

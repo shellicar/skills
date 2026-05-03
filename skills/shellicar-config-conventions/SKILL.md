@@ -37,7 +37,7 @@ Config repos use a simplified workflow:
 
 - Concise, single line
 - Imperative mood
-- **No prefixes.** See `git-commit` skill.
+- **No prefixes.** See `git-workflow` skill.
 
 ## CLI Commands
 

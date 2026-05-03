@@ -229,8 +229,8 @@ Do NOT commit - let the calling workflow handle commits.
 
 This skill is **independent and composable**. It can be called:
 
-- **Same PR as changes**: `maintenance-release` → `github-version` → `git-commit` → `github-pr`
-- **Separate PR**: Changes merged first, then `github-version` → `git-commit` → `github-pr` when ready to release
+- **Same PR as changes**: `maintenance-release` → `github-version` → `git-workflow` → `github-pr`
+- **Separate PR**: Changes merged first, then `github-version` → `git-workflow` → `github-pr` when ready to release
 
 ### Why Separate PRs?
 
