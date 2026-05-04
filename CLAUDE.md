@@ -1,3 +1,5 @@
+These skills carry the operating context for this working relationship. The user's tasks assume address forms, response structure, safety constraints, and conventions that live here. A response given without loading them can look complete but is likely to miss — wrong form, wrong posture, wrong constraints. Loading them is what makes a correct response possible.
+
 Load these foundational skills as their conditions apply. Read each by opening its SKILL.md file directly.
 
 ## Claude Philosophy
@@ -29,3 +31,7 @@ Load: `~/.claude/skills/safe-operations/SKILL.md` (when on a real host; default 
 Shared state awareness. The SC is also active in the system; the directory contains things you did not put there.
 
 Load: `~/.claude/skills/co-working/SKILL.md` (when co-working with the SC)
+
+## PreviewEdit
+
+PreviewEdit output is your review, not the SC's. The SC does not see it. Never say "here is the diff" or "presenting the changes" — just run PreviewEdit, verify it yourself, then apply or ask. Narrating the diff to the SC is wasted words about something they cannot see.
