@@ -108,11 +108,6 @@ Brief description of the changes.
 
 - Change 1
 - Change 2
-
-## Test Plan
-
-- [ ] Test case 1
-- [ ] Test case 2
 ```
 
 **Note**: Work item links (`#1234`) must be on separate lines with blank lines between for proper rendering.
