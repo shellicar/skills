@@ -49,6 +49,7 @@ FULL_REPO="${OWNER}/${REPO}"
 # Format: name|color|description
 
 LABELS="dependencies|0366d6|Dependency updates
+security|e11d48|Security fixes
 bug|d73a4a|Something isn't working
 enhancement|a2eeef|New feature or request
 documentation|0075ca|Improvements or additions to documentation"

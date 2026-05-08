@@ -239,10 +239,15 @@ Note: A CVE in an internal tool (e.g., `tools/verify-version.sh` deps) is still 
 #### Special Package Rules
 
 - `syncpack` - **never auto-update** (major bumps break; always `--reject syncpack`)
-- `@types/node` - always safe to update (types only, recommended)
 - `@types/*` - should align with main package version
-- Build tools (esbuild, tsup, vitest) - dev only, can be more aggressive
-- Runtime libraries (express, hono) - more caution needed
+
+#### Pin handling
+
+This guidance applies only to versions in the `dependencies` and `devDependencies` fields of `package.json`. The `packageManager` field is not covered. It has its own SHA-pinned format and is restored by `corepack up` after ncu runs.
+
+Within `dependencies` and `devDependencies`, the absence of `^`/`~` (a pinned version like `4.5.1`) is not a signal to skip. Pin syntax tells you nothing about intent: some pins are intentional compatibility constraints, others are just how the version was recorded. If a pin matters, the human will say so when reviewing the analysis.
+
+`peerDependencies` need careful handling. Their ranges often span multiple majors (`^11`, `^11 | ^12`) to express compatibility with consumers. Only widen a peer range when the corresponding dependency or devDependency version has also moved.
 
 ## Phase 2: Present Recommended Plan
 
@@ -417,9 +422,11 @@ See: https://github.com/pnpm/pnpm/issues/6774
 
 Look for packages that need special handling:
 
-- **Pinned versions** (no `^` or `~` prefix, e.g. `4.5.1`) — these are intentional, skip them
 - **Major bumps** — skip by default in maintenance releases
 - **syncpack** — always reject
+- **Packages the human has flagged as pinned-by-intent** — skip per the human's instruction
+
+See the Pin handling section in Phase 1.6. The absence of `^`/`~` is not, on its own, a signal to skip.
 
 #### Provide exact commands
 
