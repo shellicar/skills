@@ -23,6 +23,45 @@ Git has three places where file content lives:
 
 Understanding which state you're affecting prevents unnecessary operations.
 
+## Naming Branches and Refs
+
+A branch name alone is ambiguous. `epic/refactor-next` can refer to:
+
+- A **local branch** named `epic/refactor-next` (only meaningful if it exists locally).
+- A **remote-tracking ref** named `origin/epic/refactor-next` (the local snapshot of where the remote thinks the branch is, updated by `git fetch`).
+- The **remote-side branch** itself, on the actual server.
+
+These can point at the same commit, but they often don't. Treating them as interchangeable produces wrong diffs, wrong merge bases, and wrong reasoning that looks coherent.
+
+### The naming rule
+
+**Always refer to a branch by its full ref name and include the short SHA the ref currently resolves to.**
+
+- **Remote-tracking ref:** `origin/<branch-name> [<short-sha>]` — e.g. `origin/epic/refactor-next [bff895d]`.
+- **Local ref:** `<branch-name> [<short-sha>]` — e.g. `epic/refactor-next [459bf56]`.
+
+The `origin/` prefix is part of the name, not optional. The bracketed SHA pins the moment-in-time the ref resolves to — without it, "the branch" means different things at different times.
+
+When writing or describing a diff command, fetch operation, branch comparison, or merge-base calculation, **use the full form for every ref**. If you find yourself writing just `epic/refactor-next` without the `origin/` prefix when you meant the remote-tracking ref, or without a SHA when you meant a specific commit, stop and resolve it explicitly. The ambiguity is the bug.
+
+### When the distinction matters
+
+- **Diffs.** `git diff A...B` computes the merge-base of A and B then diffs from there to B. Whether A is `origin/main` or `main` changes which merge base is computed. Today they may resolve to the same commit; tomorrow they may not.
+- **Merge-base.** `git merge-base origin/main HEAD` and `git merge-base main HEAD` are different operations whenever `origin/main` and `main` aren't at the same commit.
+- **Fetch.** `git fetch origin` updates remote-tracking refs (`origin/*`). It does *not* touch local branches. Your local `main` does not move; `origin/main` does.
+- **Push.** Pushing local `main` to the remote is what makes `main` and `origin/main` match again.
+
+### How to verify
+
+When uncertain what a ref resolves to:
+
+- `git rev-parse <ref>` — returns the SHA the ref currently points to.
+- `git show-ref` — lists every ref the repo knows about.
+- `git branch -a` — lists local and remote-tracking branches.
+- `git rev-parse --abbrev-ref <ref>` — gives the symbolic name.
+
+Resolving before reasoning is the discipline. The cost is one command. The cost of conflation is a wrong diff that reads coherent.
+
 ## Branch Switching
 
 A branch is a pointer to a commit. Switching branches moves HEAD to a different commit and updates the working tree to match.
