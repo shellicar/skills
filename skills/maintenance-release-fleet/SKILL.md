@@ -398,8 +398,14 @@ Categories: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`.
 Description rules:
 
 - Plain text. No URLs. The generator appends a markdown link from `metadata.ghsa`.
-- Name the affected package and the action. "Fixed GHSA-... in <pkg>" beats "Fix audit". "Updated @shellicar/build-clean to 1.2.2, biome to 2.3.14" beats "Updated dependencies" when there are specifics.
-- For routine multi-dep bumps with no single specific story, the canonical signature is `"Updated all dependencies to latest versions"`.
+- Name the affected package and the action. "Fixed GHSA-... in <pkg>" beats "Fix audit".
+- For routine multi-dep bumps, match the description to the actual scope of the run (the scenario from Phase 2):
+  - **Scenario A (patch only)**: `"Updated patch dependencies"`.
+  - **Scenario B (security + patch + minor)**: `"Updated patch and minor dependencies"`.
+  - **Scenario C (full update across all deps)**: `"Updated all dependencies to latest versions"`.
+  - **Scenario D (targeted major)**: name the specific major bump.
+  - **Scenario E (patch only, no security)**: `"Updated patch dependencies"`.
+- Name specific bumps only when there is a consumer-visible implication readers of the changelog should know about: a behaviour change in a runtime dep, a deprecation, a peer-range shift, or anything else that affects how consumers use the package. The diff is not the threshold; implication is. Listing every patch bump from `git diff` is noise.
 
 Metadata rules:
 
@@ -490,9 +496,9 @@ gh pr view <number> --json state,mergedAt
 
 If auto-merge is enabled, the PR will merge once checks pass. Do not proceed until `state` is `MERGED`.
 
-### 6.2 Create Release
+### 6.2 Create Releases
 
-Invoke the `github-release` skill to create a GitHub release, which triggers npm publish.
+For each affected package (every package whose `package.json` changed in this mission), invoke the `github-release` skill in tier order (Tier 0 → Tier 1 → Tier 2 per Phase 1.2). Wait for each release's npm-publish workflow to complete before creating the next. If any workflow fails, stop and report. Within a tier, order does not matter.
 
 ### 6.3 Milestone
 
