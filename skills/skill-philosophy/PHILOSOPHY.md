@@ -34,6 +34,18 @@ Without `PHILOSOPHY.md`, the editor approximates the reasoning from what's in `S
 
 Each edit is a small drift unless the editor knows what to preserve. Even editors with good intentions undo decisions they didn't know were decisions. Over many edits, the skill loses coherence with its original purpose. The `PHILOSOPHY.md` is the structural defence: an editor who reads it knows what the load-bearing pieces are and avoids removing them by accident.
 
+### Philosophy changes slowly; skill changes rapidly
+
+The two files move at different speeds, and that's by design.
+
+`SKILL.md` is current-state-shaped: it captures how the discipline is being practised right now. As the discipline is refined through iteration, the `SKILL.md` is what changes — new patterns surface, framings sharpen, structure evolves. Frequent small edits are normal.
+
+`PHILOSOPHY.md` is reasoning-shaped: it captures *why* the discipline is the way it is, what failure modes drove it, what was rejected. These move only when the underlying reasoning shifts. A change to the operational shape doesn't necessarily require a change to the reasoning history.
+
+The practical implication: an editor touching `SKILL.md` should default to *not* updating `PHILOSOPHY.md` unless the why-decisions themselves have shifted. The check is at the reasoning layer: "Have we changed our mind about *why* this skill exists or what it's defending against, or have we just refined *how* the discipline operates?" The first requires updating `PHILOSOPHY.md`; the second doesn't.
+
+This cadence is the design's expectation. Treating both files as needing the same edit frequency produces either bloated `PHILOSOPHY.md` (every operational tweak becomes a paragraph there) or stagnant `SKILL.md` (changes get blocked on perceived philosophy edits). Both are regressions.
+
 ## Decisions made
 
 ### Skill name: `skill-philosophy`
@@ -51,6 +63,17 @@ The voice already exists in the foundational `PHILOSOPHY.md` files. Keeping it c
 ### Structure consistent across all `PHILOSOPHY.md` files
 
 The recurring sections (Why this skill exists / Origin / Key insights / Decisions / What was rejected / What it doesn't cover / Notes for editors) come from the foundational `PHILOSOPHY.md` files. Standardising the structure makes editing predictable — an editor reading any `PHILOSOPHY.md` knows where to find what.
+
+### Both files answer 5W/1H, but `SKILL.md` does it directly and `PHILOSOPHY.md` indirectly
+
+The discipline that *every skill and/or philosophy must answer WHO / WHAT / WHEN / HOW / WHY* applies to both files. `SKILL.md` does this through explicit `## Who / ## What / ## Why / ## How / ## When` sections (or, for reference-shaped skills, the frontmatter description carries the answers). `PHILOSOPHY.md` does this through its purpose-organized sections, which collectively answer the five questions.
+
+I considered restructuring `PHILOSOPHY.md` to use 5W/1H sections too, for consistency. Rejected because:
+
+1. **The WHO / WHEN / HOW are nearly identical across every `PHILOSOPHY.md`** (editors / at edit time / by reading the substantive content). Repeating these as headers in every file is boilerplate without per-file information.
+2. **The substantive variation per skill is in the editorial sections** (Origin, Decisions, What was rejected). 5W/1H would collapse these into WHAT and HOW, losing the granularity that distinguishes "what we decided" from "what we rejected" from "what we don't cover."
+3. **`PHILOSOPHY.md`'s purpose is editor-facing reasoning history.** The purpose-organized sections are closer to the editor's actual work ("what was tried?", "what got rejected?", "what should I be careful about?") than question-organized sections would be.
+4. **The discipline is *answer all five questions*, not *use five-section headers*.** Mapping the purpose-organized sections to 5W/1H (documented in `SKILL.md`'s `## How` section) is the verification check. As long as each `PHILOSOPHY.md` is readable as an answer to all five questions through its sections, the discipline holds.
 
 ## What was rejected
 

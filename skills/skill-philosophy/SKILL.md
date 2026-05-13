@@ -20,6 +20,8 @@ A skill in this repo has two files:
 
 Both files are required. Creating a skill means writing both. Modifying a skill means reading the `PHILOSOPHY.md` first, then editing the `SKILL.md`, and updating the `PHILOSOPHY.md` if the reasoning has shifted.
 
+**Cadence.** Philosophy changes slowly; skill changes more rapidly. `SKILL.md` is current-state-shaped — it evolves as the discipline is refined, new patterns surface, framings sharpen. `PHILOSOPHY.md` is reasoning-shaped — it shifts only when the underlying problem the skill addresses changes, or when a key insight gets reframed. Expect to touch `SKILL.md` often and `PHILOSOPHY.md` rarely. A `SKILL.md` edit that doesn't require a `PHILOSOPHY.md` update is the common case; a change that does is significant.
+
 ## Why
 
 A `SKILL.md` describes the *current shape* of the discipline. It does not document the reasoning that produced that shape — what alternatives were considered and rejected, what failure modes drove the current content, what to be careful about when modifying.
@@ -50,3 +52,24 @@ Without the philosophy, future editors modify `SKILL.md` based on what it curren
 Voice in `PHILOSOPHY.md` is first-person SC, addressed to future editors. Not third-person observation. The `PHILOSOPHY.md` is the SC's editorial context shared with whoever will edit the `SKILL.md` next.
 
 A skill without `PHILOSOPHY.md` is incomplete. Either write the `PHILOSOPHY.md` or do not create the skill.
+
+### Both files answer WHO / WHAT / WHEN / HOW / WHY
+
+The discipline applies to both files: each must answer the five questions. They do it differently.
+
+`SKILL.md` answers directly, with explicit `## Who / ## What / ## Why / ## How / ## When` sections (or, for reference-shaped skills, via topic-organized sections with the questions answered in the frontmatter description).
+
+`PHILOSOPHY.md` answers indirectly, through its purpose-organized sections:
+
+| `PHILOSOPHY.md` section | Question(s) answered |
+|---|---|
+| Opening paragraph | WHO (editors) + WHEN (at edit time) |
+| Why this skill exists | WHY (the foundational problem) |
+| Origin | WHY (deeper) + WHEN (when it came about) |
+| Key insights that shaped this skill | WHAT (substantive content of the philosophy) |
+| Decisions made | WHAT (choices) + HOW (chosen approaches) |
+| What was rejected | WHAT (anti-content) |
+| What this skill does NOT cover | WHAT (scope boundaries) |
+| Notes for future editors | HOW (editorial discipline) |
+
+The discipline is *answer all five questions*, not *use five-section headers*. The purpose-organized sections of `PHILOSOPHY.md` collectively cover the five questions while serving the editor's actual work — reasoning history, alternatives considered, constraints to respect. The mapping above is the verification check: every `PHILOSOPHY.md` should be readable as an answer to all five questions through these sections.
