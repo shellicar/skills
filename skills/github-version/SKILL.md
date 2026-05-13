@@ -40,6 +40,21 @@ For npm packages:
 - Multiple PRs can go into one version, but prefer frequent small releases
 - Pre-releases available for uncertain features
 
+## Detect changelog flow
+
+@shellicar repos use one of two CHANGELOG patterns:
+
+1. **Direct edit**: `CHANGELOG.md` is hand-maintained. Phase 3a applies.
+2. **`changes.jsonl` + generator**: per-package `changes.jsonl` files drive `CHANGELOG.md` generation. `CHANGELOG.md` is regenerated, not edited directly. Phase 3b applies.
+
+Detect at the start:
+
+```bash
+find . -name 'changes.jsonl' -not -path './node_modules/*' | head -1
+```
+
+If any `changes.jsonl` is present in the repo (typically per-package under `packages/` or `apps/`), use the generator flow (Phase 3b). Otherwise, use the direct-edit flow (Phase 3a).
+
 ## Phase 1: Determine Current Version
 
 ### From Package.json
@@ -104,7 +119,9 @@ The question should include:
 - Recommended next version
 - Reason for recommendation (security fix, bug fix, new feature, etc.)
 
-## Phase 3: Update CHANGELOG.md
+## Phase 3a: Update CHANGELOG.md (direct edit flow)
+
+Use this phase when no `changes.jsonl` files are present in the repo. For the generator flow, see Phase 3b.
 
 ### Check if CHANGELOG.md Exists
 
@@ -198,6 +215,53 @@ Add link at bottom of CHANGELOG (maintain alphabetical/version order):
 ```
 
 Insert after the most recent version link.
+
+## Phase 3b: Append release markers and regenerate CHANGELOG.md (generator flow)
+
+Use this phase when `changes.jsonl` files are present in the repo. For the direct-edit flow, see Phase 3a.
+
+Do not edit `CHANGELOG.md` directly. The generator owns it.
+
+For each affected published package (every package whose `package.json` will be bumped):
+
+### 3b.1 Append the release marker to changes.jsonl
+
+Format (per the schema):
+
+```jsonl
+{"type":"release","version":"<x.y.z>","date":"<YYYY-MM-DD>","tag":"<pkg-shortname>@<x.y.z>"}
+```
+
+Where:
+
+- `pkg-shortname` is the package's `name` field with the `@shellicar/` prefix stripped (e.g., `claude-sdk`, `core-di`, `winston-azure-application-insights`). The directory name should equal this; if they do not match, stop and report.
+- `date` is today's date.
+
+Append, never edit existing entries.
+
+### 3b.2 Bump package.json (Phase 4 below)
+
+Run the standard package.json bump for the package.
+
+### 3b.3 Regenerate CHANGELOG.md
+
+```bash
+pnpm --filter scripts changelog packages/<pkg>
+```
+
+(Or whatever path the repo uses for the changelog generator.)
+
+### 3b.4 Validate
+
+```bash
+pnpm --filter scripts validate
+```
+
+Must be clean. If validation fails, stop and report.
+
+### 3b.5 Stage all three files
+
+For each affected package, stage `package.json`, `changes.jsonl`, and `CHANGELOG.md` together (Phase 5 below covers this).
 
 ## Phase 4: Bump Package.json Version
 
