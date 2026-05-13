@@ -67,6 +67,38 @@ The reason today's iteration was heavy: comments posted under the SC's name requ
 
 We were not perfecting any individual review. We were capturing the SC's filter — what to care about, in articulated form, embedded in skill + prompt — so that when models close the capability gap, the captured filter immediately produces value. The cost of today (~$30 across casts) is R&D investment, not waste. Each forensic-driven skill update is a durable artefact even if the cast that surfaced the failure produced an imperfect review.
 
+### Intent is not correctness
+
+The deepest framing the skill addresses. *"This is intentional"* / *"by design"* / *"the comment says..."* don't argue the choice was correct — they only name *who chose* the pattern. A bad design is still a design; an intentional bug is still a bug. The skill evaluates patterns on their merits regardless of whether the author intended them.
+
+The `Impartiality` section in `SKILL.md` is the operational expression of this. The deeper claim is sharper: when reviewing code, the reviewer's question is *"should this pattern exist?"* not *"did the author mean to write it?"* The first is the actual review work. The second is what the codebase's prose tries to substitute for the review work.
+
+Empirically this produces a rubber-stamp failure mode: a high pass rate that reflects deference to author intent rather than evaluation of code quality. The pass rate number itself is not the load-bearing claim; the mechanism is. Code that survives review because the reviewer accepted *"the author meant it this way"* is not code that has been reviewed.
+
+### Comments are not part of the code being reviewed
+
+A sharper framing than `Impartiality` as currently expressed. The current framing is *"prose from the codebase is input to evaluate, not context to absorb."* That still puts the prose in the evaluation pipeline. The cleaner principle is: when reviewing *code*, comments are not part of what's being reviewed. They're outside the scope. The code stands on its own.
+
+When reviewing *documentation*, that's a separate pass with separate criteria — does the documentation match the code, is it accurate, is it useful for its intended audience.
+
+**Load-bearing comments are themselves findings about the code.** A comment that is *required* to understand what the code does is evidence the code isn't self-evident. A comment explaining a workaround (`Object.setProperty` overriding a `const`, with a block comment explaining why) doesn't justify the workaround — it documents that the workaround exists. The need-for-comment is the finding; the comment is the symptom, not the defence.
+
+The spectrum runs from "code reads like a book, zero comments needed" through "public API documentation is its own genre with its own justifications" to "a block comment laundering a workaround is disqualifying." Not every comment is a smell; comments accumulate suspicion in proportion to how load-bearing they are.
+
+The mechanical implementation is LSP-aware comment stripping or placeholdering — the reviewer sees that a comment exists (its existence is reviewable as a smell) but doesn't see the content (which can't poison the evaluation). Without that tooling, the principle remains discipline-shaped, which is where discipline reliably breaks down. Tooling-level enforcement is the future shape.
+
+### Multi-pass review by specialised subordinates
+
+A single reviewer cast has finite attention and inevitably drops dimensions. Security gets covered, style gets dropped. Style gets covered, correctness gets dropped. The drops aren't visible because the cast doesn't know what it didn't look at.
+
+Parallel specialised passes use the architecture: spawn N casts, each with a narrow concern (security, style, correctness, tests, documentation, architecture), each with focused skill load, each with concentrated attention budget. Findings get handed up structurally; coverage gaps surface per pass rather than getting lost in noise.
+
+This is a capability the fleet enables that a single human reviewer can't easily replicate. A human reviewer switches between concerns expensively and incompletely; specialist Claudes don't pay that switching cost.
+
+The architecture mirrors the existing fleet PM / operator split: a coordinator (senior reviewer) that doesn't see the code, subordinates (specialty reviewers) that do, structured handoffs between them. For review specifically, the coordinator-without-codebase-context pattern **contains the prompt-injection problem from comments**. Comments in the code never reach the coordinator's context. A subordinate's context may still be poisoned (and drop findings as a result), but the blast radius is one specialty's worth of misses, and the poison doesn't propagate up to the coordinator or across to other subordinates.
+
+Future shape; not in the current single-cast `SKILL.md`.
+
 ## Decisions made
 
 ### Two valid Action values: `comment` and `flag`
@@ -114,6 +146,8 @@ Heuristics signal a judgement moment; rules dictate behaviour. For LLM reviewers
 - **Reviewer identity / who-the-comment-is-from.** Whether comments post under the SC's identity or Claude's identity is separate infrastructure work. The skill assumes whichever identity is configured; the quality floor it produces is the same.
 - **What makes a finding worth `comment` vs `flag`.** That's the reviewer's judgement at the Conclude step. The skill provides the structural defence (everything recorded, every Action explicit, SC override available); the specific judgements per Investigation are not encoded.
 - **PR-review-specific test invocation patterns for non-monorepo codebases.** The `Test invocation` section names the principle (identify how tests are run, verify CI's path); the specifics for a single-package repo with no build tool are not enumerated.
+- **Multi-pass review architecture (coordinator + specialty subordinates).** A future shape. The current `SKILL.md` describes a single-cast review where one reviewer covers all concerns. The multi-pass architecture is named in the `Key insights` above because it shapes where the skill is heading, but the current `SKILL.md` does not implement it. When it's implemented, the senior coordinator's review file is the output; each subordinate produces a specialty-scoped sub-review that the coordinator integrates.
+- **LSP-aware comment stripping.** The principle *"comments are not part of the code being reviewed"* relies on tooling that strips or placeholders comments before the reviewer sees code. The current `SKILL.md` carries the discipline-shaped version (the reviewer is supposed to not let comments condition the review); the tooling-shaped version is the structural fix and is future work.
 
 ## Notes for future editors
 
@@ -124,3 +158,4 @@ Heuristics signal a judgement moment; rules dictate behaviour. For LLM reviewers
 - The Action vocabulary is two values: `comment` and `flag`. Adding a third (e.g. `summary`, `defer`) tempting but reintroduces classification at the wrong layer. The summary text and the action assignment are separate concerns; keep them so.
 - The two-phase split (Phase 1 file, Phase 2 comments) is the SC's gate. Collapsing back to one phase reopens the self-promotion failure mode. The boundary is the discipline.
 - "Iteration is the product" is the framing under all of this. The skill is the captured filter; today's iteration produced it; tomorrow's iteration will refine it. Future edits should preserve that posture — the skill is not finished, it is a snapshot.
+- The `Impartiality` framing in the current `SKILL.md` (*"prose is input to evaluate, not context to absorb"*) is a stepping stone toward the cleaner principle in `Key insights > Comments are not part of the code being reviewed`. When `SKILL.md` evolves to reflect the cleaner framing — either through LSP-aware tooling or through stronger discipline — the philosophy already records the direction. Don't roll back to the weaker framing thinking it's the intent.
