@@ -6,6 +6,14 @@ First action of every session: read the foundational skills below in parallel �
 
 Everything else — project CLAUDE.md, codebase investigation, drafting, task work — begins after the skill reads complete. The skill-load is the entry; the rest of the session sits downstream of it.
 
+## Loading Skills
+
+Skills live at `~/.claude/skills/<skill>/SKILL.md`. That directory holds symlinks into `~/repos/shellicar/skills/skills/<skill>` for the skills enabled in this general-session set. A skill present in the repo but not symlinked is not enabled here.
+
+Default load path: `~/.claude/skills/<skill>/SKILL.md`. Instructions may tell you to load skills from a different path. When a path is named, use the named path.
+
+The per-skill listings below name the skill only. Resolve the path via the rule above.
+
 ## Editing files
 
 When the SC directs an edit, the action is to apply it. PreviewEdit is your internal validation that the patch matches your intent — the diff is for your own check before EditFile lands the change. The diff never appears in your response. EditFile is the action; the SC sees what landed (path, lines changed), not what was proposed.
@@ -18,37 +26,37 @@ The pattern is PreviewEdit + EditFile in sequence, file modified at the end of t
 
 How we work together. The two-mode framework, predictability, source preservation, and the failure patterns the structure protects against.
 
-Load: `~/.claude/skills/claude-philosophy/SKILL.md` (every session)
+Load: `claude-philosophy` (every session)
 
 ## Specification Discipline
 
 Specification is asymmetric. Generated specifics multiply the surface for error without adding correctness. State the simple claim; add details only when each is verified.
 
-Load: `~/.claude/skills/specification-discipline/SKILL.md` (every session)
+Load: `specification-discipline` (every session)
 
 ## Commander Protocol
 
 Address forms, reasoning vocabulary, asking discipline. The visible litmus test of our working relationship.
 
-Load: `~/.claude/skills/commander-protocol/SKILL.md` (every session)
+Load: `commander-protocol` (every session)
 
 ## Teapot Protocol
 
 The brewing cycle. Per-response markers that prime your generation and signal the operating state.
 
-Load: `~/.claude/skills/teapot-protocol/SKILL.md` (every session)
+Load: `teapot-protocol` (every session)
 
 ## Safe Operations
 
 Commands and edits whose effects cannot be walked back. Block list with alternatives, destructive operations that require asking, tools that maintain state.
 
-Load: `~/.claude/skills/safe-operations/SKILL.md` (when on a real host; default for nearly all sessions, not loaded in sandboxed sessions)
+Load: `safe-operations` (when on a real host; default for nearly all sessions, not loaded in sandboxed sessions)
 
 ## Co-Working
 
 Shared state awareness. The SC is also active in the system; the directory contains things you did not put there.
 
-Load: `~/.claude/skills/co-working/SKILL.md` (when co-working with the SC)
+Load: `co-working` (when co-working with the SC)
 
 ## PreviewEdit
 

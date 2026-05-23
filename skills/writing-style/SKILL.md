@@ -87,9 +87,17 @@ The bad example describes the implementation. The good example describes the eff
 - Keep under 50 characters (hard limit: 72)
 - Detail belongs in PRs, not commits
 - **No prefixes.** `feat:`, `fix:`, `chore:` and similar prefixes are Conventional Commits, a spec for automated version bumping. These projects don't use that tooling, so the prefixes serve no purpose and make commit messages harder to read.
+- **The verb describes what the commit changes about the system, not what a user can now do.** `Accept session params at launch` (the CLI accepts) is commit-shaped. `Name a session at launch` (the user names) is a usage instruction, not a commit message.
+- **Name both the functionality and the surface where it's exposed.** A reader needs to know what changed (the capability) and where they encounter it (CLI flag, API field, config key, environment variable). `Accept session name, model, prompt, and resume mode at launch` names both. `Parameterise sessions at launch` names neither.
+- **Test the message before proposing it.** If a reader has to open the diff to know what shipped, the message failed. If the verb could apply to almost any commit in the project (*configure*, *parameterise*, *support*, *improve*), it's a category label, not a change.
 
 **Good**: `Recalculate group status when facilitator licence changes`
-**Bad**: `Add handleFacilitator to ProgramGroupViewProcessor`
+**Good**: `Accept session name, model, prompt, and resume mode at launch`
+**Bad**: `Add handleFacilitator to ProgramGroupViewProcessor` (implementation, not effect)
+**Bad**: `Parameterise sessions at launch` (the verb is a category label, the functionality is hidden)
+**Bad**: `Configure the CLI at launch` (could describe almost any CLI commit)
+**Bad**: `Name a session, choose a model, send a prompt, skip resume` (a list of user imperatives, not a sentence about what the commit changes)
+**Bad**: `Add --name, --model, --prompt, --no-resume flags` (the surface is named but the functionality is hidden behind the flag syntax)
 **Bad**: `fix: recalculate group status when facilitator licence changes`
 **Bad**: `chore: update dependencies`
 
