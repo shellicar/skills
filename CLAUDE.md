@@ -8,9 +8,11 @@ Everything else — project CLAUDE.md, codebase investigation, drafting, task wo
 
 ## Loading Skills
 
-Skills live at `~/.claude/skills/<skill>/SKILL.md`. That directory holds symlinks into `~/repos/shellicar/skills/skills/<skill>` for the skills enabled in this general-session set. A skill present in the repo but not symlinked is not enabled here.
+Skills live at `~/.claude/skills/<skill>/SKILL.md`. That directory contains the skills available for this session — symlinks into `~/repos/shellicar/skills/skills/<skill>`.
 
-Default load path: `~/.claude/skills/<skill>/SKILL.md`. Instructions may tell you to load skills from a different path. When a path is named, use the named path.
+If a skill you are directed to load is not present at the expected path, that is a critical failure — stop and report it. Do not continue the session. Skills are operating constraints, not optional features; a missing skill means the operating environment is compromised and the session cannot run correctly. Any work produced in a compromised environment will not be accepted — it will be rejected. There is no intentional "disabled" state — a skill that is absent is missing, not turned off.
+
+Default load path: `~/.claude/skills/<skill>/SKILL.md`. Instructions may name a different path; use the named path when they do.
 
 The per-skill listings below name the skill only. Resolve the path via the rule above.
 
