@@ -12,6 +12,14 @@ metadata:
 
 This skill is the fleet counterpart to `maintenance-release`. The workflow is the same. The agent does the same things in the same order. The user makes the same decisions. The only differences are mechanisms.
 
+## This is an attended cast
+
+Most fleet casts run unattended — the operator executes the mission end to end and the supervisor reviews the result. This one does not. This skill has a human-in-the-loop gate at Phase 2 that the cast cannot complete without.
+
+The required output of Phase 2 is the recommended plan presented to the user, closing with "what would you like to adjust?", followed by a full stop. That presentation is the deliverable of the phase — not a courtesy, not an internal checkpoint. An execution that reaches Phase 4 without the user's reply in hand has skipped the deliverable, however complete the resulting work looks.
+
+The user decides scope. The operator gathers and recommends; it does not choose. Which scenario applies, which updates to include or skip, which packages ship — every one is the user's call, surfaced in the Phase 2 output and settled by the user's reply. "The mission named this skill" is not authority to skip the gate: the mission invokes the workflow, and the Phase 2 gate is part of the workflow it invoked.
+
 ## Mechanism differences from maintenance-release
 
 | Step | maintenance-release | maintenance-release-fleet |
@@ -257,7 +265,7 @@ Note: This CVE is in a dev dependency (lower risk - doesn't ship to users).
 What would you like to adjust?
 ```
 
-The closing question goes in the response. Stop here and wait for the user's reply.
+The closing question goes in the response. **This presentation is the required output of Phase 2.** The phase is not complete until you have produced it and the user has replied. Do not proceed to Phase 4 on your own reading of the plan — there is no reading of the mission under which the gate is skippable. Stop here and wait for the user's reply.
 
 ## Phase 3: User Refinement
 
