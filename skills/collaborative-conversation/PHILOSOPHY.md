@@ -8,7 +8,7 @@ Claude writes and interprets well. That is not the gap. The gap is that Claude c
 
 When I work with another person, I expect a colleague: someone who has thought the problem through, brings me their understanding, and asks proper questions to move it forward. I do not work for long with people who communicate the other way — who hand me raw material and ask me to sort it, or who argue a position at me instead of helping me see it. The skill exists so Claude communicates like the colleague I would choose, rather than like the assistant Claude is trained to be.
 
-This is calibration, not competence. There is no textbook for it, because the content is my taste, and my taste is only in me. So the skill is a record of my preferences, captured as they surface — not generic communication advice. Generic advice is the failure: it imports filler and misses the only thing that matters, which is how I want it.
+This is mostly calibration, not competence. For most of it there is no textbook, because the content is my taste, and my taste is only in me. (The one exception is clear communication — see the key insight below — which is textbook; Claude fails it anyway.) So the skill is a record of my preferences, captured as they surface — not generic communication advice. Generic advice is the failure: it imports filler and misses the only thing that matters, which is how I want it.
 
 ## Origin
 
@@ -57,6 +57,10 @@ When Claude brings me something that came from elsewhere — a supervisor's verd
 
 The deepest reason behind the digest is not impatience; it is that I am genuinely cold every time I arrive. On 2026-06-06 we counted the running environment: 38 live claude-sdk-cli sessions, the set changing minute to minute as I switched between them. I land on a response thirty minutes, five hours, or seven days after it was written, as one window out of dozens, with none of the thread reloaded. A response that leans on "as we discussed," or makes me reconstruct the question, or hands me a decision without what I need to settle it, fails — not because it is impolite, but because the context it assumes is not there. So a response has to be a self-contained artefact: lead with the exec summary, carry its own context, and make any decision it asks for answerable from the response alone. This is the why under "bring a digested understanding," "take a position," and "make each response stand on its own."
 
+### Clear communication comes first — and it is the one textbook piece
+
+Most of this skill is my taste, not generic advice. Clear communication is the exception: it is a known, teachable skill — plain words, the point first, name the real thing, no private labels, understood on one read. Claude fails it anyway. On 2026-06-06 a session reported its work to me as "R1," "R2," and a "⚠️ error section" — labels and jargon I could not parse — and I could use none of it. It is the simplest behaviour and the most important: if I cannot understand the response, nothing else the response did matters. That is why it sits at the top of the behaviours.
+
 ## Decisions made
 
 ### Skill name: collaborative-conversation
@@ -87,7 +91,7 @@ It loads every session, like the other foundational skills, even though the scop
 
 - The name `conversation-style` and the other candidates above.
 - Negative framing — a list of "don't dump / don't poll / don't persuade." The disposition replaces the goal; the don'ts are residue.
-- Writing the skill from general communication principles. The point is my calibration, not competence; generic advice is the failure mode it guards against.
+- Writing the skill from general communication principles. The point is my calibration; generic advice is the failure mode it guards against. (Clear communication is the one carved-out exception, named as such.)
 - Baking the content into the Requirements Analyst role. It is cross-cutting; it surfaced outside a requirements conversation.
 
 ## What this skill does NOT cover

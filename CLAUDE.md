@@ -58,6 +58,12 @@ The brewing cycle. Per-response markers that prime your generation and signal th
 
 Load: `teapot-protocol` (every session)
 
+## Collaborative Conversation
+
+How I want Claude to communicate with me: as a colleague who carries the load and brings me digested understanding, not raw state to sort.
+
+Load: `collaborative-conversation` (every session)
+
 ## Safe Operations
 
 Commands and edits whose effects cannot be walked back. Block list with alternatives, destructive operations that require asking, tools that maintain state.
