@@ -11,6 +11,7 @@ set -e
 #   assignee  (required) - Assignee (@me or username)
 #   labels    (required) - Array of label names
 #   milestone (optional) - Milestone title
+#   reviewers (optional) - Array of reviewer usernames
 #
 # Example:
 #   jq -n '{
@@ -60,6 +61,13 @@ while IFS= read -r label; do
 done <<LABELS
 $(printf '%s' "$INPUT" | jq -r '.labels[]? // empty')
 LABELS
+
+# Reviewers (optional, repeated --reviewer per entry)
+while IFS= read -r reviewer; do
+  [ -n "$reviewer" ] && set -- "$@" --reviewer "$reviewer"
+done <<REVIEWERS
+$(printf '%s' "$INPUT" | jq -r '.reviewers[]? // empty')
+REVIEWERS
 
 # Execute
 gh pr create \

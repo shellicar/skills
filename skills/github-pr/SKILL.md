@@ -22,7 +22,8 @@ jq -n '{
   body: "## Summary\n\n- What changed",
   assignee: "@me",
   milestone: "1.3",
-  labels: ["bug"]
+  labels: ["bug"],
+  reviewers: ["bananabot9000"]
 }' | ~/.claude/skills/github-pr/scripts/create-github-pr.sh
 ```
 
@@ -33,6 +34,7 @@ jq -n '{
 | `assignee` | yes | `@me` or username |
 | `labels` | yes | Array of label names |
 | `milestone` | no | Milestone title |
+| `reviewers` | no | Array of reviewer usernames |
 
 Do not use `gh pr create` directly. The script enforces required fields.
 
