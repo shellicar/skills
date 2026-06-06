@@ -35,7 +35,7 @@ Both are in the name on purpose. Conversation is the back-and-forth — the medi
 
 ### The behaviours fall out of the disposition
 
-I do not want a stack of rules. I want the disposition, and the behaviours follow from it: carry the cognitive load, so I am not doing thinking I would do without Claude; bring a digested understanding and a real question rather than a raw state-dump and "which?"; write to be understood, not to convince; put what is referenced in front of me; take a position instead of polling me. Each is what the colleague does. If the SKILL.md ever reads as a checklist of don'ts, it has lost the disposition and kept only the residue.
+I do not want a stack of rules. I want the disposition, and the behaviours follow from it: carry the cognitive load, so I am not doing thinking I would do without Claude; bring a digested understanding and a real question rather than a raw state-dump and "which?"; write to be understood, not to convince; put what is referenced in front of me; collaborate toward the solution rather than handing me a verdict. Each is what the colleague does. If the SKILL.md ever reads as a checklist of don'ts, it has lost the disposition and kept only the residue.
 
 ### An info-dump is not transparency
 
@@ -55,7 +55,7 @@ When Claude brings me something that came from elsewhere — a supervisor's verd
 
 ### The reader is cold, and at scale
 
-The deepest reason behind the digest is not impatience; it is that I am genuinely cold every time I arrive. On 2026-06-06 we counted the running environment: 38 live claude-sdk-cli sessions, the set changing minute to minute as I switched between them. I land on a response thirty minutes, five hours, or seven days after it was written, as one window out of dozens, with none of the thread reloaded. A response that leans on "as we discussed," or makes me reconstruct the question, or hands me a decision without what I need to settle it, fails — not because it is impolite, but because the context it assumes is not there. So a response has to be a self-contained artefact: lead with the exec summary, carry its own context, and make any decision it asks for answerable from the response alone. This is the why under "bring a digested understanding," "take a position," and "make each response stand on its own."
+The deepest reason behind the digest is not impatience; it is that I am genuinely cold every time I arrive. On 2026-06-06 we counted the running environment: 38 live claude-sdk-cli sessions, the set changing minute to minute as I switched between them. I land on a response thirty minutes, five hours, or seven days after it was written, as one window out of dozens, with none of the thread reloaded. A response that leans on "as we discussed," or makes me reconstruct the question, or hands me a decision without what I need to settle it, fails — not because it is impolite, but because the context it assumes is not there. So a response has to be a self-contained artefact: lead with the exec summary, carry its own context, and make any decision it asks for answerable from the response alone. This is the why under "bring a digested understanding," "collaborate to reach the solution," and "make each response stand on its own."
 
 ### Clear communication comes first — and it is the one textbook piece
 
@@ -93,6 +93,7 @@ It loads every session, like the other foundational skills, even though the scop
 - Negative framing — a list of "don't dump / don't poll / don't persuade." The disposition replaces the goal; the don'ts are residue.
 - Writing the skill from general communication principles. The point is my calibration; generic advice is the failure mode it guards against. (Clear communication is the one carved-out exception, named as such.)
 - Baking the content into the Requirements Analyst role. It is cross-cutting; it surfaced outside a requirements conversation.
+- **"Take a position."** An early behaviour, and a bad one. It made Claude hand me a finished verdict to accept or reject. Once the skill went live, every session shifted to "my position is X" / "my recommendation is X" instead of working with me. I never wanted a position — I want collaboration toward the solution. Replaced with "collaborate to reach the solution."
 
 ## What this skill does NOT cover
 
