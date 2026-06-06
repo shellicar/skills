@@ -150,6 +150,8 @@ From the output:
 - **NPM**: Confirm the version is live. If pending, wait and re-run.
 - **Milestone**: See `github-milestone` skill. Do **not** auto-close for patch releases — milestones use `x.y` format and stay open across the minor series.
 
+**npm publish failed with 404 on PUT to the registry.** If `npm publish` returns `404 Not Found - PUT https://registry.npmjs.org/...`, the automation token (`NPM_TOKEN`) has expired. This is not a true package-not-found; do not investigate package-naming or registry-path issues. Stop and flag to the SC for token rotation. After rotation, retry the failed workflow (`gh run rerun <id>`) and continue.
+
 ## Integration with Other Skills
 
 **Typical flow:**
