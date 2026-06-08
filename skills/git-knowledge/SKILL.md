@@ -3,7 +3,7 @@ name: git-knowledge
 description: |
   WHAT: Reference for how git actually works: the three states, when stashing is and isn't needed, and what uncommitted files can and cannot affect.
   WHY: Common misconceptions lead to unnecessary stashes, pre-emptive staging, and occasionally destructive operations that weren't needed.
-  WHEN: TRIGGER before switching branches, rebasing, stashing, or any operation that modifies working tree state.
+  WHEN: TRIGGER before switching branches, rebasing, stashing, working with submodules, or any operation that modifies working tree state.
 user-invocable: false
 metadata:
   category: reference
@@ -61,6 +61,26 @@ When uncertain what a ref resolves to:
 - `git rev-parse --abbrev-ref <ref>` — gives the symbolic name.
 
 Resolving before reasoning is the discipline. The cost is one command. The cost of conflation is a wrong diff that reads coherent.
+
+## Diff Syntax: Two-dot vs Three-dot
+
+`git diff A..B` and `git diff A...B` are not interchangeable.
+
+- **`git diff A..B`** — direct comparison: the difference between the tip of A and the tip of B. Equivalent to `git diff A B`.
+- **`git diff A...B`** — merge-base comparison: finds the common ancestor of A and B, then shows the difference between that ancestor and the tip of B. This answers "what did B contribute since the branches diverged?"
+
+### When it matters
+
+For reviewing a feature branch's contribution against a base branch:
+
+- **Three-dot (`...`) is the correct form.** It isolates B's contribution since divergence, regardless of what has happened on A since.
+- **Two-dot (`..`) contaminates the diff** with any changes on A that B doesn't have — work from both sides is mixed together.
+
+Three-dot is also stable after a merge: once A has advanced past B's merge point, `git diff A...B` still shows B's original contribution correctly. Two-dot does not.
+
+### The rule
+
+For "what does this branch add?" — use three-dot. Two-dot is correct when you want a direct point-to-point snapshot comparison, which is rarely what is meant for feature branch review.
 
 ## Branch Switching
 
@@ -127,6 +147,54 @@ Files that Git has never seen (not in any commit, not in the index).
 
 **Untracked files need no action** unless you intend to commit them. They cannot "break" anything.
 
+## Submodules
+
+A submodule is a separate Git repository embedded inside a parent repository. The parent stores a reference to a specific commit SHA in the submodule — not a branch name, a specific commit.
+
+### What the parent stores
+
+The parent's tree contains a "gitlink" entry: the exact commit SHA the submodule is expected to be at. `git status` and `git submodule status` report when the submodule's working directory is at a different commit. This is state, not damage.
+
+### "Out of date" is normal
+
+When `git status` shows a submodule as modified, or `git submodule status` shows a `+` prefix, it means the submodule's current HEAD is at a different commit than what the parent has recorded. Common situations:
+
+- The parent was updated (by someone else's commit) to point to a newer submodule commit, and the local submodule hasn't been synced yet.
+- The developer has advanced the submodule and hasn't yet committed the updated pointer to the parent.
+
+Neither of these is messy. Neither requires immediate action.
+
+### Submodules are almost always in detached HEAD
+
+The submodule's working directory is typically in detached HEAD — checked out at a specific commit, not on a branch. This is correct and expected. It is not damage.
+
+### `git submodule update` vs pulling inside the submodule
+
+These are different operations:
+
+- **`git submodule update`** — moves the submodule to the commit the parent expects. Follows the parent's recorded intent.
+- **`git pull` inside the submodule directory** — advances the submodule to the current tip of a branch. Moves ahead of what the parent expects.
+
+Neither is wrong. They serve different purposes.
+
+### Updating the pointer in the parent
+
+When you advance the submodule and want the parent to record that, stage and commit the updated gitlink in the parent. This requires two commits: one in the submodule repo (the change), one in the parent (the updated pointer).
+
+### `git clone` does not initialise submodules
+
+Cloning a repository with submodules does not populate the submodule directories. To initialise:
+
+```
+git submodule update --init --recursive
+```
+
+Or clone with `--recurse-submodules`.
+
+### The rule
+
+A submodule showing as modified or at a different commit is informational. Do not treat it as a problem to solve unless you have a specific reason to sync or advance the pointer.
+
 ## Common Misconceptions
 
 ### "I need to stash before creating a branch"
@@ -152,6 +220,10 @@ Files that Git has never seen (not in any commit, not in the index).
 ### "Untracked files are dangerous"
 
 **Wrong.** Untracked files are inert. They exist only in the working tree. No Git operation will touch them (except `git clean`, which you should never run without explicit permission).
+
+### "A submodule showing as modified is messy or needs fixing"
+
+**Wrong.** A modified submodule in `git status` means the submodule's working directory is at a different commit than what the parent has recorded. This is normal working state — not a problem, not mess. Decide whether to sync the submodule to the parent's recorded commit (`git submodule update`) or advance the parent's pointer to a newer commit; do neither by reflex.
 
 ## Operations and Their Actual Requirements
 

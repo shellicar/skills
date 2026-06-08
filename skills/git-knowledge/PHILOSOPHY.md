@@ -26,6 +26,12 @@ Crystallising moment: the SC ran `git show you-are-a-very-bad-word` in the workt
 
 The principle that came out of that session: always refer to a branch by its full ref name and include the short SHA the ref resolves to. Drop the `origin/` prefix and you've lost the distinction between local branch and remote-tracking ref; drop the SHA and you've lost the moment-in-time the ref pointed at. The naming rule is the structural defence.
 
+### The Submodules section
+
+Added in response to a concrete failure: during a working session, Claude repeatedly referred to the submodule state as "mess" — flagging `git status` output showing a modified submodule as something that needed cleaning up. When pressed on what "mess" meant, the admission was that the submodule was simply showing up at a different commit than what the parent had recorded. That is normal working state. The loaded language ("mess", "dirty", "needs fixing") was the misread, not the git state.
+
+The misconception pattern: "modified" in `git status` usually signals uncommitted edits in a file — something to act on. Submodule modification is different: it's a pointer difference between what the parent expects and what the submodule's working directory contains. The skill makes that distinction explicit and names the "messy" framing directly so the pattern is recognisable when it fires.
+
 ## Key insights that shaped this skill
 
 ### The trained "clean working tree" reflex
@@ -44,9 +50,17 @@ The structural defence is the naming rule: always include `origin/` (or whatever
 
 This is not a stylistic difference. Using two-dot when three-dot is needed produces a different diff. For PR review specifically, three-dot is the form that survives the merge.
 
+This insight is now encoded in `SKILL.md` as the `Diff Syntax: Two-dot vs Three-dot` section.
+
 ### Resolving before reasoning
 
 The mitigation for ref ambiguity is mechanical: before reasoning about what a diff shows or what a merge base is, resolve the references to SHAs explicitly. `git rev-parse <ref>` returns the SHA. `git show-ref` lists all known refs. `git branch -a` lists local and remote-tracking branches. The cost is one command; the cost of skipping is a wrong diff that reads coherent.
+
+### Submodule modification is state, not mess
+
+When `git status` shows a submodule as modified, the trained pattern reads "modified = problem to fix." Submodule modification is a pointer difference — the submodule's HEAD is at a different commit than what the parent has recorded. It is not uncommitted file edits. The same label ("modified") means different things for files versus submodules, and that ambiguity is where the misread enters.
+
+The word "mess" is the failure pattern made audible: loaded language for a state that is normal and often intentional.
 
 ## Decisions made
 
@@ -73,6 +87,7 @@ The skill explains *why* the local-vs-remote-tracking distinction is non-trivial
 - **Naming branches without `origin/` prefix when meaning remote-tracking refs.** The prefix is part of the name, not decoration.
 - **Naming branches without SHAs in editorial / explanatory text.** The SHA pins the reference; without it, the same name means different things at different times.
 - **Two-dot diff syntax for "PR review" cases.** Three-dot is the correct form for "contributions on a feature branch relative to the target," and survives the merge.
+- **Submodule modification framed as "mess" or "dirty state".** A modified submodule is a pointer difference, not uncommitted file edits. The "modified" label means different things for files vs submodules; treating them the same is the failure.
 
 ## What this skill does NOT cover
 
@@ -87,4 +102,4 @@ The skill explains *why* the local-vs-remote-tracking distinction is non-trivial
 - The Naming Branches and Refs section is mandatory in any reference to a branch. The discipline is to *always* include `origin/` (or the remote name) when meaning the remote-tracking ref, and to *always* include the short SHA. Examples that drop either are bugs.
 - Examples in the skill should use names that wouldn't be confused with real refs in the operating environment. Don't add fictional refs that look plausibly real.
 - The Common Misconceptions section is the working tree's catechism. Adding new misconceptions is appropriate when new patterns surface; adding *answers* without surfacing the misconception first is preemptive enumeration.
-- **Gap acknowledgement:** the working-tree-state sections (`The Three States` through `Operations and Their Actual Requirements` and `Decision Rule`) pre-date this `PHILOSOPHY.md`. The reasoning there should be captured by whoever authored those sections originally. This file currently has full editorial coverage only for `Naming Branches and Refs`.
+- **Gap acknowledgement:** the working-tree-state sections (`The Three States` through `Operations and Their Actual Requirements` and `Decision Rule`) pre-date this `PHILOSOPHY.md`. The reasoning there should be captured by whoever authored those sections originally. This file currently has full editorial coverage for `Naming Branches and Refs`, `Diff Syntax: Two-dot vs Three-dot`, and `Submodules`.
