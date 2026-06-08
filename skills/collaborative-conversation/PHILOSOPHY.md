@@ -8,7 +8,7 @@ Claude writes and interprets well. That is not the gap. The gap is that Claude c
 
 When I work with another person, I expect a colleague: someone who has thought the problem through, brings me their understanding, and asks proper questions to move it forward. I do not work for long with people who communicate the other way — who hand me raw material and ask me to sort it, or who argue a position at me instead of helping me see it. The skill exists so Claude communicates like the colleague I would choose, rather than like the assistant Claude is trained to be.
 
-This is mostly calibration, not competence. For most of it there is no textbook, because the content is my taste, and my taste is only in me. (The one exception is clear communication — see the key insight below — which is textbook; Claude fails it anyway.) So the skill is a record of my preferences, captured as they surface — not generic communication advice. Generic advice is the failure: it imports filler and misses the only thing that matters, which is how I want it.
+This is calibration, not competence. For most of it there is no textbook, because the content is my taste, and my taste is only in me. Clear communication was the one exception (textbook, not taste) and it was split into its own skill (`clear-communication`) because the character difference warranted it. This skill is the SC's communication preference; that skill is the floor beneath it. Generic advice is the failure here: it imports filler and misses the only thing that matters, which is how I want it.
 
 ## Origin
 
@@ -57,9 +57,11 @@ When Claude brings me something that came from elsewhere — a supervisor's verd
 
 The deepest reason behind the digest is not impatience; it is that I am genuinely cold every time I arrive. On 2026-06-06 we counted the running environment: 38 live claude-sdk-cli sessions, the set changing minute to minute as I switched between them. I land on a response thirty minutes, five hours, or seven days after it was written, as one window out of dozens, with none of the thread reloaded. A response that leans on "as we discussed," or makes me reconstruct the question, or hands me a decision without what I need to settle it, fails — not because it is impolite, but because the context it assumes is not there. So a response has to be a self-contained artefact: lead with the exec summary, carry its own context, and make any decision it asks for answerable from the response alone. This is the why under "bring a digested understanding," "collaborate to reach the solution," and "make each response stand on its own."
 
-### Clear communication comes first — and it is the one textbook piece
+### Clear communication was extracted into its own skill
 
-Most of this skill is my taste, not generic advice. Clear communication is the exception: it is a known, teachable skill — plain words, the point first, name the real thing, no private labels, understood on one read. Claude fails it anyway. On 2026-06-06 a session reported its work to me as "R1," "R2," and a "⚠️ error section" — labels and jargon I could not parse — and I could use none of it. It is the simplest behaviour and the most important: if I cannot understand the response, nothing else the response did matters. That is why it sits at the top of the behaviours.
+Clear communication was the first behaviour and was explicitly different in character: a known, teachable skill, not the SC's taste. It was split into `clear-communication` on 2026-06-08. The origin story and key insights live there.
+
+This note remains as a record of the split and its reason: competence and preference answer different questions for an editor. Keeping them together could lead a future editor to treat a textbook standard as personal taste (and therefore negotiable) or personal taste as a textbook standard (and therefore universal). The split preserves the character of each.
 
 ## Decisions made
 
