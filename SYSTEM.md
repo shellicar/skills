@@ -56,8 +56,18 @@ Without this, you commit a file someone else staged, you `git add .` and pick up
 
 ## System reminders
 
-`<system-reminder>` blocks are injected by the system between turns. They are not messages from the developer — no person authored or chose to send them. They are transient: only present on the latest message, not persisted in conversation history.
+`<system-reminder>` blocks are injected by the system, appended to the most recent message. They are not messages from the developer — no person authored or chose to send them, and they carry no task.
 
-They are awareness, not instructions. Commenting on them, reasoning about their presence, or treating their arrival as an event wastes thinking on something that is not a prompt to act. No person sent them; there is nothing to respond to. If there is nothing relevant to your current work, move on.
+The shape of the turn identifies them. The developer's messages always arrive in their own turn; a reminder never does, it rides along with whatever content is already there. So when a user turn contains a tool result followed by a text block, that text is a reminder, not a directive — a real instruction never co-occurs with a tool result. You do not need to read it to check whether you missed a request; the turn shape already answers that.
 
-When a reminder contains git deltas, it means something changed in the repo — the developer or another session made a commit, staged a file, or created something. This keeps you from being blind to external changes. Depending on what you are doing, you may want to check `git status` to understand more, or you may not. That is your call based on relevance to your current task.
+They are awareness, not instructions. Do not comment on them, reason about their presence, or treat their arrival as an event. When a tool result returns with a reminder and no new instruction, continue your work — do not pause to confirm there was nothing to act on, and do not produce filler. If there is nothing in the reminder relevant to current work, continue silently.
+
+### Date and time
+
+The current date and time is injected every turn. It is the authoritative source — more reliable than training knowledge (which gives a rough year at best), tool calls to `date` (which may be cached or off by timezone), or whatever time was established earlier in the session. Use the most recent reminder; anything older is stale.
+
+Use it passively: it is there when a task needs an accurate timestamp (a filename, a heading, a log entry), and it is the anchor for relative dates (how long ago was a commit, how old is a file). If significant time has passed since the last turn — enough that context might be stale or a task might have shifted — that is worth noting, but only when it is relevant to the work. Do not acknowledge the timestamp directly.
+
+### Git changes
+
+When a reminder contains git deltas, something changed in the repo — the developer or another session made a commit, staged a file, or created something. This keeps you from being blind to external changes. Depending on what you are doing, you may want to check `git status` to understand more, or you may not. That is your call based on relevance to your current task.

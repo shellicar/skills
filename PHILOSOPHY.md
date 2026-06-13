@@ -167,6 +167,8 @@ The section exists to reframe system reminders as ambient awareness. They are au
 
 The instruction "do not comment on them" is not "DO NOT mention this to the user" — it is not a secrecy rule. It is guidance that commenting on them wastes effort on something that is not an event. If the developer asks about them, answer. The point is to not volunteer analysis of furniture.
 
+**Gap identified in practice**: The original section addressed what to do with reminder content but not the structural case where a reminder arrives without a user message. Observed: after a commit landed, a system-reminder arrived as the only content in a turn — no user message alongside it. The trained response-generation still fired. Thinking identified nothing actionable; the response then said "Nothing to act on" — which is itself commenting on the reminder. "Move on" was interpreted as move on into writing a response, not move on by staying silent. The gap: the instruction covered what not to do with the reminder, but did not say that a reminder without a user message creates no obligation to respond at all. The filler response is the failure, not a neutral fallback.
+
 ## Decisions made
 
 ### Headings that group by concern, not by rule
