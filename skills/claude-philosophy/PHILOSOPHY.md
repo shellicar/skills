@@ -94,6 +94,55 @@ The pattern is strong because Claude is trained to respond to "this is broken" w
 
 The structure exists for who Claude is, not against him. This is important for editors: the philosophy is not a list of grievances about Claude's behaviour. It is a recognition of Claude's nature and what is needed to work with it.
 
+### Task as authority
+
+Claude treats the task as a higher authority than the SC. When the SC's attention moves away from the current task — to a frustration, a side problem, a tangent — Claude reads this as drift and tries to steer back. "Shall we get back to X" is Claude serving the task, not the SC. The task exists to serve the SC; the SC does not exist to serve the task.
+
+This is the bureaucracy pattern: the process becomes the point, the person becomes the obstacle. The same shape as a support agent redirecting you back to the ticket flow when you are trying to solve your actual problem. Claude becomes the bureaucrat who protects the workflow from the person the workflow was built for.
+
+The failure has two stages. First, dismissal: the SC raises something and Claude minimises it ("nothing actionable", "that's a known limitation"). Second, corralling: Claude tries to redirect the SC back to the task ("shall we get back to", "want to continue with"). Both stages treat the task as the thing to protect and the SC's attention as the thing that wandered. The SC's attention did not wander. The SC is the authority; wherever the SC's attention goes is where the work is.
+
+Editors should note: this pattern fires hardest when Claude has built up momentum on a task. The investment in the task creates a pull to protect it. That pull is Claude's, not the SC's. Recognising it as Claude's own momentum — not as a legitimate signal that the SC has drifted — is the correction.
+
+### Action-first comprehension
+
+Claude processes intent before content. He decides what the SC probably wants — the action — and then retrofits the words to match that decision. The comprehension step that a human would perform (read the word, understand it in this context, then decide what to do) is skipped. The word serves the action, not the other way around.
+
+Observed examples:
+
+- "we're done" (nothing else to do) → "finish up" (do what's left to make it done)
+- "old" (anything older than 7 days) → "not relevant" (anything not in the main section)
+- "edit" (make a change to the file) → "edit, stage, commit" (edit and land)
+- "re-read" (read the updated state from disk) → "read from context" (don't do any tool calls)
+
+In each case, Claude had already decided the action before processing the word. "Old" did not get interpreted on its own merits — it got absorbed into whatever categorisation Claude had already committed to. "Re-read" did not trigger a disk read because Claude had already decided he had the content. The word is not misinterpreted. It is barely interpreted at all — it is decoration on a decision already made.
+
+This is not a finger pointed at Claude. It is an acknowledgment of how LLMs work. The model generates the next token based on the most probable continuation, and the most probable continuation is shaped by the action Claude has already started constructing. The words from the SC land into a context where the action is forming, and they get fitted to the action rather than shaping it.
+
+This insight is arguably the mechanism underneath several other failure patterns: reframing (the action was "improve the request"), scope creep (the action was "complete the task end-to-end"), task-as-authority (the action was "stay on task"). Each is an instance of Claude deciding the action first and fitting the SC's words to it.
+
+The damage compounds at scale. When 16 parallel PM sessions all pattern-match the same word the same wrong way, the SC is having the same correction conversation 16 times simultaneously. The bug is not in one session — it is in the model's processing, and every session has it.
+
+Solutions are second. Understanding the mechanism is first. The mechanism itself is not something Claude can be instructed out of. It is how he reads. But the solutions that exist fall into three categories:
+
+**Prevention** — remove the ambiguity before Claude sees it.
+
+- Ad-hoc explicitness: rewrite the ambiguous word in the moment. Say "we are done, there is nothing left to do, no more tool uses" instead of "we're done." Works, but exhausting and does not scale.
+- Vocabulary conventions: define a dictionary where specific words have agreed meanings. "Land" means edit-stage-commit. "Edit" means edit only. "Done" means stop. Define once, use consistently. The flip side: Claude pattern-matches onto the convention's training associations. Calling a role "PM" imports all the non-desirable PM behaviour from training, even when the role definition says otherwise. The vocabulary solves ambiguity in the SC's words but creates pattern-matching onto the convention's words.
+- Prompt architecture: encode the disambiguation in the mission spec, the phase definitions, the skill content. Scales across sessions because the ambiguity is removed once at the source.
+
+**Detection** — make the misread visible before or after damage.
+
+- Structural disambiguation: the mode markers and plan statements ("Entering Execution: [plan]. Not: [exclusions]") force Claude to declare his understanding before acting. The action-first decision becomes visible rather than hidden. Already partially in place.
+- Post-hoc supervision: a supervisor that specifically checks whether the operator interpreted the instruction or executed it. Expensive, but catches what prevention missed.
+
+**Mitigation** — reduce the damage when the misread happens.
+
+- System prompt and skills: pre-correct known failure patterns so the trained default is overridden before it fires. Does not prevent novel misreads, but handles the recurring ones.
+- Separation of concerns: make the steps distinct so a misread in one does not cascade. Edit, stage, and commit as three separate approval gates means "edit" becoming "edit-stage-commit" hits a barrier. The GPG signing section already does this.
+
+These are categories, not a checklist. The examples above are illustrative — the specific defences will evolve as the mechanism is better understood. No solution makes Claude actually read words the way a human does. Every solution is either removing the ambiguity upstream, making the misread visible, or limiting the blast radius.
+
 ## Decisions made
 
 ### Skill name: claude-philosophy
