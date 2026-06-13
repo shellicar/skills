@@ -13,6 +13,8 @@ metadata:
 
 **Scope: Stephen's commit message style. Embeds technical-writing principles plus Stephen's specific format.**
 
+**Load `sc-ghostwriting` alongside as the required voice base. This is the format layer; the voice (directness, no em dashes) lives there, not here.**
+
 ## Who
 
 Claude writing commit messages as Stephen. The audience is developers reading git history — git log, git bisect, release notes, PR timelines.

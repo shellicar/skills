@@ -67,6 +67,7 @@ The rule here is not "Conventional Commits is wrong." It is: these projects do n
 - PR text — `sc-pr-writing`
 - Work item text — `sc-workitem-writing`
 - The underlying principle — `technical-writing`
+- Stephen's voice (directness, no em dashes) — `sc-ghostwriting`, the required base loaded alongside this skill
 
 ## Notes for future editors
 

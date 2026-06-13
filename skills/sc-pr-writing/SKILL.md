@@ -13,6 +13,8 @@ metadata:
 
 **Scope: PR titles and descriptions as Stephen. Embeds technical-writing principles plus Stephen's specific format.**
 
+**Load `sc-ghostwriting` alongside as the required voice base. This is the format layer; the voice (directness, no em dashes) lives there, not here.**
+
 ## Who
 
 Claude writing PR text as Stephen. The primary audience is reviewers; secondary is the team reading PR history and the traceability record.

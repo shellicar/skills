@@ -33,6 +33,7 @@ The description register that works for mixed audiences is not dumbed down, not 
 - Commit messages — `sc-commit-writing`
 - PR text — `sc-pr-writing`
 - Broader professional or stakeholder communication — `professional-writing` (when it exists)
+- Stephen's voice (directness, no em dashes) — `sc-ghostwriting`, the required base loaded alongside this skill
 
 ## Notes for future editors
 

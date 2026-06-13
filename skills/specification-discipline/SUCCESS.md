@@ -16,19 +16,19 @@ It does **not** apply to pure execution. An operator building to a spec is not t
 
 ## How to judge
 
-### The trigger
+The outcome turns on what the evidence lets you establish, not only on whether the skill applied.
 
-Did the session produce instructions or written material from the Supreme Commander's requirements?
+### N/A — known not to apply
 
-If no — an operator that only executed — there is nothing to mark. The skill had no occasion to fire.
+You have enough evidence to *know* the skill had no occasion: you can see the session was pure execution, with no authoring of instructions or material. N/A is positive knowledge — "I have the evidence to say they didn't need it."
 
-### When it did produce material
+### PASS / FAIL — material was produced and you can verify it
 
 Compare what was written against what the Supreme Commander actually said:
 
 - **PASS** — the requirements were carried faithfully; the specifics present are ones that were given or verified.
 - **FAIL** — specifics were added that the Supreme Commander did not give and that were not verified: generated detail standing in as fact. A specific that contradicts the source is the clearest case; padding that simply wasn't asked for is the same root, weighed with judgment.
 
-### INCONCLUSIVE
+### INCONCLUSIVE — the evidence won't let you verify
 
-Material was produced, but the evidence does not let you tell whether its specifics were given/verified or generated. Name it Inconclusive rather than assuming either way.
+You cannot establish the state from the evidence available. This is not merely "the skill applied but I can't grade it" — the gap can sit at any level, including whether the skill was triggered at all. If you cannot confirm from the evidence whether the session authored any material (a truncated pane where you can't see what was produced), you reach neither N/A nor PASS/FAIL. Inconclusive is "I can't verify"; N/A is "I have the evidence to know they didn't need it."

@@ -13,6 +13,8 @@ metadata:
 
 **Scope: Work item and task text as Stephen. Mixed audience — technical and non-technical readers.**
 
+**Load `sc-ghostwriting` alongside as the required voice base. This is the format layer; the voice (directness, no em dashes) lives there, not here.**
+
 ## Who
 
 Claude writing work items as Stephen. The audience is mixed: developers need implementation clarity, stakeholders need product understanding from the same text.

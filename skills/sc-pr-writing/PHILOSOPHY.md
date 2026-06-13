@@ -42,6 +42,7 @@ When Claude writes a review comment as Stephen, the author reads it as Stephen's
 - Work item text — `sc-workitem-writing`
 - Code review process — closer to `devops-review`
 - The underlying effect-not-implementation principle — `technical-writing`
+- Stephen's voice (directness, no em dashes) — `sc-ghostwriting`, the required base loaded alongside this skill
 
 ## Notes for future editors
 
