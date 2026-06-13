@@ -85,14 +85,6 @@ Every unique GHSA listed individually with a link.
 
 The commit message is sufficient as both title and body.
 
-## Auto-Merge
-
-Only enable auto-merge if the prompt explicitly requests it. Not all repos use auto-merge.
-
-```bash
-gh pr merge --auto --squash
-```
-
 ## Post-Creation
 
 Verify the PR is not blocked:
