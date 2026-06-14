@@ -75,12 +75,12 @@ From the script output, check the following — stop and inform the Supreme Comm
 
 ### 3. Confirm with user
 
-**Attended sessions** (interactive Claude Code etc., where `AskUserQuestion` is available): use it to confirm release creation:
+**Attended sessions** (interactive Claude Code etc.): ask the user to confirm release creation:
 
 - "Create release" - Proceed with release
 - "Cancel" - Do not create release
 
-**Unattended sessions** (fleet casts dispatched by a PM, no `AskUserQuestion` tool): the confirmation is upstream. The mission prompt approved releases as part of its scope and the SC approved the dispatch. Proceed without prompting; do not stop on the absence of the tool.
+**Unattended sessions** (fleet casts dispatched by a PM): the confirmation is upstream. The mission prompt approved releases as part of its scope and the SC approved the dispatch. Proceed without prompting.
 
 ### 4. Extract release notes from CHANGELOG.md
 

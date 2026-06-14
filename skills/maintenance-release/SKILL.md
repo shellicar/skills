@@ -206,7 +206,7 @@ pnpm exec npm-check-updates --workspaces --reject syncpack
 **Never run ncu with `-u` yourself.** Instead:
 1. Run without `-u` to see what's available
 2. Analyze and recommend which to include/skip (see Phase 2)
-3. Present recommendation to user via `AskUserQuestion`
+3. Present recommendation to the user
 4. User runs ncu interactively or with specific filters
 
 #### Categorize Results
@@ -363,7 +363,7 @@ If no CVEs and no updates available:
 
 ## Phase 3: User Refinement
 
-Use the `AskUserQuestion` tool when gathering user input during this workflow.
+Ask the user directly when gathering input during this workflow.
 
 Example questions:
 
@@ -507,7 +507,7 @@ Version bumping and CHANGELOG.md updates are handled by the `github-version` ski
 1. **Same PR**: After verification passes, invoke `github-version` skill, then create a second commit for version changes
 2. **Separate PR**: Commit changes now, merge, then do version management in a separate PR when ready to release
 
-Use `AskUserQuestion` to confirm:
+Ask the user to confirm:
 
 ```text
 Verification passed. Changes are ready.
@@ -604,7 +604,7 @@ This verifies the branch has a merged PR, switches to main, pulls, prunes remote
 
 ## Notes
 
-- Use `AskUserQuestion` tool when gathering user input during this workflow
+- Ask the user directly when gathering input during this workflow
 - This skill gathers information and recommends; the user decides
 - Major updates are ALWAYS presented individually for conscious decision
 - The plan shows everything, even items recommended to skip

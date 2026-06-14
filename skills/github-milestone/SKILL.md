@@ -34,7 +34,7 @@ It represents the current target. If multiple exist, pick the one that matches t
 
 ### 3. If no open milestone exists → ask
 
-Use `AskUserQuestion` to determine which milestone to create:
+Ask the user which milestone to create:
 
 - "Next minor (x.y+1)" — e.g., `6.1` if current version is `6.0.x`
 - "Next major (x+1.0)" — e.g., `7.0` if planning breaking changes

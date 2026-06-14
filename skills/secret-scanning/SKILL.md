@@ -81,7 +81,7 @@ When multiple findings are in the same block (e.g. multiple PII values in one JS
 
 **Step 3: Ask the Supreme Commander to resolve each finding**
 
-After presenting the table, use the `AskUserQuestion` tool to collect a decision for each finding. Present one question per finding (batch up to 4 at a time). Each question must:
+After presenting the table, ask the user to decide on each finding. Present one question per finding. Each question must:
 
 - State the finding (file, Rule ID, value)
 - State the suggested disposition and remediation action (if Remediate)
@@ -101,7 +101,7 @@ For each confirmed "Remediate" finding, execute the specified remediation action
 
 After remediation edits are applied, commit the changes. The working tree MUST be clean before history scrubbing can proceed (`git filter-branch` requires a clean working tree). Use `git-workflow` to commit.
 
-**Step 5: Post-remediation — gidetermine whether the remediated values exist in git history and whether they've been pushed.
+**Step 5: Post-remediation — determine whether the remediated values exist in git history and whether they've been pushed.
 
 ##### 5a: Determine current context
 

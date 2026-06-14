@@ -1,7 +1,7 @@
 ---
 name: maintenance-release-fleet
 description: |
-  Fleet counterpart to maintenance-release. The workflow is identical to maintenance-release: same phases, same actors, same decisions. The only differences are mechanisms: the agent asks the user in the response and waits for reply rather than calling AskUserQuestion; the branch is set up by the PM via worktree rather than by preflight.sh; helper scripts live in this skill's own directory; audit identifiers are persisted to disk so they survive across phases or session boundaries. Without it, fleet maintenance prompts duplicate workflow logic, scripts get cross-referenced from the wrong skill, and audit identifiers are lost when the session ends.
+  Fleet counterpart to maintenance-release. The workflow is identical to maintenance-release: same phases, same actors, same decisions. The only differences are mechanisms: the branch is set up by the PM via worktree rather than by preflight.sh; helper scripts live in this skill's own directory; audit identifiers are persisted to disk so they survive across phases or session boundaries. Without it, fleet maintenance prompts duplicate workflow logic, scripts get cross-referenced from the wrong skill, and audit identifiers are lost when the session ends.
   TRIGGER when running a fleet maintenance mission for an @shellicar npm package.
   DO NOT TRIGGER for coworking sessions (load maintenance-release instead), single targeted dependency changes, or non-npm projects.
 metadata:
@@ -24,7 +24,6 @@ The user decides scope. The operator gathers and recommends; it does not choose.
 
 | Step | maintenance-release | maintenance-release-fleet |
 |------|---------------------|---------------------------|
-| Agent asks the user a question | Calls `AskUserQuestion` | Writes the question in the response, waits for the user's reply, continues from the reply |
 | Branch is created | `preflight.sh --branch <name>` runs `git switch -c` | PM creates the worktree (with branch) before the session starts; agent verifies it is on the right branch |
 | Helper scripts location | `~/.claude/skills/maintenance-release/scripts/` | `~/.claude/skills/maintenance-release-fleet/scripts/` |
 | Audit identifiers (GHSAs, CVE IDs) | Held in agent's session context | Captured to `.claude/audit/YYYY-MM-DD.json` so they survive if the session ends |

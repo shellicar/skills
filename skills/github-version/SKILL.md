@@ -19,7 +19,7 @@ Determine the next version number and update CHANGELOG.md for a release.
 ```
 1. Get current version from package.json or git tags
 2. Determine bump type: patch (fixes/deps), minor (features), major (breaking)
-3. Confirm version with user via AskUserQuestion
+3. Confirm version with the user
 4. Update CHANGELOG.md with new version section
 5. Bump version in package.json
 6. Stage changes (don't commit - let caller handle)
@@ -107,7 +107,7 @@ For features you're not fully confident in, use pre-release versions:
 
 ### Confirm with User
 
-**REQUIRED**: Use the `AskUserQuestion` tool to confirm the version before proceeding.
+**REQUIRED**: Ask the user to confirm the version before proceeding.
 
 Example options:
 - "1.2.1 (patch)" - Recommended version based on change type

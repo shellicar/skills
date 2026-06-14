@@ -27,7 +27,7 @@ Parse the remote with `dev.azure.com` in the URL:
 - `https://{org}@dev.azure.com/{org}/{project}/_git/{repo}` -> org, project
 - `git@ssh.dev.azure.com:v3/{org}/{project}/{repo}` -> org, project
 
-If no Azure DevOps remote found, use `AskUserQuestion` to ask for org and project. **Always confirm** with `AskUserQuestion` before making changes.
+If no Azure DevOps remote found, ask the user for the org and project. **Always confirm** with the user before making changes.
 
 ## Sub-Skills
 
