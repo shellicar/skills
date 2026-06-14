@@ -389,11 +389,22 @@ Each published package has a `changes.jsonl` driving CHANGELOG.md generation.
 - Validator: `pnpm --filter scripts validate`
 - Generator: `pnpm --filter scripts changelog packages/<pkg>` (release time, not now)
 
-When an entry is needed:
+When an entry is needed — the governing test is whether the package's own published content changed:
 
-- **Direct dep bump in a published package's `package.json`**: yes, entry in that package's `changes.jsonl`.
-- **Override added in a published package's `pnpm.overrides`**: yes.
+**A package earns a `changes.jsonl` entry only if its own `package.json` or source changed.** Verify with the package's diff, excluding the changelog files it carries:
+
+```bash
+git diff origin/main...HEAD -- packages/<pkg> ':(exclude)packages/<pkg>/changes.jsonl' ':(exclude)packages/<pkg>/CHANGELOG.md'
+```
+
+An empty diff means the package did not change: **no entry, and no release** (Phase 6.2), however the fix reached it.
+
+- **Direct dep bump in the package's own `package.json`**: yes, the package changed.
+- **Override in the package's own `pnpm.overrides`** (it ships in the package's `package.json`): yes.
+- **Fix via a root `pnpm-workspace.yaml` override, the package's `package.json` unchanged**: no entry, even if the package is transitively exposed to the CVE. A root override does not propagate to consumers (they resolve transitive deps from the upstream ranges, not our overrides), so the published artifact is byte-identical and the fix reaches no one installing the package.
 - **Change confined to examples, workspace root, or lockfile-only**: no entry.
+
+Exposure to a CVE is not the threshold; a change to the package's own published bytes is. Documenting a fix that is not in the published artifact, or releasing a package that did not change (worse, signalling that it did), is noise at best and a false security signal at worst.
 
 Format:
 
@@ -506,7 +517,7 @@ If auto-merge is enabled, the PR will merge once checks pass. Do not proceed unt
 
 ### 6.2 Create Releases
 
-For each affected package (every package whose `package.json` changed in this mission), invoke the `github-release` skill in tier order (Tier 0 → Tier 1 → Tier 2 per Phase 1.2). Wait for each release's npm-publish workflow to complete before creating the next. If any workflow fails, stop and report. Within a tier, order does not matter.
+For each affected package (every package whose own published content changed — its `package.json` or source, verified with the Phase 4.5 diff test; a changelog-only diff does not count), invoke the `github-release` skill in tier order (Tier 0 → Tier 1 → Tier 2 per Phase 1.2). Wait for each release's npm-publish workflow to complete before creating the next. If any workflow fails, stop and report. Within a tier, order does not matter.
 
 ### 6.3 Milestone
 
