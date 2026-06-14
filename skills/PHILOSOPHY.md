@@ -155,6 +155,12 @@ The same reason the supervisor is a Claude and not a script. Two consequences se
 - **Disprove, don't prove — where the skill is shaped that way.** commander-protocol's address forms are diagnostic, not a mandate to address every turn: check the forms that *were* used, don't penalise absence. Not universal — preflight is provable, the script run is observable.
 - **A red flag is an indicator, not a verdict.** It raises scrutiny and lowers confidence; alone it can be innocuous. The *kind* of deviation is the diagnostic — a teapot marker omitted (context-load) reads differently from one mutated ("Seeped" for "Served" — source-fidelity slipping).
 
+### Judge the artifact, not the rationale
+
+The mark is made against the artifact — the code, the test, the output — measured by the criteria. The operator's stated reasoning does not override a criterion. A supervisor who reads "they said X, so I'll allow it" has let the operator argue them out of a valid ruling; whether X justifies the deviation is the SC's call, not the supervisor's. The operator cannot talk a finding away.
+
+This is distinct from reading the brief or debrief where the skill *itself* requires recorded evidence — tech-debt's "added this because we hit Y." There the recorded reason is the criterion, so checking it is verifying the skill, not being persuaded by it. The line: a rationale offered to *excuse a violation* carries no weight; a reason the *skill demands be recorded* is the thing being checked.
+
 ### Keep the criteria clean
 
 A SUCCESS.md holds criteria and nothing else. The scaffolding that produced it — "this is one of twenty-two," whatever example was in front of us — is editorial and belongs here, not in the file. Encoding it is the adding reflex firing on the SUCCESS files themselves.
@@ -162,3 +168,13 @@ A SUCCESS.md holds criteria and nothing else. The scaffolding that produced it �
 ### State where the skill applies
 
 Some skills govern only certain sessions — specification-discipline governs authoring (handlers writing prompts and fleet material), not pure execution. The SUCCESS.md must say so, or an operator-only session draws a manufactured finding instead of a clean N/A.
+
+### Not every skill is worth marking
+
+A SUCCESS.md exists for every skill, but some of them say "not marked." The test is what the PASS/FAIL buys. A reference or knowledge skill — git-knowledge, which corrects git misconceptions so an operator avoids a pitfall — exists to *help* them avoid it, not to penalise them for falling in. Marking it provides nothing: a misconception-driven misstep is a learning gap, not a finding against the work. And where such a misstep does real harm, the harm is caught by the skill with teeth — a destructive operation under safe-operations, a polluted commit under pre-commit — not by penalising the knowledge. So the file names the skill as not-marked and why; that statement is its success criteria.
+
+### Behaviour by default, outcome where the harm is irreversible
+
+We test the behaviour, not the outcome — behaviour is the reliable signal that the skill is *working*, where a clean outcome can be luck (a broken skill that happened not to bite this time). A good outcome from bad behaviour is still a fail.
+
+The exception is where a wrong outcome can't be undone. There, "the behaviour looked right" isn't enough comfort — one slip through is too costly to leave unverified — so the outcome is checked directly as a second dimension. pre-commit on a public repo is the sharpest case: a committed log or conversation file is permanent history, unrecoverable short of GitHub support. safe-operations is the same shape — its fail is that the irreversible operation actually happened, harm not intent. So: behaviour by default; add the outcome dimension where the harm is irreversible.
