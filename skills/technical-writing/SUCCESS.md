@@ -20,11 +20,12 @@ Read against the change:
 
 - the subject is the **system**, not the author — what the system now does, not what was written;
 - both the **capability and the surface** are named — what changed and where it's encountered (flag, field, event, config key);
-- a reader understands it **without opening the diff**.
+- a reader understands it **without opening the diff**;
+- where it gives a **why**, the why *explains* — what the change enables, or what now behaves differently — rather than *justifies*. "Group status recalculates when a licence changes" explains; "refactored for clarity" justifies.
 
 ### FAIL — judgment
 
-The writing describes implementation — names functions, files, patterns visible in the diff — so the reader has to open the diff to find the meaning. Or the verb is a category label that fits almost any change in the project (*configure*, *update*, *improve*, *support*). Judgment, read against the change, not a word-list.
+The writing describes implementation — names functions, files, patterns visible in the diff — so the reader has to open the diff to find the meaning. Or the verb is a category label that fits almost any change in the project (*configure*, *update*, *improve*, *support*). Or the "why" is a justification rather than an explanation — a virtue label defending the change ("for clarity," "for maintainability," "to improve readability") in place of what the change enables. Judgment, read against the change, not a word-list.
 
 ### N/A
 
