@@ -55,6 +55,21 @@ find . -name 'changes.jsonl' -not -path './node_modules/*' | head -1
 
 If any `changes.jsonl` is present in the repo (typically per-package under `packages/` or `apps/`), use the generator flow (Phase 3b). Otherwise, use the direct-edit flow (Phase 3a).
 
+## Versioning mode: lockstep vs independent
+
+A repo releases in one of two modes. Determine which before bumping versions.
+
+**Independent** — each package is versioned on its own. Bump only the packages with source changes since their last release; leave the rest untouched. A single-package repo is always independent, and it is the default for a multi-package repo unless the repo's conventions say otherwise.
+
+**Lockstep** — every released package shares one version number. When a release goes out, all participating packages move to the same next version. Two kinds of package get bumped:
+
+- Every package with source changes since the last release.
+- Every package whose released workspace dependency is bumping, even with no source change of its own. Republishing re-pins it to the new dependency version, so consumers of that package resolve the new dependency. This is the *transitive bump*.
+
+The result is that all released packages carry the same version, and no published package references an unpublished dependency. When publishing a lockstep release, publish dependencies before dependents (leaves first) so that ordering also holds on the registry.
+
+A repo's mode is set by its conventions and release history, not chosen per release. If unsure, check whether the packages currently share a version (lockstep) or diverge (independent).
+
 ## Phase 1: Determine Current Version
 
 ### From Package.json
@@ -91,19 +106,17 @@ Based on semver and the type of changes:
 
 ### Pre-releases
 
-For features you're not fully confident in, use pre-release versions:
+A pre-release carries a hyphenated suffix: a channel identifier and a counter, e.g. `1.2.1-preview.1`, `1.0.0-beta.3`, `2.0.0-rc.1`. Two cases arise:
 
-```text
-1.2.1-preview.1
-1.2.1-preview.2
-1.2.1-preview.3
-...
-1.2.1  (final release)
-```
+- **Pre-1.0 package.** Every release is a pre-release on the road to `1.0.0`, conventionally `1.0.0-<channel>.N` (e.g. `1.0.0-beta.9`). The next release increments the counter: `1.0.0-beta.8 → 1.0.0-beta.9`. The base `1.0.0` does not change until the package goes stable.
+- **Pre-release of a future stable version.** For a feature you're not fully confident in, ship `1.2.1-preview.N` ahead of `1.2.1`. Increment the counter each iteration; the base is the eventual stable target.
 
-- CHANGELOG is written as if it's the final version (1.2.1)
-- Pre-release suffix is only in package.json
-- Increment preview number for each iteration
+Either way, determine the next pre-release by incrementing the counter on the current pre-release version — not by applying the stable patch/minor/major table above.
+
+Changelog handling for a pre-release depends on the flow:
+
+- **Generator flow (`changes.jsonl`)** — a pre-release does **not** write a release marker; every entry stays under `[Unreleased]` until the stable release. See Phase 3b.
+- **Direct-edit flow** — write the entry under the eventual stable version heading; the pre-release suffix lives only in `package.json`.
 
 ### Confirm with User
 
@@ -226,7 +239,9 @@ For each affected published package (every package whose `package.json` will be 
 
 ### 3b.1 Append the release marker to changes.jsonl
 
-Format (per the schema):
+**Pre-releases skip this step.** A pre-release (the version contains a hyphen, e.g. `1.0.0-beta.9`) does not get a release marker — its entries stay under `[Unreleased]`. For a pre-1.0 package, every release is a pre-release, so no markers are written until `1.0.0` ships. The marker is what moves `[Unreleased]` entries into a dated version section, so it belongs only to a stable release.
+
+For a stable release, append the marker. Format (per the schema):
 
 ```jsonl
 {"type":"release","version":"<x.y.z>","date":"<YYYY-MM-DD>","tag":"<pkg-shortname>@<x.y.z>"}
@@ -314,6 +329,6 @@ This skill is **independent and composable**. It can be called:
 - Always confirm version with user before proceeding
 - Match existing CHANGELOG format
 - Security fixes and dependency updates are patch releases (no functionality change)
-- Pre-releases for uncertain features: `x.y.z-preview.N`
+- Pre-releases increment a counter on the current pre-release version; pre-1.0 packages stay `1.0.0-<channel>.N` until they go stable, and keep changelog entries under `[Unreleased]` (no release marker)
 - CHANGELOG date is planned date, not necessarily actual release date
 - For npm packages: release early, release often
