@@ -1,12 +1,6 @@
-# sc-commit-writing: editorial context
+# sc-commit-writing: editorial record
 
-This file is the editorial context for the `sc-commit-writing` skill. Read it before modifying `SKILL.md`.
-
-## Why this skill exists
-
-Commit messages are the permanent record of intent. The diff shows what changed; the message is the only place where the why can live. A message that describes what the diff already shows has wasted that opportunity.
-
-The failure is common enough to have a name: "Move function to x.ts," "Refactor X for clarity," "Update Y to use Z." Each of these describes mechanics visible in the diff. None of them tells the reader anything they could not learn by reading the diff. Git log filled with these entries is a log with no information.
+This file is the editorial record for the `sc-commit-writing` skill: how it came to be shaped this way, what was rejected, and notes for the next editor. The reasoning behind each rule now lives in the skill itself, next to the rule it explains; this file holds the history, not the why.
 
 ## Origin
 
@@ -18,33 +12,7 @@ The Conventional Commits prefix pattern added a second layer of noise: `feat:`, 
 
 A third accumulation was verbosity disproportionate to the change. Claude, asked to write a commit message for a one-file change, would produce seven lines — a summary, a list of what was done, sometimes a note on why. The thoroughness felt helpful at first. After enough of it, a commit message longer than the change it describes is obviously wrong.
 
-## Key insights
-
-### The message supplies what the diff cannot
-
-The diff shows what moved. The message should show why it moved — what it enables, what problem it solves, what decision was made. "Move authentication logic out of the request handler so it can be tested without a network" is a different message from "Move auth logic to auth.ts." Both describe the same change; only one adds something.
-
-### Category-label verbs are a tell
-
-Verbs like *configure*, *update*, *improve*, *refactor*, *support* apply to almost any change in any project. A message built on one of these is a category label, not a description. It signals that the author described what they did rather than what changed.
-
-### Don't justify the obvious
-
-Routine work does not need a reason stated. "Refactoring" is a complete commit message for a refactoring. The reader opens the diff and sees what was refactored. Adding "to improve clarity" or "to reduce complexity" is a tautology — that is what refactoring is. Stating the obvious is a junior tell: senior work does not apologise for existing or explain what the diff already shows.
-
-The commit message explains the commit. The code explains the code. These are separate jobs.
-
-Proportionality follows from this: match message length to the significance of the change. A single-file rename gets one word. A non-obvious architectural decision might warrant a sentence. What breaks the contract is a message longer than the change — when the message has more content than the diff, something is wrong.
-
-### A partial description misdescribes the change
-
-If a commit mixes operation types — say, a refactoring and a new feature in the same commit — the message must mention both. A message that only mentions the feature leaves a reviewer looking at the refactored code confused: was this intentional? Is it related? Did you mean to commit this?
-
-The commit message is the reader's map to the diff. A partial map is a misdescription. The test: could a reviewer look at any part of the diff and be confused by the message? If yes, the message is incomplete.
-
-This also means commit strategy affects message shape. The same code committed separately produces two simple messages; committed together produces one message that covers both. The message reflects the commit as it was made, not an ideal.
-
-### Conventional Commits: the spec vs. the community version
+## Conventional Commits: the spec vs. the community version
 
 Conventional Commits defines three things with semantic meaning: `feat` (minor version bump), `fix` (patch bump), and `BREAKING CHANGE` in the footer (major bump). That is the entire spec. The purpose is machine-readable commit messages — tooling reads those tokens to drive automated semver and changelog generation.
 

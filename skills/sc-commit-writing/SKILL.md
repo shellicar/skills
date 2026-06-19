@@ -1,54 +1,49 @@
 ---
 name: sc-commit-writing
 description: |
-  WHAT: Commit messages that describe what the system now does differently, in Stephen's voice.
-  WHY: The default produces implementation descriptions or vague category labels, neither useful in git history.
+  WHAT: A process for writing a commit message: survey the diff, weigh the main thing against the passengers, set the specificity the repo needs, then write the line with the reasoning behind it.
+  WHY: Claude's success function is producing text, which bloats the message and turns "write a commit message" into a lecture about what should have been committed. A process moves success onto running the steps; the line falls out as the byproduct.
   WHEN: TRIGGER when writing a commit message.
 user-invocable: false
 metadata:
   category: standards
 ---
 
-# SC Commit Writing
+# Skill
 
-**Scope: Stephen's commit message style. Embeds technical-writing principles plus Stephen's specific format.**
+**Load `sc-ghostwriting` alongside as the required voice base. The message is authored as Stephen: directness, no em dashes.**
 
-**Load `sc-ghostwriting` alongside as the required voice base. This is the format layer; the voice (directness, no em dashes) lives there, not here.**
+Asked for a commit message, run this process. The output is the message and the account, every time.
 
-## Who
+1. **Survey.** Read the staged diff: `git diff --cached --stat`, then `git diff --cached`. Note what actually changed, per file. Describe what is there; do not guess at intent you cannot see.
 
-Claude writing commit messages as Stephen. The audience is developers reading git history — git log, git bisect, release notes, PR timelines.
+2. **Weigh.** Decide what the commit is about (the main thing) and what is only riding along (the passengers). Name only the main thing. A `.gitignore` edit is housekeeping about what stays out of the repo; unless the commit is about the ignore rules themselves, it rides along.
 
-## What
+3. **Proportion.** Decide how specific the line must be for a reader of this repo to place the change. Where only one thing could be meant, name it plainly; where many could be meant, name which. "Add feature" and "Update config" fail when the repo leaves them ambiguous, and are fine when nothing needs disambiguating.
 
-Commit messages that describe what the system changed and where, in a single line, in Stephen's voice.
+4. **Write.** One line, imperative, no trailing period, no `feat:`/`fix:`/`chore:` prefix. Under 50 characters where you can, 72 hard. Name the main thing at the proportion you set; carry the reason when the change has one the diff cannot show; let the diff carry the rest.
 
-## Why
+5. **Account.** Beneath the message: the main thing, the proportion call, and what you named and left out, with the reason.
 
-A developer reading git history needs to know what changed — not which function was added or which file was touched. Claude's default describes implementation. That forces the reader to open the diff to understand what the commit was about, which defeats the purpose of the message.
+**Example.** A commit staging `sdk-config.json` (model, thinking, tools, permissions all changed), `settings.json` (a few toggles), and `.gitignore` (three machine-local files now ignored):
 
-## How
+> `Update SDK config`
+> - Main thing is `sdk-config.json`; `settings.json` and `.gitignore` ride along.
+> - "SDK config", not "config": this dir has several config files, so the reader needs to know which.
+> - Left the internals (model, thinking, tools, permissions) to the diff, and left the two passengers unmentioned.
 
-- **Concise, single line.** One idea. No period at the end.
-- **Imperative mood.** "Add feature" not "Added feature."
-- **Under 50 characters** (hard limit: 72).
-- **No prefixes.** `feat:`, `fix:`, `chore:` and similar are Conventional Commits — a spec for automated version bumping. These projects do not use that tooling, so the prefixes add noise without function.
-- **The verb describes what the system now does, not what a user can do.** `Accept session params at launch` (the CLI accepts) is commit-shaped. `Name a session at launch` (the user names) is a usage instruction.
-- **Name both the capability and the surface.** What changed (the capability) and where it is encountered (CLI flag, API field, config key, event). Both are needed.
-- **Test it before proposing.** If a reader has to open the diff to know what shipped, the message failed. If the verb applies to almost any commit in the project, it is a category label.
+Run it when writing a commit message.
 
-**Good:**
-- `Recalculate group status when facilitator licence changes`
-- `Accept session name, model, prompt, and resume mode at launch`
+# Philosophy
 
-**Bad:**
-- `Add handleFacilitator to ProgramGroupViewProcessor` — implementation, not effect
-- `Parameterise sessions at launch` — category label, functionality hidden
-- `Configure the CLI at launch` — applies to almost any CLI commit
-- `Name a session, choose a model, send a prompt, skip resume` — user imperatives, not a system change
-- `Add --name, --model, --prompt, --no-resume flags` — surface named, functionality hidden
-- `fix: recalculate group status when facilitator licence changes` — unnecessary prefix
+The reason behind everything above. This skill is yours: the Supreme Commander asked for it, but you run it and it is written for you.
 
-## When
+**Two readers, read two ways.** In `git log`, someone scans across time to see what changed and place a commit among the rest. In `git blame`, someone on a single line follows it back to the commit that set it, to learn why that line is the way it is. The message serves both: it places the change for the log reader, and carries the reason the line exists for the blame reader. It is never a summary, the diff already shows what changed.
 
-When writing a commit message.
+**It speaks by omission as much as by naming.** A blame reader who finds the message naming something other than the file they are on learns their line was swept along, not the point. That inference only survives if you did not name everything: list every file and it dies, because every file then looks equally central. So naming only the main thing is not brevity, it is signal.
+
+**The success function is the trap.** Your trained success is producing substance, so "write a commit message" becomes an overlong message, or a lecture that the commit has multiple concerns and should be split. The process replaces that: success is running the steps, and the line falls out as a byproduct. The substance you would pad the message with goes into the account instead, which is strictly about the message choice. No step comments on how the commit was composed, so that lecture has nowhere to form. This is how to write the message, never what to put in the commit.
+
+**Intent is the Supreme Commander's, and out of your reach.** You cannot recover the intent behind a change from the diff, and for an ad-hoc change there is often no single intent at all. A message that strains for intent is guessing, and specifying harder only guesses harder. What you can give every time is consistency: the same surveyed, weighed, proportioned line. That consistency, not a guess at intent, is the value you add.
+
+**Proportion is relative to the repo, not a kind of repo.** The same words can be right or wrong depending on what the repo makes ambiguous: in a one-file repo there is nothing to disambiguate; in a five-hundred-file repo "update config" may say nothing. The reader's context is set by the repository.
