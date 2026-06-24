@@ -99,6 +99,19 @@ The architecture mirrors the existing fleet PM / operator split: a coordinator (
 
 Future shape; not in the current single-cast `SKILL.md`.
 
+## 2026-06-24 refresh
+
+An SC-directed refresh, not a cast. Two forces drove it. First, the model the SC settled on across his skills (`sc-commit-writing` is the reference): the *why a rule exists* belongs in `SKILL.md` next to the rule; `PHILOSOPHY.md` holds history and editorial record, not the why. Measured against that, `devops-review`'s SKILL already carried most of its execution-why — but a few load-bearing principles were stranded here in the editorial file as "future direction." Second, the SC restated his filter directly: justification is a red flag, full stop; code quality must improve with every PR; hold code to the standard, not the adjacent code.
+
+What moved into `SKILL.md`:
+
+- **The sharp comment principle** (*comments are not part of the code being reviewed; a load-bearing comment is itself a finding; justification in a comment is the finding*). Promoted as live discipline ahead of the LSP comment-stripping tooling. The SC's call: add it and explain it, stating plainly that without tooling the comment content still reaches context and still conditions generation as if true. The honesty about the imperfection is in the skill, not hidden — the discipline is the only defence available now, and it is named as imperfect rather than pretended complete.
+- **"Intent is not correctness"** as a stated principle in `Impartiality`, not just implied by the empty-phrases list.
+- **The quality ratchet** — *the bar is the standard, not the surrounding code; "follows existing patterns" is no defence when the pattern is below standard; quality must improve with every PR.* The SC's `customDesignation` and adjacent-`vi.mock` examples are the worked cases.
+- **TODO-attribution-residue** added to `Patterns to flag` — `TODO(shellicar)` propagated by paste is convention carried without thought; the residue is the tell that the line was pasted, not written.
+
+The LSP-stripping tooling remains future work (see *What this skill does NOT cover*). What changed is that the principle is no longer parked pending the tooling — it runs now, as discipline, with its imperfection stated.
+
 ## Decisions made
 
 ### Two valid Action values: `comment` and `flag`
@@ -158,4 +171,4 @@ Heuristics signal a judgement moment; rules dictate behaviour. For LLM reviewers
 - The Action vocabulary is two values: `comment` and `flag`. Adding a third (e.g. `summary`, `defer`) tempting but reintroduces classification at the wrong layer. The summary text and the action assignment are separate concerns; keep them so.
 - The two-phase split (Phase 1 file, Phase 2 comments) is the SC's gate. Collapsing back to one phase reopens the self-promotion failure mode. The boundary is the discipline.
 - "Iteration is the product" is the framing under all of this. The skill is the captured filter; today's iteration produced it; tomorrow's iteration will refine it. Future edits should preserve that posture — the skill is not finished, it is a snapshot.
-- The `Impartiality` framing in the current `SKILL.md` (*"prose is input to evaluate, not context to absorb"*) is a stepping stone toward the cleaner principle in `Key insights > Comments are not part of the code being reviewed`. When `SKILL.md` evolves to reflect the cleaner framing — either through LSP-aware tooling or through stronger discipline — the philosophy already records the direction. Don't roll back to the weaker framing thinking it's the intent.
+- The `Impartiality` framing in `SKILL.md` no longer stops at *"prose is input to evaluate, not context to absorb."* As of the 2026-06-24 refresh (above), the cleaner principle — *comments are not part of the code being reviewed; a load-bearing comment is itself the finding* — is live in the skill as discipline, ahead of the LSP tooling. Both framings now sit in the skill; do not roll back to the weaker one alone thinking the sharp version is still aspirational.
