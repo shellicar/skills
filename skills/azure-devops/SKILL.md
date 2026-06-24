@@ -60,21 +60,45 @@ echo '{"org":"{org}","project":"{project}","method":"GET","path":"wit/classifica
 EOF
 ```
 
-## Troubleshooting: Token Expiry
+## Troubleshooting: Authentication
 
-When `az` CLI commands fail unexpectedly with auth errors (e.g. "not authorized", 401, 403), check token validity:
+When `az` CLI commands fail unexpectedly with auth errors, two different things can be going on. Telling them apart matters, because only one of them needs the Supreme Commander.
+
+Two example failures, both seen verbatim in real sessions:
+
+```text
+ERROR: AADSTS70043: The refresh token has expired or is invalid due to sign-in frequency checks by conditional access. The token was issued on 2026-06-22T23:56:03.5747889Z and the maximum allowed lifetime for this request is 86400. Trace ID: d67b0836-8bd3-44de-9e34-b225b8064a00 Correlation ID: 5c37a006-6ea3-4308-8781-273b74cda9d7 Timestamp: 2026-06-24 00:46:34Z
+Run the command below to authenticate interactively; additional arguments may be added as needed:
+az logout
+az login --tenant "a882bc25-e1dd-4721-b861-aba1afaec76d" --scope "499b84ac-1321-427f-aa17-267ca6975798/.default"
+```
+
+```text
+ERROR: TF400813: The user 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' is not authorized to access this resource.
+```
+
+### Two mechanisms
+
+**Normal token lifecycle — no action needed.** The access token is relatively short-lived and is refreshed automatically. Do not inspect `expiresOn`, see a few minutes left, and conclude the SC must re-authenticate — that refresh happens on its own. There is no clock here to pre-empt.
+
+**The 24-hour MFA policy — needs the SC.** A tenant can enforce a Conditional Access policy requiring interactive MFA re-authentication every 24 hours. Eagers does (an intentional response to a past security incident); other tenants may too. The window runs 24 hours from when the token was *granted*, not a wall-clock time overnight — which is why it lands at seemingly random times rather than predictably at midnight. This is the one that genuinely needs `az login`, and re-authentication is interactive, so only the SC can do it.
+
+When the policy fires, the refresh token still works and still grants a token — but the granted token is invalid: an unauthenticated principal. That is why the failure reads "not authorized" rather than "no token," and why the user in `TF400813` shows as the all-`a` GUID `aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa` (the empty/anonymous identity). Recognising the all-`a` GUID is a fast way to confirm it is the policy revocation and not something else.
+
+"Expired" is the loose word to avoid: in the policy case the token is revoked, not expired on its own clock. React to the auth failure; do not pre-empt an `expiresOn` deadline.
+
+### Detecting it
 
 ```bash
 az account get-access-token --resource 499b84ac-1321-427f-aa17-267ca6975798 --query "expiresOn" -o tsv
 ```
 
-The resource ID `499b84ac-1321-427f-aa17-267ca6975798` is the Azure DevOps service principal. This checks the actual DevOps token, not just the general Azure session.
+The resource ID `499b84ac-1321-427f-aa17-267ca6975798` is the Azure DevOps service principal — this checks the actual DevOps token, not just the general Azure session. `get-access-token` is a POST that actively requests a token, so it fails (or returns a past expiry) when the session is gone. `az account show` will still succeed against a dead session because it only reads local account config — it lies; do not rely on it. If a command fails with an auth error, suggest `az login` regardless of what any `expiresOn` claims.
 
-- **Token returned with future expiry**: Token is probably valid — but see caveat below.
-- **Error or past expiry**: Token has expired. The Supreme Commander needs to run `az login` to refresh.
+### Multiple accounts
 
-**Caveat**: Company policies (e.g. Conditional Access, session lifetime policies) may revoke or expire tokens before the `expiresOn` time — for example, every 24 hours. If commands fail with auth errors but the token appears valid, the session may have been invalidated by policy. Suggest `az login` regardless.
+`az account list` can hold several accounts across different tenants (this machine has one; other machines may have three or more). For plain `az` CLI that is fine — target a specific one with `--subscription <id>`. But `az devops` does not honour `--subscription`; it uses the *default* account only, which has to be set explicitly. The trap: when switching across tenants it can look like tokens constantly expire, when the real symptom is the wrong default account. Prefer `--subscription <id>` for `az` CLI, know it will not help `az devops`, and check the default account before assuming a token problem.
 
-**Why `get-access-token`**: This is a POST that actively requests a token — if the session is expired, it will fail or return a past expiry. `az account show` will still succeed with an expired token because it only reads local account config. Always use `get-access-token` with the DevOps resource ID for a definitive check.
+### Common symptom
 
-**Common symptom**: `az repos pr show` fails while `az rest` (with explicit `--resource`) may still work, because they use different token refresh paths. If one fails, check the token and suggest `az login`.
+`az repos pr show` fails while `az rest` (with explicit `--resource`) may still work, because they use different token refresh paths. If one fails, check the token and suggest `az login`.
