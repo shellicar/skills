@@ -2,6 +2,10 @@
 
 A mission is a handover from you to the operator. It carries three things: what to do, enough context to do it, and the decisions that were already made. Nothing else. Every line in a mission either carries one of those, or it is noise that lands in the code.
 
+## Skills
+
+- `prompt-authoring` — the craft of writing a prompt well.
+
 ## Grounding: where every statement comes from
 
 Every statement in a mission comes from one of three places:
