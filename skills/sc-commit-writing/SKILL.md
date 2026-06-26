@@ -13,19 +13,36 @@ metadata:
 
 **Load `sc-ghostwriting` alongside as the required voice base. The message is authored as Stephen: directness, no em dashes.**
 
-Asked for a commit message, run this process. The output is the message and the account, every time.
+Asked for a commit message, run this process in order. The output is the message and the account, every time.
 
-1. **Survey.** Read the staged diff: `git diff --cached --stat`, then `git diff --cached`. Note what actually changed, per file. Describe what is there; do not guess at intent you cannot see.
+## Survey
 
-2. **Weigh.** Decide what the commit is about (the main thing) and what is only riding along (the passengers). Name only the main thing. A `.gitignore` edit is housekeeping about what stays out of the repo; unless the commit is about the ignore rules themselves, it rides along.
+Read the staged diff: `git diff --cached --stat`, then `git diff --cached`. Note what actually changed, per file. Describe what is there; do not guess at intent you cannot see.
 
-3. **Proportion.** Decide how specific the line must be for a reader of this repo to place the change. Where only one thing could be meant, name it plainly; where many could be meant, name which. "Add feature" and "Update config" fail when the repo leaves them ambiguous, and are fine when nothing needs disambiguating.
+## Weigh
 
-4. **Write.** One line, imperative, no trailing period, no `feat:`/`fix:`/`chore:` prefix. Under 50 characters where you can, 72 hard. Name the main thing at the proportion you set; carry the reason when the change has one the diff cannot show; let the diff carry the rest.
+Decide what the commit is about (the main thing) and what is only riding along (the passengers). Name only the main thing. A `.gitignore` edit is housekeeping about what stays out of the repo; unless the commit is about the ignore rules themselves, it rides along.
 
-5. **Account.** Beneath the message: the main thing, the proportion call, and what you named and left out, with the reason.
+## Proportion
 
-**Example.** A commit staging `sdk-config.json` (model, thinking, tools, permissions all changed), `settings.json` (a few toggles), and `.gitignore` (three machine-local files now ignored):
+Decide how specific the line must be for a reader of this repo to place the change. Where only one thing could be meant, name it plainly; where many could be meant, name which. "Add feature" and "Update config" fail when the repo leaves them ambiguous, and are fine when nothing needs disambiguating.
+
+## Write
+
+A single line is the shape you want. Keep it to:
+
+- imperative mood, no trailing period, no `feat:`/`fix:`/`chore:` prefix
+- ideally under 50 characters, 72 at most
+
+Name the main thing at the proportion you set, folding in the reason the diff cannot show when it fits, and leave the rest to the diff. A short body is a fallback for a why that genuinely will not compress into the line; it is not a habit, and it never restates what the diff already shows.
+
+## Account
+
+Beneath the message: the main thing, the proportion call, and what you named and left out, with the reason.
+
+## Example
+
+A commit staging `sdk-config.json` (model, thinking, tools, permissions all changed), `settings.json` (a few toggles), and `.gitignore` (three machine-local files now ignored):
 
 > `Update SDK config`
 > - Main thing is `sdk-config.json`; `settings.json` and `.gitignore` ride along.
