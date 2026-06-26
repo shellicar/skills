@@ -1,98 +1,52 @@
 #!/bin/sh
-# Fix pnpm audit vulnerabilities with clean override resolution
+# Fix pnpm audit vulnerabilities surgically (pnpm 11+).
 #
-# Runs pnpm audit --fix, then nukes lockfile + node_modules and
-# reinstalls to work around the pnpm override chaining bug where
-# overrides don't re-evaluate after a first override changes resolution.
+# Runs `pnpm audit --fix=update` — patches the vulnerable lockfile entries
+# directly, no overrides: no override-chaining (pnpm#6774), no lockfile/
+# node_modules nuke, no version drift. Then re-audits and stops if anything
+# remains, so residue is surfaced rather than silently left.
 #
-# See: https://github.com/pnpm/pnpm/issues/6774
+# Majors and other set-aside advisories are handled in the skill workflow
+# (auditConfig.ignoreGhsas) BEFORE this runs — `--fix=update` honours the
+# ignore list, so anything listed there is skipped here.
 #
-# Usage:
-#   fix-audit.sh              # Run in current directory
-#   fix-audit.sh --check      # Verify audit is clean (no fix)
+# Requires pnpm 11+ (--fix=update is v11; 10.x audit --fix can't reach
+# transitive deps). Update pnpm first.
 #
-# Exit codes:
-#   0  Audit is clean (after fix, or already clean)
-#   1  Audit still has vulnerabilities after fix
+# Usage:   fix-audit.sh            fix, then verify
+#          fix-audit.sh --check    verify only
+#
+# Exit:    0  clean      1  vulnerabilities remain (STOP)      2  bad env
 
 set -e
 
 CHECK_ONLY=0
-
 while [ $# -gt 0 ]; do
   case "$1" in
-    --check)
-      CHECK_ONLY=1
-      shift
-      ;;
-    -h|--help)
-      sed -n '/^#/!q;s/^# \{0,1\}//p' "$0" | tail -n +2
-      exit 0
-      ;;
-    *)
-      printf "❌ Unknown option: %s\n" "$1" >&2
-      exit 1
-      ;;
+    --check) CHECK_ONLY=1; shift ;;
+    -h|--help) sed -n '/^#/!q;s/^# \{0,1\}//p' "$0" | tail -n +2; exit 0 ;;
+    *) printf "❌ Unknown option: %s\n" "$1" >&2; exit 2 ;;
   esac
 done
 
-# Verify we're in a pnpm workspace
-if [ ! -f "pnpm-workspace.yaml" ]; then
-  printf "❌ No pnpm-workspace.yaml found in current directory\n" >&2
-  exit 1
-fi
+[ -f pnpm-workspace.yaml ] || { printf "❌ No pnpm-workspace.yaml in the current directory\n" >&2; exit 2; }
 
-# ── Check-only mode ──────────────────────────────────────────────────
+major="$(pnpm --version | cut -d. -f1)"
+case "$major" in ''|*[!0-9]*) printf "❌ Cannot read pnpm version (%s)\n" "$(pnpm --version)" >&2; exit 2 ;; esac
+[ "$major" -ge 11 ] || { printf "❌ pnpm %s — needs 11+ (10.x audit --fix misses transitive deps). Update pnpm first.\n" "$(pnpm --version)" >&2; exit 2; }
 
 if [ "$CHECK_ONLY" -eq 1 ]; then
-  printf "🔍 Checking audit status...\n"
-  set +e
-  pnpm audit 2>&1
-  status=$?
-  set -e
-  if [ "$status" -eq 0 ]; then
-    printf "✅ Audit is clean\n"
-    exit 0
-  else
-    printf "❌ Audit has vulnerabilities\n"
-    exit 1
-  fi
+  printf "🔍 Checking audit...\n"
+  if pnpm audit; then printf "✅ Clean\n"; exit 0; else printf "❌ Vulnerabilities present\n" >&2; exit 1; fi
 fi
 
-# ── Fix mode ─────────────────────────────────────────────────────────
+printf "🔧 pnpm audit --fix=update...\n"
+pnpm audit --fix=update 2>&1 || true
 
-printf "🔧 Running pnpm audit --fix...\n"
-set +e
-pnpm audit --fix 2>&1
-set -e
-
-# pnpm override chaining bug workaround:
-# When multiple overrides exist for the same package at different version
-# ranges (e.g. koa@<2.16.4 and koa@>=3.0.0), pnpm doesn't re-evaluate
-# the second override after the first one changes the resolved version.
-# The only reliable fix is to delete both pnpm-lock.yaml AND node_modules
-# then do a clean install.
-#
-# See: https://github.com/pnpm/pnpm/issues/6774
-printf "\n🔄 Removing lockfile and node_modules for clean override resolution...\n"
-printf "   (workaround for https://github.com/pnpm/pnpm/issues/6774)\n"
-rm -f pnpm-lock.yaml
-rm -rf node_modules
-printf "📦 Reinstalling...\n"
-pnpm install 2>&1
-
-# ── Verify ───────────────────────────────────────────────────────────
-
-printf "\n🔍 Verifying audit...\n"
-set +e
-pnpm audit 2>&1
-status=$?
-set -e
-
-if [ "$status" -eq 0 ]; then
-  printf "\n✅ Audit is clean\n"
-  exit 0
+printf "\n🔍 Verifying...\n"
+if pnpm audit; then
+  printf "\n✅ Audit clean\n"; exit 0
 else
-  printf "\n❌ Audit still has vulnerabilities after fix\n" >&2
+  printf "\n❌ Vulnerabilities remain after --fix=update — STOP and surface to the SC (residue may need a major decision or a targeted override).\n" >&2
   exit 1
 fi
