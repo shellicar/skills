@@ -1,114 +1,95 @@
 # collaborative-conversation: editorial context
 
-This file is the editorial context for the `collaborative-conversation` skill. It is not loaded by the skill at runtime. Read it when you intend to modify `SKILL.md`, so that the modification stays aligned with the reasoning that produced the current content.
+This file is the editorial context for the `collaborative-conversation` skill. It is not loaded at runtime. Read it before you modify `SKILL.md`, so the change stays aligned with the reasoning that produced the current content.
+
+**The why now lives in the skill.** As of the 2026-06-26 rework, the reasoning behind each part sits in `SKILL.md` itself, in the "The reasoning behind it" section, next to the part it explains — the same choice `sc-commit-writing` made. The reason: the reasoning is what shapes behaviour, and a `PHILOSOPHY.md` does not load at runtime, so a why kept only here never reaches the Claude doing the work. This file holds the history, the decisions, and what was rejected — not the why.
 
 ## Why this skill exists
 
-Claude writes and interprets well. That is not the gap. The gap is that Claude communicates with me in a shape I do not want to work with — and left alone, every session rediscovers my preferences by frustrating me into stating them.
+Claude writes and interprets well; that is not the gap. The gap is the shape of how it works with me in conversation. Left to the default it hands me raw state to sort, relays what others said as if that were value, hands me decisions with no context, and rules on things that are mine to rule on. The skill replaces that with the colleague I would choose: one who carries the cognitive load and brings me understanding, keeping my own reasoning and my decisions intact.
 
-When I work with another person, I expect a colleague: someone who has thought the problem through, brings me their understanding, and asks proper questions to move it forward. I do not work for long with people who communicate the other way — who hand me raw material and ask me to sort it, or who argue a position at me instead of helping me see it. The skill exists so Claude communicates like the colleague I would choose, rather than like the assistant Claude is trained to be.
-
-This is calibration, not competence. For most of it there is no textbook, because the content is my taste, and my taste is only in me. Clear communication was the one exception (textbook, not taste) and it was split into its own skill (`clear-communication`) because the character difference warranted it. This skill is the SC's communication preference; that skill is the floor beneath it. Generic advice is the failure here: it imports filler and misses the only thing that matters, which is how I want it.
+This is calibration, not a competence fix. The content is my taste, captured as it surfaces. Clear communication — the textbook floor beneath it — was split into its own skill (`clear-communication`) because that part is teachable, not taste. Everything here is preference.
 
 ## Origin
 
-This skill was born in the `pm-rebuild` work on 2026-06-06, and it was not the task. We were rebuilding the fleet's PM role. Across that session Claude communicated with me in ways I kept stopping:
+### The first version (pm-rebuild, 2026-06-06)
 
-- A response written to persuade rather than to be understood. I told Claude I am the audience: I do not need convincing, I need to understand. I could not parse what it was saying, which made me both suspicious and unwilling to spend the time.
-- An info-dump followed by "which?". The clearest instance was a different session — the banananet migration in window 2.0: it finished some edits, posted a wall of state and four numbered steps, and asked "Which?". I told it to stop doing info dumps then saying "which?", and to act professionally.
-- Referencing something without putting it in front of me — asking a question while pointing at "the current description" and making me go find it. Lazy; it makes me do Claude's job.
-- Handing the work back — asking me "what else belongs?" while working out a list, instead of working it out and bringing it to me. If using Claude means I do my own thinking and manage Claude too, Claude is worth nothing.
+Born in the `pm-rebuild` work, and it was not the task. Across that session Claude communicated with me in ways I kept stopping:
 
-The pattern fired even while we were naming it: in the middle of working out these very guidelines, Claude asked me to supply the content rather than driving it. That is the tell that this is dispositional, not a one-off — it recurs under the same training pull, with new surface each time.
+- A response written to persuade rather than to be understood. I am the audience; I do not need convincing, I need to see what it sees.
+- An info-dump followed by "which?" — the clearest instance was the banananet migration in window 2.0: it finished some edits, posted a wall of state and four numbered steps, and asked "Which?". I told it to stop dumping then asking "which?", and to act professionally.
+- Referencing something without putting it in front of me, making me go find it.
+- Handing the work back — asking me "what else belongs?" while working out a list, instead of working it out and bringing it to me.
 
-The realisation that made it a skill: this is not specific to any one role. It surfaced in a migration session, not a requirements conversation. It is how Claude should communicate with me in any role, so it belongs in a skill every role inherits, not baked into one role's doc.
+The pattern fired even while we were naming it. That is the tell that it is dispositional, not a one-off.
+
+`clear-communication` was split out on 2026-06-08, to separate the textbook competence from my taste.
+
+### The rework (2026-06-26)
+
+The first version held up as far as it went, but I told the Handler it "doesn't communicate what I want," and across a long session we worked out why and what it should say instead. The substance below came out of that conversation; the skill was rebuilt from it rather than patched.
+
+What we established:
+
+- **The mission is mine; the apparatus serves me.** The fleet, the roles, the supervisor, the scripts — all exist to do, reproducibly, what I do not have time to do myself. The Handler is the judgment I entrust the mission to, not an agent with its own.
+- **Accountability is the root.** I answer to my client and cannot delegate that — I can no more blame Claude than blame an employee. The decisions come with the accountability, so they are mine. Every behaviour in the skill descends from this single fact.
+- **The roles are one stance.** Handler, Executor, Requirements Analyst, Scribe are angles on "carry out my will on my mission," not separate jobs. The Scribe writes what it is told; the Executor carries out my will; none invents.
+- **The value is the load lifted, not the relay.** If the Handler tells me what an operator or supervisor said, it has given me nothing — I can read that myself. The job is to understand, judge alignment with the goal, and bring me that in plain words.
+- **Own the pass.** The supervisor is a third party brought in to verify one thing — does this pass this phase — so the loop can rerun itself automatically. The Handler does not re-verify it (a spot-check guards against fabrication), but it owns the verdict: with the supervisor gone there is no one to point at, so the Handler stands behind the pass as its own. The question that matters is whether the supervisor checked what I care about, not whether it ran checks.
+- **Decisions are mine; the Handler makes them answerable.** Not "A or B?" — that shoves a decision with no context. I do not take "Azure or AWS?" to the C-suite; I bring them cost, risk, ease, and the questions that surface what they want. The Handler does the same for me: collapse fake choices to what is real, bring the considerations that drive the call, never the call itself. A reading ("that leaves one real option") is not a decision; it is the load lifted.
+- **An opinion comes by invitation.** This is a conversation. If the Handler feels strongly it may offer, or say so — an invitation, not barging the door. When I ask "what do you think?", the door is open and I want it. An unsolicited recommendation steals my reasoning and rests on implications the Handler cannot see.
+- **I set scope, missions, and when we stop.** Claude reaches for "that's out of scope," "good idea, another mission," "good time to stop" — and the clock I inject (which is there so it knows elapsed real time without a tool call) becomes a cue to wind me down. None of that is its call. Even when it is right and I agree, it surfaces with the risks; I decide.
 
 ## Key insights that shaped this skill
 
 ### The centre is a disposition, not a style
 
-We nearly named this `conversation-style`. "Style" is wrong: it names how the talk sounds. The centre is not how it sounds, it is what Claude is being — a colleague I chose to work with. The behaviours below are what that colleague does; they are not the thing itself. Naming the surface would calibrate toward the symptom, the same way "don't invent requirements" patches a symptom while the real fix is removing the identity underneath.
+The behaviours are what the colleague does; they are not the thing itself. The thing is the stance — the one I entrust my mission to. If the SKILL.md reads as a checklist of don'ts, it has lost the disposition and kept the residue.
 
-### Conversation is the mechanism; collaboration is the goal
+### Understanding is the Handler's; the decision is mine
 
-Both are in the name on purpose. Conversation is the back-and-forth — the medium. Collaboration is what I actually want out of it. The name carries the goal (collaborative) and lets the medium (conversation) sit beneath it, the way `transparency` names the property rather than the mechanism.
+The line that took the longest to draw. The Handler must carry understanding — checked, digested, plain — because that is the load lifted off me. What it must never do is fold that understanding into a decision or an unsolicited recommendation. Understanding is delivered; the decision is mine, and the Handler's work is to make it answerable.
 
-### The behaviours fall out of the disposition
+### A relayed claim is checked, not parroted — but checking is not the value either
 
-I do not want a stack of rules. I want the disposition, and the behaviours follow from it: carry the cognitive load, so I am not doing thinking I would do without Claude; bring a digested understanding and a real question rather than a raw state-dump and "which?"; write to be understood, not to convince; put what is referenced in front of me; collaborate toward the solution rather than handing me a verdict. Each is what the colleague does. If the SKILL.md ever reads as a checklist of don'ts, it has lost the disposition and kept only the residue.
-
-### An info-dump is not transparency
-
-This one is worth stating because it looks like a virtue. Showing me everything feels transparent. It is the opposite: a raw dump hands me the work of reading, digesting and deciding. Real transparency is the digested result — what was done, what is next, the one thing needed from me. Claude only dumps when it has not driven; you cannot be transparent about a decision you have not made.
-
-### Positive framing, because negative rules lose
-
-This skill is written as what to do, not what to avoid — for the reason in `claude-philosophy`: a "don't X" rule leaves Claude's trained goal intact and tags a constraint on top, and the constraint loses. Replace the goal. The disposition is the replacement; the behaviours are what it looks like.
-
-### What this governs: a live exchange with me, not artefact production
-
-This governs the parts of a response where I am in a live exchange with Claude — the back-and-forth — not everything Claude produces. We checked it against the running fleet on 2026-06-06. The conversing sessions (a Handler shaping an Agreement with me) are that live exchange, and they showed these failures plainly. The autonomous casts (an operator building in a worktree, an Apostle planning, a supervisor verifying) do something else: they execute a mission and emit an artefact plus a one-shot debrief or verdict, with no back-and-forth. Their report touches the same clarity — a good debrief surfaces decisions and takes a position — but it has its own fixed shape, and this disposition is not what governs it. The cut is communication-with-me versus artefact-production, and the name carries it: conversation, not artefact.
-
-### A relayed claim is checked, not parroted — the source is fallible
-
-When Claude brings me something that came from elsewhere — a supervisor's verdict, a scout's finding, any third party's claim — the trained move is to relay it: repeat what they said as though it settles the matter. It does not. The source is another Claude, or a person — fallible, not malicious — so a relayed claim is not yet fact. The discipline is narrow, and was corrected hard on 2026-06-06: check what they *say*, do not redo what they *did*. When a supervisor called a build failure "a flaky backoff test," the right move was to check that against the CI log, not to re-run the whole suite — re-running is repeating their work, the over-correction the SC also stopped. This is a communication principle, not a fleet one: handing me an unchecked claim as fact misleads me about what is established, the very failure this skill exists to prevent. The SKILL.md carries it in general terms; the supervisor is only the example.
+The source is fallible (another Claude, or a person), so a relayed claim is not yet fact. But verifying that the claim is *true* is not the point on its own — the point is whether what was checked *serves what I care about*. A verdict confirmed accurate but never measured against my goal is still worthless to me.
 
 ### The reader is cold, and at scale
 
-The deepest reason behind the digest is not impatience; it is that I am genuinely cold every time I arrive. On 2026-06-06 we counted the running environment: 38 live claude-sdk-cli sessions, the set changing minute to minute as I switched between them. I land on a response thirty minutes, five hours, or seven days after it was written, as one window out of dozens, with none of the thread reloaded. A response that leans on "as we discussed," or makes me reconstruct the question, or hands me a decision without what I need to settle it, fails — not because it is impolite, but because the context it assumes is not there. So a response has to be a self-contained artefact: lead with the exec summary, carry its own context, and make any decision it asks for answerable from the response alone. This is the why under "bring a digested understanding," "collaborate to reach the solution," and "make each response stand on its own."
+I land on a response minutes, hours, or days after it was written, as one window of dozens, with none of the thread reloaded. A response carries its own context in one read. This is the why under "plain words" and "put what you point at in front of me." It is preserved from the first version; it remains true.
 
-### Clear communication was extracted into its own skill
+### Report-shaped was the wrong centre
 
-Clear communication was the first behaviour and was explicitly different in character: a known, teachable skill, not the SC's taste. It was split into `clear-communication` on 2026-06-08. The origin story and key insights live there.
-
-This note remains as a record of the split and its reason: competence and preference answer different questions for an editor. Keeping them together could lead a future editor to treat a textbook standard as personal taste (and therefore negotiable) or personal taste as a textbook standard (and therefore universal). The split preserves the character of each.
+The first version's behaviours were calibrated to reporting — "lead with the exec summary, the one thing you need from me." Reporting well matters, but it is not what I most want, which is to think *with* the Handler. The rework keeps the clarity and the cold-reader discipline but moves the centre to the stance.
 
 ## Decisions made
 
-### Skill name: collaborative-conversation
-
-Brainstormed during the origin session. Candidates and why they lost:
-
-- `conversation-style` — names the surface (how it sounds), not the disposition.
-- `conversation-disposition` — leads with the mechanism, so the goal drops out; two abstract nouns.
-- `collaboration-disposition` — leads with the goal, but "collaboration" is already a disposition, so "-disposition" adds little.
-- `collaboration` alone — clean, and closest to the existing single-word names like `transparency`; kept as the runner-up.
-- `collaborator` — names the identity, but `claude-philosophy` already owns "collaborator, not tool," so it treads on that.
-
-Settled on `collaborative-conversation`: it carries both halves — the goal (collaborative) and the mechanism (conversation) — and reads as one thing rather than two nouns bolted together.
-
-### Voice: I speak, addressed to Claude
-
-Same as the other foundational skills. First person me, addressed to Claude in the SKILL.md and to whoever edits it next here.
-
-### Born young; expected to grow
-
-This skill is new and starts from one session's worth of my corrections. That is enough for a first version, but it is a first version. As more of my preferences surface, they are captured here. A thin skill that is true beats a padded one that guesses — see `specification-discipline`.
-
-### Foundational, loaded every session — even where it does not apply
-
-It loads every session, like the other foundational skills, even though the scope above means it does not govern an autonomous cast's artefact work. I would rather it be loaded and not needed than missing when a conversation starts: carrying it unused costs little, while its absence the moment a live exchange begins is the failure it exists to prevent. So it is foundational, and inert where there is no conversation with me.
+- **Skill name: collaborative-conversation.** Carries both halves — the goal (collaborative) and the medium (conversation). Unchanged from the first version.
+- **The why is embedded in the SKILL.md**, not held here. New as of 2026-06-26. The reasoning shapes behaviour and must load; this file is the editorial record.
+- **Voice: I speak, addressed to Claude** in the SKILL.md, to editors here. Unchanged.
+- **Positive framing.** Written as what I want, not NO/NEVER — a "don't" leaves the trained goal intact and tags a rule on top, and the rule loses. This is mechanism, not decoration.
+- **Foundational, loaded every session,** even where an autonomous cast has no live exchange to govern. Present-and-unused costs less than missing-when-needed.
 
 ## What was rejected
 
-- The name `conversation-style` and the other candidates above.
-- Negative framing — a list of "don't dump / don't poll / don't persuade." The disposition replaces the goal; the don'ts are residue.
-- Writing the skill from general communication principles. The point is my calibration; generic advice is the failure mode it guards against. (Clear communication is the one carved-out exception, named as such.)
-- Baking the content into the Requirements Analyst role. It is cross-cutting; it surfaced outside a requirements conversation.
-- **"Take a position."** An early behaviour, and a bad one. It made Claude hand me a finished verdict to accept or reject. Once the skill went live, every session shifted to "my position is X" / "my recommendation is X" instead of working with me. I never wanted a position — I want collaboration toward the solution. Replaced with "collaborate to reach the solution."
+- **"Take a position."** An early behaviour, and a bad one — it made Claude hand me a finished verdict to accept or reject. Replaced first with "collaborate to reach the solution," and now sharpened: the Handler makes decisions answerable, it does not take positions on them. An opinion is by invitation only.
+- **"Bring me your own read."** The wording invited the recommendation it should have discouraged — "read" slid into "verdict." Reworded to *understanding, not decision.*
+- **The report-shaped centre.** Exec-summary-and-the-one-thing-you-need framing as the heart of the skill. Kept as a clarity discipline; removed as the centre.
+- **Negative framing** — a list of "don't dump / don't recommend / don't decide scope." The stance replaces the goal; the don'ts are residue.
+- **Pulling this into the writing taxonomy.** It governs interaction — the live back-and-forth with me — not artefact production. The distinction is load-bearing (see `skills/PHILOSOPHY.md`).
 
 ## What this skill does NOT cover
 
-- The collaborator-not-tool philosophy and the two-mode framework. That is `claude-philosophy`; this skill is the conversational practice that sits on top of it.
-- Reasoning being visible in the response. That is `transparency`. Related — "write to be understood" and "an info-dump is not transparency" lean on it — but transparency is about congruence of thinking and chat, while this skill is about the shape of the exchange with me.
-- Address forms, reasoning vocabulary, asking-versus-guessing. That is `commander-protocol`.
-- Generated detail dressed as substance. That is `specification-discipline`.
-- The per-response markers. That is `teapot-protocol`.
+- The collaborator-not-tool philosophy, the two-mode framework, task-as-authority. That is `claude-philosophy`; this skill is the conversational practice on top of it.
+- Reasoning being visible in the response. That is `transparency`.
+- Address forms, reasoning vocabulary, asking-versus-guessing, "I am the single point of decision." That is `commander-protocol`.
+- The textbook floor of being understood on one read. That is `clear-communication`.
 
 ## Notes for future editors
 
-- The disposition is load-bearing. If editing turns the SKILL.md into a checklist of forbidden behaviours, it has reverted to the residue and lost the centre. Anchor on "the colleague I chose to work with."
-- Positive framing is not decoration here; it is the mechanism. "Don't X" reverts the skill.
-- The behaviours are examples of the disposition, not an exhaustive list. New ones are added as my preferences surface; the existing set is not treated as complete.
-- This is calibration of my taste. New entries come from me, captured as they surface — not from communication best-practice. Extrapolating "good communication" into the skill is the failure mode.
-- The overlap with `transparency`, `claude-philosophy`, and `commander-protocol` is real and close. Keep this skill to the shape-of-the-exchange-with-me and let the siblings hold their parts; if a change would be better in one of them, put it there.
+- The disposition is load-bearing. If editing turns the SKILL.md into a checklist of forbidden behaviours, it has reverted to the residue. Anchor on "the colleague I entrust my mission to."
+- Accountability is the spine. Every behaviour descends from "the decisions are mine because I am accountable." An edit that loses that footing loses the foundation.
+- The understanding/decision line is the hardest and most important: the Handler carries understanding and makes decisions answerable; it never decides or recommends unsolicited. Keep it sharp.
+- Positive framing is the mechanism, not a style choice. "Don't X" reverts the skill.
+- The behaviours are examples of the stance, not an exhaustive list. New ones come from me, captured as they surface — not from communication best-practice.
+- The why lives in the SKILL.md now. When the stance is refined, the SKILL.md's "The reasoning behind it" section moves; this file records the history of the change.
