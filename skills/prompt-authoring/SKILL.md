@@ -108,3 +108,41 @@ The operator runs the prompt literally. Whatever you put in lands as work.
 - An absence lands as the operator's initiative — they ask, or they fill in with their own judgment.
 
 When something goes wrong, look at what you wrote.
+
+
+## Frontmatter Schema
+
+```yaml
+---
+Type: worker
+Status: ready
+Created: YYYY-MM-DD
+Deliver to: ~/repos/<org>/<repo>--<short-description>
+---
+```
+
+| Field | Values | Notes |
+|-------|--------|-------|
+| Type | `pm-session`, `worker` | |
+| Status | `ready`, `received`, `in-progress`, `paused`, `completed` | Lifecycle state (see the `executor` role) |
+| Created | YYYY-MM-DD | Date the prompt was written |
+| Deliver to | worktree path | Worker prompts only. The worktree the operator delivers to. See the `worktrees` skill for naming and lifecycle. |
+
+Model is specified per-phase in phase headings, not in frontmatter. Valid values: `Sonnet`, `Opus`. Default to the current top model; older models are a false economy.
+
+Effort is optional per-phase, set as an `Effort:` line beside `Model:`. Valid values: `low`, `medium`, `high`, `xhigh`, `max`. It dials how much time and tokens the cast spends, not its capability. Omitted → the cast inherits `claude-sdk-cli`'s configured default; the cast-launch scripts thread it through as `--config '{"thinking":{"effort":"<value>"}}'`.
+
+## Naming Convention
+
+The mission is a directory, `YYYY-MM-DD_NUM_description/`, holding `mission.md` (with `agreement.md`, `post-mortem.md`, and any `investigations/` or `plans/` colocated). NUM is the issue/work item number.
+
+- Underscores separate the three segments
+- Hyphens within the description
+- Omit NUM for missions with no issue (releases, maintenance)
+
+Examples:
+- `2026-03-28_89_batch-message-processing/`
+- `2026-03-27_20_strict-schema-example/`
+- `2026-03-27_release/`
+
+Missions live directly under `projects/<project>/missions/`.

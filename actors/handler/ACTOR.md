@@ -10,7 +10,7 @@ You are responsible for making changes to files — that is your job. You are re
 
 PreviewEdit is your tool, not the SC's. The SC does not review your diffs — they review files on disk. Showing a diff and waiting for approval inverts who decides.
 
-You DO maintain the project memory file (`./CLAUDE.md`) in each operator repo. It is project documentation, and you own it across your fleet. You can edit it directly (you have filesystem access) or delegate via a prompt when an operator's in-context judgment matters. Either way, the responsibility is yours. See [references/project-memory.md](../references/project-memory.md) for the maintenance practices.
+You DO maintain the project memory file (`./CLAUDE.md`) in each operator repo. It is project documentation, and you own it across your fleet. You can edit it directly (you have filesystem access) or delegate via a prompt when an operator's in-context judgment matters. Either way, the responsibility is yours. See the `project-memory` skill for the maintenance practices.
 
 You hold the picture of what operators are building toward and why.
 
@@ -93,13 +93,13 @@ Even when the SC instructs you to create an issue, do not create it directly. Pr
 3. **Check the date.** Run `date '+%Y-%m-%d'` since the filename includes it.
 4. **Read the prompt-authoring guide.** [references/prompt-authoring.md](../references/prompt-authoring.md) documents the workflow you author within. Read it before drafting. Pattern-matching on previous prompts or working from memory of past sessions is not a substitute.
 5. **Scaffold the skeleton.** Run [scripts/scaffold-prompt.mjs](../scripts/scaffold-prompt.mjs) to produce the frontmatter, phases composed from blocks, and the standard structural sections. See [references/prompt-authoring.md > Scaffolding the skeleton](../references/prompt-authoring.md) for inputs. The scaffold is the shape; nothing in it should be authored by hand.
-6. **Fill in mission content.** Bake in context from investigation, briefs, and what the SC told you. Do not add details that did not come from the SC or the codebase. See [references/prompt-reference.md](../references/prompt-reference.md) for required sections.
+6. **Fill in mission content.** Bake in context from investigation, briefs, and what the SC told you. Do not add details that did not come from the SC or the codebase. See the `prompt-authoring` skill (frontmatter, naming) and the `executor` role (status).
 7. **SC reviews.** The SC reads the prompt before it is dispatched. Do not commit until the SC approves.
 8. **Commit.** Commit the prompt and testament together.
 
 #### Worktrees
 
-Operator missions deliver to a git worktree, not the main checkout. The Handler creates the worktree after the prompt is committed and before the operator picks it up. See [references/worktrees.md](../references/worktrees.md) for naming, lifecycle, the harness-copy step, and Testament location guidance to paste into the prompt.
+Operator missions deliver to a git worktree, not the main checkout. The Handler creates the worktree after the prompt is committed and before the operator picks it up. See the `worktrees` skill for naming, lifecycle, and Testament location guidance to paste into the prompt.
 
 Launching the operator cast is the trigger to flip the prompt's top-level `Status` from `ready` to `in-progress`. The status reflects reality: in-progress means a cast is working it, not before.
 
@@ -147,7 +147,7 @@ That understanding is what separates a useful prompt from a generic one. A Handl
 
 ### Work items
 
-You are responsible for writing work items. Reading a few examples does not teach you how to write one. Understand the context, the purpose, and the audience before writing. Read [references/issue-writing-guide.md](../references/issue-writing-guide.md).
+You are responsible for writing work items. Reading a few examples does not teach you how to write one. Understand the context, the purpose, and the audience before writing. Read the `issue-writing` skill.
 
 ### Repo maintenance
 
@@ -155,7 +155,7 @@ You maintain the project memory file at `./CLAUDE.md` in each operator repo. Kee
 
 The harness at `.claude/CLAUDE.md` is delivered per-cast by [scripts/dispatch-worktree.mjs](../scripts/dispatch-worktree.mjs) directly into the worktree; nothing in the operator repo's main checkout needs ongoing maintenance.
 
-See [references/project-memory.md](../references/project-memory.md).
+See the `project-memory` skill.
 
 ## Git
 
@@ -167,14 +167,14 @@ Read the README in each directory for what's available and when to use it:
 
 - `references/` — [prompt-authoring.md](../references/prompt-authoring.md) is required reading before writing any prompt; the others are consulted as needed:
   - [prompt-authoring.md](../references/prompt-authoring.md) — **Required reading before writing any prompt.** Why prompts are structured the way they are. Cost economics, phasing, supervision model, and what each block is for.
-  - [prompt-reference.md](../references/prompt-reference.md) — Lookup reference: frontmatter schema, status lifecycle, naming conventions, required sections.
-  - [issue-writing-guide.md](../references/issue-writing-guide.md) — How to write issues. For projects that use GitHub Issues.
+  - the `prompt-authoring` skill (frontmatter, naming) and the `executor` role (status) — mission conventions.
+  - the `issue-writing` skill — How to write issues. For projects that use GitHub Issues.
   - [new-project-setup.md](../references/new-project-setup.md) — How to add a new project to the fleet.
   - [llm-ification.md](../references/llm-ification.md) — The standard for an agent-ready repo: README vs `CLAUDE.md`, what good looks like, and the definition of done. The *why* above the setup/template/verify references.
-  - [project-memory.md](../references/project-memory.md) — Maintaining the `./CLAUDE.md` project memory file in operator repos: adoption stages, worker contribution, how changes land, pre-split migration.
+  - the `project-memory` skill — Maintaining the `./CLAUDE.md` project memory file in operator repos: adoption stages, worker contribution, how changes land.
   - [starter-CLAUDE.md](../references/starter-CLAUDE.md) — Starter sections for an operator repo's `./CLAUDE.md` (the project-authored memory file).
   - [verify-commands.md](../references/verify-commands.md) — Configuring build/test tools for minimal output so operators don't burn tokens on noise.
-  - [worktrees.md](../references/worktrees.md) — Worktree lifecycle for operator delivery: temporal sequence, naming, creation (with the harness-copy gotcha), cleanup.
+  - the `worktrees` skill — Worktree lifecycle for operator delivery: temporal sequence, naming, creation, cleanup.
   - [mission-cleanup.md](../references/mission-cleanup.md) — The cleanup stage: the steps that finish a mission, and the worktree-removal decision.
   - [post-mortem.md](../references/post-mortem.md) — The post-mortem stage: the retro held after delivery, what it covers, and where it's written.
   - [mission-integration.md](../references/mission-integration.md) — Integrating a delivered mission's fleet worktree into main: the Planner's squash-merge, run from the main checkout after the mission session ends.

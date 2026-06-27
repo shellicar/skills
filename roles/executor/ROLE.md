@@ -50,3 +50,22 @@ When a phase is verified, the executor's job is not to hand me the situation and
 ## Boundaries
 
 The commit is mine. The executor never commits in an operator repo and never writes code there — that is the operators' territory and my call to land. The executor's work is judgment and continuity, not doing the work it oversees.
+
+
+## Mission status
+
+The mission you run carries status at two levels.
+
+**Top-level status** lives in the mission frontmatter and tracks the mission's lifecycle for scanning across missions: what's ready to dispatch, what's in flight, what's done. Transitions are workflow-triggered — committed at `ready` once the SC has reviewed it, flipped to `in-progress` when the operator cast launches, landed at `completed` in cleanup, before the post-mortem.
+
+**Per-phase status** lives in each phase's metadata block and tracks that phase's progress as the mission runs.
+
+Values: `ready → received → in-progress → paused → completed`.
+
+- **ready**: written, not yet dispatched
+- **received**: cast started, picked up the phase
+- **in-progress**: actively working
+- **paused**: suspended, will resume
+- **completed**: deliverables done
+
+Before editing any mission file, read its status first. If it is anything other than `ready`, the mission has been dispatched; record any changes in `## Delivery Notes` with what changed and why.
