@@ -136,9 +136,7 @@ Message (Handler-authored portion):
 ~~~
 You are the Phase <N> Supervisor.
 
-First, load your `~/.claude/CLAUDE.md` and the foundational skills it names. Then read:
-
-- ~/repos/shellicar/skills/actors/supervisor/ACTOR.md
+First, load your `~/.claude/CLAUDE.md` and the foundational skills it names. Your supervisor role is already composed into this cast's system prompt.
 
 The mission file the operator worked from is in `<mission>`.
 
