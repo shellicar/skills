@@ -256,10 +256,10 @@ export function buildSystem({ actor, role }) {
     }
   };
   const parts = [];
-  if (actor) parts.push(load('actors', actor, 'ACTOR.md'));
+  if (actor) parts.push(`<actor name="${actor}">\n${load('actors', actor, 'ACTOR.md')}\n</actor>`);
   const roles = Array.isArray(role) ? role : role ? [role] : [];
-  for (const r of roles) parts.push(load('roles', r, 'ROLE.md'));
-  return parts.join('\n\n');
+  for (const r of roles) parts.push(`<role name="${r}">\n${load('roles', r, 'ROLE.md')}\n</role>`);
+  return parts.join('\n');
 }
 
 /**
