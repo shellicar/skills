@@ -144,7 +144,7 @@ function sleep(ms) {
  *   skills       — array of skill names, emitted as <skills> (required)
  *   effort       — optional thinking effort (low|medium|high|xhigh|max); omitted leaves the CLI default
  */
-export function ensureCast({ pm, from, role, state, splitTarget, splitDir, cwd, model, missionFile, name, message, skills, effort }) {
+export function ensureCast({ pm, from, role, state, splitTarget, splitDir, cwd, model, missionFile, name, message, skills, effort, castRole }) {
   const existing = findPaneByRole(pm, role);
 
   if (existing) {
@@ -154,7 +154,7 @@ export function ensureCast({ pm, from, role, state, splitTarget, splitDir, cwd, 
       return { paneId: existing, action: 'already-running' };
     }
     console.error(`reusing existing ${role} pane ${existing} (no CLI running).`);
-    const launchResult = launchCli(existing, { from, model, missionFile, name, message, skills, effort });
+    const launchResult = launchCli(existing, { from, model, missionFile, name, message, skills, effort, actor: role, castRole });
     return { paneId: existing, action: 'relaunched', launchResult };
   }
 
@@ -170,7 +170,7 @@ export function ensureCast({ pm, from, role, state, splitTarget, splitDir, cwd, 
     'set-option', '-w', '-t', paneId, '@state', state,
   ]);
 
-  const launchResult = launchCli(paneId, { from, model, missionFile, name, message, skills, effort });
+  const launchResult = launchCli(paneId, { from, model, missionFile, name, message, skills, effort, actor: role, castRole });
   return { paneId, action: 'created', launchResult };
 }
 
@@ -237,6 +237,31 @@ export function buildPrompt({ from, message, skills, missionPath }) {
 }
 
 /**
+ * Read the actor + role files and build the --system content. Symmetric with
+ * buildPrompt: callers pass names, this loads from ~/.claude/{actors,roles}/ and
+ * hard-fails (exit 2) if a named file is missing. actor is required in practice;
+ * role is optional (a supervisor cast has an actor and no sub-role). The
+ * mechanism — read-and-embed now, perhaps `--system @path` later — is private to
+ * this script; callers only ever pass the names.
+ */
+export function buildSystem({ actor, role }) {
+  const base = join(homedir(), '.claude');
+  const load = (kind, name, file) => {
+    const p = join(base, kind, name, file);
+    try {
+      return readFileSync(p, 'utf8');
+    } catch {
+      console.error(`system file not found: ${p}`);
+      process.exit(2);
+    }
+  };
+  const parts = [];
+  if (actor) parts.push(load('actors', actor, 'ACTOR.md'));
+  if (role) parts.push(load('roles', role, 'ROLE.md'));
+  return parts.join('\n\n');
+}
+
+/**
  * Remove the temp prompt directory after a launch — but only when the launch
  * verified. The shell's `cat` reads the prompt before claude-sdk-cli starts, so
  * once waitForClaudeSdkCli reports ok the file has been consumed and is safe to
@@ -253,7 +278,7 @@ export function cleanupPrompt(tmpDir, promptPath, launchResult) {
   }
 }
 
-function launchCli(paneId, { from, model, missionFile, name, message, skills, effort }) {
+function launchCli(paneId, { from, model, missionFile, name, message, skills, effort, actor, castRole }) {
   // Build the combined prompt and write to a temp file; shell substitution
   // captures it for --prompt. The mission rides inside the prompt as a
   // <mission> path element, not a --file attachment. The temp file is removed
@@ -265,7 +290,12 @@ function launchCli(paneId, { from, model, missionFile, name, message, skills, ef
   const promptPath = join(tmp, 'prompt');
   writeFileSync(promptPath, prompt);
 
-  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(model)}${effortFlag(effort)} --prompt "$(cat ${shq(promptPath)})" --no-resume`;
+  const system = buildSystem({ actor, role: castRole });
+  const systemPath = join(tmp, 'system');
+  writeFileSync(systemPath, system);
+  const systemFlag = system ? ` --system "$(cat ${shq(systemPath)})"` : '';
+
+  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(model)}${effortFlag(effort)}${systemFlag} --prompt "$(cat ${shq(promptPath)})" --no-resume`;
 
   execFileSync('tmux', ['send-keys', '-t', paneId, launch, 'Enter']);
 

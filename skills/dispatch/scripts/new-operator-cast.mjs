@@ -26,6 +26,7 @@
  *     "model": "claude-sonnet-4-6",
  *     "missionFile": "/path/to/mission.md",
  *     "name": "Maker",
+ *     "castRole": "maker",            // operator phase role → roles/<castRole>/ROLE.md
  *     "from": "the claude-cli-cve-fix Handler",
  *     "message": "Phase 1, iteration 1. ...",
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
@@ -73,6 +74,7 @@ const { paneId, launchResult } = ensureCast({
   message: cfg.message,
   skills: cfg.skills,
   effort: cfg.effort,
+  castRole: cfg.castRole,
 });
 
 if (launchResult && !launchResult.ok) {

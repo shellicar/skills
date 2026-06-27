@@ -23,6 +23,7 @@
  *     "model": "claude-sonnet-4-6",
  *     "missionFile": "/path/to/mission.md",
  *     "name": "Builder",             // for --name flag; supervisor casts use "supervisor"
+ *     "castRole": "builder",          // operator phase role → roles/<castRole>/ROLE.md; omit for supervisor
  *     "from": "the claude-cli-cve-fix Handler",
  *     "message": "Phase 2, iteration 1. ...",
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
@@ -43,7 +44,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { waitForClaudeSdkCli, buildPrompt, effortFlag, cleanupPrompt } from './pane.mjs';
+import { waitForClaudeSdkCli, buildPrompt, buildSystem, effortFlag, cleanupPrompt } from './pane.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -74,7 +75,12 @@ const tmp = mkdtempSync(join(tmpdir(), 'router-prompt-'));
 const promptPath = join(tmp, 'prompt');
 writeFileSync(promptPath, prompt);
 
-const launch = `claude-sdk-cli --name ${shq(cfg.name)} --model ${shq(cfg.model)}${effortFlag(cfg.effort)} --prompt "$(cat ${shq(promptPath)})" --no-resume`;
+const system = buildSystem({ actor: cfg.role, role: cfg.castRole });
+const systemPath = join(tmp, 'system');
+writeFileSync(systemPath, system);
+const systemFlag = system ? ` --system "$(cat ${shq(systemPath)})"` : '';
+
+const launch = `claude-sdk-cli --name ${shq(cfg.name)} --model ${shq(cfg.model)}${effortFlag(cfg.effort)}${systemFlag} --prompt "$(cat ${shq(promptPath)})" --no-resume`;
 
 // Defensive Ctrl-C in case a CLI is still running. If the pane is already
 // at the shell prompt this is a no-op (^C with no foreground job).
