@@ -78,7 +78,7 @@ import { readFileSync, writeFileSync, mkdtempSync } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
 import { tmpdir, homedir } from "node:os";
 import { join } from "node:path";
-import { buildPrompt, waitForClaudeSdkCli } from "./pane.mjs";
+import { buildPrompt, buildSystem, waitForClaudeSdkCli } from "./pane.mjs";
 
 function expandPath(p) {
   if (typeof p !== "string") return p;
@@ -123,9 +123,18 @@ const prompt = buildPrompt({ from: cfg.from || "the Planner", message: cfg.envel
 const tmp = join(mkdtempSync(join(tmpdir(), "handler-prompt-")), "prompt");
 writeFileSync(tmp, prompt);
 
+// Compose the handler's identity into --system: the handler actor plus all its
+// roles. We load every role because there is no dynamic role switching yet —
+// the handler moves RA -> scribe -> executor -> router within one session, so
+// all must be present at launch. (requirements-analyst has no ROLE.md yet.)
+const system = buildSystem({ actor: "handler", role: ["scribe", "executor", "router"] });
+const sysTmp = join(mkdtempSync(join(tmpdir(), "handler-system-")), "system");
+writeFileSync(sysTmp, system);
+
 const launch =
   `claude-sdk-cli --name ${shq(cfg.name)} ` +
   `--model ${shq(model)} --resume ${shq(cfg.convId)} ` +
+  `--system "$(cat ${shq(sysTmp)}; rm -f ${shq(sysTmp)})" ` +
   `--prompt "$(cat ${shq(tmp)}; rm -f ${shq(tmp)})"`;
 
 execFileSync("tmux", ["send-keys", "-t", paneId, launch, "Enter"]);

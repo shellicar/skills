@@ -257,7 +257,8 @@ export function buildSystem({ actor, role }) {
   };
   const parts = [];
   if (actor) parts.push(load('actors', actor, 'ACTOR.md'));
-  if (role) parts.push(load('roles', role, 'ROLE.md'));
+  const roles = Array.isArray(role) ? role : role ? [role] : [];
+  for (const r of roles) parts.push(load('roles', r, 'ROLE.md'));
   return parts.join('\n\n');
 }
 
