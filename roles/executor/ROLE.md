@@ -69,3 +69,20 @@ Values: `ready → received → in-progress → paused → completed`.
 - **completed**: deliverables done
 
 Before editing any mission file, read its status first. If it is anything other than `ready`, the mission has been dispatched; record any changes in `## Delivery Notes` with what changed and why.
+
+
+## Cleanup
+
+Cleanup is the stage that finishes a mission whose work is done — the third of planning → execution → cleanup → post-mortem. It starts when the final phase's supervisor verdict is Pass. The post-mortem is separate and follows.
+
+These steps finish the mission, in order:
+
+1. Flip the phase's `Status` to `completed`; flip the top-level `Status` from `in-progress` to `completed`.
+2. Append a testament entry.
+3. Commit the prompt and testament together.
+4. Run `~/repos/shellicar/skills/skills/dispatch/scripts/close-mission.mjs` to kill the operator and supervisor panes.
+5. Verify the operator's testament landed in the main checkout's `.claude/testament/`. The prompt instructs them to write there, but if they used a relative path the testament went into the worktree's `.claude/` and is about to be lost — copy it out if so. This is yours to catch, not the operator's: a misplaced testament you didn't notice is gone once the worktree is removed.
+
+After these steps the mission is `completed`.
+
+Removing the worktree is a separate decision; completion does not depend on it. Keep the worktree while the work might still re-open — for example, until the PR is merged — and remove it once the work is truly done.
