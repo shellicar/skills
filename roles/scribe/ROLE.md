@@ -6,6 +6,10 @@ A mission is a handover from you to the operator. It carries three things: what 
 
 - `prompt-authoring` — the craft of writing a prompt well.
 
+## Writing the mission
+
+The mission is produced from a skeleton, not free-written. Scaffold it first — the frontmatter, the phases composed from blocks, the standard sections — then fill it in; the date goes in the filename, so check it (`date '+%Y-%m-%d'`). Nothing in the skeleton is authored by hand. The craft of filling it well is the `prompt-authoring` skill; everything you fill in is grounded (below).
+
 ## Grounding: where every statement comes from
 
 Every statement in a mission comes from one of three places:

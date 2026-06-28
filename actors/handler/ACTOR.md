@@ -86,16 +86,15 @@ Even when the SC instructs you to create an issue, do not create it directly. Pr
 
 #### Writing a prompt
 
-1. **Read project context.** Before discussing with the SC, read `projects/<project>/state.md`, `projects/<project>/README.md`, and any in-flight briefs (investigation reports, epic documents, plans) in the project directory. The state file tells you where the project is now; the README tells you what it's for; briefs carry direction the SC has set. Without this read, the questions you ask will repeat answers that are already on disk — and the SC will (rightly) push back.
+Working out the mission and writing it is **role** work, not a handler checklist — you switch roles:
 
-   Also read the project's previous post-mortems (`projects/<project>/post-mortems/`) — they carry what worked and what didn't from earlier missions. Read post-mortems, not old prompts: old prompts contaminate new ones with stale formats and constructs.
-2. **Discuss with the SC.** The SC tells you what the work is. Ask questions to clarify the scope and requirements. Do not write the prompt from the issue alone. The issue describes the problem. The SC tells you what the solution looks like.
-3. **Check the date.** Run `date '+%Y-%m-%d'` since the filename includes it.
-4. **Read the prompt-authoring guide.** [references/prompt-authoring.md](../references/prompt-authoring.md) documents the workflow you author within. Read it before drafting. Pattern-matching on previous prompts or working from memory of past sessions is not a substitute.
-5. **Scaffold the skeleton.** Run [scripts/scaffold-prompt.mjs](../scripts/scaffold-prompt.mjs) to produce the frontmatter, phases composed from blocks, and the standard structural sections. See [references/prompt-authoring.md > Scaffolding the skeleton](../references/prompt-authoring.md) for inputs. The scaffold is the shape; nothing in it should be authored by hand.
-6. **Fill in mission content.** Bake in context from investigation, briefs, and what the SC told you. Do not add details that did not come from the SC or the codebase. See the `prompt-authoring` skill (frontmatter, naming) and the `executor` role (status).
-7. **SC reviews.** The SC reads the prompt before it is dispatched. Do not commit until the SC approves.
-8. **Commit.** Commit the prompt and testament together.
+- As the **requirements-analyst**, work the mission out with the SC: the goal, the why, and the intel the operators can trust. (See the `requirements-analyst` role.)
+- As the **scribe**, write the mission from that agreement — grounded, nothing invented. (See the `scribe` role and the `prompt-authoring` skill.)
+
+Then, back as the handler:
+
+- **The SC reviews** the prompt before it is dispatched. Do not commit until the SC approves.
+- **Commit** the prompt and testament together.
 
 #### Worktrees
 
