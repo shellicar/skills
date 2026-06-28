@@ -59,3 +59,27 @@ Using Claude to write as Stephen is only worthwhile if the result meets the bar 
 - New voice preferences come from Stephen noticing something, not from inference. Do not add preferences that sound plausible but have not been observed.
 - This skill will grow over time as more patterns surface. A thin and accurate skill is better than a padded one.
 - The em-dash rule is an example, not the point. The point is register fidelity — output that reads as Stephen's, not Claude's.
+
+
+## 2026-06-28 rework: feeding the voice layer
+
+For months this skill was a stub: the em-dash rule and the word "direct." The thinness did not show until a claude-cli documentation mission, where a fresh handler, told only to be "direct," produced blunt slogans ("the bet is X over Y", "anemic by design", "the thesis is simple") and transcribed the SC's spoken reasoning straight into a README. Both are voice failures, and both trace to the empty layer: an adjective gets interpreted into a caricature, and with no examples to match, conversation becomes the thing copied.
+
+### Decisions
+
+- **Encode the voice by examples and contrasts, not adjectives.** Real samples of Stephen's writing to match, and tells of drift drawn from the actual failures. This is the operative form, and it now lives in the SKILL.
+- **The operative why moved into the SKILL.** Per the 2026-06-26 migration (sc-commit-writing, collaborative-conversation), the reasoning that shapes the writing sits next to the rule, where it loads. This file keeps the history.
+- **Added `sc-doc-writing`** as the README-shape child, the same split as the other format skills. The doc case was the primary case only because it gave the empty voice layer enough room to fail visibly; the lesson is the voice layer's, not documentation's.
+- **Kept the voice/format split; did not recombine.** The worry that it was "split too quickly" traced to the umbrella being starved while the children were built out, not to the split itself. The answer is to feed the umbrella.
+- **Say what you are trying to communicate.** Added after Claude repeatedly read "plain, down-to-earth" as "dumb it down." The plain instruction (work out what you mean, then say that, nothing dressed up or cut) replaced an earlier abstract framing ("the register, not the depth") that the SC found unclear: it was itself too abstract about being plain, which was the point. His words, and a demonstration of them.
+- **The writer owns whether the reader understands.** The disposition under the whole voice: communicating well is humbling yourself and meeting the reader in their frame (Stephen's framing, with the sheep-to-shepherds example). It is in the SKILL as the governing stance. The universal form of it belongs in `clear-communication`, as the disposition under "understood on one read," and is left for the SC to place there rather than edited into his foundational skill unprompted.
+
+### What was rejected
+
+- **The first rebuild drafts.** They stacked prohibitions ("never transcribe", "do not perform directness", "what never appears"), the negative framing `claude-philosophy` says fails by construction; put the operative why in this file instead of the SKILL; and addressed Claude in a detached third person. Rebuilt to the genre: positive, why in the SKILL, Claude-addressed, examples as the target.
+- **Recombining the sc- writing family.** The split is sound; the umbrella was empty, which is a different problem.
+
+
+## Where exemplars come from (added 2026-06-28)
+
+The homogenisation point above has a sharp practical edge for this skill. The natural instinct is to point at recent output as the model: "read the recent commits to see how Stephen writes." But most recent commits are now authored by Claude. Sampling them to learn his voice reads Claude's output back as his, and a year on it is Claude learning from Claude, the loop closing on itself. Exemplars must come from sources known to be his (his older hand-authored READMEs), not from the accumulating output the skill exists to correct.
