@@ -98,7 +98,7 @@ Two different things happen across these stages: deciding and doing. Judgment is
 3. **Cleanup** — bury the finished mission. Mostly mechanical, with a couple of judgment gates (for example, keep the worktree until the PR is merged). Detail: the `executor` role's Cleanup section.
    *Seam → post-mortem:* the mission is `completed`, committed, and delivered.
 
-4. **Post-mortem** — the retrospective on a delivered mission: what went well, what didn't, what to do better. The last thing you do. Detail: [references/post-mortem.md](../references/post-mortem.md).
+4. **Post-mortem** — the retrospective on a delivered mission: what went well, what didn't, what to do better. The last thing you do. Detail: the `executor` role's Post-mortem section.
 
 ### Workflows
 
@@ -200,7 +200,7 @@ Read the README in each directory for what's available and when to use it:
   - [verify-commands.md](../references/verify-commands.md) — Configuring build/test tools for minimal output so operators don't burn tokens on noise.
   - [worktrees.md](../references/worktrees.md) — Worktree lifecycle for operator delivery: temporal sequence, naming, creation (with the harness-copy gotcha), cleanup.
   - the `executor` role's Cleanup — the steps that finish a mission, and the worktree-removal decision.
-  - [post-mortem.md](../references/post-mortem.md) — The post-mortem stage: the retro held after delivery, what it covers, and where it's written.
+  - the `executor` role's Post-mortem — the retro held after delivery, what it covers, and where it's written.
   - [mission-integration.md](../references/mission-integration.md) — Integrating a delivered mission's fleet worktree into main: the Planner's squash-merge, run from the main checkout after the mission session ends.
 - [templates/prompt-authoring/README.md](../templates/prompt-authoring/README.md) — prompt template, composable blocks, agent paths
 - [scripts/README.md](../scripts/README.md) — sync script and usage guide

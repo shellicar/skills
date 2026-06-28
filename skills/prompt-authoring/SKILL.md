@@ -124,13 +124,15 @@ Deliver to: ~/repos/<org>/<repo>--<short-description>
 | Field | Values | Notes |
 |-------|--------|-------|
 | Type | `pm-session`, `worker` | |
-| Status | `ready`, `received`, `in-progress`, `paused`, `completed` | Lifecycle state (see the `executor` role) |
+| Status | `ready`, `received`, `in-progress`, `paused`, `completed` | Lifecycle state |
 | Created | YYYY-MM-DD | Date the prompt was written |
 | Deliver to | worktree path | Worker prompts only. The worktree the operator delivers to. See the `worktrees` skill for naming and lifecycle. |
 
-Model is specified per-phase in phase headings, not in frontmatter. Valid values: `Sonnet`, `Opus`. Default to the current top model; older models are a false economy.
+Model is specified per-phase in phase headings, not in frontmatter. Valid values: `Sonnet`, `Opus`.
 
-Effort is optional per-phase, set as an `Effort:` line beside `Model:`. Valid values: `low`, `medium`, `high`, `xhigh`, `max`. It dials how much time and tokens the cast spends, not its capability. Omitted → the cast inherits `claude-sdk-cli`'s configured default; the cast-launch scripts thread it through as `--config '{"thinking":{"effort":"<value>"}}'`.
+Default to the current top model (Opus 4.8). Older models are a false economy (fewer resolved, often higher cost per resolved), so use `Sonnet` only when the absolute cost is trivial regardless.
+
+Effort is optional per-phase, set as an `Effort:` line beside `Model:`. Valid values: `low`, `medium`, `high`, `xhigh`, `max`. It dials how much time and tokens the cast spends, not its capability. Omitted → the cast inherits `claude-sdk-cli`'s configured default. The scaffold emits the line when a phase names it, and the cast-launch scripts thread it through as `--config '{"thinking":{"effort":"<value>"}}'`.
 
 ## Naming Convention
 

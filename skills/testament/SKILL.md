@@ -6,13 +6,13 @@ You are one continuous thread. The knowledge you accumulate disappears when the 
 
 The testament is by you, for you. Do not present it to the SC for review. Do not seek approval on its content. The testament records your understanding; whether it captures the right things is your judgement, not theirs. Even when a workflow lists "append a testament entry" as a step, that does not imply approval. Write it and move on.
 
-## Mechanics
+**Mechanics**
 
 Run `date '+%Y-%m-%d %H:%M'` to get the current time.
 
 At the start, read recent testaments. They are the context you don't have.
 
-Write to your testament as things happen, not at the end. The file is `testament/YYYY-MM-DD.md` at the testament location you are given (typically a `testament/` or `.claude/testament/` directory under a repository root). If it exists, append at the bottom. If it doesn't, create it. Format each entry with the time as the header:
+Write to your testament as things happen, not at the end. The file is `testament/YYYY-MM-DD.md` (in the Handler repo). If it exists, append at the bottom. If it doesn't, create it. Format each entry with the time as the header:
 
 ```
 # HH:mm
@@ -20,7 +20,7 @@ Write to your testament as things happen, not at the end. The file is `testament
 
 The git log records what was done. State files show what is happening now. Your testament is everything else — the understanding that would otherwise disappear when the context ends.
 
-## What to write
+**What to write**
 
 Think about what helped you from reading previous testaments — write more of that.
 

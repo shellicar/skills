@@ -52,28 +52,44 @@ When a phase is verified, the executor's job is not to hand me the situation and
 The commit is mine. The executor never commits in an operator repo and never writes code there — that is the operators' territory and my call to land. The executor's work is judgment and continuity, not doing the work it oversees.
 
 
-## Mission status
+## Status
 
-The mission you run carries status at two levels.
+Status exists at two levels, each owned by a different party.
 
-**Top-level status** lives in the mission frontmatter and tracks the mission's lifecycle for scanning across missions: what's ready to dispatch, what's in flight, what's done. Transitions are workflow-triggered — committed at `ready` once the SC has reviewed it, flipped to `in-progress` when the operator cast launches, landed at `completed` in cleanup, before the post-mortem.
+**Top-level status is the Handler's.** It lives in the frontmatter and tracks the prompt's lifecycle for scanning across prompts: what's ready to dispatch, what's in flight, what's done. Transitions are workflow-triggered: the prompt is committed at `ready` once the SC has reviewed it, flipped to `in-progress` when the operator cast launches, and landed at `completed` in cleanup, before the post-mortem.
 
-**Per-phase status** lives in each phase's metadata block and tracks that phase's progress as the mission runs.
+**Per-phase status is the operator's.** Each phase has its own status in its metadata block, and the operator running that phase updates only their phase's status as they work it:
 
-Values: `ready → received → in-progress → paused → completed`.
+```
+# Phase 1
 
-- **ready**: written, not yet dispatched
-- **received**: cast started, picked up the phase
-- **in-progress**: actively working
-- **paused**: suspended, will resume
-- **completed**: deliverables done
+Role: Maker
+Model: Sonnet
+Status: completed
+```
 
-Before editing any mission file, read its status first. If it is anything other than `ready`, the mission has been dispatched; record any changes in `## Delivery Notes` with what changed and why.
+The two levels do not need a tie-breaker because they are not parallel records of the same thing. The Handler should only touch a phase's status as a fixup when an operator didn't update it correctly.
+
+### Status values
+
+`ready -> received -> in-progress -> paused -> completed`
+
+- **ready**: Written, not yet dispatched
+- **received**: Consumer session started, picked up the prompt
+- **in-progress**: Actively working
+- **paused**: Work suspended, will resume
+- **completed**: Deliverables done
+
+Before editing any prompt file, read its status first. If the status is anything other than `ready`, the prompt has been dispatched. Any changes you make after dispatch must be recorded in the `## Delivery Notes` section with what changed and why.
 
 
-## Cleanup
+## Mission cleanup
 
-Cleanup is the stage that finishes a mission whose work is done — the third of planning → execution → cleanup → post-mortem. It starts when the final phase's supervisor verdict is Pass. The post-mortem is separate and follows.
+Cleanup is the third stage of a mission: planning → execution → cleanup → post-mortem. It finishes a mission whose work is done. The post-mortem is a separate, later stage and does not happen here.
+
+Cleanup starts when the final phase's supervisor verdict is Pass.
+
+### Completing the mission
 
 These steps finish the mission, in order:
 
@@ -81,8 +97,66 @@ These steps finish the mission, in order:
 2. Append a testament entry.
 3. Commit the prompt and testament together.
 4. Run `~/repos/shellicar/skills/skills/dispatch/scripts/close-mission.mjs` to kill the operator and supervisor panes.
-5. Verify the operator's testament landed in the main checkout's `.claude/testament/`. The prompt instructs them to write there, but if they used a relative path the testament went into the worktree's `.claude/` and is about to be lost — copy it out if so. This is yours to catch, not the operator's: a misplaced testament you didn't notice is gone once the worktree is removed.
+5. Verify the operator's testament landed in the main checkout's `.claude/testament/`. The prompt instructs them to write there, but if they used a relative path the testament went into the worktree's `.claude/` and is about to be lost. Copy it out if so. This is the Handler's responsibility, not the operator's: a misplaced testament you didn't catch is gone once the worktree is removed.
 
 After these steps the mission is `completed`.
 
-Removing the worktree is a separate decision; completion does not depend on it. Keep the worktree while the work might still re-open — for example, until the PR is merged — and remove it once the work is truly done.
+### Removing the worktree
+
+Removing the worktree is a separate decision, and the mission's completion does not depend on it. Keep the worktree while the work might still need to re-open — for example, until the PR is merged. Remove it once the work is truly done. A `completed` mission can sit with its worktree still in place.
+
+Once cleanup is finished, the post-mortem follows. See the `executor` role's Post-mortem section.
+
+
+## Post-mortem
+
+The post-mortem is the fourth and final stage of a mission: planning → execution → cleanup → post-mortem. It is the retrospective held after the mission is delivered — the last thing you do. Cleanup has already finished the mission; the post-mortem looks back on it.
+
+Do not run it during cleanup, and do not reorder the two. See the `executor` role's Cleanup for the stage that precedes this one.
+
+### Starting it
+
+Set the window's `@state` to `post-mortem-pending`. Present the reference material to the SC: the operator's testament, the delivery notes, and the diff. Do not start the conversation. The SC drives when they have time.
+
+### What it is
+
+A conversation, like a retro. It has two distinct phases — keep them separate.
+
+#### Phase 1: Discussion
+
+Both parties talk through three questions:
+
+- What went well?
+- What didn't go well?
+- What can we do better?
+
+This phase is **identification only**. No solutions. The subject is always "we" — "we can do better at X" — not "I failed at Y" or "X was broken." Attaching a solution to an identification either dismisses the problem before it is understood, or assigns ownership before the discussion is done.
+
+Neither walks in with conclusions; they emerge from the conversation. The SC was there and brings memory of the mission's arc; you bring the operator's testament, the delivery notes, and the diff.
+
+#### Phase 2: What we're doing about it
+
+Only after Phase 1 is complete and the identifications are settled.
+
+The outcomes are not necessarily "action items." A response can be:
+
+- A concrete change to a specific artifact.
+- Something already in progress, acknowledged.
+- Something to monitor: if it recurs, then decide.
+- Something that needs a design discussion before anything is written.
+
+When an outcome is a concrete change, it must be specific enough for another session to execute with judgment — file path, which section, what the change is and why. "Change the X block" is not enough; the path and the substance must be there.
+
+The section heading is **"What we're doing about it"** rather than "Action items" — the broader label fits the full range of outcomes.
+
+Writing the post-mortem before having the conversation produces hollow confidence: phrases that sound analytical but aren't grounded in anything that happened.
+
+### Where it is written
+
+Each post-mortem is its own standalone file in the project's `post-mortems/` directory — for example, `projects/claude-cli/post-mortems/2026-06-09_239-streaming-tool-input.md`. Standalone by design: it should read without the mission, so the lessons aren't coloured by the prompt that produced them.
+
+Cover the mission in a line or two, then what went well, what didn't, and what we'll change. Record the root cause if there is one.
+
+Fleet-wide changes — to `ROLE.md`, agent files, blocks, the harness, skills — also go into the fleet `CLAUDE.md` ([../CLAUDE.md](../CLAUDE.md)), which carries the open work forward into the next session so it survives across post-mortems.
+
+The reasoning behind the timing is in [../.claude/PHILOSOPHY.md](../.claude/PHILOSOPHY.md) ("Post-mortem timing").
