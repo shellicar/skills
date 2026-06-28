@@ -2,7 +2,7 @@
 
 **Skill** — maintaining the project-authored `./CLAUDE.md` memory file in operator repos.
 
-The `./CLAUDE.md` file in each operator repo is the project-authored memory: what the repo is, how it's built, what conventions apply, what's currently in flight. It is tracked in git, separate from the harness at `.claude/CLAUDE.md` (which arrives ephemerally per cast — see the `worktrees` skill).
+The `./CLAUDE.md` file in each operator repo is the project-authored memory: what the repo is, how it's built, what conventions apply, what's currently in flight. It is tracked in git, separate from the actor and role identity, which arrives ephemerally per cast via `--system`.
 
 You own `./CLAUDE.md` across your fleet. See [starter-CLAUDE.md](starter-CLAUDE.md) for the section structure.
 
@@ -43,7 +43,7 @@ There's no formula. You know your repos.
 
 ## Adoption stages
 
-Each operator repo has an adoption stage that determines what `.claude/` content is tracked by git. The harness file itself is never tracked (it is delivered per-cast by [dispatch-worktree.mjs](../scripts/dispatch-worktree.mjs)); the stage controls whether testaments persist across casts.
+Each operator repo has an adoption stage that determines what `.claude/` content is tracked by git. The harness file itself is never tracked (the operator's actor and role arrive per cast via `--system`); the stage controls whether testaments persist across casts.
 
 | Stage | Tracked under `.claude/` | Testaments |
 |-------|--------------------------|------------|

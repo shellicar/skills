@@ -24,9 +24,9 @@ The temporal order matters. Each step happens before the next.
 1. **Draft the prompt.** Set `Deliver to:` to a path that does not yet exist. The prompt is the source of truth for what the worktree will be called.
 2. **Review with the SC.** The path may change as scope changes. Renaming a string in a draft costs nothing.
 3. **Commit the prompt.** Only after commit is the path stable.
-4. **Create the worktree.** Run [scripts/dispatch-worktree.mjs](../scripts/dispatch-worktree.mjs) (see "Creating", below). It syncs the harness, creates the branch, and copies `.claude/` together — they are one concern, not multiple.
+4. **Create the worktree.** Run [scripts/dispatch-worktree.mjs](../scripts/dispatch-worktree.mjs) (see "Creating", below). It creates the branch and the worktree and sets it up (project memory, dependencies); the operator's actor and role arrive separately via `--system` at launch.
 5. **Deliver.** The operator opens the worktree at the path the prompt already names.
-6. **Operator works.** The harness is a snapshot from create-time. If the main repo's harness is updated mid-mission, that is fine; the worktree's snapshot serves the cast.
+6. **Operator works.** The cast operates against the worktree branch; its identity (actor + role) is composed into `--system` at launch, not read from a file in the worktree.
 7. **Cleanup.** When the prompt is complete, remove the worktree (see "Cleanup", below).
 
 **Do not pre-create worktrees for prompts that have not been committed.** Drafts change. A worktree created against a draft becomes orphaned filesystem state when the draft is rewritten or abandoned.
@@ -41,9 +41,7 @@ Double-dash makes the worktree directory visually distinct from the main checkou
 
 ## Creating
 
-`dispatch-worktree.mjs` produces a worktree with a current harness, avoiding the out-of-sync-file problem that arises when a harness file is checked into a repo that uses worktrees. The harness goes stale in the main checkout over time; worktrees created from a stale main inherit the staleness. The script delivers the harness directly to the worktree, leaving the main checkout untouched.
-
-Run it from the Handler repo:
+Run `dispatch-worktree.mjs` from the Handler repo to create the worktree:
 
 ```bash
 echo '{
@@ -55,21 +53,11 @@ echo '{
 
 Required: `repoPath`, `worktreePath`, `branch`. Optional: `startingPoint` (defaults to `origin/main`).
 
-What the script does:
+It creates the worktree on a new branch at `origin/main` (`--no-track`, so the branch doesn't adopt main as its upstream), copies project memory and any root `.env` files, and installs dependencies when the repo declares pnpm. Writes go only to the worktree; the operator's main checkout is read but never written.
 
-1. Migration check on the operator's `.claude/CLAUDE.md` (read-only). Refuses if pre-split format — that case needs migration, not silent overwrite. See `references/project-memory.md > Pre-split migration`.
-2. Creates the worktree on a new branch at `origin/main` with `--no-track`.
-3. Copies the operator's `.claude/` directory into the worktree.
-4. Writes the harness template into the worktree's `.claude/CLAUDE.md`.
-5. Installs dependencies in the worktree when `package.json` declares pnpm via the `packageManager` field, using `pnpm install --frozen-lockfile`. A fresh worktree has no `node_modules`; without this, casts improvise workarounds instead of running the install.
-
-Writes go only to the worktree. The operator's main checkout is read (for the migration check and the `.claude/` copy) but never written. Its harness state, whatever it is, is the Handler's concern, not the script's.
+The operator's actor and role arrive via `--system` at launch — the script delivers no harness file into the worktree. The script is the source of truth for exactly what it does; read its docblock rather than a copy here.
 
 The Handler owns the branch name. The operator never creates a branch and the prompt does not name one in any preflight step.
-
-The branch starts at `origin/main` so the worktree begins from the latest pushed state. `--no-track` is applied so the new branch doesn't pick up main as its upstream — see the script's docblock for why this matters.
-
-The `.claude/` copy includes any untracked harness state (agents, skills, plans) the operator might need. The copy is a snapshot at create-time and does not auto-update if the main repo's harness changes mid-cast — the operator works against a stable harness for the mission's duration.
 
 ## In the prompt
 
@@ -79,7 +67,7 @@ Set `Deliver to:` in the frontmatter to the worktree path:
 Deliver to: ~/repos/@shellicar/claude-cli--237-scout
 ```
 
-The Router uses this path as `-c <path>` when splitting the operator and supervisor panes (see the `dispatch` skill (`~/repos/shellicar/skills/skills/dispatch/SKILL.md`) > New operator cast / New supervisor cast). `claude-sdk-cli` inherits cwd at process start and never re-cds — this is how the cast loads the worktree's `.claude/CLAUDE.md` harness and operates against the worktree branch.
+The Router uses this path as `-c <path>` when splitting the operator and supervisor panes (see the `dispatch` skill (`~/repos/shellicar/skills/skills/dispatch/SKILL.md`) > New operator cast / New supervisor cast). `claude-sdk-cli` inherits cwd at process start and never re-cds — this is how the cast operates against the worktree branch.
 
 ## Testament location
 
