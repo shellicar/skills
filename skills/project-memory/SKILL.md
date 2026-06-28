@@ -84,26 +84,3 @@ Reasons to stay at stage 0:
 ### Applying a stage change
 
 Update the repo's `.gitignore` with the negation lines for the target stage. That's the whole change — gitignore is the source of truth. Tracking which repo is at which stage in your project tracking is optional; do it if it helps you remember.
-
-
-## Pre-split migration
-
-If `dispatch-worktree.mjs` reports "Migration needed" for an operator repo, the repo's `.claude/CLAUDE.md` is in the pre-split format: project content (`<!-- BEGIN:REPO:section-name -->` blocks) lives alongside template content inside the harness file. The split separated them — `.claude/CLAUDE.md` is now harness-only (delivered per-cast), and `./CLAUDE.md` is project-authored.
-
-The dispatch script does not perform the migration; running it against a pre-split file would silently destroy the project content. You do it once per operator repo.
-
-### Step-by-step
-
-1. **Read** the operator repo's `.claude/CLAUDE.md`. Identify each `<!-- BEGIN:REPO:section-name -->` block. Each is content that needs to move.
-
-2. **Open or create** the operator repo's `./CLAUDE.md`. Use [starter-CLAUDE.md](starter-CLAUDE.md) for the section structure if creating fresh. Most repos already have something there from earlier conventions; existing content stays.
-
-3. **Move** each REPO block into `./CLAUDE.md`, stripping the BEGIN/END markers. The section name typically maps directly (`REPO:current-state` → `## Current State`, `REPO:architecture` → `## Architecture`, and so on). The content under each marker becomes the section body.
-
-4. **Consolidate** (only if `./CLAUDE.md` already had content). Some operator repos predate the split and already have project content in `./CLAUDE.md`. After moving the REPO blocks in, you'll likely have overlapping or duplicated material. Use your judgment to merge: keep what's substantive, drop duplicates, prefer the more current version. There's no formula — your call.
-
-5. **Configure** the operator repo's `.gitignore` for the chosen adoption stage (see Adoption Stages above).
-
-6. **Remove or replace** the operator repo's `.claude/CLAUDE.md`. Under the worktree model the file is no longer needed in the main checkout — the worktree gets a fresh harness from `dispatch-worktree.mjs`. You can `rm .claude/CLAUDE.md`, or replace it with the current template if a placeholder is useful locally.
-
-7. **Re-run** the dispatch. The migration check should now pass.
