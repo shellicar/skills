@@ -43,7 +43,7 @@
 import { readFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ensureCast, getOperatorPane } from './pane.mjs';
+import { ensureCast, getOperatorPane } from '../../../shared/pane.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -78,7 +78,7 @@ const superCwd = mkdtempSync(join(tmpdir(), 'supervisor-cwd-'));
 
 const { paneId, launchResult } = ensureCast({
   pm,
-  role: 'supervisor',
+  actor: 'supervisor',
   state: 'sv-pending',
   splitTarget: operatorPane,
   splitDir: '-h',

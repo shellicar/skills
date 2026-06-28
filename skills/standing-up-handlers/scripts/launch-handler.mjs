@@ -74,19 +74,14 @@
  * Exit codes: 0 launched & stable; 1 CLI never stabilised; 2 bad input.
  */
 
-import { readFileSync, writeFileSync, mkdtempSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
-import { tmpdir, homedir } from "node:os";
-import { join } from "node:path";
-import { buildPrompt, buildSystem, waitForClaudeSdkCli } from "./pane.mjs";
+import { homedir } from "node:os";
+import { launchCli } from "../../../shared/pane.mjs";
 
 function expandPath(p) {
   if (typeof p !== "string") return p;
   return p.replace(/^~/, homedir()).replace(/^\$HOME/, homedir());
-}
-
-function shq(s) {
-  return `'${String(s).replace(/'/g, `'\\''`)}'`;
 }
 
 const cfg = JSON.parse(readFileSync(0, "utf8"));
@@ -116,31 +111,24 @@ if (cfg.colour) {
   execFileSync("tmux", ["set-option", "-w", "-t", paneId, "@colour", cfg.colour]);
 }
 
-// 3. Build the prompt (skills + the bare-line envelope), write it to a temp file
-//    the shell reads and removes, and send-keys the launch into the pane. No
-//    brief is attached — see WHY NO BRIEF.
-const prompt = buildPrompt({ from: cfg.from || "the Planner", message: cfg.envelope, skills: cfg.skills });
-const tmp = join(mkdtempSync(join(tmpdir(), "handler-prompt-")), "prompt");
-writeFileSync(tmp, prompt);
+// 3. Launch through the shared primitive. The handler's identity is its actor
+//    plus all its roles — loaded every time because there is no dynamic role
+//    switching yet (it moves RA -> scribe -> executor -> router within one
+//    session, so all must be present at launch; requirements-analyst has no
+//    ROLE.md yet). resume (not no-resume): the handler adopts its pre-generated
+//    conv id. --system is the primitive's concern, not this script's.
+const result = launchCli(paneId, {
+  from: cfg.from || "the Planner",
+  model,
+  name: cfg.name,
+  message: cfg.envelope,
+  skills: cfg.skills,
+  actor: "handler",
+  role: ["scribe", "executor", "router"],
+  resume: cfg.convId,
+});
 
-// Compose the handler's identity into --system: the handler actor plus all its
-// roles. We load every role because there is no dynamic role switching yet —
-// the handler moves RA -> scribe -> executor -> router within one session, so
-// all must be present at launch. (requirements-analyst has no ROLE.md yet.)
-const system = buildSystem({ actor: "handler", role: ["scribe", "executor", "router"] });
-const sysTmp = join(mkdtempSync(join(tmpdir(), "handler-system-")), "system");
-writeFileSync(sysTmp, system);
-
-const launch =
-  `claude-sdk-cli --name ${shq(cfg.name)} ` +
-  `--model ${shq(model)} --resume ${shq(cfg.convId)} ` +
-  `--system "$(cat ${shq(sysTmp)}; rm -f ${shq(sysTmp)})" ` +
-  `--prompt "$(cat ${shq(tmp)}; rm -f ${shq(tmp)})"`;
-
-execFileSync("tmux", ["send-keys", "-t", paneId, launch, "Enter"]);
-
-// 4. Verify the CLI reaches a stable running state in the pane.
-const result = waitForClaudeSdkCli(paneId);
+// 4. launchCli has already verified the CLI reached a stable running state.
 if (result && !result.ok) {
   console.error(
     `claude-sdk-cli launch failed in ${paneId}: ${result.reason}` +

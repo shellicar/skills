@@ -19,11 +19,11 @@
  *
  * Stdin (JSON):
  *   {
- *     "role": "operator",            // resolves target pane by @role
+ *     "actor": "operator",           // the actor; resolves target pane by @role
  *     "model": "claude-sonnet-4-6",
  *     "missionFile": "/path/to/mission.md",
  *     "name": "Builder",             // for --name flag; supervisor casts use "supervisor"
- *     "castRole": "builder",          // operator phase role → roles/<castRole>/ROLE.md; omit for supervisor
+ *     "role": "builder",              // operator phase sub-role → roles/<role>/ROLE.md; omit for supervisor
  *     "from": "the claude-cli-cve-fix Handler",
  *     "message": "Phase 2, iteration 1. ...",
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
@@ -41,10 +41,8 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { waitForClaudeSdkCli, buildPrompt, buildSystem, effortFlag, cleanupPrompt } from './pane.mjs';
+import { readFileSync } from 'node:fs';
+import { launchCli } from '../../../shared/pane.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -53,7 +51,7 @@ if (!pm) {
 }
 
 const cfg = JSON.parse(readFileSync(0, 'utf8'));
-for (const k of ['from', 'role', 'model', 'missionFile', 'name', 'message']) {
+for (const k of ['from', 'actor', 'model', 'missionFile', 'name', 'message']) {
   if (!cfg[k]) {
     console.error(`config missing required field: ${k}`);
     process.exit(2);
@@ -63,43 +61,35 @@ for (const k of ['from', 'role', 'model', 'missionFile', 'name', 'message']) {
 const list = execFileSync('tmux', ['list-panes', '-t', pm, '-F', '#{pane_id} #{@role}'], { encoding: 'utf8' });
 const target = list.split('\n').map(l => l.trim()).filter(Boolean)
   .map(l => l.split(/\s+/))
-  .find(([, r]) => r === cfg.role)?.[0];
+  .find(([, r]) => r === cfg.actor)?.[0];
 
 if (!target) {
-  console.error(`No pane with @role=${cfg.role} in window of ${pm}`);
+  console.error(`No pane with @role=${cfg.actor} in window of ${pm}`);
   process.exit(1);
 }
-
-const prompt = buildPrompt({ from: cfg.from, message: cfg.message, skills: cfg.skills, missionPath: cfg.missionFile });
-const tmp = mkdtempSync(join(tmpdir(), 'router-prompt-'));
-const promptPath = join(tmp, 'prompt');
-writeFileSync(promptPath, prompt);
-
-const system = buildSystem({ actor: cfg.role, role: cfg.castRole });
-const systemPath = join(tmp, 'system');
-writeFileSync(systemPath, system);
-const systemFlag = system ? ` --system "$(cat ${shq(systemPath)})"` : '';
-
-const launch = `claude-sdk-cli --name ${shq(cfg.name)} --model ${shq(cfg.model)}${effortFlag(cfg.effort)}${systemFlag} --prompt "$(cat ${shq(promptPath)})" --no-resume`;
 
 // Defensive Ctrl-C in case a CLI is still running. If the pane is already
 // at the shell prompt this is a no-op (^C with no foreground job).
 execFileSync('tmux', ['send-keys', '-t', target, 'C-c']);
 
-const stateValue = cfg.role === 'supervisor' ? 'sv-pending' : 'op-pending';
+const stateValue = cfg.actor === 'supervisor' ? 'sv-pending' : 'op-pending';
 execFileSync('tmux', ['set-option', '-w', '-t', target, '@state', stateValue]);
 
-execFileSync('tmux', ['send-keys', '-t', target, launch, 'Enter']);
-
-const result = waitForClaudeSdkCli(target);
-cleanupPrompt(tmp, promptPath, result);
+// Relaunch through the shared primitive: actor + sub-role in, --system stays private to pane.mjs.
+const result = launchCli(target, {
+  from: cfg.from,
+  model: cfg.model,
+  missionFile: cfg.missionFile,
+  name: cfg.name,
+  message: cfg.message,
+  skills: cfg.skills,
+  effort: cfg.effort,
+  actor: cfg.actor,
+  role: cfg.role,
+});
 if (!result.ok) {
   console.error(`claude-sdk-cli launch failed in ${target}: ${result.reason}${result.name ? ` (saw ${result.name})` : ''}`);
   process.exit(1);
 }
 
 console.log(target);
-
-function shq(s) {
-  return `'${String(s).replace(/'/g, `'\\''`)}'`;
-}

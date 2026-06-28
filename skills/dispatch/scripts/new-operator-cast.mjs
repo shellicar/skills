@@ -26,7 +26,7 @@
  *     "model": "claude-sonnet-4-6",
  *     "missionFile": "/path/to/mission.md",
  *     "name": "Maker",
- *     "castRole": "maker",            // operator phase role → roles/<castRole>/ROLE.md
+ *     "role": "maker",                // operator phase sub-role → roles/<role>/ROLE.md
  *     "from": "the claude-cli-cve-fix Handler",
  *     "message": "Phase 1, iteration 1. ...",
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
@@ -44,7 +44,7 @@
  */
 
 import { readFileSync } from 'node:fs';
-import { ensureCast } from './pane.mjs';
+import { ensureCast } from '../../../shared/pane.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -63,7 +63,7 @@ for (const k of ['from', 'cwd', 'model', 'missionFile', 'name', 'message']) {
 const { paneId, launchResult } = ensureCast({
   pm,
   from: cfg.from,
-  role: 'operator',
+  actor: 'operator',
   state: 'op-pending',
   splitTarget: pm,
   splitDir: '-v',
@@ -74,7 +74,7 @@ const { paneId, launchResult } = ensureCast({
   message: cfg.message,
   skills: cfg.skills,
   effort: cfg.effort,
-  castRole: cfg.castRole,
+  role: cfg.role,
 });
 
 if (launchResult && !launchResult.ok) {

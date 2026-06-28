@@ -16,7 +16,7 @@
  */
 
 import { readFileSync } from 'node:fs';
-import { paneProcessName } from './pane.mjs';
+import { paneProcessName } from '../../../shared/pane.mjs';
 
 const cfg = JSON.parse(readFileSync(0, 'utf8'));
 const paneId = cfg.paneId;

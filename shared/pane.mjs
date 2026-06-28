@@ -131,7 +131,8 @@ function sleep(ms) {
  *
  * Parameters:
  *   pm           — Handler pane id (used to filter list-panes)
- *   role         — '@role' value ('operator', 'supervisor', ...)
+ *   actor        — the actor; its name is also the pane '@role' ('operator', 'supervisor')
+ *   role         — optional sub-role (operator phase role → roles/<role>/ROLE.md); omitted for supervisor
  *   state        — '@state' value to set on a newly-created pane
  *   splitTarget  — pane id to split off when creating
  *   splitDir     — '-v' (vertical) or '-h' (horizontal)
@@ -144,17 +145,18 @@ function sleep(ms) {
  *   skills       — array of skill names, emitted as <skills> (required)
  *   effort       — optional thinking effort (low|medium|high|xhigh|max); omitted leaves the CLI default
  */
-export function ensureCast({ pm, from, role, state, splitTarget, splitDir, cwd, model, missionFile, name, message, skills, effort, castRole }) {
-  const existing = findPaneByRole(pm, role);
+export function ensureCast({ pm, from, actor, state, splitTarget, splitDir, cwd, model, missionFile, name, message, skills, effort, role }) {
+  const paneRole = actor;
+  const existing = findPaneByRole(pm, paneRole);
 
   if (existing) {
     const comm = paneProcessName(existing);
     if (comm === PREFERRED) {
-      console.error(`warning: ${role} pane ${existing} is already running claude-sdk-cli; this may not be the cast you intended. Run close-role ${role} first to recreate.`);
+      console.error(`warning: ${paneRole} pane ${existing} is already running claude-sdk-cli; this may not be the cast you intended. Run close-role ${paneRole} first to recreate.`);
       return { paneId: existing, action: 'already-running' };
     }
-    console.error(`reusing existing ${role} pane ${existing} (no CLI running).`);
-    const launchResult = launchCli(existing, { from, model, missionFile, name, message, skills, effort, actor: role, castRole });
+    console.error(`reusing existing ${paneRole} pane ${existing} (no CLI running).`);
+    const launchResult = launchCli(existing, { from, model, missionFile, name, message, skills, effort, actor, role });
     return { paneId: existing, action: 'relaunched', launchResult };
   }
 
@@ -165,12 +167,12 @@ export function ensureCast({ pm, from, role, state, splitTarget, splitDir, cwd, 
   ], { encoding: 'utf8' }).trim();
 
   execFileSync('tmux', [
-    'set-option', '-p', '-t', paneId, '@role', role,
+    'set-option', '-p', '-t', paneId, '@role', paneRole,
     ';',
     'set-option', '-w', '-t', paneId, '@state', state,
   ]);
 
-  const launchResult = launchCli(paneId, { from, model, missionFile, name, message, skills, effort, actor: role, castRole });
+  const launchResult = launchCli(paneId, { from, model, missionFile, name, message, skills, effort, actor, role });
   return { paneId, action: 'created', launchResult };
 }
 
@@ -279,7 +281,7 @@ export function cleanupPrompt(tmpDir, promptPath, launchResult) {
   }
 }
 
-function launchCli(paneId, { from, model, missionFile, name, message, skills, effort, actor, castRole }) {
+export function launchCli(paneId, { from, model, missionFile, name, message, skills, effort, actor, role, resume }) {
   // Build the combined prompt and write to a temp file; shell substitution
   // captures it for --prompt. The mission rides inside the prompt as a
   // <mission> path element, not a --file attachment. The temp file is removed
@@ -291,12 +293,13 @@ function launchCli(paneId, { from, model, missionFile, name, message, skills, ef
   const promptPath = join(tmp, 'prompt');
   writeFileSync(promptPath, prompt);
 
-  const system = buildSystem({ actor, role: castRole });
+  const system = buildSystem({ actor, role });
   const systemPath = join(tmp, 'system');
   writeFileSync(systemPath, system);
   const systemFlag = system ? ` --system "$(cat ${shq(systemPath)})"` : '';
 
-  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(model)}${effortFlag(effort)}${systemFlag} --prompt "$(cat ${shq(promptPath)})" --no-resume`;
+  const resumeFlag = resume ? ` --resume ${shq(resume)}` : ' --no-resume';
+  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(model)}${effortFlag(effort)}${systemFlag} --prompt "$(cat ${shq(promptPath)})"${resumeFlag}`;
 
   execFileSync('tmux', ['send-keys', '-t', paneId, launch, 'Enter']);
 
