@@ -57,6 +57,30 @@ Rules:
 
 Same shape every time. The point is variance reduction — the SC reviews plans in the same shape every dispatch, so the review surface is constant.
 
+## Status
+
+Updating mission status is a Router operation — the mechanical *write* to `mission.md`. The operator never touches it (that proved chaotic). The split is decision vs write: the **Executor decides**, the **Router writes**.
+
+- Go-ahead to dispatch a phase → the Router sets it `in-progress`.
+- The Executor's call that a phase has passed and is done → the Router sets it `completed`.
+
+Ideally a tool owns the write — a `dispatch_operator` / `promote_phase` call updates the status itself — so it is never hand-edited. Today Claude makes both the decision and the write; keeping the write on the Router's side is what stays clean once the tool exists.
+
+Status exists at two levels:
+
+- **Top-level status** (mission frontmatter) tracks the mission's lifecycle for scanning across missions: committed at `ready` once the SC has reviewed it, `in-progress` when the operator cast launches, `completed` in cleanup before the post-mortem.
+- **Per-phase status** (each phase's metadata block) tracks that phase's progress as the mission runs.
+
+### Status values
+
+`ready -> received -> in-progress -> paused -> completed`
+
+- **ready**: written, not yet dispatched
+- **received**: cast started, picked up the phase
+- **in-progress**: actively working
+- **paused**: suspended, will resume
+- **completed**: deliverables done
+
 ## Skills
 
 - `dispatch` — the mechanical how-to and scripts for routing casts (CLI, panes, envelopes).

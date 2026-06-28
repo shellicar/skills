@@ -54,33 +54,7 @@ The commit is mine. The executor never commits in an operator repo and never wri
 
 ## Status
 
-Status exists at two levels, each owned by a different party.
-
-**Top-level status is the Handler's.** It lives in the frontmatter and tracks the prompt's lifecycle for scanning across prompts: what's ready to dispatch, what's in flight, what's done. Transitions are workflow-triggered: the prompt is committed at `ready` once the SC has reviewed it, flipped to `in-progress` when the operator cast launches, and landed at `completed` in cleanup, before the post-mortem.
-
-**Per-phase status is the operator's.** Each phase has its own status in its metadata block, and the operator running that phase updates only their phase's status as they work it:
-
-```
-# Phase 1
-
-Role: Maker
-Model: Sonnet
-Status: completed
-```
-
-The two levels do not need a tie-breaker because they are not parallel records of the same thing. The Handler should only touch a phase's status as a fixup when an operator didn't update it correctly.
-
-### Status values
-
-`ready -> received -> in-progress -> paused -> completed`
-
-- **ready**: Written, not yet dispatched
-- **received**: Consumer session started, picked up the prompt
-- **in-progress**: Actively working
-- **paused**: Work suspended, will resume
-- **completed**: Deliverables done
-
-Before editing any prompt file, read its status first. If the status is anything other than `ready`, the prompt has been dispatched. Any changes you make after dispatch must be recorded in the `## Delivery Notes` section with what changed and why.
+The status *writes* are mechanical and the Router's (see the `router` role); operators never touch `mission.md`. The *decisions* behind them are yours: the go-ahead to dispatch a phase, and the call that a phase has passed and is done. Before editing any mission file yourself, read its status first: if it is anything other than `ready`, the mission has been dispatched, and any change is recorded in `## Delivery Notes` with what changed and why.
 
 
 ## Mission cleanup
