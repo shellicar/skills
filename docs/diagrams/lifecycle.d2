@@ -1,0 +1,49 @@
+vars: {
+  d2-config: {
+    theme-id: 200
+  }
+}
+
+direction: right
+
+title: "Fleet — Mission lifecycle: four stages, the mission's states, and the boards it lives on" {
+  near: top-center
+  shape: text
+  style.font-size: 20
+  style.bold: true
+}
+
+# ---- the four stages (the backbone) ----
+planning: "1 · PLANNING\nRA + Scribe\n(work it out, write the mission)" { style.fill: "#2A1B3A"; style.stroke: "#A569BD"; style.font-color: "#F3EAFB" }
+execution: "2 · EXECUTION\nthe phase loop\n(Operator ↔ Router ↔ Supervisor ↔ Executor)" { style.fill: "#23210C"; style.stroke: "#F1C40F"; style.font-color: "#FBF6E3" }
+cleanup: "3 · CLEANUP\nfinish the mission\n(status, testament, close panes)" { style.fill: "#2E1E0E"; style.stroke: "#E67E22"; style.font-color: "#FBEFE3" }
+postmortem: "4 · POST-MORTEM\nthe retrospective" { style.fill: "#10241B"; style.stroke: "#2ECC71"; style.font-color: "#E8F8F0" }
+
+# ---- states on the edges between stages ----
+planning -> execution: "ready  →  dispatched (in-progress)" { style.stroke: "#F1C40F"; style.stroke-width: 2 }
+execution -> execution: "phase pass → next phase" { style.stroke: "#566573"; style.stroke-dash: 2 }
+execution -> cleanup: "final verdict: Pass" { style.stroke: "#E67E22"; style.stroke-width: 2 }
+cleanup -> postmortem: "completed · PR merged" { style.stroke: "#2ECC71"; style.stroke-width: 2 }
+postmortem -> retired: "post-mortem written" { style.stroke: "#2ECC71"; style.stroke-width: 2 }
+
+paused: "paused / parked\n(sub-state of active —\nheld with an un-park trigger)" { style.fill: "#3A1714"; style.stroke: "#E74C3C"; style.font-color: "#FBEAEA" }
+execution -> paused: "held" { style.stroke: "#E74C3C"; style.stroke-dash: 2 }
+paused -> execution: "un-park" { style.stroke: "#E74C3C"; style.stroke-dash: 2 }
+
+retired: "RETIRED\nlives only in git history\n+ the threads bookends" { style.fill: "#1A1A22"; style.stroke: "#566573"; style.font-color: "#AEB6BF" }
+
+# ---- the boards (where a mission is tracked at each point) ----
+boards: "tracking boards" {
+  style.fill: transparent; style.stroke: "#444A5A"; style.stroke-dash: 4; style.font-color: "#7F8C8D"
+  active: "active-missions\nready · in-progress · paused\n(read at boot, kept short)" { style.fill: "#2A2A3A"; style.stroke: "#AEB6BF" }
+  completed: "completed-missions\ncompleted → retired\n(the winding-down drain)" { style.fill: "#2A2A3A"; style.stroke: "#AEB6BF" }
+}
+
+planning -> boards.active: "appears once committed" { style.stroke: "#566573"; style.stroke-dash: 3 }
+cleanup -> boards.completed: "crosses on merge" { style.stroke: "#566573"; style.stroke-dash: 3 }
+
+note: "Stages run in order and never merge or reorder. 'active' covers ready/in-progress/paused; on PR-merge the mission crosses to 'completed' and winds down through cleanup then post-mortem, then retires off every board.\nParked is active-but-held: troops in position, deliberately waiting on a trigger." {
+  near: bottom-center
+  shape: text
+  style.font-color: "#7F8C8D"
+}

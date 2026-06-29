@@ -1,0 +1,33 @@
+vars: {
+  d2-config: {
+    theme-id: 200
+  }
+}
+
+direction: down
+
+title: "Fleet — Relationships: an actor IS its contracts (the posture on each edge)" {
+  near: top-center
+  shape: text
+  style.font-size: 22
+  style.bold: true
+}
+
+sc: "SC" { style.fill: "#2A1B3A"; style.stroke: "#A569BD"; style.font-color: "#F3EAFB" }
+planner: "Planner" { style.fill: "#14352A"; style.stroke: "#2ECC71"; style.font-color: "#E8F8F0" }
+handler: "Handler" { style.fill: "#2B2810"; style.stroke: "#F1C40F"; style.font-color: "#FBF6E3" }
+operator: "Operator" { style.fill: "#2E1E0E"; style.stroke: "#E67E22"; style.font-color: "#FBEFE3" }
+supervisor: "Supervisor" { style.fill: "#3A1714"; style.stroke: "#E74C3C"; style.font-color: "#FBEAEA" }
+
+sc <-> planner: "plan & sequence the work together" { style.stroke: "#A569BD"; style.stroke-width: 2 }
+sc <-> handler: "hold the goal — don't guess it, don't hand it back;\nthe decision and the accountability are the SC's" { style.stroke: "#A569BD"; style.stroke-width: 2 }
+planner -> handler: "stands up & entrusts the mission" { style.stroke: "#2ECC71"; style.stroke-width: 2 }
+handler -> operator: "equip for success — don't command;\ngive true intel, never a guess as fact" { style.stroke: "#E67E22"; style.stroke-width: 2 }
+operator -> supervisor: "output goes to an independent check" { style.stroke: "#E67E22"; style.stroke-width: 2 }
+supervisor -> handler: "verdict — but the Handler owns the pass" { style.stroke: "#E74C3C"; style.stroke-width: 2 }
+
+note: "An actor is its relationships, not its file. Swap the person or implementation behind a box and the edges — the contracts — still hold; that is what makes it an actor.\nThe SC is a person too; Claude plays Planner / Handler / Operator / Supervisor.\nThe Operator and Supervisor never talk directly — those hops are relayed by the Handler's Router (see the orchestration view).\nThe SDLC parallel: each edge is a seat a different person could fill — analyst, builder, reviewer — defined by the contract, not the individual." {
+  near: bottom-center
+  shape: text
+  style.font-color: "#7F8C8D"
+}

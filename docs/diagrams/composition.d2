@@ -1,0 +1,93 @@
+vars: {
+  d2-config: {
+    theme-id: 200
+  }
+}
+
+direction: down
+
+title: "Fleet — Composition: persons play actors, actors take roles, roles load skills" {
+  near: top-center
+  shape: text
+  style.font-size: 22
+  style.bold: true
+}
+
+# ---- People: the individuals ----
+people: People {
+  style.fill: transparent
+  style.stroke: "#444A5A"
+  style.stroke-dash: 4
+  style.font-color: "#7F8C8D"
+  claude: Claude { style.fill: "#1B2A4A"; style.stroke: "#5DADE2"; style.font-color: "#EAF2FB" }
+  sc: "Stephen" { style.fill: "#2A1B4A"; style.stroke: "#A569BD"; style.font-color: "#F3EAFB" }
+}
+
+# ---- Actors: the identity a person plays (defined by relationships) ----
+sc_actor: "SC\nproduct owner · decides · accountable" {
+  style.fill: "#2A1B3A"; style.stroke: "#A569BD"; style.font-color: "#F3EAFB"
+}
+
+planner: "Planner\n(no sub-roles — the actor is the job)" {
+  style.fill: "#14352A"; style.stroke: "#2ECC71"; style.font-color: "#E8F8F0"
+}
+
+supervisor: "Supervisor\n(no sub-roles — third-party check)" {
+  style.fill: "#3A1714"; style.stroke: "#E74C3C"; style.font-color: "#FBEAEA"
+}
+
+handler: "Handler  ·  holds one mission" {
+  style.fill: "#2B2810"; style.stroke: "#F1C40F"; style.font-color: "#FBF6E3"
+  ra: "Requirements Analyst" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
+  scribe: "Scribe" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
+  executor: "Executor" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
+  router: "Router" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
+}
+
+operator: "Operator  ·  one job, one cast" {
+  style.fill: "#2E1E0E"; style.stroke: "#E67E22"; style.font-color: "#FBEFE3"
+  maker: "Maker" { style.fill: "#3A2412"; style.stroke: "#E67E22" }
+  apostle: "Apostle" { style.fill: "#3A2412"; style.stroke: "#E67E22" }
+  courier: "Courier" { style.fill: "#3A2412"; style.stroke: "#E67E22" }
+  more: "… Builder, Scaffolder, Architect,\nEngineer, Investigator, Scout,\nReviewer, Cleaner, Apprentice, Writer\n(13 roles total)" {
+    style.fill: transparent; style.stroke: "#6B4A2E"; style.stroke-dash: 3; style.font-color: "#C99B6E"
+  }
+}
+
+# ---- Skills: capabilities a role loads ----
+skills: Skills {
+  style.fill: transparent
+  style.stroke: "#444A5A"
+  style.stroke-dash: 4
+  style.font-color: "#7F8C8D"
+  prompt_authoring: "prompt-authoring" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  dispatch: "dispatch" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  standing_up: "standing-up-handlers" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  worktrees: "worktrees" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  project_memory: "project-memory" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  issue_writing: "issue-writing" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  testament: "testament  (shared)" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+}
+
+# ---- plays / is ----
+people.claude -> planner: plays { style.stroke: "#5DADE2" }
+people.claude -> handler: plays { style.stroke: "#5DADE2" }
+people.claude -> operator: plays { style.stroke: "#5DADE2" }
+people.claude -> supervisor: plays { style.stroke: "#5DADE2" }
+people.sc -> sc_actor: is { style.stroke: "#A569BD" }
+
+# ---- roles load skills ----
+handler.scribe -> skills.prompt_authoring: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+handler.router -> skills.dispatch: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+handler.executor -> skills.worktrees: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+handler.executor -> skills.project_memory: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+handler.executor -> skills.issue_writing: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+planner -> skills.standing_up: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+handler -> skills.testament: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+operator -> skills.testament: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+
+note: "An actor is an identity defined by its relationships, not by what's in its file.\nA person plays an actor; the same person (Claude) plays all four Claude actors.\nRoles live inside an actor; skills are loaded by roles as the work needs them." {
+  near: bottom-center
+  shape: text
+  style.font-color: "#7F8C8D"
+}

@@ -1,0 +1,66 @@
+vars: {
+  d2-config: {
+    theme-id: 200
+  }
+}
+
+direction: down
+
+title: "Fleet — Runtime: how it actually runs (tmux casts, --system composition, worktrees, conv-ids)" {
+  near: top-center
+  shape: text
+  style.font-size: 20
+  style.bold: true
+}
+
+# ---- launch scripts: the things that create casts ----
+scripts: "launch scripts" {
+  style.fill: transparent; style.stroke: "#444A5A"; style.stroke-dash: 4; style.font-color: "#7F8C8D"
+  start_planner: "start-planner.mjs" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  launch_handler: "launch-handler.mjs" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  cast_scripts: "new-operator-cast.mjs\nnew-supervisor-cast.mjs\nnext-phase-cast.mjs" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+}
+
+# ---- tmux: where casts live ----
+tmux: "tmux server" {
+  style.fill: "#0D0D14"; style.stroke: "#6C7A96"; style.font-color: "#AEB6BF"
+
+  planner_session: "session: planner" {
+    style.fill: "#10241B"; style.stroke: "#2ECC71"
+    planner_cast: "Planner cast\nclaude-sdk-cli --system(planner)\n--no-resume · conv-id" { style.fill: "#14352A"; style.stroke: "#2ECC71" }
+  }
+
+  handler_window: "window: <mission>   (one per mission)" {
+    style.fill: "#23210C"; style.stroke: "#F1C40F"
+    handler_pane: "Handler cast\n--system(handler + roles)\n--resume conv-id" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
+    operator_pane: "Operator pane\n--system(operator + phase role)\nconv-id" { style.fill: "#3A2412"; style.stroke: "#E67E22" }
+    supervisor_pane: "Supervisor pane\n--system(supervisor)\nconv-id" { style.fill: "#3A1714"; style.stroke: "#E74C3C" }
+  }
+}
+
+# ---- worktrees / repos the casts run in ----
+disks: "working trees" {
+  style.fill: transparent; style.stroke: "#444A5A"; style.stroke-dash: 4; style.font-color: "#7F8C8D"
+  fleet_wt: "fleet worktree\nclaude-fleet-<mission>" { style.fill: "#2A2A3A"; style.stroke: "#AEB6BF" }
+  target_wt: "target worktree\n<repo>--<mission>" { style.fill: "#2A2A3A"; style.stroke: "#AEB6BF" }
+  standalone: "standalone repo\n(no inherited context)" { style.fill: "#2A2A3A"; style.stroke: "#AEB6BF" }
+}
+
+# ---- who creates what ----
+scripts.start_planner -> tmux.planner_session.planner_cast: "creates" { style.stroke: "#5DADE2"; style.stroke-dash: 2 }
+tmux.planner_session.planner_cast -> scripts.launch_handler: "runs" { style.stroke: "#2ECC71"; style.stroke-dash: 2 }
+scripts.launch_handler -> tmux.handler_window.handler_pane: "new window + cast" { style.stroke: "#5DADE2"; style.stroke-dash: 2 }
+tmux.handler_window.handler_pane -> scripts.cast_scripts: "Router runs" { style.stroke: "#F1C40F"; style.stroke-dash: 2 }
+scripts.cast_scripts -> tmux.handler_window.operator_pane: "splits pane" { style.stroke: "#E67E22"; style.stroke-dash: 2 }
+scripts.cast_scripts -> tmux.handler_window.supervisor_pane: "splits pane" { style.stroke: "#E74C3C"; style.stroke-dash: 2 }
+
+# ---- where each cast operates ----
+tmux.handler_window.handler_pane -> disks.fleet_wt: "cwd" { style.stroke: "#566573" }
+tmux.handler_window.operator_pane -> disks.target_wt: "cwd" { style.stroke: "#566573" }
+tmux.handler_window.supervisor_pane -> disks.standalone: "cwd" { style.stroke: "#566573" }
+
+note: "Every box is a `claude-sdk-cli` cast: identity via --system (actor + role, composed at launch), work via --prompt (skills + mission), and a conv-id as the durable anchor.\nThe Planner stands up Handler windows; the Handler's Router splits the Operator and Supervisor panes inside its own window.\nThe Supervisor runs in a standalone repo on purpose — a third party shouldn't inherit the operator's context." {
+  near: bottom-center
+  shape: text
+  style.font-color: "#7F8C8D"
+}
