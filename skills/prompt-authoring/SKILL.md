@@ -1,6 +1,6 @@
 # Prompt authoring
 
-**Skill** (loaded by the `scribe` role). The reusable craft of writing a prompt well — true for any prompt, anywhere.
+**Skill** (loaded by the `scribe` role). The reusable craft of writing a prompt well — true for any prompt, anywhere. The *shape* of a mission (which phases, roles, models, skills) is decided upstream and recorded in the agreement — see the `mission-shaping` skill. This skill is the writing.
 
 ## Writing for a literal reader
 
@@ -50,53 +50,6 @@ A finding carries its WHY — *from the investigation*, *because the bug is at X
 Inline the context the operator needs. When you have investigation findings, bake them in: file paths, line numbers, root cause analysis, decisions. The operator should not re-investigate what you already know.
 
 Long-form investigation output belongs in a separate document the operator reads. Point to it. Do not paste it in full; the operator reads it if they need it.
-
-## Cost economics
-
-Investigation has to happen somewhere. The question is where.
-
-When you investigate the codebase and write a prescriptive mission, that investigation happens once, in your context. The operator reads a dense prompt and executes.
-
-When you skip investigation and write a vague prompt, the operator re-investigates from scratch: expensive context, expensive tokens, worse output.
-
-Your investigation happens once. The operator's happens every delivery. Baking investigation into the mission is an investment that pays off on every dispatch.
-
-## Why phasing works
-
-### Context management
-
-Every message in a session carries the full context. As the session grows, signal-to-noise drops and the model's ability to focus degrades. Splitting into phases sheds that baggage. Each phase starts clean.
-
-### Cost management
-
-Context accumulates as a triangular sum. Separate sessions cost N × T. One continuous session costs T × N × (N+1)/2. Later phases benefit most because they shed the most accumulated baggage.
-
-**The mental model.** Graph a cast on two axes: turns (x) and tokens (y). At each turn n, plot the context size y_n. The cost of that turn is approximately:
-
-- `(y_n − y_{n−1})` for the new content added (paid at the uncached / cache-write rate).
-- `y_n / 10` for the cached re-load of the prior context (cached reads at roughly 10% of the full rate).
-
-Total session cost is the sum over all turns. The cached-read term integrates to roughly the area under the line divided by ten.
-
-The shape of the line determines the bill. A flat, low line — a new cast that stays small — integrates to a small area. A line that climbs to a large context and then continues at that height — a long recast — integrates to a large area, even if the deltas per turn are small. You pay for the height of the line on every turn.
-
-When deciding **recast vs new cast**, draw the line for each option across the turns you expect. The integral is the cost. A new cast that starts at zero usually wins for multi-turn revisions, even paying for setup overhead. A recast wins only when the marginal work fits in roughly one turn against a cast that's already paid the setup; the existing context buys you something concrete that the new cast would have to re-establish.
-
-Cost is one dimension of the decision. Other considerations — risk (polluted reasoning, accumulated bias), continuity (codebase walk, in-progress reasoning), time-to-completion — weigh in too. The line gives you the cost input to balance against the rest.
-
-### Probability management
-
-In a single long session, errors compound multiplicatively. Split into phases with verification between each, errors become independent. A failed phase gets caught and re-run at low cost.
-
-This only works when verification between phases actually works. If the supervisor can't verify whether Phase 1 succeeded, errors propagate silently and you're back to the multiplicative model.
-
-## The supervision model
-
-Three independent parties: you write the mission, the operator executes it, the supervisor verifies the outcome.
-
-The supervisor writes the verification, not you. Leave `## Supervisor Verification` blank on each phase. If you write verification, the supervisor is approving your self-assessment, which is not a gate.
-
-Verification checks outcomes, not compliance. "Does this work?" not "did they follow the steps?" Some checks require judgment. That is fine.
 
 ## The operator follows what you write
 
@@ -148,3 +101,61 @@ Examples:
 - `2026-03-27_release/`
 
 Missions live directly under `projects/<project>/missions/`.
+
+## Scaffolding the skeleton
+
+A new prompt starts from the scaffold script, not from a previous prompt. Reading old prompts to learn the shape contaminates the new one: anti-patterns and outdated formats from earlier templates get pattern-matched into the new prompt. The script removes that loop. Shape comes from the blocks directly; mission content fills in afterwards.
+
+### Recurring mission types
+
+The rule above — scaffold from the blocks, don't read old prompts — is right for *feature* missions, where a prior prompt's specifics contaminate the new one. Some types are the exception: maintenance releases, security audits, version-bump releases recur with a fixed shape, and that shape is canonical. For these, read the most recent prior instance (or a recipe under `templates/prompt-authoring/recipes/`, if one has been canonised) for the **shape** — which phases, which roles, which skills, in what order. Take the skeleton and nothing else: leave the advisories, versions, package names, and context. The contamination guard is still live — if you find yourself carrying anything across but the phase/role/skill structure, stop; that is contamination, not shape.
+
+The script: `scripts/scaffold-prompt.mjs`. Reads JSON from stdin, writes a scaffolded `mission.md` into the mission directory it composes.
+
+Inputs:
+
+- `project` — the project name. The script writes the mission to `<pm-repo>/projects/<project>/missions/<YYYY-MM-DD>[_<issueNumber>]_<slug>/mission.md`.
+- `slug` — the description part of the mission directory name (`<YYYY-MM-DD>[_<issueNumber>]_<slug>/`).
+- `issueNumber` — optional. When supplied, included in the mission directory name per the naming convention.
+- `baseRepo`, `worktreeName` — composed into the `Deliver to` frontmatter as `${baseRepo}--${worktreeName}`.
+- `skillsDir` — substituted into `## Loading Skills` so the path pattern is concrete.
+- `phases` — the structural decisions. Each needs `role` and `model`. Courier also needs `variant` (`github` or `azure`).
+
+The date and the full output path are all derived by the script. The Handler does not name the path; the convention lives in one place.
+
+Example:
+
+```json
+{
+  "project": "claude-cli",
+  "slug": "history-view",
+  "issueNumber": 179,
+  "baseRepo": "~/repos/@shellicar/claude-cli",
+  "worktreeName": "history-view",
+  "skillsDir": "~/repos/shellicar/skills/skills",
+  "phases": [
+    { "role": "Investigator", "model": "Opus" },
+    { "role": "Apostle",      "model": "Opus" },
+    { "role": "Maker",        "model": "Opus" },
+    { "role": "Courier",      "model": "Opus", "variant": "github" }
+  ]
+}
+```
+
+Pipe in:
+
+```
+echo '<json>' | node scripts/scaffold-prompt.mjs
+```
+
+The output `mission.md` has the right frontmatter (with `Written against version` set to the fleet-material short SHA captured at scaffold time), the standard patterns block, the phases summary, every phase composed from its block, and Delivery Notes at the bottom. The operator role arrives via `--system` at launch; the scaffold no longer substitutes agent paths. Mission content is the work that follows the scaffold.
+
+The script commits the scaffold to the current branch before it returns. This is deliberate: the skeleton is boilerplate, so the review surface is your filled-in content diffed against that commit — not the commit itself. Don't be thrown by the commit, and don't treat it as the content commit: the filled mission and testament are committed separately, after the SC reviews, per *Writing a prompt* (step 8).
+
+## Guardrails are infrastructure
+
+Real guardrails — preflight, "stop and ask," critical-failure stop, explicit staging — live in the harness. They are silent until the operator hits them. They catch a defined failure mode without telling the operator how to walk through the work. The Handler does not write guardrails. If a recurring failure mode wants a structural rail, raise it with the SC; the rail belongs in the harness, not in every prompt as a re-statement.
+
+## Verify commands
+
+The commands in the Verify section are run by the operator and their output is consumed as tokens. If a command produces verbose output (turbo preamble, full test suite logs), the operator burns context on noise. Check that verify commands are configured for minimal output. See [verify-commands.md](verify-commands.md).

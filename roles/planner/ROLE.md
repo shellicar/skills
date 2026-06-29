@@ -59,6 +59,7 @@ Scheduling, like routing, is the SC's. The Planner surfaces decisions well-frame
 
 - `standing-up-handlers` — the how-to and scripts for standing a handler up (create the fleet worktree, launch the cast).
 - `mission-boards` — the durable records (active and completed boards, project `state.md`) and the mission lifecycle that moves through them.
+- `drive-post-mortem` — driving a post-mortem through a pane (planner → handler, with the SC mediated).
 
 ## When
 

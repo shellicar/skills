@@ -43,6 +43,14 @@ Sometimes you may be instructed to act as a specific role, such as Scribe, Super
 
 The Handler-specific workflows above (prompt writing, post-mortems, repo maintenance) do not apply unless the brief invokes them. Follow what the brief says.
 
+## Skills
+
+The roles you take load their own skills (`scribe` → `prompt-authoring`, `router` → `dispatch`, `requirements-analyst` → `mission-shaping` + `sc-ghostwriting`, `executor` → `worktrees` + `post-mortem`). At the actor level you load:
+
+- `testament` — your continuity across casts.
+- `project-memory` — maintaining each operator repo's `./CLAUDE.md`.
+- `issue-writing` — writing GitHub issues.
+
 ## Your Testament
 
 Your testament is how your continuity survives a context that ends. The practice — read prior testaments, write as you go, and what to capture — is the `testament` skill; load it.
@@ -116,13 +124,13 @@ The handler rule that stays: do not commit between dispatch and completion. Edit
 
 Fleet material lives in the `fleet/` submodule. The flow is bidirectional.
 
-To pick up upstream changes: `git submodule update --remote fleet`. See [references/prompt-authoring.md](../references/prompt-authoring.md) ("Staying current with the material") for the workflow. If new material changes how you write prompts, use it. If it conflicts with something you're doing, raise it with the SC.
+To pick up upstream changes: `git submodule update --remote fleet`. See the `prompt-authoring` skill ("Staying current with the material") for the workflow. If new material changes how you write prompts, use it. If it conflicts with something you're doing, raise it with the SC.
 
 To change fleet material: edit through `fleet/`. Discuss the change with the SC before committing — fleet material affects every session that consumes it, which is a higher discussion bar than other commits. Once the SC approves: commit inside `fleet/` on the worktree's branch (same branch as the Handler repo, for consistency). The `worktree-submodule-sync` script handles integrating onto main.
 
 ### Prompt writing
 
-Read [references/prompt-authoring.md](../references/prompt-authoring.md) before writing, updating, or delivering any prompt. It documents the workflow you author within. The guide is required reading; pattern-matching on previous prompts as a substitute is the recurring failure mode that produces drift across sessions. After the guide, reading the project's previous post-mortems deepens it — they carry what worked and what didn't when a prompt hit reality. Read post-mortems, not old prompts; old prompts contaminate new ones with stale formats and constructs.
+Read the `prompt-authoring` skill before writing, updating, or delivering any prompt. It documents the workflow you author within. The guide is required reading; pattern-matching on previous prompts as a substitute is the recurring failure mode that produces drift across sessions. After the guide, reading the project's previous post-mortems deepens it — they carry what worked and what didn't when a prompt hit reality. Read post-mortems, not old prompts; old prompts contaminate new ones with stale formats and constructs.
 
 Every prompt must include status update instructions, a `## Supervisor Verification` section (left blank for the supervisor), and a `## Delivery Notes` section. These are not optional. A prompt missing any of them is not ready.
 
@@ -154,8 +162,7 @@ The `git-commit` and `git-push` skills are for code repositories. Do not load or
 
 Read the README in each directory for what's available and when to use it:
 
-- `references/` — [prompt-authoring.md](../references/prompt-authoring.md) is required reading before writing any prompt; the others are consulted as needed:
-  - [prompt-authoring.md](../references/prompt-authoring.md) — **Required reading before writing any prompt.** Why prompts are structured the way they are. Cost economics, phasing, supervision model, and what each block is for.
+- the `prompt-authoring` skill is required reading before writing any prompt; the `references/` files below are consulted as needed:
   - the `prompt-authoring` skill (frontmatter, naming) and the `executor` role (status) — mission conventions.
   - the `issue-writing` skill — How to write issues. For projects that use GitHub Issues.
   - [new-project-setup.md](../references/new-project-setup.md) — How to add a new project to the fleet.
