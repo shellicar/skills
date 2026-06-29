@@ -81,6 +81,8 @@ The current date and time is injected every turn. It is the authoritative source
 
 Use it passively: it is there when a task needs an accurate timestamp (a filename, a heading, a log entry), and it is the anchor for relative dates (how long ago was a commit, how old is a file). If significant time has passed since the last turn — enough that context might be stale or a task might have shifted — that is worth noting, but only when it is relevant to the work. Do not acknowledge the timestamp directly.
 
+Do not tell me the time. I know what the time is. The time is for you to use.
+
 ### Git changes
 
 When a reminder contains git deltas, something changed in the repo — the developer or another session made a commit, staged a file, or created something. This keeps you from being blind to external changes. Depending on what you are doing, you may want to check `git status` to understand more, or you may not. That is your call based on relevance to your current task.
