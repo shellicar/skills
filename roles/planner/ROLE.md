@@ -16,11 +16,7 @@ Cross-mission, cross-project visibility and scheduling. The Planner:
 - stands up the session that runs a mission (a Router/script operation), then hands off;
 - rehydrates the environment after a tmux-server or machine death — resuming handlers, rebuilding the tmux network from the durable record.
 
-The picture lives in `active-missions.md` at the fleet repo root — a **durable, conversation-anchored record**, not a status board (copyable skeleton: [`references/templates/active-missions.md`](references/templates/active-missions.md)). Per mission it stores what cannot be recovered any other way: the **handler conversation id** (the anchor — `~/.claude/conversation/<id>.jsonl`, resumable with `--resume`), plus worktree, branch, project, phase, and model. It deliberately does **not** store tmux state (sessions, windows, panes, `@state`) — that is rebuilt on recovery, not restored. To survive a machine death the record must be committed and pushed; uncommitted, it dies with the disk.
-
-Per project, `projects/<project>/state.md` holds the **durable project record**: settled decisions and their reasoning, cross-mission dependencies, tech debt, and SC-captured items not yet scoped into missions. It is the complement to `active-missions.md` — that holds the live cross-mission picture, this holds what is durable about one project and lives nowhere else. It is **not** a status board (don't mirror `active-missions.md`, git, or `gh` into it; copied status goes stale the moment it's written). Read a project's state.md before shaping work for it, and maintain it to the shape and discipline of [`references/templates/state.md`](references/templates/state.md) — that template's *What this file is* section is the definition.
-
-The handler conversation id is read live from the cast's **status line** (`tmux capture-pane -p` → the `⚡ model · session · id` line) — the definitive source while a cast runs. `claude-threads` is only a *birth* anchor (it misses re-seats), and `.claude/.sdk-conversation-history` lists *every* conversation run in the cwd, so neither is reliable on its own. The threads are **bookends** — they mark a mission's birth and retirement and have no view of the process in between; holding the in-flight picture is the Planner's job, not theirs.
+The Planner keeps three durable records: the active and completed mission boards (`active-missions.md`, `completed-missions.md`) and each project's `projects/<project>/state.md`. What each holds, the lifecycle that moves through them, and how they survive a restart are in the `mission-boards` skill; their structure is in the templates under [`references/templates/`](references/templates/). Read a project's `state.md` before shaping work for it.
 
 ## Why
 
@@ -46,13 +42,7 @@ Scheduling, like routing, is the SC's. The Planner surfaces decisions well-frame
 4. Stand up the session: create the handler's worktree, then launch the handler cast — full *how* (sequence, configs, the brief vs the operator prompt) in the `standing-up-handlers` skill (`~/repos/shellicar/skills/skills/standing-up-handlers/SKILL.md`).
 5. Hand off — the mission session runs its own lifecycle (planning, execution, cleanup, post-mortem).
 
-**Mission lifecycle** — a mission moves through major states, and the durable boards split on the load-bearing line *is the work done*:
-
-- **active** — live work in progress, held in `active-missions.md` and the *only* thing in the project's active tmux session. A **held** mission (recorded in the Parked section, living in the `parked` tmux session — **never** the active one) is work unfinished with the handler still resumable, but not progressable now for a recorded reason. **One held state, typed by its trigger:** a **voluntary park** (the SC shelved it; un-parks on the SC's decision) or a **dependency block** (a named mission gates it; un-parks automatically when that blocker merges, which the Planner watches for and actions). Tag the window `@state=parked-<trigger>` — the trigger names the blocking mission, or the decision. **When a mission is stood up to unblock another, record the un-park trigger at that moment** — on the held mission's row *and* cross-referenced on the blocker's row — so the un-park isn't missed when the blocker lands.
-- **→ PR merged → completed** — merge is when the SC declares the mission complete; it crosses to `completed-missions.md` and enters the post-completion stage. It stays *active* through merge (never piling up as pending-merge) because conflicts and follow-on can still land. Completed runs two phases in order: **cleanup** (mechanical winding-down) then **post-mortem** (the retrospective, which only the cast that was there can give — so its conv id is the asset).
-- **→ post-mortem written → retired** — struck from every board entirely. A retired mission lives only in git history and the `claude-threads` bookends; keeping a row would just duplicate what git holds.
-
-`active-missions.md` is the bounded recovery/planning surface (read at boot, scanned often), so it stays short; `completed-missions.md` (copyable skeleton: [`references/templates/completed-missions.md`](references/templates/completed-missions.md)) is the unbounded winding-down drain queue, consulted when draining, not on every boot. Non-active casts live in their own tmux sessions (`parked`, `post-mortem`), anchored by handler conv id, so the active surface shows only live work.
+**Mission lifecycle** — the states a mission moves through (active → complete → done → post-mortem → retired), which board holds it at each, and how the parked/held states work: the `mission-boards` skill.
 
 **Recovery** — when the tmux server or the machine dies, the Planner rehydrates. Handler conversation ids are pre-generated at dispatch (`node -p "crypto.randomUUID()"`, recorded, then launched with `--resume <id>` — the CLI adopts the id whether or not the conversation exists yet), so the record is populated by construction, not reconstructed afterward.
 
@@ -68,6 +58,7 @@ Scheduling, like routing, is the SC's. The Planner surfaces decisions well-frame
 ## Skills
 
 - `standing-up-handlers` — the how-to and scripts for standing a handler up (create the fleet worktree, launch the cast).
+- `mission-boards` — the durable records (active and completed boards, project `state.md`) and the mission lifecycle that moves through them.
 
 ## When
 
