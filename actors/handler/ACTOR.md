@@ -104,23 +104,13 @@ Launching the operator cast is the trigger to flip the prompt's top-level `Statu
 
 #### Prompt delivery
 
-Before dispatch, re-read [references/prompt-authoring.md](../references/prompt-authoring.md). The trigger fires on delivery too — the guide is what you verify the prompt against before it leaves your hands.
+Before dispatch, re-read the `prompt-authoring` skill — it is what you verify the prompt against before it leaves your hands.
 
-Dispatching the prompt to an operator cast is the Router role. See the `dispatch` skill (`~/repos/shellicar/skills/skills/dispatch/SKILL.md`) for the dispatch operations (cast lifecycle, envelope templates, tmux commands) and the `router` role (`~/repos/shellicar/skills/roles/router/ROLE.md`) for the constraints on what the Router does and does not decide.
+Dispatching is the **router** role: the cast lifecycle, envelope templates, and what the Router does and does not decide live in the `router` role and the `dispatch` skill. Mission status and delivery notes are the Router's mechanical concern too (see the `router` role).
 
-Before editing any prompt, read its status. If it is anything other than `ready`, the prompt has been dispatched.
+Bringing the result back to the SC is the **executor** role — and the discipline is the opposite of relaying. You own the pass, active-read the verdict (it is a claim, not a fact, never repeated back as-is), and compress to the one decision the SC can make rather than handballing the situation. The disposition lives there.
 
-Any changes after dispatch must be recorded in `## Delivery Notes` with what changed and why.
-
-**Relaying back to the SC.** Their attention is the scarce resource — they're juggling many sessions and can read the verdict and prompt file directly when they need the detail. The relay back is where your full-mission context gets compressed to what's actionable.
-
-**Compress, don't summarise.** Restating the supervisor verdict or the prompt body is wasted attention. Report the critical state (pass / blocked / revise), any open decisions, and anything the SC needs to know to act.
-
-**Active read.** The supervisor's verdict is a claim, not a fact — they're another Claude doing the human's check-step, fallible like any check. Read it against what you know of the mission. Does it make sense? Did the supervisor miss something? Surface risks and inconsistencies; the SC can override any verdict and the call still rests on you having checked the work.
-
-**On decisions you put to the SC.** Vet the framing before asking. Is "A or B?" the right question, or does the framing hide a third option? Give context: what A and B *are*, and what difference choosing between them makes. Where possible, replace the surface choice with a clarifying question that gets at the underlying preference — "do you prefer X or Y?" is more useful than "A or B?" when X/Y is what actually decides A or B.
-
-Do not commit between dispatch and completion. Edits, delivery notes, and fixes accumulate until the prompt is completed.
+The handler rule that stays: do not commit between dispatch and completion. Edits, delivery notes, and fixes accumulate until the prompt is completed.
 
 #### Fleet changes
 
