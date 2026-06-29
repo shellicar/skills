@@ -17,7 +17,7 @@ Process control:
 
 - `SIGINT` exits the CLI. `next-phase-cast` sends Ctrl-C to the pane before relaunching.
 
-Recast (re-prompt an active cast): the message is sent into the pane directly (paste-and-submit). No `--file`, no `--prompt`. The envelope IS the message.
+Recast (re-prompt an active cast): `recast-operator` / `recast-supervisor` paste a pre-built template message into the pane and submit. No `--file`, no `--prompt`, and no caller-authored prose — the Handler picks a template; mission content stays in the mission file.
 
 ### Pane lifecycle
 
@@ -172,55 +172,33 @@ JSON config:
 
 Returns the target pane id (same as the existing pane) on stdout.
 
-#### Operator re-prompt (recast)
+#### Re-prompt an active cast (recast)
 
-Sent into an active operator cast for the next iteration. The mission and skills are already loaded; the recast carries only `<from>` and `<message>` (the temporal trigger).
+Two scripts re-trigger an active cast in place: [`recast-operator`](scripts/recast-operator.mjs) and [`recast-supervisor`](scripts/recast-supervisor.mjs). Each resolves its pane by `@role`, sets the window `@state` (`op-pending` / `sv-pending`) so the status bar shows who is active, then pastes-and-submits an envelope.
 
-Invoke (message piped to stdin):
+The message is execution context only — *why* the cast is being re-prompted, plus any mechanical pointer it needs — and is selected from a fixed template set, never written as prose. Mission content stays in the mission file, the single source of truth. Two reasons: anything sent in the envelope is not captured in the mission, and fixed, small templates keep dispatch predictable.
+
+**`recast-operator`** — pick a `template`:
+
+- `mission-updated` — the mission file changed; re-read it.
+- `revise` — the supervisor recorded a verdict in `## Supervisor Verification`; re-read it and the mission and address it in a new iteration.
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/recast.mjs", "stdin": "{\"role\":\"<role>\",\"from\":\"<from>\",\"message\":\"<message text>\"}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/recast-operator.mjs", "stdin": "{\"from\":\"<from>\",\"template\":\"mission-updated\"}"}
 ]}
 ```
 
-Triggers and message shape per trigger:
+**`recast-supervisor`** — pick a `template`:
 
-**Prompt file updated** (the SC, another role, or the supervisor edited the mission between turns):
+- `verify` — the operator finished a new iteration. Rebuilds the operator-pane footer (the `tmux capture-pane` pointer, resolved via `getOperatorPane`, as `new-supervisor-cast` sends on first launch) so the supervisor knows where to read the debrief, then verifies and records a new iteration verdict. Without it the supervisor has no signal the operator finished and sits idle.
+- `mission-updated` — the mission file changed; re-read it.
 
-~~~
-The prompt file has been updated. <brief pointer to what changed — e.g. "verdict in `## Supervisor Verification` for Phase 1">
-~~~
-
-This covers supervisor verdicts too. The supervisor writes verdicts into the mission file's `## Supervisor Verification` section per their role; the recast message just triggers the cast to re-read.
-
-**SC correction or follow-up**: the SC's text passes through verbatim. The Router doesn't paraphrase.
-
-~~~
-The SC has sent the following:
-
-<from>
-the Supreme Commander
-</from>
-<message>
-SC's text, verbatim
-</message>
-~~~
-
-#### Supervisor re-prompt (recast)
-
-Same principle as operator re-prompt. Use `recast` with `{"role": "supervisor", ...}`.
-
-~~~
-The SC has sent the following:
-
-<from>
-the Supreme Commander
-</from>
-<message>
-SC's correction or question, verbatim
-</message>
-~~~
+```json
+{"commands": [
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/recast-supervisor.mjs", "stdin": "{\"from\":\"<from>\",\"template\":\"verify\"}"}
+]}
+```
 
 
 ### Skills
