@@ -23,7 +23,7 @@
  * involves the fleet/ submodule) is a separate concern, deliberately not here.
  *
  * WHY NO BRIEF — THE BARE LINE
- * The `envelope` is a bare mission line ("i have a mission to fix cves in the
+ * The launch line is a fixed bare mission line (from `task` + `project`) ("i have a mission to fix cves in the
  * claude-cli repo") and nothing else. No brief is attached, and the envelope is
  * not an instruction sheet. This is load-bearing. Tested n=4 each way on
  * 2026-06-20: a cast handed a brief that named specifics started interrogating
@@ -57,7 +57,8 @@
  *     "session":    "claude-cli",
  *     "cwd":        "~/repos/fleet/claude-fleet-shellicar--system-prompt",
  *     "convId":     "<pre-generated uuid>",
- *     "envelope":   "i have a mission to fix cves in the claude-cli repo",
+ *     "task":       "to fix the cves",
+ *     "project":    "claude-cli",
  *     "skills":     ["claude-philosophy", "commander-protocol", ...],
  *     "name":       "system-prompt",
  *     "windowName": "claude-cli-system-prompt",
@@ -66,7 +67,7 @@
  *     "model":      "claude-opus-4-8"
  *   }
  *
- * Required: session, cwd, convId, envelope, skills, name, windowName.
+ * Required: session, cwd, convId, task, project, skills, name, windowName.
  * Optional: title (defaults to windowName), colour (unset if omitted),
  *           model (defaults to claude-opus-4-8 — handlers default to Opus).
  *
@@ -77,7 +78,8 @@
 import { readFileSync } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
 import { homedir } from "node:os";
-import { launchCli } from "../../../shared/pane.mjs";
+import { launchCli } from "../../../shared/pane/launch.mjs";
+import { handlerLaunchMessage } from "../../../shared/pane/templates.mjs";
 
 function expandPath(p) {
   if (typeof p !== "string") return p;
@@ -85,7 +87,7 @@ function expandPath(p) {
 }
 
 const cfg = JSON.parse(readFileSync(0, "utf8"));
-for (const k of ["session", "cwd", "convId", "envelope", "skills", "name", "windowName"]) {
+for (const k of ["session", "cwd", "convId", "task", "project", "skills", "name", "windowName"]) {
   if (!cfg[k]) {
     console.error(`config missing required field: ${k}`);
     process.exit(2);
@@ -121,7 +123,7 @@ const result = launchCli(paneId, {
   from: cfg.from || "the Planner",
   model,
   name: cfg.name,
-  message: cfg.envelope,
+  message: handlerLaunchMessage({ task: cfg.task, project: cfg.project }),
   skills: cfg.skills,
   actor: "handler",
   role: ["scribe", "executor", "router"],

@@ -39,7 +39,8 @@
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { getOperatorPane } from '../../../shared/pane.mjs';
+import { getOperatorPane } from '../../../shared/pane/lookup.mjs';
+import { supervisorRecastMessage } from '../../../shared/pane/templates.mjs';
 
 const cfg = JSON.parse(readFileSync(0, 'utf8'));
 
@@ -65,18 +66,17 @@ if (!target) {
   process.exit(1);
 }
 
-let message;
-if (cfg.template === 'mission-updated') {
-  message = 'The mission file has been updated. Re-read it before continuing.';
-} else if (cfg.template === 'verify') {
-  const operatorPane = getOperatorPane(pm);
+let operatorPane;
+if (cfg.template === 'verify') {
+  operatorPane = getOperatorPane(pm);
   if (!operatorPane) {
     console.error(`No pane with @role=operator in window of ${pm}`);
     process.exit(1);
   }
-  const footer = `Operator's debrief is in tmux pane ${operatorPane}. Read with \`tmux capture-pane -t ${operatorPane} -p -S -500\`.`;
-  message = `The operator has been re-prompted and completed a new iteration.\n\n${footer}\n\nVerify this iteration against the mission file and record your verdict in a new iteration block under \`## Supervisor Verification\`.`;
-} else {
+}
+
+const message = supervisorRecastMessage(cfg.template, { operatorPane });
+if (message === undefined) {
   console.error(`Unknown or missing template: ${cfg.template}. One of: verify, mission-updated`);
   process.exit(2);
 }

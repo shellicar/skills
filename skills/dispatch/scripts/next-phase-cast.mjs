@@ -25,7 +25,8 @@
  *     "name": "Builder",             // for --name flag; supervisor casts use "supervisor"
  *     "role": "builder",              // operator phase sub-role → roles/<role>/ROLE.md; omit for supervisor
  *     "from": "the claude-cli-cve-fix Handler",
- *     "message": "Phase 2, iteration 1. ...",
+ *     "phase": 2,                       // phase number; the envelope is fixed
+ *     "iteration": 1,                   // optional, defaults to 1
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
  *   }
  *
@@ -42,7 +43,8 @@
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { launchCli } from '../../../shared/pane.mjs';
+import { launchCli } from '../../../shared/pane/launch.mjs';
+import { operatorCastMessage, supervisorCastMessage } from '../../../shared/pane/templates.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -51,7 +53,7 @@ if (!pm) {
 }
 
 const cfg = JSON.parse(readFileSync(0, 'utf8'));
-for (const k of ['from', 'actor', 'model', 'missionFile', 'name', 'message']) {
+for (const k of ['from', 'actor', 'model', 'missionFile', 'name', 'phase']) {
   if (!cfg[k]) {
     console.error(`config missing required field: ${k}`);
     process.exit(2);
@@ -75,13 +77,18 @@ execFileSync('tmux', ['send-keys', '-t', target, 'C-c']);
 const stateValue = cfg.actor === 'supervisor' ? 'sv-pending' : 'op-pending';
 execFileSync('tmux', ['set-option', '-w', '-t', target, '@state', stateValue]);
 
-// Relaunch through the shared primitive: actor + sub-role in, --system stays private to pane.mjs.
+// The temporal envelope is a fixed template, chosen by actor; the Handler
+// supplies only phase/iteration, never prose.
+const message = cfg.actor === 'supervisor'
+  ? supervisorCastMessage({ phase: cfg.phase })
+  : operatorCastMessage({ phase: cfg.phase, name: cfg.name, iteration: cfg.iteration });
+
 const result = launchCli(target, {
   from: cfg.from,
   model: cfg.model,
   missionFile: cfg.missionFile,
   name: cfg.name,
-  message: cfg.message,
+  message,
   skills: cfg.skills,
   effort: cfg.effort,
   actor: cfg.actor,

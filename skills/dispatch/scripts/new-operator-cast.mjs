@@ -28,7 +28,8 @@
  *     "name": "Maker",
  *     "role": "maker",                // operator phase sub-role → roles/<role>/ROLE.md
  *     "from": "the claude-cli-cve-fix Handler",
- *     "message": "Phase 1, iteration 1. ...",
+ *     "phase": 1,                       // phase number; the envelope is fixed
+ *     "iteration": 1,                   // optional, defaults to 1
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
  *   }
  *
@@ -44,7 +45,8 @@
  */
 
 import { readFileSync } from 'node:fs';
-import { ensureCast } from '../../../shared/pane.mjs';
+import { ensureCast } from '../../../shared/pane/launch.mjs';
+import { operatorCastMessage } from '../../../shared/pane/templates.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -53,7 +55,7 @@ if (!pm) {
 }
 
 const cfg = JSON.parse(readFileSync(0, 'utf8'));
-for (const k of ['from', 'cwd', 'model', 'missionFile', 'name', 'message']) {
+for (const k of ['from', 'cwd', 'model', 'missionFile', 'name', 'phase']) {
   if (!cfg[k]) {
     console.error(`config missing required field: ${k}`);
     process.exit(2);
@@ -71,7 +73,7 @@ const { paneId, launchResult } = ensureCast({
   model: cfg.model,
   missionFile: cfg.missionFile,
   name: cfg.name,
-  message: cfg.message,
+  message: operatorCastMessage({ phase: cfg.phase, name: cfg.name, iteration: cfg.iteration }),
   skills: cfg.skills,
   effort: cfg.effort,
   role: cfg.role,

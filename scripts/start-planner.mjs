@@ -25,7 +25,7 @@
  *   start-planner.mjs -- --resume <conv-id>
  *
  * SHARED COMPOSITION
- * `--system` is built by the shared `buildSystem` (../shared/pane.mjs), the same
+ * `--system` is built by the shared `buildSystem` (../shared/pane/envelope.mjs), the same
  * helper the dispatch launchers use. One source of truth for the actor/role XML
  * format — no inlined second copy to drift. That is why this lives in the skills
  * repo next to its siblings rather than standalone in fleet/.
@@ -41,7 +41,7 @@
  */
 
 import { execFileSync, spawnSync } from "node:child_process";
-import { buildSystem } from "../shared/pane.mjs";
+import { buildSystem } from "../shared/pane/envelope.mjs";
 
 // The composition preset: the Planner's identity (actor + role) into --system.
 const system = buildSystem({ actor: "planner", role: "planner" });

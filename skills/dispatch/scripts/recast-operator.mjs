@@ -31,11 +31,7 @@
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-
-const TEMPLATES = {
-  'mission-updated': 'The mission file has been updated. Re-read it before continuing.',
-  'revise': 'The supervisor has recorded a verdict in `## Supervisor Verification`. Re-read it and the mission, and address it in a new iteration.',
-};
+import { operatorRecastMessage } from '../../../shared/pane/templates.mjs';
 
 const cfg = JSON.parse(readFileSync(0, 'utf8'));
 
@@ -45,9 +41,9 @@ if (!from) {
   process.exit(2);
 }
 
-const message = TEMPLATES[cfg.template];
+const message = operatorRecastMessage(cfg.template);
 if (!message) {
-  console.error(`Unknown or missing template: ${cfg.template}. One of: ${Object.keys(TEMPLATES).join(', ')}`);
+  console.error(`Unknown or missing template: ${cfg.template}. One of: mission-updated, revise`);
   process.exit(2);
 }
 

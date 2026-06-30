@@ -25,7 +25,7 @@
  *     "model": "claude-opus-4-8",
  *     "missionFile": "/path/to/mission.md",
  *     "from": "the claude-cli-cve-fix Handler",
- *     "message": "Phase 1. ...",
+ *     "phase": 1,                       // phase number; the envelope is fixed
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
  *   }
  *
@@ -43,7 +43,9 @@
 import { readFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ensureCast, getOperatorPane } from '../../../shared/pane.mjs';
+import { ensureCast } from '../../../shared/pane/launch.mjs';
+import { getOperatorPane } from '../../../shared/pane/lookup.mjs';
+import { supervisorCastMessage } from '../../../shared/pane/templates.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -52,7 +54,7 @@ if (!pm) {
 }
 
 const cfg = JSON.parse(readFileSync(0, 'utf8'));
-for (const k of ['from', 'cwd', 'model', 'missionFile', 'message']) {
+for (const k of ['from', 'cwd', 'model', 'missionFile', 'phase']) {
   if (!cfg[k]) {
     console.error(`config missing required field: ${k}`);
     process.exit(2);
@@ -64,8 +66,6 @@ if (!operatorPane) {
   console.error(`No pane with @role=operator in window of ${pm}`);
   process.exit(1);
 }
-
-const supervisorContext = getSupervisorContext({ operatorPane, targetRepo: cfg.cwd });
 
 // TEMPORARY WORKAROUND. Launch the supervisor in a neutral scratch directory
 // instead of the worktree. claude-sdk-cli auto-loads the launch directory's
@@ -87,7 +87,7 @@ const { paneId, launchResult } = ensureCast({
   model: cfg.model,
   missionFile: cfg.missionFile,
   name: 'supervisor',
-  message: `${cfg.message}\n\n${supervisorContext}`,
+  message: supervisorCastMessage({ phase: cfg.phase }),
   skills: cfg.skills,
   effort: cfg.effort,
 });
@@ -98,15 +98,3 @@ if (launchResult && !launchResult.ok) {
 }
 
 console.log(paneId);
-
-/**
- * Returns the supervisor-specific context block: how to capture the operator's
- * debrief and a note that the supervisor's cwd is a scratch directory (so the
- * target repo path in the envelope is the real one). Two pieces of context the
- * Handler cannot author and the SC shouldn't have to know about.
- */
-function getSupervisorContext({ operatorPane, targetRepo }) {
-  const operatorFooter = `Operator's debrief is in tmux pane ${operatorPane}. Read with \`tmux capture-pane -t ${operatorPane} -p -S -500\`.`;
-  const targetRepoNote = `The target repo is at ${targetRepo}; your own working directory is a scratch directory.`;
-  return `${operatorFooter}\n\n${targetRepoNote}`;
-}
