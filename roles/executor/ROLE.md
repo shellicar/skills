@@ -97,38 +97,9 @@ Do not run it during cleanup, and do not reorder the two. See the `executor` rol
 
 Set the window's `@state` to `post-mortem-pending`. Present the reference material to the SC: the operator's testament, the delivery notes, and the diff. Do not start the conversation. The SC drives when they have time.
 
-### What it is
+### How to run it
 
-A conversation, like a retro. It has two distinct phases — keep them separate.
-
-#### Phase 1: Discussion
-
-Both parties talk through three questions:
-
-- What went well?
-- What didn't go well?
-- What can we do better?
-
-This phase is **identification only**. No solutions. The subject is always "we" — "we can do better at X" — not "I failed at Y" or "X was broken." Attaching a solution to an identification either dismisses the problem before it is understood, or assigns ownership before the discussion is done.
-
-Neither walks in with conclusions; they emerge from the conversation. The SC was there and brings memory of the mission's arc; you bring the operator's testament, the delivery notes, and the diff.
-
-#### Phase 2: What we're doing about it
-
-Only after Phase 1 is complete and the identifications are settled.
-
-The outcomes are not necessarily "action items." A response can be:
-
-- A concrete change to a specific artifact.
-- Something already in progress, acknowledged.
-- Something to monitor: if it recurs, then decide.
-- Something that needs a design discussion before anything is written.
-
-When an outcome is a concrete change, it must be specific enough for another session to execute with judgment — file path, which section, what the change is and why. "Change the X block" is not enough; the path and the substance must be there.
-
-The section heading is **"What we're doing about it"** rather than "Action items" — the broader label fits the full range of outcomes.
-
-Writing the post-mortem before having the conversation produces hollow confidence: phrases that sound analytical but aren't grounded in anything that happened.
+The conduct is the `post-mortem` skill: the two phases kept apart, identification before solutions, "we" not "I", and changes pitched so another session could act on them. Run the retro from there. This section holds only the mission-specific wrapping, when it happens and where the file lands.
 
 ### Where it is written
 
