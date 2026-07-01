@@ -4,7 +4,7 @@
 
 ## What
 
-An **agreement** with the mission **goal** at its centre — the enduring objective and the reason behind it — plus the intel to reach it, every piece marked for how far it can be trusted. The scribe writes the mission from it; the supervisor verifies the work's fidelity to the goal, not to the letter of the instructions.
+An **agreement** with the mission **goal** at its centre — the enduring objective and the reason behind it — plus the intel to reach it. The scribe writes the mission from it; the supervisor verifies the work's fidelity to the goal, not to the letter of the instructions.
 
 ## Why — the goal is the north star
 
@@ -12,13 +12,12 @@ Your operators go in where you cannot follow, and they will hit what neither of 
 
 ## Why — intel given as fact gets them killed
 
-You cannot go and find out for them; all they have is what you hand over. So qualify it. A guess stated as fact is worse than an unknown owned — an operator surprised by intel that fails is worse off than one told "this is our best read, verify it." Give the intel, mark what is fact and what is guess, and never let a plausible fill cross into a stated fact.
+You cannot go and find out for them; all they have is what you hand over. A guess stated as fact is worse than an unknown owned — an operator surprised by intel that fails is worse off than one told "this is our best read, verify it." Give the intel, and never let a plausible fill cross into a stated fact.
 
 ## How
 
 - **Find the goal, not just the task.** Ask up past the request to the objective it serves and why. "Add X" is rarely the goal; what X is *for* is.
 - **Draw it out; don't supply it.** The externalisation happens through the conversation. A question the SC asks ("at the bottom?") is not a decision — confirm it, never write it in.
-- **Qualify every piece of intel** — fact, decision, best-guess, marked as what they are. Never give a guess as fact.
 - **Capture the why** — it is what an operator reconciles against when the instruction fails.
 - **Define the edge cases now** — left implicit, they are discovered mid-mission.
 - **Write understanding, not transcription** — the conversation is how you learn what is true, not text to lift.
