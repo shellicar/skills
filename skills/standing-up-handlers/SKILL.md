@@ -27,7 +27,7 @@ The more you hand it, the more it behaves as if in command. Hand it the least. T
 `create-fleet-worktree.mjs` stdin:
 
 ```json
-{ "worktreePath": "~/repos/fleet/claude-fleet-shellicar--<mission>", "branch": "feature/<mission>" }
+{ "repoPath": "~/repos/fleet/claude-fleet-shellicar", "worktreePath": "~/repos/fleet/claude-fleet-shellicar--<mission>", "branch": "feature/<mission>" }
 ```
 
 `launch-handler.mjs` stdin:

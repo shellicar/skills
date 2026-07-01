@@ -35,13 +35,16 @@
  *   {
  *     "worktreePath":  "~/repos/shellicar/claude-fleet-eagers--system-prompt-per-query",
  *     "branch":        "feature/system-prompt-per-query",
- *     "repoPath":      "~/repos/shellicar/claude-fleet-eagers",  // optional
+ *     "repoPath":      "~/repos/shellicar/claude-fleet-eagers",
  *     "startingPoint": "origin/main"                              // optional
  *   }
  *
- * Required: worktreePath, branch.
- * Optional: repoPath (default: the current working directory),
- *           startingPoint (default origin/main).
+ * Required: repoPath, worktreePath, branch.
+ * Optional: startingPoint (default origin/main).
+ *
+ * repoPath is required (no cwd default): defaulting to the working directory
+ * silently branched the worktree off whichever repo the script happened to be
+ * run from. Naming the repo removes that trap.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -85,11 +88,11 @@ function readConfig() {
   } catch (err) {
     die(`Invalid JSON on stdin: ${err.message}`);
   }
-  for (const k of ["worktreePath", "branch"]) {
+  for (const k of ["repoPath", "worktreePath", "branch"]) {
     if (!cfg[k]) die(`Missing required field: ${k}`);
   }
   return {
-    repoPath: expandPath(cfg.repoPath || process.cwd()),
+    repoPath: expandPath(cfg.repoPath),
     worktreePath: expandPath(cfg.worktreePath),
     branch: cfg.branch,
     startingPoint: cfg.startingPoint || "origin/main",
