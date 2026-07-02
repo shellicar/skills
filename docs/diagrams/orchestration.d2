@@ -50,14 +50,14 @@ sc -> handler.ra: "direction" { style.stroke: "#A569BD"; style.stroke-width: 3 }
 handler.executor -> sc: "report (a decision)" { style.stroke: "#A569BD"; style.stroke-width: 3 }
 
 # ---------------- the phase loop — EVERY hop goes through the Router ----------------
-handler.executor -> handler.router: "① hand off phase" { style.stroke: "#F7DC6F"; style.stroke-width: 2 }
+handler.executor -> handler.router: "① commit, then hand off phase" { style.stroke: "#F7DC6F"; style.stroke-width: 2 }
 handler.router -> operator: "② dispatch phase" { style.stroke: "#E67E22"; style.stroke-width: 3 }
 operator -> handler.router: "③ output (code / plan + brief)" { style.stroke: "#E67E22"; style.stroke-width: 3 }
 handler.router -> supervisor: "④ for review" { style.stroke: "#E74C3C"; style.stroke-width: 3 }
 supervisor -> handler.router: "⑤ verdict" { style.stroke: "#E74C3C"; style.stroke-width: 3 }
 handler.router -> handler.executor: "⑥ verdict → Executor decides" { style.stroke: "#F7DC6F"; style.stroke-width: 2 }
 
-note: "One phase = the loop ①→⑥, and the Router is the only thing that touches the Operator and the Supervisor.\nThe Executor never talks to the Operator or Supervisor directly, and the Operator and Supervisor never talk to each other.\nThink OSI: Executor / Operator / Supervisor are peers; the Router is the layer beneath that carries every message.\nMulti-phase missions just repeat the loop — phase 2's operator works from phase 1's committed output, never from phase 1's operator. One operator per phase, always." {
+note: "One phase = the loop ①→⑥, and the Router is the only thing that touches the Operator and the Supervisor.\nThe Executor never talks to the Operator or Supervisor directly, and the Operator and Supervisor never talk to each other.\nThink OSI: Executor / Operator / Supervisor are peers; the Router is the layer beneath that carries every message.\nMulti-phase missions just repeat the loop — phase 2's operator works from phase 1's committed output, never from phase 1's operator. One operator per phase, always.\nThe commit is the SC's: after the Executor's report (⑥) the SC decides, and committing the verified phase is the SC's own act in the operator worktree — only the SC may make or grant that commit; the handler never commits there.\nBefore ①, the Executor always commits its own record (mission, state, prompt) in the handler repo, so the operator builds from committed state — a different commit, in a different repo, from the SC's phase commit above." {
   near: bottom-center
   shape: text
   style.font-color: "#7F8C8D"
