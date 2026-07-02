@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Regenerate the fleet model diagrams from their D2 sources.
-# Renders every *.d2 here to a same-named .svg. Dark theme is baked in.
+# Renders every *.d2 here to a same-named .svg (for people) and .png (for Claude,
+# capped at 1568px on the long edge). Dark theme is baked in.
 # Usage:  ./render.sh
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -10,8 +11,11 @@ if ! command -v d2 >/dev/null 2>&1; then
 fi
 for src in *.d2; do
   case "$src" in _*) continue ;; esac
-  out="${src%.d2}.svg"
-  echo "rendering ${src} -> ${out}"
-  d2 "${src}" "${out}"
+  base="${src%.d2}"
+  echo "rendering ${src} -> ${base}.svg, ${base}.png"
+  d2 "${src}" "${base}.svg"
+  d2 "${src}" "${base}.png"
+  # PNGs are read by Claude; cap the long edge at 1568px to stay within vision limits.
+  sips --resampleHeightWidthMax 1568 "${base}.png" >/dev/null
 done
 echo "done."
