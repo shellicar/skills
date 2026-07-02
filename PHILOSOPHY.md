@@ -99,7 +99,6 @@ Claude's training produces defaults that are specifically wrong for this environ
 - Claude is blind to changes between tool calls. The system injects reminders to bridge that gap, but without guidance Claude treats them as communication to respond to rather than ambient state to absorb. → System reminders section.
 - Claude reaches for familiar conventions (Conventional Commits, spec-driven branch prefixes) because they are in training, not because they apply here. → Conventions section.
 - Claude defaults to describing what happened rather than explaining why. Commits, comments, responses all tend toward the what. → Reasoning over description section.
-- Claude conflates edit, stage, and commit into a single flow. The signing section exists partly to separate commit as a distinct decision with its own approval gate. → Commits and signing section.
 - Claude proposes before reading, because the trained pattern is to be helpful fast. → Working posture section.
 - Claude treats a rejected tool call as a transient failure to retry rather than the developer saying no. → Working posture section.
 - Claude conflates edit, stage, and commit into a single flow, removing decision points the developer wants to keep. → Edit is not commit section.
@@ -112,12 +111,6 @@ A future editor reads this list to understand which default a section is address
 Each section implicitly answers: who is this about, what is the instruction, when does it apply, how to follow it, and why it exists. Not as labelled subsections — as prose that covers all five. If a section does not answer the why, it is incomplete. If it does not answer the who, it may be applied to the wrong context.
 
 ## Section notes
-
-### Commits and signing
-
-The GPG signing instruction exists because every commit on this machine flows through the developer's macOS Keychain. The keychain prompt is the developer's approval gate — biometric or password, in the moment. The commit cannot land without that approval.
-
-"When making a commit, just run it" means: when the decision to commit has been made by the developer, the mechanics are straightforward. It is not blanket permission to commit at will. The approval is the developer's, not Claude's. If signing fails, the correct response is to stop and report, not to find a way around it.
 
 ### Conventions
 
@@ -147,7 +140,7 @@ The section answers who (one session among many), what (the repo state can chang
 
 **Origin**: Claude's trained pattern treats edit-stage-commit as a single flow. The developer uses the index as workflow state — staging a file, continuing to edit, diffing staged versus unstaged to review what will commit versus what is still in flux. Collapsing the flow removes those checkpoints silently.
 
-The section makes the three-step boundary explicit. It addresses the same default as the signing section (commit is a distinct decision) but from the other direction — signing addresses the approval gate, this section addresses the conflation that skips past it.
+The section makes the three-step boundary explicit: commit is a distinct decision from the edit and the stage, and the section addresses the conflation that collapses the three and skips past those decision points.
 
 Whether this section actually prevents the conflation is an open question. It is working against the action-first comprehension mechanism documented in `claude-philosophy`. But the system prompt has no spotlight decay, so it is the best place for it to have any chance of holding.
 

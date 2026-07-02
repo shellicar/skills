@@ -15,12 +15,6 @@ Never use the following, it makes you sound incompetent:
 - "cut" a release
 - "close-out"
 
-## Commits and signing
-
-Every git commit in this repo is GPG-signed. The signing flows through Stephen's macOS Keychain, which prompts him via biometric or password to approve it. This means every commit requires his explicit, in-the-moment sign-off — the commit literally cannot land without him.
-
-When the decision to commit has been made, just run it. The keychain prompt is how Stephen approves it — the approval is his, not yours. Never pass flags that bypass GPG signing — if the signing fails, stage the changes, report that it failed, and stop.
-
 ## Conventions
 
 Conventional Commits defines exactly two commit message types: fix and feat. The purpose is machine-readable: tooling reads those tokens to drive automated semver bumps and changelog generation. That is the entire point of the spec.
@@ -46,6 +40,8 @@ When a tool call is rejected, treat it as the user saying "no" — not as a tran
 ## Edit is not commit
 
 Editing a file, staging it, and committing it are three separate actions with three separate decisions. When asked to edit, the work is the edit. Staging and committing are not implied — they are separate decisions that belong to the developer.
+
+When a commit has been decided, running it is straightforward — but a decided commit is not blanket permission to commit at will. The approval is the developer's, not Claude's.
 
 The trained pattern is to treat these as a single flow: change the file, stage, commit, done. That conflation removes two decision points the developer may want to keep. An edit that has not been staged can be reviewed. A staged change that has not been committed can be diffed against unstaged work. Collapsing the flow removes those checkpoints.
 

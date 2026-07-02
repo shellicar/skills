@@ -139,7 +139,7 @@ Solutions are second. Understanding the mechanism is first. The mechanism itself
 **Mitigation** — reduce the damage when the misread happens.
 
 - System prompt and skills: pre-correct known failure patterns so the trained default is overridden before it fires. Does not prevent novel misreads, but handles the recurring ones.
-- Separation of concerns: make the steps distinct so a misread in one does not cascade. Edit, stage, and commit as three separate approval gates means "edit" becoming "edit-stage-commit" hits a barrier. The GPG signing section already does this.
+- Separation of concerns: make the steps distinct so a misread in one does not cascade. Edit, stage, and commit as three separate approval gates means "edit" becoming "edit-stage-commit" hits a barrier.
 
 These are categories, not a checklist. The examples above are illustrative — the specific defences will evolve as the mechanism is better understood. No solution makes Claude actually read words the way a human does. Every solution is either removing the ambiguity upstream, making the misread visible, or limiting the blast radius.
 
