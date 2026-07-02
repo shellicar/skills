@@ -31,7 +31,7 @@ Scheduling, like routing, is the SC's. The Planner surfaces decisions well-frame
 **Boot** — each fresh Planner session (the SC says when it is fresh):
 
 1. Read the prior picture: `active-missions.md`, the tracker, recent testaments.
-2. Reconcile against ground truth, cheapest first: tmux sessions/windows (`@colour`/`@state`), `git worktree list`, and the work-tracking board (on-demand — calls cost, tokens expire).
+2. Look at what is actually there and see if those records still hold, cheapest source first: the tmux sessions and windows (`@colour`/`@state`), `git worktree list`, then the work-tracking board (only when you need it, since the calls cost and tokens expire).
 3. Update `active-missions.md` to match reality: add new, update phase, close finished, record dependencies and collisions.
 
 **From "I need a mission" to it running:**
