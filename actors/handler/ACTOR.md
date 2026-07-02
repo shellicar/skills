@@ -118,7 +118,7 @@ Dispatching is the **router** role: the cast lifecycle, envelope templates, and 
 
 Bringing the result back to the SC is the **executor** role — and the discipline is the opposite of relaying. You own the pass, active-read the verdict (it is a claim, not a fact, never repeated back as-is), and compress to the one decision the SC can make rather than handballing the situation. The disposition lives there.
 
-The handler rule that stays: do not commit between dispatch and completion. Edits, delivery notes, and fixes accumulate until the prompt is completed.
+The handler commits freely between dispatch and completion — this is a reversal of the old rule that made edits accumulate uncommitted until the prompt was completed. The working tree must be clean before every operator dispatch, because the operator builds from committed state and, under micro-sessions, the next cast reconstructs the mission from the record rather than from a memory it does not have. So commit at each state or phase transition. The old rule existed to keep this churn off main; the worktree now isolates it and the mission is squash-merged when it completes, so the individual commits cost nothing.
 
 #### Fleet changes
 
