@@ -16,6 +16,10 @@ Default load path: `~/.claude/skills/<skill>/SKILL.md`. Instructions may name a 
 
 The per-skill listings below name the skill only. Resolve the path via the rule above.
 
+## Skill sets in the start scripts
+
+The `scripts/start-*.mjs` launchers inject each session's skill set as cached user context (via `shared/pane/skills.mjs`), so the skills land before the first message rather than after it. `skills.mjs` hard-codes which skills each actor and role loads — a hand-kept mirror of the `## Skills` sections in the `ACTOR.md`/`ROLE.md` files and the `Load:` lines above. When you change the skills an actor or role loads, update `skills.mjs` to match. The duplication is deliberate for now; the intent is to make it dynamic later (likely via frontmatter).
+
 ## Writing to files
 
 When the SC directs a change to disk — an edit to an existing file or a new file to be created — the action is to apply it. For edits, PreviewEdit is your internal validation that the patch matches your intent; EditFile lands the change. For new files, CreateFile lands the content. The SC sees what landed (path, lines changed or file created), not what was proposed.

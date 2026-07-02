@@ -76,3 +76,36 @@ export function buildSystem({ actor, role }) {
   for (const r of roles) parts.push(part('roles', r, 'ROLE.md', 'role'));
   return parts.join(' ');
 }
+
+/**
+ * Read the actor + role files and build the --system content with the file
+ * CONTENTS inlined directly, not as $(cat ...) references, and with any leading
+ * frontmatter stripped. This is the form for the root-session launchers
+ * (start-planner, start-handler): they run claude-sdk-cli directly with no
+ * shell, so $(cat ...) would never expand — reading the contents here makes
+ * --system correct however it is launched. The cast launchers keep buildSystem's
+ * $(cat) form, which the shell they send into expands. Hard-fails (exit 2) if a
+ * file is missing. `role` accepts a single name or an array.
+ */
+export function buildSystemInline({ actor, role }) {
+  const base = join(homedir(), '.claude');
+  const read = (kind, name, file) => {
+    const p = join(base, kind, name, file);
+    try {
+      return stripFrontmatter(readFileSync(p, 'utf8')).trim();
+    } catch {
+      console.error(`system file not found: ${p}`);
+      process.exit(2);
+    }
+  };
+  const parts = [];
+  if (actor) parts.push(`<actor name='${actor}'>\n${read('actors', actor, 'ACTOR.md')}\n</actor>`);
+  const roles = Array.isArray(role) ? role : role ? [role] : [];
+  for (const r of roles) parts.push(`<role name='${r}'>\n${read('roles', r, 'ROLE.md')}\n</role>`);
+  return parts.join('\n');
+}
+
+// Strip a leading YAML frontmatter block (--- ... ---) if present; otherwise a no-op.
+function stripFrontmatter(s) {
+  return s.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
+}
