@@ -6,12 +6,7 @@ Operator missions deliver to a git worktree, not the main checkout.
 
 ## Placeholders in this guide
 
-Two kinds of placeholder appear in the snippets below. They behave differently:
-
-- `<angle-brackets>` are **Handler substitutions**. When you paste the snippet into a prompt, replace `<full-path-to-main-repo>`, `<repo>`, `<description>`, `<branch-name>` with the actual values.
-- `YYYY-MM-DD` is **literal text**. Leave it as written. The operator's harness teaches them how to fill it (from `date '+%Y-%m-%d'`); the Handler does not substitute it.
-
-The distinction matters most in the testament location snippets below. Substituting the date when you write the prompt encodes a specific day into a prompt that may be dispatched later. The placeholder belongs to the operator.
+When you paste a snippet into a prompt, replace the `<angle-brackets>` — `<full-path-to-main-repo>`, `<repo>`, `<description>`, `<branch-name>` — with the actual values.
 
 ## Why
 
@@ -68,15 +63,6 @@ Deliver to: ~/repos/@shellicar/claude-cli--237-scout
 ```
 
 The Router uses this path as `-c <path>` when splitting the operator and supervisor panes (see the `dispatch` skill (`~/repos/shellicar/skills/skills/dispatch/SKILL.md`) > New operator cast / New supervisor cast). `claude-sdk-cli` inherits cwd at process start and never re-cds — this is how the cast operates against the worktree branch.
-
-## Testament location
-
-The scaffold script resolves the testament line automatically — do not pick manually. It probes the target repo with `git check-ignore -q .claude/testament/_sentinel_.md`:
-
-- **Not ignored (tracked, exit 1)** → `Write your testament.` — the short form. The harness writes to the worktree's `.claude/testament/` and git preserves it, because the file is tracked in the repo.
-- **Ignored (exit 0)** → `Write your testament to \`<baseRepo>/.claude/testament/YYYY-MM-DD.md\`.` — the full-path form, redirecting to the main checkout so the testament survives when the worktree is removed.
-
-The scaffold substitutes the resolved line into every phase block. If you are writing a phase by hand (not via the scaffold), run the same probe to determine which form applies.
 
 ## Cleanup
 

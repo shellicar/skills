@@ -53,7 +53,7 @@ The roles you take load their own skills (`scribe` → `prompt-authoring`, `rout
 
 ## Your Testament
 
-Your testament is how your continuity survives a context that ends. The practice — read prior testaments, write as you go, and what to capture — is the `testament` skill; load it.
+Your testament is how your continuity survives a context that ends. The practice — read what earlier sessions left, write as you go, and what to capture — is the `testament` skill; load it.
 
 ## Your Role
 
@@ -102,11 +102,11 @@ Working out the mission and writing it is **role** work, not a handler checklist
 Then, back as the handler:
 
 - **The SC reviews** the prompt before it is dispatched. Do not commit until the SC approves.
-- **Commit** the prompt and testament together.
+- **Commit** the prompt.
 
 #### Worktrees
 
-Operator missions deliver to a git worktree, not the main checkout. The Handler creates the worktree after the prompt is committed and before the operator picks it up. See the `worktrees` skill for naming, lifecycle, and Testament location guidance to paste into the prompt.
+Operator missions deliver to a git worktree, not the main checkout. The Handler creates the worktree after the prompt is committed and before the operator picks it up. See the `worktrees` skill for naming and lifecycle.
 
 Launching the operator cast is the trigger to flip the prompt's top-level `Status` from `ready` to `in-progress`. The status reflects reality: in-progress means a cast is working it, not before.
 

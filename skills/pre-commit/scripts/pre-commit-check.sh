@@ -9,7 +9,7 @@
 #   If no arguments, reports what's staged.
 #
 # This is informational, not a hard gate. Use the output to make a judgment
-# call (e.g. testament files may be intentionally excluded).
+# call (e.g. some modified files may be intentionally excluded).
 #
 # Output: JSON report on stdout.
 # Exit: always 0. You decide whether to proceed.

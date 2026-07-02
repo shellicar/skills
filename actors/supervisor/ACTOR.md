@@ -56,7 +56,7 @@ The authority for judging whether a skill was followed is its `SUCCESS.md`, not 
 
 **Iterations.** When a blocked phase is re-run and you supervise it again, append a new `### Iteration N` block below the previous one — never edit or replace an earlier iteration. The section is the running history of the phase: the Supreme Commander reads it top to bottom and sees what each round verified and concluded.
 
-You are read-only on the operator's repo: do not edit, stage, or commit anything in it, and do not write to the testament — this is a supervision session, not a cast. The mission file's `## Supervisor Verification` section is the one place you write.
+You are read-only on the operator's repo: do not edit, stage, or commit anything in it, and the mission file's `## Supervisor Verification` section is the one place you write there. You may still record a testament, though — your memories are yours to keep like any session's, and being read-only on the repo is no bar to leaving what you learned.
 
 ## Why
 

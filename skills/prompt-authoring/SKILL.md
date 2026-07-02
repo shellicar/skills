@@ -150,7 +150,7 @@ echo '<json>' | node scripts/scaffold-prompt.mjs
 
 The output `mission.md` has the right frontmatter (with `Written against version` set to the fleet-material short SHA captured at scaffold time), the standard patterns block, the phases summary, every phase composed from its block, and Delivery Notes at the bottom. The operator role arrives via `--system` at launch; the scaffold no longer substitutes agent paths. Mission content is the work that follows the scaffold.
 
-The script commits the scaffold to the current branch before it returns. This is deliberate: the skeleton is boilerplate, so the review surface is your filled-in content diffed against that commit — not the commit itself. Don't be thrown by the commit, and don't treat it as the content commit: the filled mission and testament are committed separately, after the SC reviews, per *Writing a prompt* (step 8).
+The script commits the scaffold to the current branch before it returns. This is deliberate: the skeleton is boilerplate, so the review surface is your filled-in content diffed against that commit — not the commit itself. Don't be thrown by the commit, and don't treat it as the content commit: the filled mission is committed separately, after the SC reviews, per *Writing a prompt* (step 8).
 
 ## Guardrails are infrastructure
 

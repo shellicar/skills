@@ -12,7 +12,7 @@ metadata:
 
 Run before every commit. Shows you what's staged so you can verify it's correct.
 
-This is informational, not a hard gate. Use the output to make a judgment call. For example, testament files may be intentionally excluded from a commit, and that's fine.
+This is informational, not a hard gate. Use the output to make a judgment call. Some modified files are intentionally left out of a commit, and that's fine.
 
 ## Usage
 

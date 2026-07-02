@@ -73,10 +73,8 @@ Cleanup starts when the final phase's supervisor verdict is Pass.
 These steps finish the mission, in order:
 
 1. Flip the phase's `Status` to `completed`; flip the top-level `Status` from `in-progress` to `completed`.
-2. Append a testament entry.
-3. Commit the prompt and testament together.
-4. Run `~/repos/shellicar/skills/skills/dispatch/scripts/close-mission.mjs` to kill the operator and supervisor panes.
-5. Verify the operator's testament landed in the main checkout's `.claude/testament/`. The prompt instructs them to write there, but if they used a relative path the testament went into the worktree's `.claude/` and is about to be lost. Copy it out if so. This is the Handler's responsibility, not the operator's: a misplaced testament you didn't catch is gone once the worktree is removed.
+2. Commit the prompt.
+3. Run `~/repos/shellicar/skills/skills/dispatch/scripts/close-mission.mjs` to kill the operator and supervisor panes.
 
 After these steps the mission is `completed`.
 
@@ -95,7 +93,7 @@ Do not run it during cleanup, and do not reorder the two. See the `executor` rol
 
 ### Starting it
 
-Set the window's `@state` to `post-mortem-pending`. Present the reference material to the SC: the operator's testament, the delivery notes, and the diff. Do not start the conversation. The SC drives when they have time.
+Set the window's `@state` to `post-mortem-pending`. Present the reference material to the SC: the delivery notes and the diff. Do not start the conversation. The SC drives when they have time.
 
 ### How to run it
 
