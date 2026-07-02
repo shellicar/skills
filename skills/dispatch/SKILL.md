@@ -63,7 +63,7 @@ The message is mechanical content — placeholders filled from the dispatch stat
 
 `<from>` is how the cast knows who authored the message, so it can't mistake Router-orchestrated text for direct SC direction. It states the sender positively (the Handler), replacing the old negative `[Message from the Router, not the SC.]` marker. When the message quotes another voice — the SC, verbatim — that voice nests its own `<from>`/`<message>` rather than a fenced block (see the recast templates).
 
-The templates below are the `<message>` text the Router writes; the scripts add `<from>`, `<skills>`, and `<mission>`. Placeholders in angle brackets are filled in at dispatch time.
+The `<message>` element is built by the script from a fixed template, keyed on the phase number, role name, and iteration the Handler passes in — the Handler no longer writes message prose. The scripts add `<from>`, `<skills>`, and `<mission>`. The template text each script produces is shown below for reference; placeholders in angle brackets are filled in at dispatch time.
 
 #### New operator cast
 
@@ -73,7 +73,7 @@ Invoke:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-operator-cast.mjs", "stdin": "{\"from\":\"<from>\",\"cwd\":\"<cwd>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"name\":\"<name>\",\"message\":\"<message>\"}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-operator-cast.mjs", "stdin": "{\"from\":\"<from>\",\"cwd\":\"<cwd>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"name\":\"<name>\",\"phase\":<phase>}"}
 ]}
 ```
 
@@ -85,9 +85,11 @@ JSON config:
 - `missionFile` — absolute path to the mission file (emitted as `<mission>`, read by the cast)
 - `name` — phase role (Maker, Apostle, Investigator, …); passed as `--name`
 - `effort` — optional thinking effort from the phase's `Effort:` field (`low|medium|high|xhigh|max`); omitted → CLI default
-- `message` — the `<message>` text
+- `phase` — phase number; the envelope is a fixed template, so the Handler passes the number, not message prose
+- `iteration` — optional iteration within the phase (defaults to 1)
+- `role` — optional operator sub-role (`maker`, `builder`, …) resolved to `roles/<role>/ROLE.md`
 
-Message:
+Envelope message (built by the script from `phase`, `name`, and `iteration`; shown for reference):
 
 ~~~
 You are the Phase <N> <role-name>, iteration <M>.
@@ -95,17 +97,17 @@ You are the Phase <N> <role-name>, iteration <M>.
 
 Placeholders: `<N>` phase number, `<M>` iteration within the phase, `<role-name>` matches the `name` field.
 
-Worked example — phase 1 Maker on the easyquote-cves mission. The message as you'd write it:
+Worked example — phase 1 Maker on the easyquote-cves mission. The envelope the script produces:
 
 ~~~
 You are the Phase 1 Maker, iteration 1.
 ~~~
 
-Serialised into the Exec call (newlines in the message become `\n` inside the JSON string):
+Serialised into the Exec call:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-operator-cast.mjs", "stdin": "{\"from\":\"the easyquote-cves Handler\",\"cwd\":\"/Users/stephen/repos/eagers/easyquote--cves\",\"model\":\"claude-sonnet-4-6\",\"missionFile\":\"/Users/stephen/repos/fleet/claude-fleet-eagers/projects/easyquote/missions/easyquote-cves/mission.md\",\"name\":\"Maker\",\"message\":\"You are the Phase 1 Maker, iteration 1.\"}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-operator-cast.mjs", "stdin": "{\"from\":\"the easyquote-cves Handler\",\"cwd\":\"/Users/stephen/repos/eagers/easyquote--cves\",\"model\":\"claude-sonnet-4-6\",\"missionFile\":\"/Users/stephen/repos/fleet/claude-fleet-eagers/projects/easyquote/missions/easyquote-cves/mission.md\",\"name\":\"Maker\",\"phase\":1,\"iteration\":1}"}
 ]}
 ```
 
@@ -119,7 +121,7 @@ Invoke:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-supervisor-cast.mjs", "stdin": "{\"from\":\"<from>\",\"cwd\":\"<cwd>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"message\":\"<message>\"}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-supervisor-cast.mjs", "stdin": "{\"from\":\"<from>\",\"cwd\":\"<cwd>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"phase\":<phase>}"}
 ]}
 ```
 
@@ -129,9 +131,9 @@ JSON config:
 - `cwd` — worktree (operator's worktree)
 - `model` — typically Opus (`claude-opus-4-8`) for supervisors
 - `missionFile` — the operator's mission file (emitted as `<mission>`; the supervisor reviews against it)
-- `message` — the `<message>` text
+- `phase` — phase number; the envelope is a fixed template. The supervisor cast takes no `name` or `message` — the script builds the supervisor envelope itself.
 
-Message (Handler-authored portion):
+Envelope message (built by the script):
 
 ~~~
 You are the Phase <N> Supervisor.
@@ -161,14 +163,16 @@ Invoke:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/next-phase-cast.mjs", "stdin": "{\"from\":\"<from>\",\"role\":\"<role>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"name\":\"<name>\",\"message\":\"<message>\"}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/next-phase-cast.mjs", "stdin": "{\"from\":\"<from>\",\"actor\":\"<actor>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"name\":\"<name>\",\"phase\":<phase>,\"iteration\":<iteration>}"}
 ]}
 ```
 
 JSON config:
 
-- `role` — `operator` or `supervisor` (which pane to use)
-- `from`, `model`, `missionFile`, `name`, `message` — same as new-operator-cast
+- `actor` — `operator` or `supervisor` (which pane to reuse, resolved by `@role`)
+- `phase` — phase number; the envelope is a fixed template
+- `from`, `model`, `missionFile`, `name` — same as new-operator-cast (`name` is `supervisor` for a supervisor cast)
+- `iteration`, `role`, `effort` — optional; same as new-operator-cast
 
 Returns the target pane id (same as the existing pane) on stdout.
 
