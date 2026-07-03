@@ -241,3 +241,11 @@ The record a **cast** leaves of what it *learned* — kept as memories, by it an
 Example: a handler's testament — what it worked out about the project and the SC's direction, left as memories so the next handler begins as the continuity, not from zero.
 
 _Avoid_: debrief, log, journal
+
+## boot
+
+The first thing a **cast** does when it wakes: read the prior picture — its **testament**, the durable records, and what is actually running — and work out where things really stand before it acts. A cast starts from nothing and remembers nothing, so boot is reading what is there, not recalling what was; it is how a cast becomes the continuity rather than a title with no memory. It matters most under micro-sessions, where a cast can wake cold in the middle of work it holds no memory of.
+
+Example: a planner's boot — read the boards and the recent testaments, look at the live tmux windows and worktrees, and bring the boards back in line with what is actually running.
+
+_Avoid_: startup, init, bootstrap
