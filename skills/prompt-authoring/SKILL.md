@@ -1,6 +1,6 @@
 # Prompt authoring
 
-**Skill** (loaded by the `scribe` role). The reusable craft of writing a prompt well — true for any prompt, anywhere. The *shape* of a mission (which phases, roles, models, skills) is decided upstream and recorded in the agreement — see the `mission-shaping` skill. This skill is the writing.
+**Skill** (loaded by the `scribe` role). The reusable craft of writing a prompt well — true for any prompt, anywhere. The *shape* of a mission (which phases, roles, models, skills) is decided upstream and recorded in `squad.md` — see the `mission-shaping` skill. This skill is the writing.
 
 ## Writing for a literal reader
 
@@ -89,18 +89,7 @@ Effort is optional per-phase, set as an `Effort:` line beside `Model:`. Valid va
 
 ## Naming Convention
 
-The mission is a directory, `YYYY-MM-DD_NUM_description/`, holding `mission.md` (with `agreement.md`, `post-mortem.md`, and any `investigations/` or `plans/` colocated). NUM is the issue/work item number.
-
-- Underscores separate the three segments
-- Hyphens within the description
-- Omit NUM for missions with no issue (releases, maintenance)
-
-Examples:
-- `2026-03-28_89_batch-message-processing/`
-- `2026-03-27_20_strict-schema-example/`
-- `2026-03-27_release/`
-
-Missions live directly under `projects/<project>/missions/`.
+The mission directory, the artefacts it holds, and the naming format are defined once in the `mission-artefacts` skill — the single source. This skill is the writing craft; that one is the structure it writes into.
 
 ## Scaffolding the skeleton
 
