@@ -10,9 +10,10 @@
  * --name is derived from the worktree: a `<base>--<worktree>` cwd becomes
  * scribe-<worktree> (falls back to `scribe`). On a fresh conversation
  * (--no-resume) the skill set is injected via --prompt as cached user context,
- * firing one first turn on a default message; on a resume the skills are already
- * present, so they are not re-sent. Everything else is forwarded verbatim,
- * including --model; a leading `--` separator is accepted and stripped.
+ * firing one first turn on a seed message ("reorient" by default, or the value of
+ * --message); on a resume the skills are already present, so they are not
+ * re-sent. Everything else is forwarded verbatim, including --model; a leading
+ * `--` separator is accepted and stripped.
  * Runs interactively in the current pane and exits with claude-sdk-cli's status.
  * Exit 2 if an identity file is missing (via buildSystemInline).
  */
@@ -34,6 +35,17 @@ const name = sep >= 0 ? `scribe-${dir.slice(sep + 2)}` : "scribe";
 const passthrough = process.argv.slice(2);
 if (passthrough[0] === "--") passthrough.shift();
 
+// Pull an optional --message <value> out of the passthrough: it overrides the
+// default seed message ("reorient") for the first-turn prompt. Extracted here so
+// it is not forwarded to claude-sdk-cli, which does not understand it. Only has
+// an effect on --no-resume, the sole path that builds a prompt.
+let message = "reorient";
+const mi = passthrough.indexOf("--message");
+if (mi >= 0) {
+  message = passthrough[mi + 1] ?? message;
+  passthrough.splice(mi, 2);
+}
+
 const args = ["--name", name, "--system", system];
 
 // Seed the skill set as cached user context only on a fresh conversation
@@ -42,7 +54,7 @@ const args = ["--name", name, "--system", system];
 // was meant to seed. skillsFor mirrors the ACTOR/ROLE `## Skills` (see skills.mjs).
 if (passthrough.includes("--no-resume")) {
   const skills = skillsFor({ actor: "handler", role: "scribe" });
-  args.push("--prompt", buildPrompt({ from: "the Supreme Commander", message: "reorient", skills }));
+  args.push("--prompt", buildPrompt({ from: "the Supreme Commander", message, skills }));
 }
 
 args.push(...passthrough);

@@ -11,12 +11,14 @@
  *
  * A thin wrapper, not an orchestrator. Presets: --name planner and the composed
  * --system. On a fresh conversation (--no-resume) it also injects the skill set
- * via --prompt as cached user context, which fires one first turn on a default
- * message; on a resume the skills are already in the conversation, so they are
- * not re-sent. Everything else (including --model) is forwarded verbatim:
+ * via --prompt as cached user context, which fires one first turn on a seed
+ * message ("reorient" by default, or the value of --message); on a resume the
+ * skills are already in the conversation, so they are not re-sent. Everything
+ * else (including --model) is forwarded verbatim:
  *
  *   start-planner.mjs                      # CLI default resume
  *   start-planner.mjs --no-resume          # force a brand-new conversation
+ *   start-planner.mjs --no-resume --message "..."  # override the seed message
  *   start-planner.mjs --resume <conv-id>   # rehydrate a Planner after a death
  *   start-planner.mjs --model claude-...   # override the default model
  *
@@ -52,6 +54,17 @@ if (pane) {
 const passthrough = process.argv.slice(2);
 if (passthrough[0] === "--") passthrough.shift();
 
+// Pull an optional --message <value> out of the passthrough: it overrides the
+// default seed message ("reorient") for the first-turn prompt. Extracted here so
+// it is not forwarded to claude-sdk-cli, which does not understand it. Only has
+// an effect on --no-resume, the sole path that builds a prompt.
+let message = "reorient";
+const mi = passthrough.indexOf("--message");
+if (mi >= 0) {
+  message = passthrough[mi + 1] ?? message;
+  passthrough.splice(mi, 2);
+}
+
 const args = ["--name", "planner", "--system", system];
 
 // Seed the skill set as cached user context only on a fresh conversation
@@ -60,7 +73,7 @@ const args = ["--name", "planner", "--system", system];
 // was meant to seed. skillsFor mirrors the ACTOR/ROLE `## Skills` (see skills.mjs).
 if (passthrough.includes("--no-resume")) {
   const skills = skillsFor({ actor: "planner", role: "planner" });
-  args.push("--prompt", buildPrompt({ from: "the Supreme Commander", message: "reorient", skills }));
+  args.push("--prompt", buildPrompt({ from: "the Supreme Commander", message, skills }));
 }
 
 args.push(...passthrough);
