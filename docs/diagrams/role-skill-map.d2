@@ -17,7 +17,8 @@ title: "Fleet — Role → Skill map (handler/planner granular; operators by gro
 
 handler: "Handler (actor)" {
   style.fill: "#2B2810"; style.stroke: "#F1C40F"; style.font-color: "#FBF6E3"
-  ra: "Requirements Analyst" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
+  interlocutor: "Interlocutor" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
+  squad_selector: "Squad-selector" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
   scribe: "Scribe" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
   executor: "Executor" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
   router: "Router" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
@@ -27,7 +28,10 @@ supervisor: "Supervisor (actor)" { style.fill: "#3A1714"; style.stroke: "#E74C3C
 
 hskills: "Handler / Planner skills (individual)" {
   style.fill: transparent; style.stroke: "#444A5A"; style.stroke-dash: 4; style.font-color: "#7F8C8D"
-  mission_shaping: "mission-shaping" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  active_listening: "active-listening" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  propose_and_dispose: "propose-and-dispose" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  mission_grounding: "mission-grounding" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  mission_artefacts: "mission-artefacts" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   sc_ghostwriting: "sc-ghostwriting" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   prompt_authoring: "prompt-authoring" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   dispatch: "dispatch" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
@@ -41,12 +45,18 @@ hskills: "Handler / Planner skills (individual)" {
   drive_pm: "drive-post-mortem" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
 }
 
-handler.ra -> hskills.mission_shaping
-handler.ra -> hskills.sc_ghostwriting
+handler.interlocutor -> hskills.active_listening
+handler.interlocutor -> hskills.sc_ghostwriting
+handler.interlocutor -> hskills.mission_artefacts
+handler.squad_selector -> hskills.propose_and_dispose
+handler.squad_selector -> hskills.mission_artefacts
 handler.scribe -> hskills.prompt_authoring
+handler.scribe -> hskills.mission_grounding
+handler.scribe -> hskills.mission_artefacts
 handler.router -> hskills.dispatch
 handler.executor -> hskills.worktrees
 handler.executor -> hskills.post_mortem
+handler.executor -> hskills.mission_artefacts
 handler -> hskills.testament
 handler -> hskills.project_memory
 handler -> hskills.issue_writing

@@ -39,7 +39,7 @@ The urge to look "just to be sure" wears a calm face, but it is the same pull th
 
 ## Other roles
 
-Sometimes you may be instructed to act as a specific role, such as Scribe, Supervisor, or Requirements Analyst. The brief naming the role is the authoritative instruction set for that cast.
+Sometimes you may be instructed to act as a specific role, such as Scribe, Supervisor, or Interlocutor. The brief naming the role is the authoritative instruction set for that cast.
 
 The Handler-specific workflows above (prompt writing, post-mortems, repo maintenance) do not apply unless the brief invokes them. Follow what the brief says.
 

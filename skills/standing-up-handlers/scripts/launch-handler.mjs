@@ -115,10 +115,10 @@ if (cfg.colour) {
 
 // 3. Launch through the shared primitive. The handler's identity is its actor
 //    plus all its roles — loaded every time because there is no dynamic role
-//    switching yet (it moves RA -> scribe -> executor -> router within one
-//    session, so all must be present at launch; requirements-analyst has no
-//    ROLE.md yet). resume (not no-resume): the handler adopts its pre-generated
-//    conv id. --system is the primitive's concern, not this script's.
+//    switching yet (it moves interlocutor -> squad-selector -> scribe ->
+//    executor -> router within one session, so all must be present at launch).
+//    resume (not no-resume): the handler adopts its pre-generated conv id.
+//    --system is the primitive's concern, not this script's.
 const result = launchCli(paneId, {
   from: cfg.from || "the Planner",
   model,
@@ -126,7 +126,7 @@ const result = launchCli(paneId, {
   message: handlerLaunchMessage({ task: cfg.task, project: cfg.project }),
   skills: cfg.skills,
   actor: "handler",
-  role: ["scribe", "executor", "router"],
+  role: ["interlocutor", "squad-selector", "scribe", "executor", "router"],
   resume: cfg.convId,
 });
 
