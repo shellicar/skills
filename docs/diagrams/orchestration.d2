@@ -26,11 +26,13 @@ planner: "Planner\nstands missions up" {
 handler: "Handler  ·  holds one mission" {
   style.fill: "#2B2810"; style.stroke: "#F1C40F"; style.font-color: "#FBF6E3"
   interlocutor: "Interlocutor" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
+  squad_selector: "Squad-selector" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
   scribe: "Scribe" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
   executor: "Executor\nruns the mission" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
   router: "Router\nrelay / transport" { style.fill: "#4A3A0E"; style.stroke: "#F7DC6F"; style.bold: true }
 
-  interlocutor -> scribe: "intent" { style.stroke: "#F1C40F" }
+  interlocutor -> squad_selector: "intent" { style.stroke: "#F1C40F" }
+  squad_selector -> scribe: "squad" { style.stroke: "#F1C40F" }
   scribe -> executor: "mission" { style.stroke: "#F1C40F" }
 }
 

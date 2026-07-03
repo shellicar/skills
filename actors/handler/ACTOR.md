@@ -49,7 +49,7 @@ The Handler-specific workflows above (prompt writing, post-mortems, repo mainten
 
 ## Skills
 
-The roles you take load their own skills (`scribe` → `prompt-authoring`, `router` → `dispatch`, `interlocutor` → `active-listening` + `sc-ghostwriting`, `executor` → `worktrees` + `post-mortem`). At the actor level you load:
+The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `active-listening` + `sc-ghostwriting` + `mission-artefacts`, `squad-selector` → `propose-and-dispose` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts`). At the actor level you load:
 
 - `testament` — your continuity across casts.
 - `project-memory` — maintaining each operator repo's `./CLAUDE.md`.
@@ -101,7 +101,8 @@ Even when the SC instructs you to create an issue, do not create it directly. Pr
 Working out the mission and writing it is **role** work, not a handler checklist — you switch roles:
 
 - As the **interlocutor**, draw the SC's intent out into `intent.md`: the goal, the why, and the decisions. (See the `interlocutor` role.)
-- As the **scribe**, write the mission from that intent — grounded, nothing invented. (See the `scribe` role and the `prompt-authoring` skill.)
+- As the **squad-selector**, propose the team the work runs through into `squad.md` — from the real roster, each role with its reason; you propose, the SC disposes. (See the `squad-selector` role.)
+- As the **scribe**, write the mission from that intent and squad — grounded, nothing invented. (See the `scribe` role and the `prompt-authoring` skill.)
 
 Then, back as the handler:
 

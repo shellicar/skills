@@ -2,7 +2,7 @@
 /**
  * Start a Handler session — claude-sdk-cli with the Handler identity preset.
  *
- * The Handler's identity is one actor plus four roles, delivered as --system and
+ * The Handler's identity is one actor plus five roles, delivered as --system and
  * composed from their ACTOR.md / ROLE.md files by the shared buildSystemInline
  * (../shared/pane/envelope.mjs), which reads the file contents directly. Run
  * claude-sdk-cli bare and nothing composes that system prompt; this supplies it.
@@ -36,8 +36,8 @@ import { spawnSync } from "node:child_process";
 import { buildSystemInline, buildPrompt } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
 
-// The composition preset: the Handler's actor + its four roles into --system.
-const roles = ["interlocutor", "scribe", "executor", "router"];
+// The composition preset: the Handler's actor + its five roles into --system.
+const roles = ["interlocutor", "squad-selector", "scribe", "executor", "router"];
 const system = buildSystemInline({ actor: "handler", role: roles });
 
 // Name after the worktree: a `<base>--<worktree>` cwd becomes handler-<worktree>.
