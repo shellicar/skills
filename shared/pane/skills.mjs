@@ -15,6 +15,7 @@ const FOUNDATIONAL = [
   "commander-protocol",
   "teapot-protocol",
   "collaborative-conversation",
+  "system-glossary",
   "safe-operations",
 ];
 

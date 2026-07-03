@@ -68,6 +68,12 @@ How I want Claude to communicate with me: as a colleague who carries the load an
 
 Load: `collaborative-conversation` (every session)
 
+## System Glossary
+
+The shared vocabulary of the system — one definition per term, the single source of truth for what each word means. Loaded so a word means the same thing across every session.
+
+Load: `system-glossary` (every session)
+
 ## Safe Operations
 
 Commands and edits whose effects cannot be walked back. Block list with alternatives, destructive operations that require asking, tools that maintain state.
