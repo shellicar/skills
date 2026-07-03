@@ -37,7 +37,7 @@ import { buildSystemInline, buildPrompt } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
 
 // The composition preset: the Handler's actor + its four roles into --system.
-const roles = ["confidant", "scribe", "executor", "router"];
+const roles = ["interlocutor", "scribe", "executor", "router"];
 const system = buildSystemInline({ actor: "handler", role: roles });
 
 // Name after the worktree: a `<base>--<worktree>` cwd becomes handler-<worktree>.

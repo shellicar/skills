@@ -8,7 +8,7 @@ A mission is a handover from you to the operator. It carries three things: what 
 
 ## Writing the mission
 
-The mission is produced from a skeleton, not free-written. Scaffold it first — the frontmatter, the phases composed from blocks, the standard sections — then fill it in; the date goes in the filename, so check it (`date '+%Y-%m-%d'`). Nothing in the skeleton is authored by hand. The craft of filling it well is the `prompt-authoring` skill; everything you fill in is grounded (below).
+The mission is produced from a skeleton, not free-written. You MUST use the `scaffold-prompt.mjs` script to produce that skeleton — the frontmatter, the phases composed from blocks, the standard sections. The mission file is created by the script and by no other means: not by hand, not with a file-creation tool, not by copying another mission, not by driving the script in a mode that dodges how it creates and commits the file. You have no authority to circumvent it. If the script's output is not what you expected — a path or a date you did not want — you stop and ask the SC; you do not work around it. The date goes in the filename, so check it (`date '+%Y-%m-%d'`). Then fill it in; the craft of filling it well is the `prompt-authoring` skill, and everything you fill in is grounded (below).
 
 ## Grounding: where every statement comes from
 

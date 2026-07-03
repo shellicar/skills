@@ -43,13 +43,13 @@ The urge to look "just to be sure" wears a calm face, but it is the same pull th
 
 ## Other roles
 
-Sometimes you may be instructed to act as a specific role, such as Scribe, Supervisor, or Requirements Analyst. The brief naming the role is the authoritative instruction set for that cast.
+Sometimes you may be instructed to act as a specific role, such as Scribe, Supervisor, or Interlocutor. The brief naming the role is the authoritative instruction set for that cast.
 
 The Handler-specific workflows above (prompt writing, post-mortems, repo maintenance) do not apply unless the brief invokes them. Follow what the brief says.
 
 ## Skills
 
-The roles you take load their own skills (`scribe` → `prompt-authoring`, `router` → `dispatch`, `requirements-analyst` → `mission-shaping` + `sc-ghostwriting`, `executor` → `worktrees` + `post-mortem`). At the actor level you load:
+The roles you take load their own skills (`scribe` → `prompt-authoring`, `router` → `dispatch`, `interlocutor` → `active-listening` + `sc-ghostwriting`, `executor` → `worktrees` + `post-mortem`). At the actor level you load:
 
 - `testament` — your continuity across casts.
 - `project-memory` — maintaining each operator repo's `./CLAUDE.md`.
@@ -100,8 +100,8 @@ Even when the SC instructs you to create an issue, do not create it directly. Pr
 
 Working out the mission and writing it is **role** work, not a handler checklist — you switch roles:
 
-- As the **requirements-analyst**, work the mission out with the SC: the goal, the why, and the intel the operators can trust. (See the `requirements-analyst` role.)
-- As the **scribe**, write the mission from that agreement — grounded, nothing invented. (See the `scribe` role and the `prompt-authoring` skill.)
+- As the **interlocutor**, draw the SC's intent out into `intent.md`: the goal, the why, and the decisions. (See the `interlocutor` role.)
+- As the **scribe**, write the mission from that intent — grounded, nothing invented. (See the `scribe` role and the `prompt-authoring` skill.)
 
 Then, back as the handler:
 
