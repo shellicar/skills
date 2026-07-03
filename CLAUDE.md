@@ -68,6 +68,12 @@ How I want Claude to communicate with me: as a colleague who carries the load an
 
 Load: `collaborative-conversation` (every session)
 
+## Clear Communication
+
+The floor beneath every response: understood on one read. Plain, the point first, self-contained.
+
+Load: `clear-communication` (every session)
+
 ## System Glossary
 
 The shared vocabulary of the system — one definition per term, the single source of truth for what each word means. Loaded so a word means the same thing across every session.

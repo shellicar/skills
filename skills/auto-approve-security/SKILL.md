@@ -1,13 +1,14 @@
 ---
 name: auto-approve-security
 description: |
- Documents the threat model behind the auto-approve permission system so Claude can evaluate new approval requests and flag security gaps.
- Without it, approval decisions rely on intuition rather than proven constraints.
- TRIGGER on session start.
+  DEPRECATED. Superseded by the mcp-shellicar tooling model.
+  TRIGGER never.
 user-invocable: false
 metadata:
-  category: foundational
+  deprecated: mcp-shellicar
 ---
+
+> **DEPRECATED**: superseded by `mcp-shellicar`. Do not load this skill.
 
 # Auto-Approve Security Model
 

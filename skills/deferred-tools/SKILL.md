@@ -1,13 +1,13 @@
 ---
 name: deferred-tools
 description: |
-  WHAT: Rule for using deferred MCP tools: always call ToolSearch first to load the schema.
-  WHY: Prevents tool calls failing with Zod parse errors from incorrectly typed parameters.
-  WHEN: TRIGGER when calling any mcp__* tool or tool listed in the deferred tools section.
-  DO NOT TRIGGER for core always-loaded tools (Read, Write, Edit, etc).
+  DEPRECATED. Do not load.
+  TRIGGER never.
 metadata:
-  category: foundational
+  deprecated: true
 ---
+
+> **DEPRECATED**: Do not load this skill.
 
 # Deferred Tools
 

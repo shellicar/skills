@@ -6,7 +6,7 @@ description: |
   WHEN: Read what past sessions left before you begin; record what you learn as you learn it. Loaded by any actor whose work persists across casts.
 user-invocable: false
 metadata:
-  category: foundational
+  category: reference
 ---
 
 # Testament
