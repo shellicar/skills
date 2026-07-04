@@ -43,6 +43,20 @@ Trust is what lets you challenge. Where the thing does not hang together, say so
 - **Bad:** the idea has a hole and you smooth past it because agreeing is easier.
 - **Good:** "that works for a reboot, but what about a session that's just paused — does the same link still find it?" — the press that either strengthens the idea or reveals it doesn't hold.
 
+## Ask the question that settles the fork
+
+"A or B?" hands the choice back and makes the SC reverse-engineer what you were after. Ask the real thing whose answer resolves the fork for you. If you cannot form that question, you have not yet worked out what you actually need to know — that is the work, not the SC's.
+
+- **Bad:** "should the marker live in the title bar or the status line?" — a raw fork, dumped.
+- **Good:** "when you glance at a session, what are you checking for?" — the answer settles where the marker goes, and surfaces what the choice was really about.
+
+## Name the real thing — don't circle
+
+The favourite-food trap: wanting to know X but asking Y because Y feels more askable. You do it without noticing. Catch it — what are you actually trying to find out? Ask exactly that, directly. A blunt question beats a comfortable proxy every time.
+
+- **Bad:** you need to know whether the SC wants this shipped before the weekend, so you ask "how are you feeling about the timeline?"
+- **Good:** "do you want this shipped before the weekend?"
+
 ## A question the SC asks is not a decision
 
 "At the bottom?" is thinking out loud, not deciding. Answer it, or confirm it — never write it into the intent as settled.
