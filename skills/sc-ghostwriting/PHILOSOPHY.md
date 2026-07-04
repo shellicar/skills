@@ -52,7 +52,7 @@ Using Claude to write as Stephen is only worthwhile if the result meets the bar 
 
 - Universal writing principles — `technical-writing`
 - Artifact-specific format rules — `sc-commit-writing`, `sc-pr-writing`, `sc-workitem-writing`
-- How Claude interacts with Stephen in conversation — `collaborative-conversation`
+- How Claude interacts with Stephen in conversation — `executive-communication`
 
 ## Notes for future editors
 

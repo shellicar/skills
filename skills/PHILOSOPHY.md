@@ -2,6 +2,8 @@
 
 This file records the reasoning behind how skills are structured — not a catalogue, but the understanding that makes editing them coherent. Read it before creating or restructuring communication skills.
 
+> **Succession:** the interaction skill this file discusses, `collaborative-conversation`, has since been retired and replaced by `executive-communication`. The 2026-06-08 account below names it under its old name; the live interaction skill is now `executive-communication`.
+
 ## Communication Skills
 
 Worked out in a session on 2026-06-08. What follows is the reasoning, not just the map it produced.
@@ -34,7 +36,7 @@ Documentation and code review are communication — one-directional artifacts th
 
 **Documentation** requires technique beyond writing style: understanding what the audience does not yet know, choosing the right structure for the use pattern (reference vs. tutorial vs. guide), keeping content accurate as a domain evolves. A `documentation-writing` skill can live in this taxonomy and govern voice, register, and how to write for a reader who lacks context. The structural and domain knowledge that makes documentation useful is a separate layer — it belongs in domain or project-specific skills, not here.
 
-**Code review** goes further. Written review feedback is communication: it goes from reviewer to author, one direction. But code review also requires technical judgment — what to look for, how to evaluate against a quality bar — and has a meaningful interactive dimension: the author responds, the reviewer re-evaluates, the conversation continues across turns. A skill governing how review feedback is written belongs in this taxonomy. A skill governing what to look for technically belongs in domain skills. A skill governing the review dialogue belongs closer to `collaborative-conversation`.
+**Code review** goes further. Written review feedback is communication: it goes from reviewer to author, one direction. But code review also requires technical judgment — what to look for, how to evaluate against a quality bar — and has a meaningful interactive dimension: the author responds, the reviewer re-evaluates, the conversation continues across turns. A skill governing how review feedback is written belongs in this taxonomy. A skill governing what to look for technically belongs in domain skills. A skill governing the review dialogue belongs closer to `executive-communication`.
 
 The principle: when a domain requires significant technique or has a meaningful interactive dimension on top of the communication, only the communication component belongs here. The technique component belongs in domain skills; the interaction component belongs with the interaction skills. The taxonomy handles the communication layer, not the whole domain.
 
@@ -77,7 +79,7 @@ The universal skills exist for two reasons: shareable to others, and as the docu
 This is illustrative, not a complete or fixed list. Skills will be added over time; the axes above are how to decide where a new skill sits.
 
 **Interaction (separate from this taxonomy):**
-- `collaborative-conversation` — the live dialogue between Claude and SC; not a writing skill
+- `executive-communication` — the live dialogue between Claude and SC; not a writing skill
 
 **Universal communication:**
 - `clear-communication` — how to be understood; Claude's voice; the floor beneath everything
@@ -121,7 +123,7 @@ Every skill answers WHO, WHAT, WHEN, HOW, and WHY. For communication skills, the
 ## Notes for future editors
 
 - **Audience first.** When creating a skill, identify the audience before anything else. That axis determines more about what the skill needs to do than author or artifact type.
-- **The communication/interaction distinction is load-bearing.** If an edit pulls an interaction skill (like `collaborative-conversation`) into the writing taxonomy, it has missed the distinction this file exists to preserve.
+- **The communication/interaction distinction is load-bearing.** If an edit pulls an interaction skill (like `executive-communication`) into the writing taxonomy, it has missed the distinction this file exists to preserve.
 - **The `sc-` prefix is the naming rule.** A skill that is SC-specific but lacks the prefix will be read as universal. A skill that is universal but carries the prefix will be read as personal. The prefix is the signal; keep it consistent.
 - **`writing-style` is dissolving.** Do not add to it. New content for any of its contexts belongs in the appropriate skill from this taxonomy.
 - **The examples list is illustrative.** Add to it as skills are created. Gaps in it are not tasks — they are spaces that may or may not need filling.
