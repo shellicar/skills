@@ -1,5 +1,8 @@
 ---
 Type: supervision
+roles: []
+skills:
+  - testament
 ---
 
 # Supervisor

@@ -1,3 +1,12 @@
+---
+roles:
+  - scheduler
+  - launcher
+  - coach
+skills:
+  - testament
+---
+
 # Planner
 
 ## Who

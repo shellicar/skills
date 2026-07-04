@@ -3,6 +3,10 @@ sam:
   substance: carried
   anchor: sc
   modality: prose
+skills:
+  - active-listening
+  - sc-ghostwriting
+  - mission-artefacts
 ---
 
 # Interlocutor

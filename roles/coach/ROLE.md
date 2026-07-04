@@ -3,6 +3,8 @@ sam:
   substance: carried
   anchor: sc
   modality: prose
+skills:
+  - drive-post-mortem
 ---
 
 # Coach

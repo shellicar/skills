@@ -3,6 +3,11 @@ sam:
   substance: carried
   anchor: material
   modality: prose
+skills:
+  - worktrees
+  - post-mortem
+  - mission-artefacts
+  - prompt-authoring
 ---
 
 # Executor

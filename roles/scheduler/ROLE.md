@@ -3,6 +3,8 @@ sam:
   substance: new
   anchor: material
   modality: prose
+skills:
+  - mission-boards
 ---
 
 # Scheduler
