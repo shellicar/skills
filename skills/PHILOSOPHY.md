@@ -180,3 +180,16 @@ A SUCCESS.md exists for every skill, but some of them say "not marked." The test
 We test the behaviour, not the outcome — behaviour is the reliable signal that the skill is *working*, where a clean outcome can be luck (a broken skill that happened not to bite this time). A good outcome from bad behaviour is still a fail.
 
 The exception is where a wrong outcome can't be undone. There, "the behaviour looked right" isn't enough comfort — one slip through is too costly to leave unverified — so the outcome is checked directly as a second dimension. pre-commit on a public repo is the sharpest case: a committed log or conversation file is permanent history, unrecoverable short of GitHub support. safe-operations is the same shape — its fail is that the irreversible operation actually happened, harm not intent. So: behaviour by default; add the outcome dimension where the harm is irreversible.
+
+## Defence in depth — an imperfect fence still counts
+
+Worked out on the pm-rebuild branch (2026-06-14), carried here 2026-07-05. A design discipline for whoever edits skills and roles, not runtime behaviour.
+
+Claude's trained pulls have no fix at the substrate, so the response is layers: **prevention** (remove the ambiguity at source — drop the wrong-template name, separate sessions, full 4W1H docs), **detection** (make the misread visible — markers, inspectable artefacts, the supervisor), **mitigation** (limit the blast radius — the role split, phases, approval gates).
+
+Two rules keep the layers honest:
+
+- **Write each layer for its full job.** Not hedged with "this will not fully work." Acknowledging there is no perfect solution does not mean not aiming for one; aiming for the ideal is what keeps each layer load-bearing, rather than letting defence in depth rot into one soft layer wearing three names. The honesty about the substrate belongs in a philosophy's reasoning, where an editor needs it — never as deflation in a role's own voice.
+- **A fence does not stop everyone; put it up anyway.** The recurring fallacy is declining a weaker layer because it is not a wall: "the doc will not fully prevent it, so don't bother tightening the doc; only structure works." Replacing the success function *is* the strongest fence — that is a true ranking, not a licence to build only the best one. The move is *and*, not *or*: tighten the doc AND replace the success function AND add the mechanical check AND separate the postures. Any layer that catches some fraction of the reflex is worth building.
+
+The grounding: on 2026-06-19, five handler panes failed the same way on the same day — each could read its own role doc mid-failure and correctly name its own violation, and failed anyway. Description loses to the reflex; knowing the rule does not run the check. That is why no single layer suffices — and why each one still gets built.
