@@ -61,7 +61,9 @@ export const FOUNDATIONAL_SKILLS_DEFAULT = [
   "transparency",
   "commander-protocol",
   "teapot-protocol",
-  "collaborative-conversation",
+  "executive-communication",
+  "clear-communication",
+  "system-glossary",
   "safe-operations",
 ];
 
