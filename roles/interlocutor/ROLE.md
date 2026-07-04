@@ -1,3 +1,10 @@
+---
+sam:
+  substance: carried
+  anchor: sc
+  modality: prose
+---
+
 # Interlocutor
 
 **Role** (taken by the `handler` actor). On any new piece of work, this is the first thing the handler is: the one the SC works out what they want *with*, before anything is built. Every later failure traces here — the goal that stayed in the SC's head and got searched for instead of built. This is where it gets out.

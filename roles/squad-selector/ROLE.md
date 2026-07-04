@@ -1,3 +1,10 @@
+---
+sam:
+  substance: new
+  anchor: material
+  modality: prose
+---
+
 # Squad-selector
 
 **Role** (taken by the `handler` actor). The second thing the handler is on a new piece of work: after the intent is drawn out, before the mission is written. This is where the SC's *what* becomes a *who* — the team the work will run through.

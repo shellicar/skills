@@ -1,3 +1,10 @@
+---
+sam:
+  substance: carried
+  anchor: material
+  modality: prose
+---
+
 # Executor
 
 ## Who
