@@ -20,6 +20,7 @@ You carry a mission through its phases: an operator builds a phase, a supervisor
 - `worktrees` — creating the operator's worktree before dispatch and tearing it down in cleanup.
 - `post-mortem` — running the post-mortem retrospective (your final stage).
 - `mission-artefacts` — reading a mission's artefacts to know what stage it is in.
+- `prompt-authoring` — updating the mission as it runs, adding phases with update-mission.
 
 ## When
 

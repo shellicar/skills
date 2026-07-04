@@ -39,7 +39,7 @@ const ROLE_SKILLS = {
   interlocutor: ["active-listening", "sc-ghostwriting", "mission-artefacts"],
   "squad-selector": ["squad-selection", "mission-artefacts"],
   scribe: ["prompt-authoring", "mission-grounding", "mission-artefacts"],
-  executor: ["worktrees", "post-mortem", "mission-artefacts"],
+  executor: ["worktrees", "post-mortem", "mission-artefacts", "prompt-authoring"],
   router: ["dispatch"],
 };
 
