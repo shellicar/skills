@@ -43,6 +43,8 @@ Read `mission.md` against `intent.md`, in both directions.
 
 Check one proves nothing was invented. Check two proves the mission is the right mission, whole — nothing added, nothing lost. Together, they are the proof.
 
+Drift is not only distorting what the intent said — it is also the mission speaking where the intent was silent. The garbled-tool-use mission (2026-06): the front artefact overreached into design (a rollback approach) and implementation (a fabricated test mechanism), and the supervisor then flagged "divergences" that were not real — the operator had legitimately decided territory the mission should never have claimed. Territory claimed past the intent fails verification downstream as surely as a distortion does.
+
 ## The pass — list first, judge second
 
 The same discipline as grounding, for the same reason: fold listing and judging into one write and generation composes each verdict with its justification, which is exactly where nodding-through hides. The artefact makes the pass visible from outside — the two writes either appear in the tool log or they do not.

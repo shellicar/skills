@@ -41,6 +41,8 @@ Every claim traces to exactly one of three:
 
 No fourth source exists. A claim that traces to none is invented. "It follows from X," "the natural consequence," "presumably," "it should" — these are invention dressed as logic, not a fourth source.
 
+**True is not a source either.** PBI 1089 (2026-06): a planning session wrote "credential-shaped" variables into the prompt as the secrets to map — name-vibes, never queried, never discussed. Told to audit them out, the audit *added* a package.json finding — verified, true, and still wrong, because nobody had agreed it. A verified fact that traces to none of the three sources is still cut; if it matters, it goes back upstream as a question, never in as a fact.
+
 ## The mechanical pass — list first, judge second
 
 The mission body is written first (scaffold, then fill — you MUST use `create-mission.mjs`; see the scribe role). Then grounding runs as a short sequence of writes that produce a colocated `provenance.md` beside `mission.md`. One rule carries the whole discipline: **everything is listed before anything is judged, in separate writes.** A claim written down before its source is assigned cannot be quietly reworded to fit a source you are inventing for it; a settled item written down before it is checked cannot be quietly forgotten.
