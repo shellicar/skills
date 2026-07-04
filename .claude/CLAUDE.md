@@ -11,6 +11,10 @@ This repo is the system itself: the actors, roles, and skills the fleet runs on,
 - `scripts/` — the SC's own scripts.
 - `docs/`, `agents/` — supporting material.
 
+## Editing skills
+
+Before editing anything under `skills/`, always load `skills/PHILOSOPHY.md` and the skill's own `PHILOSOPHY.md` where it has one. The philosophy files carry the reasoning and the rejected alternatives; an edit made without them re-litigates settled decisions or breaks the shape the reasoning protects.
+
 ## Where scripts go
 
 The question is who owns the script's craft, not who runs it.
