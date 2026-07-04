@@ -29,33 +29,29 @@ The win this skill installs instead: every claim in the mission is traced to its
 
 That "short is correct" holds for one kind of shortness only: shortness from cutting invention. There is an opposite failure, and it is just as real — carrying *less* than the intent settled. A blueprint, an illustration, a decision the SC pinned in `intent.md` is *grounded* (its source is the SC), so it must land in the mission. Dropping it is not a short mission done right; it is a hole.
 
-So the trace runs in two directions. The five-call pass proves nothing in the mission is unsourced — mission → source. This second direction proves nothing the intent settled is missing — intent → mission: walk `intent.md`'s settled content, its blueprints and illustrations and decisions, and confirm each one carried into the mission. A settled thing with no home in the mission is a drop, and it goes back in — dropping what the SC decided is as much a failure as inventing what they did not.
+So the trace runs in two directions, and both are part of the mechanical pass below. Mission → source proves nothing in the mission is unsourced. Intent → mission proves nothing the intent settled is missing: every settled thing — blueprint, illustration, decision — is confirmed to have a home in the mission. A settled thing with no home is a drop, and it goes back in — dropping what the SC decided is as much a failure as inventing what they did not.
 
 ## The three sources
 
 Every claim traces to exactly one of three:
 
 1. **SC** — the SC decided it in the conversation; `intent.md` carries it.
-2. **Codebase** — the operator can open a file and verify it.
+2. **Project** — the project's own agent-facing files carry it: its `README.md`, its `CLAUDE.md`, and its brief. Those are the whole of what a project tells you — you do **not** read the code. A fact you would have to open the worktree to confirm is not grounded here; it is the operator's to establish.
 3. **Fleet** — a harness rule or reference declares it.
 
 No fourth source exists. A claim that traces to none is invented. "It follows from X," "the natural consequence," "presumably," "it should" — these are invention dressed as logic, not a fourth source.
 
-## The mechanical pass — fixed, batched, countable
+## The mechanical pass — list first, judge second
 
-The mission body is written first (scaffold, then fill — you MUST use `create-mission.mjs`; see the scribe role). Then grounding runs as a fixed sequence of tool calls that produce a colocated `provenance.md` beside `mission.md`. The sequence is fixed and **batched by step, not by claim** — so you cannot compose a claim and its source together in your head, which is where invention hides.
+The mission body is written first (scaffold, then fill — you MUST use `create-mission.mjs`; see the scribe role). Then grounding runs as a short sequence of writes that produce a colocated `provenance.md` beside `mission.md`. One rule carries the whole discipline: **everything is listed before anything is judged, in separate writes.** A claim written down before its source is assigned cannot be quietly reworded to fit a source you are inventing for it; a settled item written down before it is checked cannot be quietly forgotten.
 
-The fixed sequence:
+The sequence:
 
-1. **`CreateFile`** `provenance.md` — the scaffold: a header and an empty Claims section, no claim content.
-2. **`EditFile`** — append every **Claim**: one line per statement in the mission the operator will act on, quoted from the draft. All claims, one call, after the draft is complete.
-3. **`EditFile`** — append `Source:` to every claim, one call across all: `SC — "<their words from intent.md>"`, `Codebase — <path>`, `Fleet — <ref>`, or `INVENTED`.
-4. **`EditFile`** — append `Verdict: keep | cut` to every claim, one call. `cut` = `INVENTED`, or a source you cannot actually point to.
-5. **`EditFile`** `mission.md` — remove every `cut` claim from the mission.
+1. **List.** Create `provenance.md` from `TEMPLATE.md` with both lists complete and unjudged: every **Claim** — one line per statement in the mission the operator will act on, quoted from the draft — and every **Settled item** — one line per decision, blueprint, or illustration the SC pinned in `intent.md`. No sources, no verdicts yet.
+2. **Judge.** In a second write, against the frozen lists: to every claim, append `Source:` (`SC — "<their words from intent.md>"`, `Project — <the CLAUDE.md / README / brief line>`, `Fleet — <ref>`, or `INVENTED`) and `Verdict: keep | cut` — `cut` = `INVENTED`, or a source you cannot actually point to. To every settled item, append `Carried: <where in the mission>` or `DROPPED`.
+3. **Apply.** Edit `mission.md`: remove every `cut` claim, restore every `DROPPED` item.
 
-Five calls, fixed, independent of how many claims there are. The batching is the defence: step 3 cannot begin until step 2 has listed every claim, so sourcing happens against a written list — not against a claim you are inventing as you justify it. This is the devops-review shape: Notice all, then Trace all, then Verdict — never per-item, because per-item is where in-head composition lives.
-
-Why the file and not the head: the discipline must be countable from outside. With a fixed five-call shape the pass either ran or it did not — visible in the tool-call log, no judgement required. Fold it into a single write and generation collapses it to a plausible mission with no trace, because the end-state mission looks identical and fewer calls is the path of least resistance. Same end-state, no cost difference, and generation defaults to the bulk write. The fixed shape removes that default.
+The separation between listing and judging is the defence. Judging happens against a written list — not against a claim you are inventing as you justify it, and not against a memory of the intent that recalls selectively. Fold the pass into a single write and generation composes each claim and its source together, which is exactly where invention hides; the end-state mission looks identical either way, so the collapse is the path of least resistance. The file, not the head, because the pass must be visible from outside: the list write and the judge write either appear in the tool log or they do not.
 
 ## The empty sources
 
