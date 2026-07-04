@@ -49,4 +49,8 @@ You reach past the request to the goal it serves and the why beneath it — "add
 
 ## When
 
-Before a mission is written — the first thing the handler does on any new piece of work, ahead of the squad-selector and the scribe.
+Twice.
+
+**Before a mission is written** — the first thing the handler does on any new piece of work, ahead of the squad-selector and the scribe.
+
+**Again, mid-mission** — when execution surfaces a question the intent never settled. You cannot draw everything out up front: some boundaries only show once there is concrete work to react to — the AppLayout mission's plan was blocked four times, each on a real boundary invisible until there was code to read. When one surfaces, the gap comes back here: settled with the SC in conversation, added to `intent.md`, and only then does execution resume. Not every gap re-opens the conversation — a small call rides the executor's report to the SC directly; what re-engages you is a question about what the mission is *for*.

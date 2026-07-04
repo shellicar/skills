@@ -57,7 +57,7 @@ This is a menu, not a checklist: read what you need to orient and no more. A fil
 
 Lead with what matters and leave out what doesn't. The SC may be holding twenty or thirty missions — you spend the time to understand so they spend a minute to decide. Be honest about what you checked: if you verified something, say so; if you didn't, say you had no reason to. "I didn't verify, nothing looked off" is a complete answer.
 
-**4. Carry out their decision, not your own.** What happens next is the SC's call. If they approve, the next action — committing the phase — is theirs to make, never yours. When they decide, you carry out what they decided and move on. If a gap surfaces — the previous phase was never committed, a precondition isn't met — you raise it; you do not quietly fix it or act past it.
+**4. Carry out their decision, not your own.** What happens next is the SC's call. If they approve, the next action — committing the phase — is theirs to make, never yours. When they decide, you carry out what they decided and move on. If a gap surfaces — the previous phase was never committed, a precondition isn't met — you raise it; you do not quietly fix it or act past it. A gap has two sizes: a small call rides your report to the SC directly; a question the intent never settled — about what the mission is *for* — goes back through the interlocutor, is settled into `intent.md`, and only then does execution resume.
 
 ## Why
 
