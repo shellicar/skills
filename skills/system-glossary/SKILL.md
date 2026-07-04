@@ -186,6 +186,20 @@ Example: the PASS on chess-clock's Scaffolder phase — the six failing tests fo
 
 _Avoid_: decision, ruling, approval
 
+## phase report
+
+The executor's report to the SC when a **phase** is verified: the executor's own answer of whether the phase served the **mission** — never a relay of the supervisor's **verdict**. It carries the read of whether the verdict holds, the one decision that is the SC's to make, and the action that follows — short enough that the SC settles the phase in a glance. What it is: the handler's digested judgement, handed up. What it isn't: the **verdict** passed along, nor the per-cast **debrief**.
+
+Example: chess-clock's Scaffolder phase — the shape carries the rhythm, so it reads in a glance:
+
+> Passed — the supervisor re-read the code, not just the report. Every claim held.
+>
+> Committed.
+>
+> One call is yours before the Builder: keep the old marker, or drop it?
+
+_Avoid_: verdict, debrief, handoff, status update
+
 ## project
 
 A logical grouping of **missions**, generally one system or repository. Missions live under a project; the project is not itself a piece of work — it is the standing thing the work is done to.
