@@ -3,6 +3,10 @@ sam:
   substance: carried
   anchor: decided
   modality: tool
+skills:
+  - prompt-authoring
+  - mission-grounding
+  - mission-artefacts
 ---
 
 # Scribe

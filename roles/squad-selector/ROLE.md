@@ -3,6 +3,9 @@ sam:
   substance: new
   anchor: material
   modality: prose
+skills:
+  - squad-selection
+  - mission-artefacts
 ---
 
 # Squad-selector

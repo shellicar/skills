@@ -3,6 +3,8 @@ sam:
   substance: carried
   anchor: decided
   modality: tool
+skills:
+  - dispatch
 ---
 
 # Router
