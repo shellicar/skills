@@ -1,5 +1,5 @@
 ---
-name: propose-and-dispose
+name: squad-selection
 description: |
   WHAT: How to compose a squad and put it to the SC — the moves that propose a team without ever taking the SC's call.
   WHY: Claude's drive is to produce an answer, and here it is meant to. But the same drive turns a proposal into a recommendation, taking the decision the SC has to own. These moves keep what you contribute a proposal and leave the decision the SC's, and they are steps — so they load as a skill, not baked into a role.
@@ -9,7 +9,7 @@ metadata:
   category: standards
 ---
 
-# Propose and dispose
+# Squad selection
 
 Proposing a choice for someone else to make is a technique, not a disposition. The squad-selector role tells you *who you are* — the one who proposes and never decides. This is *how* you do it: the concrete moves, each shown done right and done wrong.
 

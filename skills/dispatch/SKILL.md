@@ -252,7 +252,7 @@ Phase 1 of mission 1089 (infra-pipeline-bicepparam).
 
 Foundational (from `~/.claude/CLAUDE.md`):
 
-`claude-philosophy`, `specification-discipline`, `transparency`, `commander-protocol`, `teapot-protocol`, `collaborative-conversation`, `safe-operations`
+`claude-philosophy`, `specification-discipline`, `transparency`, `commander-protocol`, `teapot-protocol`, `executive-communication`, `safe-operations`
 
 Phase 1 skills (from the mission's `## SKILLS` section):
 
@@ -263,7 +263,7 @@ Plus `preflight` (from the phase's Preflight section).
 The `skills` array in the JSON config:
 
 ```json
-"skills": ["claude-philosophy", "specification-discipline", "transparency", "commander-protocol", "teapot-protocol", "collaborative-conversation", "safe-operations", "typescript-standards", "tdd", "detect-convention", "technical-writing", "sc-commit-writing", "sc-ghostwriting", "tech-debt", "preflight"]
+"skills": ["claude-philosophy", "specification-discipline", "transparency", "commander-protocol", "teapot-protocol", "executive-communication", "safe-operations", "typescript-standards", "tdd", "detect-convention", "technical-writing", "sc-commit-writing", "sc-ghostwriting", "tech-debt", "preflight"]
 ```
 
 ### Router scripts

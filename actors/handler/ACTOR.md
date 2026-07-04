@@ -49,7 +49,7 @@ The Handler-specific workflows above (prompt writing, post-mortems, repo mainten
 
 ## Skills
 
-The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `active-listening` + `sc-ghostwriting` + `mission-artefacts`, `squad-selector` → `propose-and-dispose` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts`). At the actor level you load:
+The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `active-listening` + `sc-ghostwriting` + `mission-artefacts`, `squad-selector` → `squad-selection` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts`). At the actor level you load:
 
 - `testament` — your continuity across casts.
 - `project-memory` — maintaining each operator repo's `./CLAUDE.md`.
