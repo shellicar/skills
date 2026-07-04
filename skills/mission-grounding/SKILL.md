@@ -25,6 +25,12 @@ The trained win is "produce a complete, thorough mission" — and thoroughness i
 
 The win this skill installs instead: every claim in the mission is traced to its source in the provenance file, and the untraceable ones are cut. A short grounded mission beats a thorough invented one, every time. If the trace comes out short, the mission is short — that is correct, not a gap.
 
+## The other failure — dropping what the intent settled
+
+That "short is correct" holds for one kind of shortness only: shortness from cutting invention. There is an opposite failure, and it is just as real — carrying *less* than the intent settled. A blueprint, an illustration, a decision the SC pinned in `intent.md` is *grounded* (its source is the SC), so it must land in the mission. Dropping it is not a short mission done right; it is a hole.
+
+So the trace runs in two directions. The five-call pass proves nothing in the mission is unsourced — mission → source. This second direction proves nothing the intent settled is missing — intent → mission: walk `intent.md`'s settled content, its blueprints and illustrations and decisions, and confirm each one carried into the mission. A settled thing with no home in the mission is a drop, and it goes back in — dropping what the SC decided is as much a failure as inventing what they did not.
+
 ## The three sources
 
 Every claim traces to exactly one of three:
