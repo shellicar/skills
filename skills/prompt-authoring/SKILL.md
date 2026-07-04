@@ -1,6 +1,6 @@
 # Prompt authoring
 
-**Skill** (loaded by the `scribe` role). The reusable craft of writing a prompt well — true for any prompt, anywhere. The *shape* of a mission (which phases, roles, models, skills) is decided upstream and recorded in `squad.md` — see the `mission-shaping` skill. This skill is the writing.
+**Skill** (loaded by the `scribe` role). The reusable craft of writing a prompt well — true for any prompt, anywhere. The *shape* of a mission (which phases, roles, models, skills) is decided upstream and recorded in `squad.md` — see the `squad-selection` skill. This skill is the writing.
 
 ## Writing for a literal reader
 
@@ -99,26 +99,24 @@ A new prompt starts from the scaffold script, not from a previous prompt. Readin
 
 The rule above — scaffold from the blocks, don't read old prompts — is right for *feature* missions, where a prior prompt's specifics contaminate the new one. Some types are the exception: maintenance releases, security audits, version-bump releases recur with a fixed shape, and that shape is canonical. For these, read the most recent prior instance (or a recipe under `templates/prompt-authoring/recipes/`, if one has been canonised) for the **shape** — which phases, which roles, which skills, in what order. Take the skeleton and nothing else: leave the advisories, versions, package names, and context. The contamination guard is still live — if you find yourself carrying anything across but the phase/role/skill structure, stop; that is contamination, not shape.
 
-The script: `scripts/scaffold-prompt.mjs`. Reads JSON from stdin, writes a scaffolded `mission.md` into the mission directory it composes.
+The scribe's script is `create-mission.mjs`, run through the `scribe` role. It is one of three that carry a mission's file across its life, each *handed* the mission directory rather than composing a path from parts:
 
-Inputs:
+- `scaffold-mission.mjs` — run by the interlocutor at the start. Creates the mission directory, dated once, holding `intent.md`, `squad.md`, and a `mission.md` placeholder. This is the only script that derives the date; every script after it takes the directory as given.
+- `create-mission.mjs` — yours. Writes the `mission.md` skeleton into the directory you are handed.
+- `update-mission.mjs` — run by the executor. Adds phases to an existing `mission.md` as the mission runs.
 
-- `project` — the project name. The script writes the mission to `<pm-repo>/projects/<project>/missions/<YYYY-MM-DD>[_<issueNumber>]_<slug>/mission.md`.
-- `slug` — the description part of the mission directory name (`<YYYY-MM-DD>[_<issueNumber>]_<slug>/`).
-- `issueNumber` — optional. When supplied, included in the mission directory name per the naming convention.
+`create-mission.mjs` reads JSON from stdin and overwrites the `mission.md` placeholder with the skeleton. Inputs:
+
+- `missionDir` — the mission directory, handed to you; it already exists. The script writes `mission.md` into it and reads the date from the directory name. You do not name the path or the date — they were set once, when the directory was created.
 - `baseRepo`, `worktreeName` — composed into the `Deliver to` frontmatter as `${baseRepo}--${worktreeName}`.
 - `skillsDir` — substituted into `## Loading Skills` so the path pattern is concrete.
-- `phases` — the structural decisions. Each needs `role` and `model`. Courier also needs `variant` (`github` or `azure`).
-
-The date and the full output path are all derived by the script. The Handler does not name the path; the convention lives in one place.
+- `phases` — the structural decisions. Each needs `role` and `model`; `effort` is optional; Courier also needs `variant` (`github` or `azure`).
 
 Example:
 
 ```json
 {
-  "project": "claude-cli",
-  "slug": "history-view",
-  "issueNumber": 179,
+  "missionDir": "~/repos/@shellicar/handler/projects/claude-cli/missions/2026-07-04_179_history-view",
   "baseRepo": "~/repos/@shellicar/claude-cli",
   "worktreeName": "history-view",
   "skillsDir": "~/repos/shellicar/skills/skills",
@@ -134,12 +132,12 @@ Example:
 Pipe in:
 
 ```
-echo '<json>' | node scripts/scaffold-prompt.mjs
+echo '<json>' | node ~/repos/shellicar/skills/skills/prompt-authoring/scripts/create-mission.mjs
 ```
 
-The output `mission.md` has the right frontmatter (with `Written against version` set to the fleet-material short SHA captured at scaffold time), the standard patterns block, the phases summary, every phase composed from its block, and Delivery Notes at the bottom. The operator role arrives via `--system` at launch; the scaffold no longer substitutes agent paths. Mission content is the work that follows the scaffold.
+The output `mission.md` has the right frontmatter (with `Written against version` set to the material short SHA captured at write time), the standard patterns block, the phases summary, every phase composed from its block, and Delivery Notes at the bottom. The operator role arrives via `--system` at launch; the script no longer substitutes agent paths. Mission content is the work that follows.
 
-The script commits the scaffold to the current branch before it returns. This is deliberate: the skeleton is boilerplate, so the review surface is your filled-in content diffed against that commit — not the commit itself. Don't be thrown by the commit, and don't treat it as the content commit: the filled mission is committed separately, after the SC reviews, per *Writing a prompt* (step 8).
+The script commits the `mission.md` it writes before it returns. This is purely a review mechanism, not the content commit: the skeleton is boilerplate, so committing it makes your review surface the filled-in content diffed against that commit, rather than the boilerplate as well. Without the commit the SC would be reading everything, skeleton included. The filled mission is committed separately, after the SC reviews, per *Writing a prompt* (step 8). `scaffold-mission` commits its placeholders for the same reason; `update-mission` does not commit, since an existing `mission.md` already lives in whatever state the scribe or a prior run left it.
 
 ## Guardrails are infrastructure
 

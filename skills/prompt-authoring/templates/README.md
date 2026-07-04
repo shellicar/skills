@@ -1,10 +1,10 @@
 # Prompt Authoring Templates
 
-Templates for composing operator missions. The blocks here are consumed by [scripts/scaffold-prompt.mjs](../../scripts/scaffold-prompt.mjs), which produces the mission skeleton from a JSON description.
+Templates for composing operator missions. The blocks here are consumed by [../scripts/create-mission.mjs](../scripts/create-mission.mjs), which writes the mission skeleton from a JSON description, and [../scripts/update-mission.mjs](../scripts/update-mission.mjs), which adds phases as the mission runs.
 
 ## Writing a mission
 
-Start by running [scripts/scaffold-prompt.mjs](../../scripts/scaffold-prompt.mjs). It produces the mission skeleton from the blocks below: frontmatter, status instruction, patterns/roles preamble, mission briefing, delivery notes, and one composed phase per role. See [references/prompt-authoring.md](../../references/prompt-authoring.md) ("Scaffolding the skeleton") for the inputs.
+Start by running [../scripts/create-mission.mjs](../scripts/create-mission.mjs). It produces the mission skeleton from the blocks below: frontmatter, status instruction, patterns/roles preamble, mission briefing, delivery notes, and one composed phase per role. See the [prompt-authoring skill](../SKILL.md) ("Scaffolding the skeleton") for the inputs.
 
 [prompt-template.md](prompt-template.md) documents the same shape for reference — it is what the scaffold produces. Read it if you want to see the assembled layout in one place; do not author from it by hand.
 
