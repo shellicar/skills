@@ -47,11 +47,7 @@ Write to `[output file path]`.
 
 [N] complete designs, each answering all design questions above with TypeScript types. Trade-offs stated.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`.
 
 ## Debrief
 

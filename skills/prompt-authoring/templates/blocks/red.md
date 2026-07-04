@@ -45,11 +45,7 @@ Example: a test that verifies "default permissions are read-only" passes against
 
 Do not contort the stub to make tests fail — the stub is the minimum to compile, not a mechanism for manufacturing red. A test that fails because the stub was deliberately broken is testing the stub, not the behaviour.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament. Include the test contents.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`. Include the test contents.
 
 ## Stage
 

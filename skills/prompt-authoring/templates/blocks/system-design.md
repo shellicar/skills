@@ -49,11 +49,7 @@ Write to `[output file path]`.
 
 Design document with at least two options that differ in ownership, boundaries, or data flow. Trade-offs articulated for each.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`.
 
 ## Debrief
 

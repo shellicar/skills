@@ -74,11 +74,7 @@ The plan exists at the absolute path above and contains the structure named in "
 
 Or you stopped, and the partial plan plus a stop note are delivered.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`.
 
 ## Debrief
 

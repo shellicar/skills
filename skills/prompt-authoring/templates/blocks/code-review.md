@@ -33,11 +33,7 @@ Review the implementation for quality. You did not write this code. You have ful
 
 Report what you found. For each issue: what it is, where it is, why it matters.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`.
 
 ## Debrief
 

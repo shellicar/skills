@@ -44,11 +44,7 @@ Revise from the re-read. Look for claims that lost their source, sentences that 
 
 The document exists at the absolute path above. It was re-read on a turn after it was written, and revisions from the re-read are applied. Or you stopped because the sources were thin, and a partial document plus a stop note are delivered.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`.
 
 ## Debrief
 

@@ -31,11 +31,7 @@ Write findings to `[output file path]`. Structure:
 
 Findings report is written. The report should answer all investigation questions with enough specificity that the next prompt can be prescriptive.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`.
 
 ## Debrief
 

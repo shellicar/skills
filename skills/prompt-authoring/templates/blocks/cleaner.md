@@ -25,11 +25,7 @@ Load: typescript-standards, tdd, technical-writing, sc-commit-writing, sc-ghostw
 
 Lint must pass. Build and tests must still pass after your changes.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`.
 
 ## Stage
 

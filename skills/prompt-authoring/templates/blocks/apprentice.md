@@ -50,11 +50,7 @@ These files are imported by the files above. Copy them:
 
 Build and type-check must pass. Code style is the Cleaner's job, not yours.
 
-<!-- Handler: worktree → keep the full-path line. Otherwise → keep the short. -->
-
 Write your testament.
-
-Write your testament to `<full-path-to-main-repo>/.claude/testament/YYYY-MM-DD.md`.
 
 ## Stage
 
