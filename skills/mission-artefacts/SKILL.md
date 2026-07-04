@@ -1,7 +1,7 @@
 ---
 name: mission-artefacts
 description: |
-  WHAT: The single source for what a mission is on disk — the directory it lives in, the artefacts it holds (intent, squad, mission, post-mortem), and the equation that binds them into a mission.
+  WHAT: The single source for what a mission is on disk — the directory it lives in, the artefacts it holds (intent, squad, mission, provenance, verification, post-mortem), and the equation that binds them into a mission.
   WHY: Without one definition, the artefacts drift — the role that writes intent.md and the scribe that reads it disagree on what it is, and the concrete shape gets lost (as it did once already).
   WHEN: Loaded by the roles that produce or consume a mission's artefacts — the interlocutor and squad-selector who write the front two, the scribe who writes the mission from them, and the executor who reads them to know the stage.
 user-invocable: false
@@ -20,6 +20,8 @@ A mission is a directory, not a file — `YYYY-MM-DD_NUM_description/` — holdi
 - `intent.md` — what the SC wants, and why (the `interlocutor`'s output).
 - `squad.md` — the team the work runs through (the `squad-selector`'s output).
 - `mission.md` — the operator's brief (the `scribe`'s output).
+- `provenance.md` — the scribe's per-claim trace of the mission's sources (the `mission-grounding` pass's output).
+- `verification.md` — the executor's record of the cross-check (the `mission-verification` pass's output).
 - `post-mortem.md` — the retrospective, written at the end.
 - `investigations/`, `plans/` — the mission's other artefacts, colocated alongside.
 

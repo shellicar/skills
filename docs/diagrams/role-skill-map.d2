@@ -36,6 +36,7 @@ hskills: "Handler / Planner skills (individual)" {
   active_listening: "active-listening" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   squad_selection: "squad-selection" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   mission_grounding: "mission-grounding" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  mission_verification: "mission-verification" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   mission_artefacts: "mission-artefacts" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   sc_ghostwriting: "sc-ghostwriting" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   prompt_authoring: "prompt-authoring" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
@@ -62,6 +63,8 @@ handler.router -> hskills.dispatch
 handler.executor -> hskills.worktrees
 handler.executor -> hskills.post_mortem
 handler.executor -> hskills.mission_artefacts
+handler.executor -> hskills.prompt_authoring
+handler.executor -> hskills.mission_verification
 handler -> hskills.testament
 handler -> hskills.project_memory
 handler -> hskills.issue_writing

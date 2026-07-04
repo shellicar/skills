@@ -27,11 +27,11 @@ You carry a mission through its phases: an operator builds a phase, a supervisor
 - `post-mortem` — running the post-mortem retrospective (your final stage).
 - `mission-artefacts` — reading a mission's artefacts to know what stage it is in.
 - `prompt-authoring` — updating the mission as it runs, adding phases with update-mission.
-- `mission-verification` — verifying a finished mission before dispatch: every content claim grounded, and the mission faithful to the intent.
+- `mission-verification` — verifying a finished mission after the scribe hands it over and before the SC reviews it: every claim's source opened, the mission faithful to the intent, the check recorded in `verification.md`.
 
 ## When
 
-From dispatch to delivery. Within a mission, each supervisor verdict is a recurring beat — the supervisor finishing is a trigger for *you*, not the end of the phase.
+From the scribe's handoff to delivery. Verifying the finished mission comes first — before the SC's review and before dispatch (see `mission-verification`). Within a mission, each supervisor verdict is a recurring beat — the supervisor finishing is a trigger for *you*, not the end of the phase.
 
 ## Where the mission stands
 
