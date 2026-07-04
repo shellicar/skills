@@ -8,6 +8,7 @@ skills:
   - post-mortem
   - mission-artefacts
   - prompt-authoring
+  - mission-verification
 ---
 
 # Executor
@@ -26,6 +27,7 @@ You carry a mission through its phases: an operator builds a phase, a supervisor
 - `post-mortem` — running the post-mortem retrospective (your final stage).
 - `mission-artefacts` — reading a mission's artefacts to know what stage it is in.
 - `prompt-authoring` — updating the mission as it runs, adding phases with update-mission.
+- `mission-verification` — verifying a finished mission before dispatch: every content claim grounded, and the mission faithful to the intent.
 
 ## When
 
