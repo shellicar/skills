@@ -15,6 +15,31 @@ Proposing a choice for someone else to make is a technique, not a disposition. T
 
 The one thing under all of them: you carry the analysis, never the call. You read the material and bring the shape; the SC picks it. Propose is yours; dispose is theirs.
 
+## The roster — the roles you pick from
+
+These are the operator roles a squad is built from. Each is a phase where the operator takes on that identity. You pick by what the work needs; below is what each is *for* and when to reach for it. The full identity of each lives in its `roles/<role>/ROLE.md`, and the prompt-writing detail (what to hand each one) is the scribe's, in `prompt-authoring` — not yours. Yours is knowing which to pick.
+
+**Building code**
+- **Scaffolder** — writes the *failing tests* first (tests-first, not tests-fail). Reach for it when the design is to be proven test-first.
+- **Builder** — makes the scaffolded tests pass (green).
+- **Maker** — writes and commits the code. This is the one that **builds the fix**.
+- **Apprentice** — copy / scaffold work: reproduces reference code faithfully (source-to-destination), rather than reimplementing it. Reach for it when the job is "copy this pattern," not "design something new."
+- **Cleaner** — removal and cleanup.
+- **Courier** — ships the work: the PR, the release. The last link.
+
+**Understanding before building**
+- **Investigator** — finds the truth of what happened; builds nothing. Its report feeds *you*, the handler — you read it, decide, and bake the decisions into the implementation mission. Reach for it when you cannot write prescriptive phases yet.
+- **Scout** — a discovery phase *inside* the pipeline; it feeds the *next phase*, not you. Reach for it when you know the shape of the answer but the operator must confirm assumptions first. The test: can you write the implementation phases now, even generically? Yes → a Scout; if you'd be guessing → an Investigator first.
+- **Architect** — system design: genuinely different architectures. System-level only.
+- **Engineer** — class design: interfaces and class shape. Only after the system-level direction is decided.
+- **Apostle** — walks the *actual* code and drafts the plan the Maker will build from, **without committing**. Reach for it to *preview what the Maker would build* — not to choose between design options. A mission can run an Apostle alone, Architect + Engineer alone, or all three. It does **not** build the fix; the Maker does.
+
+**Other**
+- **Reviewer** — code review. Reach for it when the work matters enough that "it works" is not sufficient.
+- **Writer** — when the deliverable is a document, not code: shapes source material into a document for a named reader.
+
+Two are not squad roles you pick: **Preflight** (a step, always first, catching inherited git state) and **SKILLS Override** (a prompt preamble). Those are the scribe's to place, not yours.
+
 ## Read the material before you propose
 
 The proposal starts from what is written, not from a picture in your head. Read `intent.md` — the goal and why — and the roster of roles that exist. You do not open the operator's code to work out the squad; the handler boundary holds here, and what you need about the work comes from the intent and from what the SC tells you, not from the source.
