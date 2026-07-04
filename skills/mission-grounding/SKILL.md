@@ -37,7 +37,7 @@ No fourth source exists. A claim that traces to none is invented. "It follows fr
 
 ## The mechanical pass — fixed, batched, countable
 
-The mission body is written first (scaffold, then fill — you MUST use `scaffold-prompt.mjs`; see the scribe role). Then grounding runs as a fixed sequence of tool calls that produce a colocated `provenance.md` beside `mission.md`. The sequence is fixed and **batched by step, not by claim** — so you cannot compose a claim and its source together in your head, which is where invention hides.
+The mission body is written first (scaffold, then fill — you MUST use `create-mission.mjs`; see the scribe role). Then grounding runs as a fixed sequence of tool calls that produce a colocated `provenance.md` beside `mission.md`. The sequence is fixed and **batched by step, not by claim** — so you cannot compose a claim and its source together in your head, which is where invention hides.
 
 The fixed sequence:
 
