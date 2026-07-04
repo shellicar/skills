@@ -1,3 +1,15 @@
+---
+name: mission-shaping
+description: |
+  DEPRECATED. The pre-role guide to shaping a mission; superseded by the role split.
+  TRIGGER never.
+user-invocable: false
+metadata:
+  deprecated: true
+---
+
+> **DEPRECATED**: superseded by the role split — shaping a mission now lives in `squad-selection` (the `squad-selector` role), recast-vs-new-cast reasoning in the `executor` role, and each block's usage in its `roles/<role>/ROLE.md`. Do not load this skill.
+
 # Mission shaping
 
 **Skill** (loaded by the `requirements-analyst` role). How to decide the *shape* of a mission — which phases, which roles, which models, which skills, and how they verify between phases — so the agreement records a structure the scribe can write from. The shape is the design that lands in the agreement; writing the mission for the operator is the `prompt-authoring` skill.
