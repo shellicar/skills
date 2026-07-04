@@ -10,7 +10,7 @@
  * --name is derived from the worktree this runs in. A handler's cwd is a fleet
  * worktree like `claude-fleet-eagers--customer-payments-retry`, so the name is
  * `handler-<the part after the -->` (e.g. handler-customer-payments-retry).
- * Handlers are not a singleton the way the Planner is, so the name is what tells
+ * There is one Planner, but handlers are many, so the name is what tells
  * one handler from another. Falls back to `handler` if the cwd has no `--`.
  *
  * A thin wrapper. Presets: --name handler-<worktree> and the composed --system.

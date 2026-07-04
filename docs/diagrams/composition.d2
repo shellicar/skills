@@ -28,8 +28,11 @@ sc_actor: "SC\nproduct owner · decides · accountable" {
   style.fill: "#2A1B3A"; style.stroke: "#A569BD"; style.font-color: "#F3EAFB"
 }
 
-planner: "Planner\n(no sub-roles — the actor is the job)" {
+planner: "Planner" {
   style.fill: "#14352A"; style.stroke: "#2ECC71"; style.font-color: "#E8F8F0"
+  scheduler: "Scheduler" { style.fill: "#1C4433"; style.stroke: "#2ECC71" }
+  launcher: "Launcher" { style.fill: "#1C4433"; style.stroke: "#2ECC71" }
+  coach: "Coach" { style.fill: "#1C4433"; style.stroke: "#2ECC71" }
 }
 
 supervisor: "Supervisor\n(no sub-roles — third-party check)" {
@@ -83,7 +86,7 @@ handler.router -> skills.dispatch: loads { style.stroke: "#566573"; style.stroke
 handler.executor -> skills.worktrees: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
 handler.executor -> skills.project_memory: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
 handler.executor -> skills.issue_writing: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
-planner -> skills.standing_up: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
+planner.launcher -> skills.standing_up: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
 handler -> skills.testament: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
 operator -> skills.testament: loads { style.stroke: "#566573"; style.stroke-dash: 2 }
 

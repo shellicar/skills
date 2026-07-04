@@ -33,7 +33,9 @@ const ACTOR_SKILLS = {
 
 // Role-level skills — the ROLE.md `## Skills` sections.
 const ROLE_SKILLS = {
-  planner: ["standing-up-handlers", "mission-boards", "drive-post-mortem"],
+  scheduler: ["mission-boards"],
+  launcher: ["standing-up-handlers"],
+  coach: ["drive-post-mortem"],
   interlocutor: ["active-listening", "sc-ghostwriting", "mission-artefacts"],
   "squad-selector": ["propose-and-dispose", "mission-artefacts"],
   scribe: ["prompt-authoring", "mission-grounding", "mission-artefacts"],

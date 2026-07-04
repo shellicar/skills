@@ -23,7 +23,12 @@ handler: "Handler (actor)" {
   executor: "Executor" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
   router: "Router" { style.fill: "#3A3413"; style.stroke: "#F1C40F" }
 }
-planner: "Planner (actor)" { style.fill: "#14352A"; style.stroke: "#2ECC71"; style.font-color: "#E8F8F0" }
+planner: "Planner (actor)" {
+  style.fill: "#14352A"; style.stroke: "#2ECC71"; style.font-color: "#E8F8F0"
+  scheduler: "Scheduler" { style.fill: "#1C4433"; style.stroke: "#2ECC71" }
+  launcher: "Launcher" { style.fill: "#1C4433"; style.stroke: "#2ECC71" }
+  coach: "Coach" { style.fill: "#1C4433"; style.stroke: "#2ECC71" }
+}
 supervisor: "Supervisor (actor)" { style.fill: "#3A1714"; style.stroke: "#E74C3C"; style.font-color: "#FBEAEA" }
 
 hskills: "Handler / Planner skills (individual)" {
@@ -60,9 +65,9 @@ handler.executor -> hskills.mission_artefacts
 handler -> hskills.testament
 handler -> hskills.project_memory
 handler -> hskills.issue_writing
-planner -> hskills.standing_up
-planner -> hskills.mission_boards
-planner -> hskills.drive_pm
+planner.scheduler -> hskills.mission_boards
+planner.launcher -> hskills.standing_up
+planner.coach -> hskills.drive_pm
 supervisor -> hskills.testament
 
 # ================= OPERATORS (by group) =================

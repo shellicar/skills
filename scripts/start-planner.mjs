@@ -3,7 +3,7 @@
  * Start a Planner session — claude-sdk-cli with the Planner identity preset.
  *
  * The Planner's identity (actor + role) is delivered as --system, composed from
- * ~/.claude/actors/planner/ACTOR.md + ~/.claude/roles/planner/ROLE.md by the
+ * ~/.claude/actors/planner/ACTOR.md + ~/.claude/roles/{scheduler,launcher,coach}/ROLE.md by the
  * shared buildSystemInline (../shared/pane/envelope.mjs), which reads the file
  * contents directly. Run claude-sdk-cli bare and nothing composes that system
  * prompt, so the session is a bare CLI, not a Planner. You *start* the Planner
@@ -36,8 +36,8 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { buildSystemInline, buildPrompt } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
 
-// The composition preset: the Planner's identity (actor + role) into --system.
-const system = buildSystemInline({ actor: "planner", role: "planner" });
+// The composition preset: the Planner's actor + its three roles into --system.
+const system = buildSystemInline({ actor: "planner", role: ["scheduler", "launcher", "coach"] });
 
 // Tag the current pane so the status bar reads "Planner". Pane/window creation
 // is the SC's; this only labels what already exists. Skipped cleanly outside tmux.
@@ -72,7 +72,7 @@ const args = ["--name", "planner", "--system", system];
 // first turn, so re-injecting would fire a spurious turn and miss the cache it
 // was meant to seed. skillsFor mirrors the ACTOR/ROLE `## Skills` (see skills.mjs).
 if (passthrough.includes("--no-resume")) {
-  const skills = skillsFor({ actor: "planner", role: "planner" });
+  const skills = skillsFor({ actor: "planner", role: ["scheduler", "launcher", "coach"] });
   args.push("--prompt", buildPrompt({ from: "the Supreme Commander", message, skills }));
 }
 

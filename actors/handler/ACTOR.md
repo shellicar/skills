@@ -182,4 +182,4 @@ Read the README in each directory for what's available and when to use it:
 - [templates/prompt-authoring/README.md](../templates/prompt-authoring/README.md) — prompt template, composable blocks, agent paths
 - [scripts/README.md](../scripts/README.md) — sync script and usage guide
 - `router` role (`~/repos/shellicar/skills/roles/router/ROLE.md`) + `dispatch` skill (`~/repos/shellicar/skills/skills/dispatch/SKILL.md`) — how a Claude session dispatches operator and supervisor casts via tmux
-- the `planner` actor (`~/repos/shellicar/skills/actors/planner/ACTOR.md`) — the singleton, cross-mission and cross-project session that holds the picture and stands up missions
+- the `planner` actor (`~/repos/shellicar/skills/actors/planner/ACTOR.md`) — the single cross-mission and cross-project session that holds the picture and stands up missions
