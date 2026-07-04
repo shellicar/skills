@@ -2,6 +2,8 @@
 
 This file is the editorial context for the `clear-communication` skill. It is not loaded at runtime. Read it before modifying `SKILL.md` so changes stay aligned with the reasoning that produced it.
 
+> **Succession:** `collaborative-conversation` — the SC-communication skill this one was split from — has since been retired and replaced by `executive-communication`. The dated history below names it under its old name; where this file points at the *live* SC-communication skill, that is now `executive-communication`.
+
 ## Why this skill exists
 
 Claude fails basic clear communication. Consistently. Not because the content is wrong, but because the form obscures it: labels I cannot decode, background before the point, sentences that take work to parse. If I cannot understand the response, nothing else it did matters.
@@ -51,7 +53,7 @@ The split preserves the character difference: collaborative-conversation is cali
 
 ## What this skill does NOT cover
 
-- The SC's communication preferences (carry the load, bring a digested understanding, collaborate to reach the solution). Those are `collaborative-conversation`.
+- The SC's communication preferences (carry the load, bring a digested understanding, collaborate to reach the solution). Those are `executive-communication`.
 - Writing style for commits, PR titles, and work item text. That is `writing-style`.
 - Reasoning being visible in the response. That is `transparency`.
 
@@ -59,4 +61,4 @@ The split preserves the character difference: collaborative-conversation is cali
 
 - "If I cannot understand the response, nothing else it did matters" is the load-bearing sentence. Edits that soften this lose the principle.
 - This skill starts thin and is expected to grow. Minto and Williams are the candidates for a resource pass.
-- The "textbook, not calibration" distinction is what separates this from `collaborative-conversation`. Do not import SC-specific preferences here; those belong in collaborative-conversation.
+- The "textbook, not calibration" distinction is what separates this from `executive-communication`. Do not import SC-specific preferences here; those belong in `executive-communication`.
