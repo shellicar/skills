@@ -34,10 +34,8 @@
  *   squad.md  (# Squad)    — the squad-selector
  *   mission.md (# Mission) — the scribe (create-mission overwrites this wholesale)
  *
- * Then commits the new directory onto the current branch, using a temporary
- * index seeded from HEAD (GIT_INDEX_FILE) so anything the caller has already
- * staged in the real index is left untouched. The commit is the boilerplate
- * skeleton; each role's filled-in content is then reviewed as a diff against it.
+ * It does not commit — it only writes the placeholder files. Staging and
+ * committing the scaffold is the caller's to do.
  *
  * Usage:
  *   echo '{...}' | node scaffold-mission.mjs
@@ -45,8 +43,6 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-
-import { commitFiles } from "../../../shared/git/commit.mjs";
 
 // Each placeholder is a bare heading — enough to orient the role that fills it
 // in, with none of the content that would contaminate a fresh mission.
@@ -122,23 +118,12 @@ const main = () => {
 
   mkdirSync(missionDir, { recursive: true });
 
-  const relFiles = [];
   for (const [name, content] of Object.entries(PLACEHOLDERS)) {
-    const path = join(missionDir, name);
-    writeFileSync(path, content, "utf-8");
-    // Paths staged into git are relative to the handler repo root.
-    relFiles.push(path.startsWith(handlerRepoRoot + "/")
-      ? path.slice(handlerRepoRoot.length + 1)
-      : path);
+    writeFileSync(join(missionDir, name), content, "utf-8");
   }
 
   console.log(`✅ Scaffolded mission ${missionDir}`);
   console.log(`   ${Object.keys(PLACEHOLDERS).join(", ")}`);
-  try {
-    commitFiles(handlerRepoRoot, relFiles, `Scaffold mission ${missionDir}`);
-  } catch (err) {
-    die(err.message);
-  }
 };
 
 main();
