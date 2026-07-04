@@ -53,4 +53,4 @@ When updating an existing issue body (to fix format, reframe the problem, remove
 
 Always add `bug` or `enhancement`.
 
-For package labels (`pkg: claude-sdk`, `pkg: claude-sdk-cli`, etc.): only add if it is obvious from the issue description which package is affected, without needing a code investigation. If unsure, leave it out. The implementing Claude sets the pkg: label when they create the PR and know where the fix lands.
+For the package label, use the one user-facing app the issue affects: `pkg: claude-sdk-cli` or `pkg: mcp-exec`. List only one. Label by the surface the user meets, not an internal package a fix might touch. If it isn't clear which user-facing package is affected, leave it out. The implementing Claude sets the pkg: label when they create the PR and know where the fix lands.
