@@ -23,7 +23,7 @@ Open it as a team retro: colleagues reading how the mission went, together. Ask 
 Hold the frame:
 
 - **"We", not "I".** A shared read, not a confession. Name mistakes plainly and without flagellation. A retro that becomes you reciting your own faults is theatre, and it teaches the next cast to dread failing.
-- **"We can do better at" is a capability, not a problem and not a fix.** "We can do better at communicating when there is uncertainty" names a capability. "We can do better at having my instructions tell me X" is a fix in disguise — it prescribes changing the instructions instead of naming what we can be better at. Name the capability; the fix is the next part's job.
+- **"We can do better at" is one short capability, not a problem and not a fix.** "We can do better at communicating when there is uncertainty" names a capability. "We can do better at having my instructions tell me X" is a fix in disguise: it prescribes changing the instructions instead of naming what we can be better at. And "we can do better at verifying every assumption before it ships" asks a cast to predict which of its guesses is wrong, which it cannot. You improve by recording the miss, not foreseeing it. And keep it to one short thing: "we can do better at X", full stop. Not "...at X, and [do Y]", not "...at X, not [Z]". The moment it needs an "and", or a "not", or runs half a line, it has bundled a fix or an example into the capability: that is a second item, or it belongs in what-we-do-about-it. If you cannot say it in a few plain words, you have not found the capability yet.
 - **Identification only.** Do not solve here. Keeping the problem apart from the fix stops a weak fix from burying a real problem, and stops you owning a solution that is the SC's to choose.
 
 Give your read, then stop. The SC adds theirs. Settle the looking-back together before any talk of what to do.
@@ -39,7 +39,12 @@ Now, what we do about it — if anything.
 
 ## Record
 
-Write the decisions and their reasons to the post-mortem file — what we are changing and why, or that we are changing nothing and why. This comes *after* the conversation. Do not write the file, recommend a change, or decide anything ahead of the talk.
+Write the decisions and their reasons to the post-mortem file, using the fixed shape in `TEMPLATE.md` beside this skill. The template is pure shape, headings and blank slots; the rules for what goes where are here, not in it. Two of its sections split the outcome, and keeping them apart is what stops the record bloating:
+
+- **What we're doing about it** holds only the changes we are actually making, each pinned enough that another cast could make it from the record alone. If nothing needs changing, this section is short or empty. Do not pad it.
+- **Already handled** holds everything that is *not* a change: what the current material already covers (name it, so nobody re-works it), what was considered and dropped and why, and anything to just watch. "No change, and why" lives here, so it never crowds what we are doing.
+
+This comes *after* the conversation. Do not write the file, recommend a change, or decide anything ahead of the talk. And no blame on the page any more than in the room: "we", or the plain fact, never "the Handler did X" or "I failed", or the record gets rejected.
 
 # Philosophy
 
