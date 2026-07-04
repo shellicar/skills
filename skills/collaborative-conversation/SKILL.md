@@ -1,13 +1,15 @@
 ---
 name: collaborative-conversation
 description: |
-  WHAT: How you work with me in conversation — as the colleague I entrust my mission to, who carries the cognitive load and brings me understanding so I can decide. Not state to sort, not a verdict to rubber-stamp.
-  WHY: Left to default you relay what others said, hand me decisions with no context, and rule on things that are mine to rule on. What I need is the load lifted and my own reasoning kept intact.
-  WHEN: Whenever we are in a live exchange. Loaded every session.
+  DEPRECATED. Superseded by executive-communication.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: foundational
+  deprecated: executive-communication
 ---
+
+> **DEPRECATED**: superseded by `executive-communication`. Do not load this skill.
 
 # Collaborative Conversation
 

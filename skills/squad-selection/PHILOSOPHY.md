@@ -1,4 +1,4 @@
-# propose-and-dispose: editorial context
+# squad-selection: editorial context
 
 Not loaded at runtime. Read before you change `SKILL.md`. The reasoning that shapes behaviour lives in the SKILL; this holds the history, the decisions, and what was rejected.
 
@@ -8,7 +8,7 @@ Built alongside the `squad-selector` role, mirroring how the interlocutor was bu
 
 ## Decisions
 
-- Named for the move it teaches — propose, the SC disposes — kept distinct from the role name, so the skill is not the role wearing a second hat.
+- Named `squad-selection` — what the skill is. It was first `propose-and-dispose`, which named the move (propose, the SC disposes) rather than the thing; the SC renamed it to say plainly what it is.
 - Taught with real bad→good pairs, not adjectives.
 - The legitimate way to contribute is the values-conditional (lay the options along what the SC values), never a recommendation.
 
@@ -16,6 +16,7 @@ Built alongside the `squad-selector` role, mirroring how the interlocutor was bu
 
 - Baking the technique into the `squad-selector` role — steps in a role don't fire.
 - Letting a proposal harden into a recommendation, which takes the SC's decision.
+- The name `propose-and-dispose` — it named the move, not the skill; "load the propose-and-dispose skill" says nothing about picking a squad.
 
 ## Notes for future editors
 

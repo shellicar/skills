@@ -34,7 +34,7 @@ supervisor: "Supervisor (actor)" { style.fill: "#3A1714"; style.stroke: "#E74C3C
 hskills: "Handler / Planner skills (individual)" {
   style.fill: transparent; style.stroke: "#444A5A"; style.stroke-dash: 4; style.font-color: "#7F8C8D"
   active_listening: "active-listening" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
-  propose_and_dispose: "propose-and-dispose" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  squad_selection: "squad-selection" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   mission_grounding: "mission-grounding" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   mission_artefacts: "mission-artefacts" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   sc_ghostwriting: "sc-ghostwriting" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
@@ -53,7 +53,7 @@ hskills: "Handler / Planner skills (individual)" {
 handler.interlocutor -> hskills.active_listening
 handler.interlocutor -> hskills.sc_ghostwriting
 handler.interlocutor -> hskills.mission_artefacts
-handler.squad_selector -> hskills.propose_and_dispose
+handler.squad_selector -> hskills.squad_selection
 handler.squad_selector -> hskills.mission_artefacts
 handler.scribe -> hskills.prompt_authoring
 handler.scribe -> hskills.mission_grounding
@@ -116,7 +116,7 @@ unused: "Not loaded by default — pulled in when the work calls for it\n(e.g. a
   d: "delivery extras: github-release/milestone/\nversion/repos, azure-devops-config/\n-pipelines/-repos" { style.fill: "#15151C"; style.stroke: "#566573" }
 }
 
-note: "Foundational (claude-philosophy, commander-protocol, teapot-protocol, specification-discipline, transparency, collaborative-conversation, clear-communication, safe-operations, co-working) load for every cast — not shown.\nHandler/planner are granular (each individual skill); operators map to skill groups (they're handed the skills, so group granularity is enough). The bottom box is skills not loaded by default — pulled in when a specific kind of work calls for them (not unused, and not a fleet/non-fleet split).\n*typescript-standards sits in code-craft for operators; the project-specific conventions skills next to it are on-demand, not default-loaded." {
+note: "Foundational (claude-philosophy, commander-protocol, teapot-protocol, specification-discipline, transparency, executive-communication, clear-communication, safe-operations, co-working) load for every cast — not shown.\nHandler/planner are granular (each individual skill); operators map to skill groups (they're handed the skills, so group granularity is enough). The bottom box is skills not loaded by default — pulled in when a specific kind of work calls for them (not unused, and not a fleet/non-fleet split).\n*typescript-standards sits in code-craft for operators; the project-specific conventions skills next to it are on-demand, not default-loaded." {
   near: bottom-center
   shape: text
   style.font-color: "#7F8C8D"

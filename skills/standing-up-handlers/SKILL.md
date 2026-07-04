@@ -38,7 +38,7 @@ The more you hand it, the more it behaves as if in command. Hand it the least. T
   "cwd": "~/repos/fleet/claude-fleet-shellicar--<mission>",
   "convId": "<the pre-generated uuid>",
   "envelope": "i have a mission to <plain description> in the <repo> repo",
-  "skills": ["claude-philosophy","specification-discipline","transparency","commander-protocol","teapot-protocol","collaborative-conversation","safe-operations"],
+  "skills": ["claude-philosophy","specification-discipline","transparency","commander-protocol","teapot-protocol","executive-communication","safe-operations"],
   "name": "<mission>",
   "windowName": "<project>-<mission>",
   "title": "<project>-<mission>",

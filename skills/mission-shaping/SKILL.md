@@ -81,7 +81,7 @@ Verify each foundational skill per prompt. The set isn't fixed — it changes as
 - `teapot-protocol` — always.
 - `specification-discipline` — always.
 - `transparency` — always.
-- `collaborative-conversation` — always.
+- `executive-communication` — always.
 - `safe-operations` — when the cast runs on a real host. Default yes; drop in sandboxed sessions.
 - `co-working` — only when the operator and the SC are active in the same directory at once. Most dispatched casts are *not* co-working. Drop by default; load only when the cast specifically is.
 

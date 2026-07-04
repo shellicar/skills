@@ -4,7 +4,7 @@ Not loaded at runtime. Read before you change `ROLE.md`. The reasoning that shap
 
 ## Where it came from
 
-The middle role of the mission pipeline — between the interlocutor (draws intent out) and the scribe (writes the mission). Built mirroring the interlocutor: an identity role plus a technique skill (`propose-and-dispose`).
+The middle role of the mission pipeline — between the interlocutor (draws intent out) and the scribe (writes the mission). Built mirroring the interlocutor: an identity role plus a technique skill (`squad-selection`).
 
 ## Decisions
 

@@ -62,11 +62,11 @@ The brewing cycle. Per-response markers that prime your generation and signal th
 
 Load: `teapot-protocol` (every session)
 
-## Collaborative Conversation
+## Executive Communication
 
-How I want Claude to communicate with me: as a colleague who carries the load and brings me digested understanding, not raw state to sort.
+How I want Claude to communicate with me: bring me digested understanding I can act on in under a minute, never raw state or a relayed verdict. My time is the resource to protect.
 
-Load: `collaborative-conversation` (every session)
+Load: `executive-communication` (every session)
 
 ## Clear Communication
 
