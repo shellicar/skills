@@ -50,6 +50,14 @@ Its anatomy carries the negative space, because a downstream session cannot tell
 
 The operator roles the work runs through — proposed from the real roster, with the reason each one is there. Claude proposes; the SC disposes. It is selection from what exists, not the invention of a structure.
 
+## The `mission.md` header fields
+
+`mission.md` opens with header fields the `scribe` stamps and the `executor` reads. They are recorded facts about the mission — **boilerplate, not content claims** — so `mission-verification` does not trace them against provenance. But you have to know what each means, because misreading one (treating it as something to verify, or checking it against the wrong repo) is how verification goes wrong.
+
+- **Created** — the date the mission was written.
+- **Deliver to** — the worktree the operator's work lands in: `<base-repo>--<worktree-name>`. The handler creates this worktree with the `dispatch` skill.
+- **Written against version** — the commit of the **fleet material** (the skills repo: the roles, skills, scaffold, and templates) the mission was authored from. It records which material version shaped the mission, so material drift stays traceable. Written as `<repo>@<commit>` so the repo is explicit.
+
 ## Why the front artefacts are two, not one
 
 They are different kinds of decision with different protection. The intent is *drawn out* of the SC and must never be invented. The squad is *proposed* by Claude and confirmed by the SC — it can be wrong, and it is corrected downstream. Splitting them keeps the drawing-out honest and the proposing accountable, and hands the `scribe` two clean inputs instead of one fused document.
