@@ -33,3 +33,17 @@ Understanding-nature content lives in the PHILOSOPHY layer at the scope it gover
 ### Area of influence restored, as influence.md
 
 Every mission declares its area of influence — the surfaces and files it expects to touch — a claim, not a final list. Not in the intent (the conversation often cannot know repo surfaces); the scribe declares it, the executor refines it as the work concretes. Its own artefact, `influence.md`, because the mission is a container: the planner's scheduler reads every live area for collisions without loading the missions, and the executor updates it without churning a dispatched `mission.md`. Reason: the concept was adopted in practice (June 2026, born from the AppLayout/core-di-lite merge collisions) but lived only in mission instances, never in the material — so the redesign lost it without deciding to. The scheduler's "touch-set" is rewritten to the SC's word.
+
+## 2026-07-06
+
+### Scout and Investigator are distinguished by the kind of question, not by output routing
+
+Scout is codebase discovery: you want to discover the codebase. Investigator is detective work: you have questions you want answered. The old "feeds you / feeds the next phase / separate mission" framing is dropped wherever the live material carried it — the routing was plumbing, never the identity, and it misled a handler into treating Investigator-vs-Apostle as a one-mission-or-two fork. Deprecated skills keep the old text: old skills are left as they are, not maintained.
+
+### The Postmaster is a new operator role — the release phase is not a second Courier
+
+Publishing was split out of the Courier. The Courier delivers the work into review (the PR, git ground); the Postmaster makes the merged work public (tags, releases, publish workflows, the registry — no working-tree changes). One word carrying both jobs is how a release phase wobbled between Maker and Courier across the June releases. The name: the mailroom analogy is kept deliberately — a semi-opaque name funds only the true half-guess ("sends the work out") and leaves the dangerous specifics to the role text, and when Claude guesses anyway the guess is visible instead of camouflaged as plausible trained behaviour. Plain "Publisher" was considered and passed over for exactly that camouflage risk.
+
+### The identity frontmatter drives; skills.mjs parses it
+
+`shared/pane/skills.mjs` now reads each actor's and role's `skills:` (and the handler's `roles:`) from the `ACTOR.md`/`ROLE.md` frontmatter, via the `yaml` dependency — the hand-kept mirror is gone, and each identity file is the single source for what it loads. The handler launch scripts share one role list (`HANDLER_ROLES`), and `launch-handler` no longer accepts a `skills` input from the Planner — a launch cannot carry a skill list that drifts from the material. Only the foundational set stays hard-coded, mirroring `~/.claude/CLAUDE.md`'s `Load:` lines, which have no frontmatter to read. Role order settled: `… scribe, executor, router`.
