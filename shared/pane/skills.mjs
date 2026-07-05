@@ -44,6 +44,17 @@ function frontmatter(path) {
 }
 
 const actorMeta = (actor) => frontmatter(join(BASE, "actors", actor, "ACTOR.md"));
+
+/**
+ * The actor-level `skills:` from ACTOR.md frontmatter — the skills an actor
+ * loads whatever role it is in (testament, tmux, ...). Exported so the dispatch
+ * path (launchCli) can union them into every cast's skill set: the mission's
+ * Load: lines carry role- and task-level skills, and without this union the
+ * actor-level ones were never delivered to operators or supervisors at all.
+ */
+export function actorSkills(actor) {
+  return actor ? (actorMeta(actor).skills ?? []) : [];
+}
 const roleMeta = (role) => frontmatter(join(BASE, "roles", role, "ROLE.md"));
 
 // The handler's full role set, from its ACTOR.md `roles:`. One session carries

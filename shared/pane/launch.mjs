@@ -11,6 +11,7 @@ import { paneProcessName, waitForClaudeSdkCli, PREFERRED } from './process.mjs';
 import { findPaneByRole, paneCwd } from './lookup.mjs';
 import { buildPrompt, buildSystem } from './envelope.mjs';
 import { getSupervisorContext } from './templates.mjs';
+import { actorSkills } from './skills.mjs';
 import { effortFlag } from './effort.mjs';
 
 /**
@@ -42,7 +43,12 @@ export function launchCli(paneId, { from, model, missionFile, name, message, ski
       console.error('warning: no operator pane in this window; supervisor launched without the operator-debrief pointer.');
     }
   }
-  const prompt = buildPrompt({ from, message: finalMessage, skills, missionPath: expandedMissionFile });
+  // Union the caller's skills with the actor's own frontmatter skills
+  // (testament, tmux, ...). The caller's list carries the role- and task-level
+  // skills from the mission; the actor-level set rides on the identity, so no
+  // handler-assembled list can forget it.
+  const finalSkills = [...new Set([...(skills ?? []), ...actorSkills(actor)])];
+  const prompt = buildPrompt({ from, message: finalMessage, skills: finalSkills, missionPath: expandedMissionFile });
   const tmp = mkdtempSync(join(tmpdir(), 'router-prompt-'));
   const promptPath = join(tmp, 'prompt');
   writeFileSync(promptPath, prompt);
