@@ -1,3 +1,14 @@
+---
+name: prompt-authoring
+description: |
+  WHAT: The reusable craft of writing a prompt well — writing for a literal reader, positive instructions, the mission scripts and the composable templates.
+  WHY: Operators follow prompts literally, so every vague or fabricated specific ends up in the code; the craft keeps what reaches them precise and buildable.
+  WHEN: Loaded by the scribe role when a mission is written, and by the executor when one is updated mid-run.
+user-invocable: false
+metadata:
+  category: standards
+---
+
 # Prompt authoring
 
 **Skill** (loaded by the `scribe` role). The reusable craft of writing a prompt well — true for any prompt, anywhere. The *shape* of a mission (which phases, roles, models, skills) is decided upstream and recorded in `squad.md` — see the `squad-selection` skill. This skill is the writing.

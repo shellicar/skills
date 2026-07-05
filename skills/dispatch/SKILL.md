@@ -1,3 +1,14 @@
+---
+name: dispatch
+description: |
+  WHAT: The mechanical how-to of dispatching casts — CLI flags, pane lifecycle, envelope templates, skill injection, and the scripts.
+  WHY: Dispatch is transport, not decision — one documented mechanism keeps every cast launched the same way, instead of each router re-deriving flags and envelope shapes.
+  WHEN: Loaded by the router role, whenever a cast is dispatched.
+user-invocable: false
+metadata:
+  category: reference
+---
+
 # Dispatch
 
 **Skill** (loaded by the `router` role). The mechanical how-to of dispatching casts — CLI flags, pane lifecycle, envelope templates, skill injection, and the scripts in `scripts/`.

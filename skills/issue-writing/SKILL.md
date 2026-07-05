@@ -1,3 +1,14 @@
+---
+name: issue-writing
+description: |
+  WHAT: How to write GitHub issues for these projects — title, body, labels.
+  WHY: A vague issue ("Improve tool UI") costs every reader who opens it; the guide keeps titles concrete and bodies carrying what the fix needs.
+  WHEN: Loaded by the handler actor, whenever an issue is written for a project that uses GitHub Issues.
+user-invocable: false
+metadata:
+  category: standards
+---
+
 # Issue Writing Guide
 
 **Skill** — how to write GitHub issues for these projects (title, body, labels).
