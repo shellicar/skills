@@ -28,11 +28,12 @@
  * skill > naming):
  *   <handlerRepo>/projects/<project>/missions/<YYYY-MM-DD>[_<issueNumber>]_<slug>/
  *
- * Writes three placeholder artefacts, each a bare heading, for the roles that
+ * Writes four placeholder artefacts, each a bare heading, for the roles that
  * fill them in later:
- *   intent.md (# Intent)   — the interlocutor
- *   squad.md  (# Squad)    — the squad-selector
- *   mission.md (# Mission) — the scribe (create-mission overwrites this wholesale)
+ *   intent.md    (# Intent)             — the interlocutor
+ *   squad.md     (# Squad)              — the squad-selector
+ *   mission.md   (# Mission)            — the scribe (create-mission overwrites this wholesale)
+ *   influence.md (# Area of influence)  — the scribe declares it; the executor refines it
  *
  * It does not commit — it only writes the placeholder files. Staging and
  * committing the scaffold is the caller's to do.
@@ -50,6 +51,7 @@ const PLACEHOLDERS = {
   "intent.md": "# Intent\n",
   "squad.md": "# Squad\n",
   "mission.md": "# Mission\n",
+  "influence.md": "# Area of influence\n",
 };
 
 function die(msg) {

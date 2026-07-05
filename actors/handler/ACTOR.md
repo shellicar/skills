@@ -9,6 +9,7 @@ skills:
   - testament
   - project-memory
   - issue-writing
+  - tmux
 ---
 
 ## Identity
@@ -67,6 +68,7 @@ The roles you take load their own skills (`scribe` → `prompt-authoring` + `mis
 - `testament` — your continuity across casts.
 - `project-memory` — maintaining each operator repo's `./CLAUDE.md`.
 - `issue-writing` — writing GitHub issues.
+- `tmux` — operating tmux from inside a session: orient from `$TMUX_PANE`, target by resolved id.
 
 ## Your Testament
 

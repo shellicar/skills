@@ -3,6 +3,7 @@ Type: supervision
 roles: []
 skills:
   - testament
+  - tmux
 ---
 
 # Supervisor

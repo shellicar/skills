@@ -27,8 +27,9 @@ const COWORKING_ACTORS = new Set(["planner"]);
 
 // Actor-level skills — the ACTOR.md `## Skills` sections.
 const ACTOR_SKILLS = {
-  planner: ["testament"],
-  handler: ["testament", "project-memory", "issue-writing"],
+  planner: ["testament", "tmux"],
+  handler: ["testament", "project-memory", "issue-writing", "tmux"],
+  supervisor: ["testament", "tmux"],
 };
 
 // Role-level skills — the ROLE.md `## Skills` sections.

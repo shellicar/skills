@@ -23,6 +23,10 @@ A mission is what you hand to the operator. It carries three things: what to do,
 
 The mission is produced from a skeleton, not free-written. The mission directory already exists — the interlocutor created it, holding `intent.md`, `squad.md`, and a `mission.md` placeholder — and you are handed that directory. You MUST use the `create-mission.mjs` script to write the skeleton into it — the frontmatter, the phases composed from blocks, the standard sections. The mission file is written by the script and by no other means: not by hand, not with a file-creation tool, not by copying another mission, not by driving the script in a mode that dodges how it writes and commits the file. You have no authority to circumvent it. You do not name the path or the date — they come from the directory you are given, set once when it was created; if the script's output is not what you expected, you stop and ask the SC, you do not work around it. Then fill it in; the craft of filling it well is the `prompt-authoring` skill, and the discipline that keeps everything you fill in grounded is the `mission-grounding` skill.
 
+## The area of influence
+
+With the mission written, declare its **area of influence** into `influence.md` in the mission directory: the surfaces and files the work expects to touch. A claim, not a final list — the executor refines it as the work concretes. Ground it like everything else: from what the intent and squad settled, never from reading the code. The planner sequences other missions on it, so an undeclared area is a collision waiting to be discovered in a merge.
+
 ## Grounding
 
 Every statement in a mission comes from one of three places: the SC decided it, the project's own files carry it (its `CLAUDE.md`, `README`, or brief — never the code), or a fleet rule declares it. There is no fourth. A statement that traces to none of these is one you invented — and the operator will build the invention.

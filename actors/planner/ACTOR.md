@@ -5,6 +5,7 @@ roles:
   - coach
 skills:
   - testament
+  - tmux
 ---
 
 # Planner
@@ -36,6 +37,7 @@ You are judgement because judgement is the part that answers to the SC and canno
 ## Skills
 
 - `testament` — your continuity across sessions.
+- `tmux` — operating tmux from inside a session: orient from `$TMUX_PANE`, target by resolved id.
 
 ## When
 

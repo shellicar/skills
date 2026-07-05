@@ -21,6 +21,7 @@ A mission is a directory, not a file — `YYYY-MM-DD_NUM_description/` — holdi
 - `blueprint.md` — the SC's pinned spec or walkthrough, when one exists (optional; the `interlocutor` writes it when the SC pins one).
 - `squad.md` — the team the work runs through (the `squad-selector`'s output).
 - `mission.md` — the operator's brief (the `scribe`'s output).
+- `influence.md` — the mission's declared area of influence (the `scribe` declares it; the `executor` refines it as the work concretes).
 - `provenance.md` — the scribe's per-claim trace of the mission's sources (the `mission-grounding` pass's output).
 - `verification.md` — the executor's record of the cross-check (the `mission-verification` pass's output).
 - `post-mortem.md` — the retrospective, written at the end.
@@ -58,6 +59,12 @@ The file exists only when a blueprint does, so its presence is a hard signal: no
 ## `squad.md` — the team, and why
 
 The operator roles the work runs through — proposed from the real roster, with the reason each one is there. Claude proposes; the SC disposes. It is selection from what exists, not the invention of a structure.
+
+## `influence.md` — the declared area of changes
+
+The surfaces and files the mission expects to touch — a claim, not a final list. The `scribe` declares it when the mission is written, from what the intent and squad settled; the `executor` refines it as phases land and the real touch surfaces concrete.
+
+It is its own artefact because two readers need it apart from the mission: the planner's `scheduler` reads every live mission's area for collisions without loading the missions, and the `executor` updates it mid-run without churning a dispatched `mission.md`. Collisions decided on it — pause, order, run alone — happen at dispatch time, on evidence, instead of being discovered in merges.
 
 ## The `mission.md` header fields
 

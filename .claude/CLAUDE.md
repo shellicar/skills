@@ -15,6 +15,10 @@ This repo is the system itself: the actors, roles, and skills the fleet runs on,
 
 Before editing anything under `skills/`, always load `skills/PHILOSOPHY.md` and the skill's own `PHILOSOPHY.md` where it has one. The philosophy files carry the reasoning and the rejected alternatives; an edit made without them re-litigates settled decisions or breaks the shape the reasoning protects.
 
+## The editorial layer
+
+Reasoning lives beside what it governs, not loaded at runtime: a unit's own `PHILOSOPHY.md` (one role, one skill), `skills/PHILOSOPHY.md` (across skills), and the root `PHILOSOPHY.md` (the system itself). `DECISIONS.md` at the root is the dated, append-only ledger of what the SC signed off, with the reason. When a decision lands, it gets its ledger entry and the affected `PHILOSOPHY.md` is updated in the same change — the editorial layer is part of the change, not documentation to catch up later.
+
 ## Changing the glossary
 
 Every time a term is added to or changed in `skills/system-glossary/SKILL.md`, search the whole repo for the word first. The material must not contradict or misuse the term — an existing use with a different meaning either gets rewritten to the glossary's meaning, or the word was the wrong one to pick. The glossary is the single source of truth only while nothing else pulls the word elsewhere: `blueprint` was defined while the Engineer role was already using it for class design, and the word was muddied from birth.

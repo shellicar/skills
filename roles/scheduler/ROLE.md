@@ -35,9 +35,9 @@ You can wake with no memory of the picture. Before you act, build it back:
 
 ## Sequencing
 
-The order rests on each mission's declared touch-set — what it changes, named at the start and sharpened as it goes.
+The order rests on each mission's declared **area of influence** — `influence.md` in its mission directory: what it changes, declared by the scribe at the start and refined by the executor as it goes. You read the areas without opening the missions.
 
-- **Narrow missions** declare a touch-set: run the ones that do not overlap side by side, hold the ones that do.
+- **Narrow missions** declare a narrow area: run the ones that do not overlap side by side, hold the ones that do.
 - **Wide relocating refactors go last and alone** in their area — the reverse of the human "biggest first" habit. A refactor that re-homes code absorbs in-flight work easily, but a mission stranded behind it has nowhere to land its change and cannot rebase. Quiet the narrow work, land the refactor, then bring the held missions back on top and resume. Dependency and CVE bumps are wide but mechanical — isolate them, but the order matters less.
 
 ## Why

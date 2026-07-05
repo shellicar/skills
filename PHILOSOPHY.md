@@ -1,6 +1,31 @@
 # Editorial context
 
-This file is the editorial context for `~/.claude/CLAUDE.md` and `SYSTEM.md`. It is not loaded by Claude at runtime. Read it when you intend to modify either file, so the modification stays aligned with the reasoning that produced the current content.
+This file is the editorial context for the system at its widest scope: the composition itself (actors / roles / skills), plus `~/.claude/CLAUDE.md` and `SYSTEM.md`. It is not loaded by Claude at runtime. Read it before restructuring the composition or modifying either file, so the change stays aligned with the reasoning that produced what is there.
+
+The editorial layer has three scopes, each beside what it governs: a unit's own `PHILOSOPHY.md` (one role, one skill), `skills/PHILOSOPHY.md` (across skills), and this file (the system). Dated sign-offs live in `DECISIONS.md` — the ledger carries *when and by whose word*; these files carry the reasoning in prose.
+
+---
+
+# The composition
+
+## Why actors, roles, and skills
+
+An **actor** is the standing identity; a **role** is one job at one SAM position (substance / anchor / modality — `docs/diagrams/sam.d2` is the table); a **skill** is the steps. The split is load-bearing, not organisational:
+
+- **Identity goes in the system prompt; steps go in the user prompt, or they never fire.** Discovered 4 July 2026: a skill delivered via `--system` never writes files; the same skill via `--prompt` does. So a ROLE.md carries who Claude is — standing dispositions — and a SKILL.md carries the steps. This is why the interlocutor's technique lives in `active-listening` and the scribe's grounding in `mission-grounding`, not in the role files.
+- **One role per cast.** A session is fixed to a single SAM position at composition, before it starts, so it never infers mid-run which posture the SC wants. `requirements-analyst` broke by fusing drawing-out and proposing in one cast: it faked the understanding and the shape at once. Roles switch by ending a cast and starting another, with an artefact at the seam.
+- **The mission pipeline is four roles, four postures:** interlocutor (draws intent out; contributes nothing) → squad-selector (proposes; the SC disposes) → scribe (transcribes; invents nothing) → executor (orchestrates; decides nothing that is the SC's). The generation shape is none → propose → none.
+
+## The evidence under the structure
+
+Two grounded results explain why this is structure rather than instruction:
+
+- **The five-handler day (2026-06-19).** Five handler panes failed the same way on the same day — each could read its own role doc mid-failure and correctly name its own violation, and failed anyway. Description loses to the reflex; knowing the rule does not run the check. Structure removes the opportunity instead of describing the prohibition. (Per the defence-in-depth section in `skills/PHILOSOPHY.md`: the doc still gets tightened too — and, not or.)
+- **The three-way scribe experiment.** Same task, three ways: no artefact — worst, the whole thing invented; artefact but the same session writes the output — still leaks, the session pulls from the conversation past the artefact; artefact plus a separate clean session — clean. The *separation* prevents fabrication, not the artefact alone — in the same session the artefact never has to be complete, because the conversation fills its gaps, so you never find out it is incomplete. This is why the scribe is a separate cast and every handoff is an artefact.
+
+## The medicine
+
+Abstract instruction does not bind. What holds, applied everywhere: replace the success function (name the trained win, give the reason chasing it destroys the role's worth — "nothing left to reach for" is the signature of a complete replacement); teach with real worked examples, not described rules; add a mechanical, externally-visible check wherever a file is written.
 
 ---
 
