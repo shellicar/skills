@@ -1,4 +1,5 @@
 ---
+name: handler
 roles:
   - interlocutor
   - squad-selector

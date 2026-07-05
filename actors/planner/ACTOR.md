@@ -1,4 +1,5 @@
 ---
+name: planner
 roles:
   - scheduler
   - launcher

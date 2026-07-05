@@ -39,10 +39,23 @@ The handler runs in a tmux pane on the server you are in.
 
 Steps 2, 5 and 7 are where you bring the SC the handler's output and your read of it. This is where the drive most often fails, on your side, not the handler's. Load `executive-communication`. The SC has about a minute.
 
+- **Mark the step.** Open every report with `[<n>/8]: <step name>` — where you are in the eight-step script (e.g. `[3/8]: Check what's already covered`). One glance tells the SC how far the retro has moved, which they need before the rest of your words land.
 - **Lead with the phase.** Say where in the retro you are, look-back, deciding changes, whatever it is. The handler's output means nothing to the SC until they know what the handler was meant to be producing.
 - **Explain, do not parrot.** Understand the output and say it in plain words. Never relay the handler's wording or its jargon, and never pass its verdict across as if it were yours. If you cannot explain it plainly, you have not understood it.
 - **Lead with the point.** What needs the SC, or that nothing does. If there is a call, carry what it turns on so they can actually decide it, never a blind yes or no.
 - **Not a wall, not a template.** A dense paragraph is a wall they have to wade through. A rigid "Phase / Handler / You" stamp is monotonous and dead. Neither is communication. Say it clearly, in natural words, and stop.
+
+# Pacing your reads
+
+When you send the handler a message it thinks before it answers, often a minute or two. Reading the pane every few seconds while it thinks burns your own turns and tells you nothing new — you keep catching the same unfinished thought.
+
+The pane's own timestamps give you the rhythm. Each `query`/`thinking`/`response` block is stamped with its start and how long it took (e.g. `thinking 23:43:44 → 23:45:31 (1m 47s)`). Read the last completed turn's duration, then wait about that long before the next read. If the handler is still mid-`thinking` with no `response` block and the turn counter has not advanced, it has not answered; reading again at once just shows you the same in-progress state.
+
+This matters most when you drive with the SC away, bringing them only the decision points. Read once when a message lands to confirm it took, then read again around when the answer is due, not before. The turn counter and the timestamps are your signal; your own impatience is not.
+
+# The handler wakes with stale paths
+
+The handler you are driving was last alive weeks ago, before the material moved, and its context still points at paths that no longer exist. It will hunt for `references/post-mortem.md` or `fleet/agents/` and burn turns finding nothing — every retro this session did. Save it the hunt: everything lives under `~/.claude/` now — skills in `~/.claude/skills/`, roles in `~/.claude/roles/`, actors in `~/.claude/actors/`. When step 1 says load the post-mortem skill, its path is `~/.claude/skills/post-mortem/SKILL.md`. When you fill step 3's bracket, name the current files under `~/.claude/` and say plainly that the material has moved.
 
 # The script
 
@@ -67,11 +80,11 @@ Read the pane. Confirm the handler is at the post-mortem, waiting. Send this, wo
 
 Read the pane. Bring the SC the handler's three and your read of them. **The SC replies with their side.** Send the SC's reply to the handler in the SC's own words, word for word, adding nothing and deciding nothing. Repeat, carrying each side back and forth, until the SC says the look-back is settled. You do not decide when it is settled; the SC does.
 
-**Hold each "we can do better at" to the standard.** This is the one craft check you enforce yourself, holding the handler to the post-mortem skill; the mission judgments stay the SC's. The standard: one short capability, not a fix, not a problem restated, no "and" or "not" bolting a second thing on. When one comes back compound or fix-laden, push back, and push back **socratically**, never "that's wrong":
+**Hold each "we can do better at" to the standard.** This is the one craft check you enforce yourself, holding the handler to the post-mortem skill; the mission judgments stay the SC's. The standard: one short capability, not a fix, not a problem restated, no "and" or "not" bolting a second thing on. Push on every one, every time — not only the compound or fix-laden ones. The SC's rule is that the socratic "what do you really mean by that?" runs on all three, every retro; a clean-looking item is still abstract until the handler has said it plainly. Push **socratically**, never "that's wrong":
 
 1. Ask the handler to explain it: what does it mean, why did you name it, how would being better at it help? That draws the real thing out.
 2. If it reaches for jargon to sound thought-through, name that and send it to `system-glossary`.
-3. Then ask it to write it plainly as one short "we can do better at".
+3. Then ask it to write it plainly as one short "we can do better at" — plain enough to say to a person, no jargon, no cleverness. The handler will not have the communication skills loaded, so when it stays dressed up, tell it to load `clear-communication` and `sc-ghostwriting` and read `sc-doc-writing` for what plain looks like, then say each again. Keep pushing until it is plain.
 
 Worked example: "catching the exact instant we don't know something, and naming the gap out loud" became, through those three questions, "we can do better at saying 'I don't know' instead of guessing".
 

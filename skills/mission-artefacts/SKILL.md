@@ -35,6 +35,8 @@ Naming:
 
 Missions live directly under `projects/<project>/missions/`.
 
+**Every mission also has a name** — the human-readable title ("Ref + PreviewEdit persistence"), distinct from the directory slug. The executor picks it, and the pick is arbitrary: the name never determines success or failure, it is the handle people know the mission by. It is recorded in `mission.md`'s header and it is what the post-mortem's heading carries. It may change over time — a mission that pivots gets renamed to what it has become; the directory keeps its original slug.
+
 ## The equation
 
 `intent + squad + fleet material = mission`
@@ -70,6 +72,7 @@ It is its own artefact because two readers need it apart from the mission: the p
 
 `mission.md` opens with header fields the `scribe` stamps and the `executor` reads. They are recorded facts about the mission — **boilerplate, not content claims** — so `mission-verification` does not trace them against provenance. But you have to know what each means, because misreading one (treating it as something to verify, or checking it against the wrong repo) is how verification goes wrong.
 
+- **Name** — the mission's human-readable name, picked by the executor. Arbitrary — a handle, not a claim — and carried into the post-mortem's heading.
 - **Created** — the date the mission was written.
 - **Deliver to** — the worktree the operator's work lands in: `<base-repo>--<worktree-name>`. The handler creates this worktree with the `dispatch` skill.
 - **Written against version** — the commit of the **fleet material** (the skills repo: the roles, skills, scaffold, and templates) the mission was authored from. It records which material version shaped the mission, so material drift stays traceable. Written as `<repo>@<commit>` so the repo is explicit.

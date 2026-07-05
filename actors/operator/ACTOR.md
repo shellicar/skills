@@ -1,4 +1,5 @@
 ---
+name: operator
 roles:
   - investigator
   - apostle

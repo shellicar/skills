@@ -1,4 +1,5 @@
 ---
+name: supervisor
 Type: supervision
 roles: []
 skills:
