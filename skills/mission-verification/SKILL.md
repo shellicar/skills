@@ -39,7 +39,7 @@ The trap is not only a claim provenance grounds badly — it is a claim provenan
 Read `mission.md` against `intent.md`, in both directions.
 
 - **Nothing drifts.** Nothing in the mission distorts the intent, puts back what the intent set out of scope, or invents past what the intent settled.
-- **Nothing is dropped.** Everything the intent carries that belongs in the operator's brief is in the mission. Start from provenance's Settled-item entries: for each `Carried: <where>`, confirm the named place in the mission actually carries the item. Then read `intent.md` itself for anything the scribe's list missed. A blueprint, an illustration, a decision the intent settled — left out of the mission, that is a fail. The intent can be perfect and the mission still wrong because the scribe dropped something for no good reason.
+- **Nothing is dropped.** Everything the intent carries that belongs in the operator's brief is in the mission. Start from provenance's Settled-item entries: for each `Carried: <where>`, confirm the named place in the mission actually carries the item. Then read `intent.md` itself for anything the scribe's list missed. An illustration or a decision the intent settled — left out of the mission, that is a fail. And when `blueprint.md` exists, a mission that never references it is a fail: the blueprint is referenced, not reproduced — the file is the vehicle — so the check is that the reference is there, not that a copy was carried. The intent can be perfect and the mission still wrong because the scribe dropped something for no good reason.
 
 Check one proves nothing was invented. Check two proves the mission is the right mission, whole — nothing added, nothing lost. Together, they are the proof.
 

@@ -99,7 +99,7 @@ _Avoid_: goal, requirement
 
 ## blueprint
 
-The precise definition of what you want — how it looks, how it works. Distinct from the **objective** (what gets delivered) and the **means** (how it is built): the blueprint pins the result exactly, so an operator builds the right thing without having to guess what it should be. A mission either carries it or sends a phase to produce it.
+The precise definition of what you want — how it looks, how it works. Distinct from the **objective** (what gets delivered) and the **means** (how it is built): the blueprint pins the result exactly, so an operator builds the right thing without having to guess what it should be. It is the SC's — pinned with the handler while the **intent** is drawn out — never something an operator phase produces; what an Engineer produces is class design, part of the **means**. When one exists it lands as `blueprint.md` in the mission directory, and the **mission** *references* the file rather than carrying a copy — the file is the vehicle, so the blueprint cannot be dropped in transcription.
 
 Example: markdown-render's element table — the exact look, row by row (a slice of it):
 
@@ -255,6 +255,14 @@ The record a **cast** leaves of what it *learned* — kept as memories, by it an
 Example: a handler's testament — what it worked out about the project and the SC's direction, left as memories so the next handler begins as the continuity, not from zero.
 
 _Avoid_: debrief, log, journal
+
+## handover
+
+The note a session writes for its successor when its context is ending — the context is high, or the SC needs a fresh session for any reason. It comes after the **testament** and the two go together: the testament carries the learning into the knowledge base; the handover exists only for session continuity. It is not a summary — it is enough for the new session to reorient: where things stand, what is in flight, and above all what to search the memory tool for, so the successor rebuilds from the knowledge base rather than from a recap. A handover that reads as a report of what happened is a summary wearing the name.
+
+Example: a handler at high context — testament written first, then the handover: the mission and its stage, the one decision pending with the SC, and the memory searches that reorient the successor.
+
+_Avoid_: summary, recap, handoff, briefing
 
 ## boot
 

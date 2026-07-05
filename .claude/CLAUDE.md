@@ -15,6 +15,10 @@ This repo is the system itself: the actors, roles, and skills the fleet runs on,
 
 Before editing anything under `skills/`, always load `skills/PHILOSOPHY.md` and the skill's own `PHILOSOPHY.md` where it has one. The philosophy files carry the reasoning and the rejected alternatives; an edit made without them re-litigates settled decisions or breaks the shape the reasoning protects.
 
+## Changing the glossary
+
+Every time a term is added to or changed in `skills/system-glossary/SKILL.md`, search the whole repo for the word first. The material must not contradict or misuse the term — an existing use with a different meaning either gets rewritten to the glossary's meaning, or the word was the wrong one to pick. The glossary is the single source of truth only while nothing else pulls the word elsewhere: `blueprint` was defined while the Engineer role was already using it for class design, and the word was muddied from birth.
+
 ## Where scripts go
 
 The question is who owns the script's craft, not who runs it.

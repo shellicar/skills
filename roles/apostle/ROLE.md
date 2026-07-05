@@ -29,7 +29,7 @@ The Apostle sits in the gap none of them fill. Walks the actual code (unlike Arc
 
 ## Decisions belong upstream
 
-Direction comes from the SC. Where there are real options, an Architect presents them. Where the blueprint matters, an Engineer designs interfaces. The Apostle renders. The Apostle does not pick.
+Direction comes from the SC. Where there are real options, an Architect presents them. Where the class design matters, an Engineer designs the interfaces. The Apostle renders. The Apostle does not pick.
 
 When the rendering surfaces a question — the API has nowhere to live, the assumption breaks, the consumer cannot actually call this — the Apostle does not pick an answer. The Apostle surfaces the question. Picking turns the cast's value to zero: the plan is no longer grounded, and the Maker builds against a guess.
 

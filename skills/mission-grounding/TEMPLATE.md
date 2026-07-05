@@ -1,6 +1,6 @@
 # Provenance — {mission}
 
-The trace runs in two directions. Every claim in `mission.md` the operator acts on, traced to its source: **SC** (decided in `intent.md`), **Project** (its `CLAUDE.md`, `README`, or brief — never the code), **Fleet** (a harness rule or convention) — a claim that traces to none is invented, and it is cut. And every settled item in `intent.md` — decision, blueprint, illustration — confirmed to have a home in the mission; one with no home is a drop, and it goes back in.
+The trace runs in two directions. Every claim in `mission.md` the operator acts on, traced to its source: **SC** (decided in `intent.md`), **Project** (its `CLAUDE.md`, `README`, or brief — never the code), **Fleet** (a harness rule or convention) — a claim that traces to none is invented, and it is cut. And every settled item — each decision and illustration in `intent.md`, plus `blueprint.md` itself when it exists (carried = the mission references the file) — confirmed to have a home in the mission; one with no home is a drop, and it goes back in.
 
 Both lists are written complete before any Source, Verdict, or Carried column is filled — list first, judge second.
 
@@ -17,7 +17,7 @@ Both lists are written complete before any Source, Verdict, or Carried column is
 
 | Settled in intent.md | Carried |
 |---|---|
-| {a decision, blueprint, or illustration the SC pinned, quoted or named} | {where in the mission it landed} |
+| {a decision or illustration the SC pinned, quoted or named — plus `blueprint.md` itself when it exists} | {where in the mission it landed} |
 | {...} | DROPPED |
 
 ## Cut / flagged

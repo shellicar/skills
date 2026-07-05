@@ -23,7 +23,7 @@ Each block in `blocks/` is a role the operator takes on for that phase. The scaf
 | [courier-azure.md](blocks/courier-azure.md) | Courier | ADO variant: creates Task, opens PR with work item linking. |
 | [investigation.md](blocks/investigation.md) | Investigator | Explores the codebase, writes findings report. |
 | [system-design.md](blocks/system-design.md) | Architect | Thinks in systems. Produces options. Does not choose. |
-| [class-design.md](blocks/class-design.md) | Engineer | Produces the blueprint for a decided direction. |
+| [class-design.md](blocks/class-design.md) | Engineer | Produces the class design for a decided direction. |
 | [codebase-discovery.md](blocks/codebase-discovery.md) | Scout | Goes ahead, confirms terrain, reports back. |
 | [apostle.md](blocks/apostle.md) | Apostle | Walks the codebase like a Maker, writes the code that would land, doesn't save it. |
 | [code-review.md](blocks/code-review.md) | Reviewer | Fresh eyes. Reviews implementation for quality. |

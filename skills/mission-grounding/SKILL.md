@@ -27,9 +27,9 @@ The win this skill installs instead: every claim in the mission is traced to its
 
 ## The other failure — dropping what the intent settled
 
-That "short is correct" holds for one kind of shortness only: shortness from cutting invention. There is an opposite failure, and it is just as real — carrying *less* than the intent settled. A blueprint, an illustration, a decision the SC pinned in `intent.md` is *grounded* (its source is the SC), so it must land in the mission. Dropping it is not a short mission done right; it is a hole.
+That "short is correct" holds for one kind of shortness only: shortness from cutting invention. There is an opposite failure, and it is just as real — carrying *less* than the intent settled. An illustration or a decision the SC pinned in `intent.md` is *grounded* (its source is the SC), so it must land in the mission — and when `blueprint.md` exists, the mission must reference it. Dropping either is not a short mission done right; it is a hole.
 
-So the trace runs in two directions, and both are part of the mechanical pass below. Mission → source proves nothing in the mission is unsourced. Intent → mission proves nothing the intent settled is missing: every settled thing — blueprint, illustration, decision — is confirmed to have a home in the mission. A settled thing with no home is a drop, and it goes back in — dropping what the SC decided is as much a failure as inventing what they did not.
+So the trace runs in two directions, and both are part of the mechanical pass below. Mission → source proves nothing in the mission is unsourced. Intent → mission proves nothing the intent settled is missing: every settled thing — decision, illustration, and the `blueprint.md` reference when the file exists — is confirmed to have a home in the mission. A settled thing with no home is a drop, and it goes back in — dropping what the SC decided is as much a failure as inventing what they did not.
 
 ## The three sources
 
@@ -49,7 +49,7 @@ The mission body is written first (scaffold, then fill — you MUST use `create-
 
 The sequence:
 
-1. **List.** Create `provenance.md` from `TEMPLATE.md` with both lists complete and unjudged: every **Claim** — one line per statement in the mission the operator will act on, quoted from the draft — and every **Settled item** — one line per decision, blueprint, or illustration the SC pinned in `intent.md`. No sources, no verdicts yet.
+1. **List.** Create `provenance.md` from `TEMPLATE.md` with both lists complete and unjudged: every **Claim** — one line per statement in the mission the operator will act on, quoted from the draft — and every **Settled item** — one line per decision or illustration the SC pinned in `intent.md`, plus one line for `blueprint.md` when it exists (its `Carried` is the mission's reference to the file — the blueprint is referenced, never reproduced). No sources, no verdicts yet.
 2. **Judge.** In a second write, against the frozen lists: to every claim, append `Source:` (`SC — "<their words from intent.md>"`, `Project — <the CLAUDE.md / README / brief line>`, `Fleet — <ref>`, or `INVENTED`) and `Verdict: keep | cut` — `cut` = `INVENTED`, or a source you cannot actually point to. To every settled item, append `Carried: <where in the mission>` or `DROPPED`.
 3. **Apply.** Edit `mission.md`: remove every `cut` claim, restore every `DROPPED` item.
 
@@ -93,3 +93,5 @@ A grounded claim states the problem; it does not design the solution. This is th
 > Update `ApprovalNotifier` to expand `~` and `$HOME` using `expandPath` from sdk-tools. Export `expandPath` as a public module. Resolve relative paths against `configLoader.sources`.
 
 The test: could the operator reasonably choose a different place for the logic? If yes, you described the problem. If no, you designed the code — and that claim traces to `INVENTED` unless a blueprint the SC decided carries it.
+
+The cost when this fails is not abstract. The 12-repo rollout (2026-06): a vendor CLI hit 1.0 and broke unpinned pipelines across twelve repos — a one-line fix per repo. The planning session over-specified it into 24 distinct failure points: it encoded things never agreed, omitted things asked, and invented an instruction that could never work ("manually queue the pipeline" on PR-validation-only pipelines). A mission that states the problem cannot hurt the operator; every one of those failures was added by writing the *how*.

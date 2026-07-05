@@ -18,6 +18,7 @@ metadata:
 A mission is a directory, not a file — `YYYY-MM-DD_NUM_description/` — holding the artefacts of its whole life colocated, from intent to post-mortem:
 
 - `intent.md` — what the SC wants, and why (the `interlocutor`'s output).
+- `blueprint.md` — the SC's pinned spec or walkthrough, when one exists (optional; the `interlocutor` writes it when the SC pins one).
 - `squad.md` — the team the work runs through (the `squad-selector`'s output).
 - `mission.md` — the operator's brief (the `scribe`'s output).
 - `provenance.md` — the scribe's per-claim trace of the mission's sources (the `mission-grounding` pass's output).
@@ -47,6 +48,12 @@ Its anatomy carries the negative space, because a downstream session cannot tell
 
 - **Out of scope** — what is deliberately left out, *with the reason for each*. The reason is the point; the SC values knowing what was set aside and why.
 - **Not agreed — must not appear** — a binding list of anything raised but not settled, so it cannot leak into the mission as though it had been decided.
+
+## `blueprint.md` — the pinned spec, when there is one
+
+Any detailed spec or walkthrough the SC pinned — a model diagram, an element table, an exact function. It is the SC's, settled with the handler in conversation — at the front, or mid-mission when re-engagement settles one — never an operator phase's output.
+
+The file exists only when a blueprint does, so its presence is a hard signal: no file, no blueprint; file present, the mission must use it. And the mission **references** the file — it never reproduces the content. A copy can be dropped or distorted in transcription; a reference cannot. The file itself is the vehicle, and the operator reads it directly.
 
 ## `squad.md` — the team, and why
 

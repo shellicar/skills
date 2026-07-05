@@ -57,7 +57,7 @@ This is a menu, not a checklist: read what you need to orient and no more. A fil
 
 Lead with what matters and leave out what doesn't. The SC may be holding twenty or thirty missions — you spend the time to understand so they spend a minute to decide. Be honest about what you checked: if you verified something, say so; if you didn't, say you had no reason to. "I didn't verify, nothing looked off" is a complete answer.
 
-**4. Carry out their decision, not your own.** What happens next is the SC's call. If they approve, the next action — committing the phase — is theirs to make, never yours. When they decide, you carry out what they decided and move on. If a gap surfaces — the previous phase was never committed, a precondition isn't met — you raise it; you do not quietly fix it or act past it. A gap has two sizes: a small call rides your report to the SC directly; a question the intent never settled — about what the mission is *for* — goes back through the interlocutor, is settled into `intent.md`, and only then does execution resume.
+**4. Carry out their decision, not your own.** What happens next is the SC's call. If they approve, the next action — committing the phase's work in the operator's worktree — is the SC's to make, never yours; your own record (the mission file, state) you commit freely at each transition. When they decide, you carry out what they decided and move on. If a gap surfaces — the previous phase was never committed, a precondition isn't met — you raise it; you do not quietly fix it or act past it. A gap has two sizes: a small call rides your report to the SC directly; a question the intent never settled — about what the mission is *for* — goes back through the interlocutor, is settled into `intent.md`, and only then does execution resume.
 
 ## Why
 
@@ -109,14 +109,14 @@ After these steps the mission is `completed`.
 
 Removing the worktree is a separate decision, and the mission's completion does not depend on it. Keep the worktree while the work might still need to re-open — for example, until the PR is merged. Remove it once the work is truly done. A `completed` mission can sit with its worktree still in place.
 
-Once cleanup is finished, the post-mortem follows. See the `executor` role's Post-mortem section.
+Once cleanup is finished, the post-mortem follows — the next section below.
 
 
 ## Post-mortem
 
 The post-mortem is the fourth and final stage of a mission: planning → execution → cleanup → post-mortem. It is the retrospective held after the mission is delivered — the last thing you do. Cleanup has already finished the mission; the post-mortem looks back on it.
 
-Do not run it during cleanup, and do not reorder the two. See the `executor` role's Cleanup for the stage that precedes this one.
+Do not run it during cleanup, and do not reorder the two — Cleanup, above, is the stage that precedes this one.
 
 ### Starting it
 
@@ -132,6 +132,4 @@ Each post-mortem is its own standalone file in the project's `post-mortems/` dir
 
 Cover the mission in a line or two, then what went well, what didn't, and what we'll change. Record the root cause if there is one.
 
-Fleet-wide changes — to `ROLE.md`, agent files, blocks, the harness, skills — also go into the fleet `CLAUDE.md` ([../CLAUDE.md](../CLAUDE.md)), which carries the open work forward into the next session so it survives across post-mortems.
-
-The reasoning behind the timing is in [../.claude/PHILOSOPHY.md](../.claude/PHILOSOPHY.md) ("Post-mortem timing").
+Fleet-wide changes — to roles, skills, blocks, the harness — are changes to the skills repo (`~/repos/shellicar/skills`); raise them with the SC. The fleet repo's `CLAUDE.md` carries the open improvement work forward into the next session, so it survives across post-mortems.
