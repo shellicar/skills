@@ -14,6 +14,7 @@ roles:
   - reviewer
   - writer
   - courier
+  - postmaster
 skills:
   - testament
 ---

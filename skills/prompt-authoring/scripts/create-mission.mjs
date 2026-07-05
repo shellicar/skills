@@ -45,7 +45,7 @@ import {
   renderPhase,
   renderPhasesSummary,
   resolveTestament,
-  materialSha,
+  materialVersion,
   expandPath,
   EFFORT_VALUES,
   FOUNDATIONAL_SKILLS_DEFAULT,
@@ -120,7 +120,7 @@ function repoRootOf(dir) {
 }
 
 function render(config, date) {
-  const version = materialSha();
+  const version = materialVersion();
   const deliverTo = `${config.baseRepo}--${config.worktreeName}`;
   // skillsDir is emitted verbatim — if the caller passed ~ it stays ~.
   const skillsDir = config.skillsDir.replace(/\/$/, "");

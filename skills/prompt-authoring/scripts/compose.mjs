@@ -40,6 +40,7 @@ export const ROLE_TO_BLOCK = {
   Scout: "codebase-discovery.md",
   Reviewer: "code-review.md",
   Writer: "writer.md",
+  Postmaster: "postmaster.md",
 };
 
 export const COURIER_VARIANTS = {
@@ -91,6 +92,25 @@ export function materialSha() {
     );
   }
   return res.stdout.trim();
+}
+
+// The full "Written against version" value: `<repo>@<commit>`, per
+// mission-artefacts ("The mission.md header fields"). The repo name is the
+// material repo's directory name, read from git rather than hard-coded so the
+// value stays truthful if the repo is checked out under another name.
+export function materialVersion() {
+  const res = spawnSync("git", ["rev-parse", "--show-toplevel"], {
+    cwd: MATERIAL_ROOT,
+    encoding: "utf-8",
+  });
+  if (res.status !== 0) {
+    fail(
+      `Failed to read material repo root from ${MATERIAL_ROOT}: ` +
+        `${(res.stderr || res.stdout || "").trim()}`,
+    );
+  }
+  const repoName = res.stdout.trim().split("/").pop();
+  return `${repoName}@${materialSha()}`;
 }
 
 function loadBlock(path) {

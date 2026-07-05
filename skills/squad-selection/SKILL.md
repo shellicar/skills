@@ -25,11 +25,12 @@ These are the operator roles a squad is built from. Each is a phase where the op
 - **Maker** — writes and commits the code. This is the one that **builds the fix**.
 - **Apprentice** — copy / scaffold work: reproduces reference code faithfully (source-to-destination), rather than reimplementing it. Reach for it when the job is "copy this pattern," not "design something new."
 - **Cleaner** — removal and cleanup.
-- **Courier** — ships the work: the PR, the release. The last link.
+- **Courier** — delivers the work into review: the PR.
+- **Postmaster** — makes the merged work public: tags, releases, publish workflows, the registry. Runs after the merge; commits nothing.
 
 **Understanding before building**
-- **Investigator** — finds the truth of what happened; builds nothing. Its report feeds *you*, the handler — you read it, decide, and bake the decisions into the implementation mission. Reach for it when you cannot write prescriptive phases yet.
-- **Scout** — a discovery phase *inside* the pipeline; it feeds the *next phase*, not you. Reach for it when you know the shape of the answer but the operator must confirm assumptions first. The test: can you write the implementation phases now, even generically? Yes → a Scout; if you'd be guessing → an Investigator first.
+- **Investigator** — detective work: you have questions you want answered. It explores, traces, and reports the truth; it builds nothing.
+- **Scout** — codebase discovery: you want to discover the codebase. It walks the ground and reports what is there.
 - **Architect** — system design: genuinely different architectures. System-level only.
 - **Engineer** — class design: interfaces and class shape. Only after the system-level direction is decided.
 - **Apostle** — walks the *actual* code and drafts the plan the Maker will build from, **without committing**. Reach for it to *preview what the Maker would build* — not to choose between design options. A mission can run an Apostle alone, Architect + Engineer alone, or all three. It does **not** build the fix; the Maker does.

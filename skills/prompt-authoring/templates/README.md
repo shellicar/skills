@@ -21,6 +21,7 @@ Each block in `blocks/` is a role the operator takes on for that phase. The scaf
 | [cleaner.md](blocks/cleaner.md) | Cleaner | Fixes lint, formatting, code style. The only role that runs linters. |
 | [courier-github.md](blocks/courier-github.md) | Courier | Gets the work out. Distils testament, opens PR. |
 | [courier-azure.md](blocks/courier-azure.md) | Courier | ADO variant: creates Task, opens PR with work item linking. |
+| [postmaster.md](blocks/postmaster.md) | Postmaster | Makes the merged work public: releases, publish workflows, the registry. |
 | [investigation.md](blocks/investigation.md) | Investigator | Explores the codebase, writes findings report. |
 | [system-design.md](blocks/system-design.md) | Architect | Thinks in systems. Produces options. Does not choose. |
 | [class-design.md](blocks/class-design.md) | Engineer | Produces the class design for a decided direction. |
@@ -43,10 +44,11 @@ A block is a *role* the operator takes for a phase; a skill is a *body of instru
 - **Maker + Courier** — implementation without tests
 - **Apprentice + Cleaner + Courier** — reproduce reference implementation
 - **Maker + Cleaner + Courier** — implementation with cleanup before shipping
-- **Investigator** — single phase, feeds the next mission
+- **Investigator** — single phase, answers the questions put to it
 - **Architect → Engineer → Scaffolder + Builder + Courier** — full pipeline
 - **Maker + Reviewer + Courier** — implementation with review before shipping
 - **Apostle → Maker + Courier**: preview the implementation, then build and ship
+- **Maker + Courier + Postmaster** — version-bump release: bump, PR, publish
 
 ### Recipes
 
