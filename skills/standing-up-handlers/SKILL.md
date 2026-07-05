@@ -49,7 +49,6 @@ The more you hand it, the more it behaves as if in command. Hand it the least. T
   "cwd": "~/repos/fleet/claude-fleet-shellicar--<mission>",
   "convId": "<the pre-generated uuid>",
   "envelope": "i have a mission to <plain description> in the <repo> repo",
-  "skills": ["claude-philosophy","specification-discipline","transparency","commander-protocol","teapot-protocol","executive-communication","safe-operations"],
   "name": "<mission>",
   "windowName": "<project>-<mission>",
   "title": "<project>-<mission>",
@@ -63,7 +62,6 @@ The more you hand it, the more it behaves as if in command. Hand it the least. T
 - **convId** — `crypto.randomUUID()`, recorded in `active-missions.md`. The recovery anchor.
 - **session** — one tmux session per project; windows are missions. `launch-handler` creates the session on the first handler for that project.
 - **cwd** — the fleet-repo worktree from step 2.
-- **skills** — the foundational set above. No `co-working` (the handler isn't sharing your directory).
 - **model** — handlers default to Opus (`claude-opus-4-8`).
 - **colour** — per the Window Colours table in the project `CLAUDE.md`; add a row for a new project, distinct from the others.
 - **windowName / title** — `<project>-<mission>`.

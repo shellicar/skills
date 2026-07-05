@@ -51,8 +51,8 @@ An actor's full skill set is its own `skills:` plus the `skills:` of whichever r
 
 Foundational skills are not listed here — they load for every session and live in `~/.claude/CLAUDE.md`. `co-working` is foundational too (loaded always, even when not co-working), so it is not a per-actor skill. `testament` is not foundational but every actor loads it, so it sits in each actor's `skills:`.
 
-Nothing reads this frontmatter yet — it declares, it does not drive. It duplicates what `shared/pane/skills.mjs` hard-codes today (see below); the intent is to make the mirror read from the frontmatter later, so each file becomes the single source for what it loads.
+This frontmatter drives: `shared/pane/skills.mjs` parses it (via the `yaml` dependency) to compose each session's skill set and the handler's role list. Each file is the single source for what it loads — change the frontmatter and every launch path follows.
 
-## The skills mirror
+## The skills module
 
-`shared/pane/skills.mjs` hard-codes the skill set each actor and role loads. It is a hand-kept mirror of the `## Skills` sections in the `ACTOR.md`/`ROLE.md` files and the `Load:` lines in `~/.claude/CLAUDE.md`, injected as cached context before the first message so the skills land before the first turn. When you change what an actor or role loads, update `skills.mjs` to match. The duplication is deliberate for now; the intent is to make it dynamic later.
+`shared/pane/skills.mjs` composes the skill set each session loads and injects it as cached context before the first message, so the skills land before the first turn. Actor and role skills (and the handler's `HANDLER_ROLES`) are read from the `ACTOR.md`/`ROLE.md` frontmatter at load time. Only the foundational list stays hard-coded there — it mirrors the `Load:` lines in `~/.claude/CLAUDE.md`, which has no frontmatter to read; keep those two in sync by hand. The `## Skills` prose sections in the identity files describe what the frontmatter declares — when you change one, change both.

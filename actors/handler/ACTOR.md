@@ -4,8 +4,8 @@ roles:
   - interlocutor
   - squad-selector
   - scribe
-  - router
   - executor
+  - router
 skills:
   - testament
   - project-memory

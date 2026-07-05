@@ -34,10 +34,12 @@
 import { basename } from "node:path";
 import { spawnSync } from "node:child_process";
 import { buildSystemInline, buildPrompt } from "../shared/pane/envelope.mjs";
-import { skillsFor } from "../shared/pane/skills.mjs";
+import { skillsFor, HANDLER_ROLES } from "../shared/pane/skills.mjs";
 
 // The composition preset: the Handler's actor + its five roles into --system.
-const roles = ["interlocutor", "squad-selector", "scribe", "executor", "router"];
+// The role list is the shared HANDLER_ROLES constant, so every handler launch
+// path composes the same identity.
+const roles = HANDLER_ROLES;
 const system = buildSystemInline({ actor: "handler", role: roles });
 
 // Name after the worktree: a `<base>--<worktree>` cwd becomes handler-<worktree>.

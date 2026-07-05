@@ -18,7 +18,7 @@ The per-skill listings below name the skill only. Resolve the path via the rule 
 
 ## Skill sets in the start scripts
 
-The `scripts/start-*.mjs` launchers inject each session's skill set as cached user context (via `shared/pane/skills.mjs`), so the skills land before the first message rather than after it. `skills.mjs` hard-codes which skills each actor and role loads — a hand-kept mirror of the `## Skills` sections in the `ACTOR.md`/`ROLE.md` files and the `Load:` lines above. When you change the skills an actor or role loads, update `skills.mjs` to match. The duplication is deliberate for now; the intent is to make it dynamic later (likely via frontmatter).
+The `scripts/start-*.mjs` launchers inject each session's skill set as cached user context (via `shared/pane/skills.mjs`), so the skills land before the first message rather than after it. `skills.mjs` reads each actor's and role's skills (and the handler's role list) from the `ACTOR.md`/`ROLE.md` frontmatter — the identity files are the single source for what they load. Only the foundational list is hard-coded in `skills.mjs`, mirroring the `Load:` lines above; keep those two in sync by hand.
 
 ## Writing to files
 

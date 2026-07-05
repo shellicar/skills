@@ -59,7 +59,6 @@
  *     "convId":     "<pre-generated uuid>",
  *     "task":       "to fix the cves",
  *     "project":    "claude-cli",
- *     "skills":     ["claude-philosophy", "commander-protocol", ...],
  *     "name":       "system-prompt",
  *     "windowName": "claude-cli-system-prompt",
  *     "title":      "claude-cli-system-prompt",
@@ -67,7 +66,10 @@
  *     "model":      "claude-opus-4-8"
  *   }
  *
- * Required: session, cwd, convId, task, project, skills, name, windowName.
+ * Required: session, cwd, convId, task, project, name, windowName.
+ * The skill set is not an input: it is derived from the handler's actor + roles
+ * via the shared skillsFor mirror, so the Planner cannot hand a handler a skill
+ * list that drifts from the material.
  * Optional: title (defaults to windowName), colour (unset if omitted),
  *           model (defaults to claude-opus-4-8 — handlers default to Opus).
  *
@@ -80,6 +82,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { homedir } from "node:os";
 import { launchCli } from "../../../shared/pane/launch.mjs";
 import { handlerLaunchMessage } from "../../../shared/pane/templates.mjs";
+import { skillsFor, HANDLER_ROLES } from "../../../shared/pane/skills.mjs";
 
 function expandPath(p) {
   if (typeof p !== "string") return p;
@@ -87,7 +90,7 @@ function expandPath(p) {
 }
 
 const cfg = JSON.parse(readFileSync(0, "utf8"));
-for (const k of ["session", "cwd", "convId", "task", "project", "skills", "name", "windowName"]) {
+for (const k of ["session", "cwd", "convId", "task", "project", "name", "windowName"]) {
   if (!cfg[k]) {
     console.error(`config missing required field: ${k}`);
     process.exit(2);
@@ -124,9 +127,9 @@ const result = launchCli(paneId, {
   model,
   name: cfg.name,
   message: handlerLaunchMessage({ task: cfg.task, project: cfg.project }),
-  skills: cfg.skills,
+  skills: skillsFor({ actor: "handler", role: HANDLER_ROLES }),
   actor: "handler",
-  role: ["interlocutor", "squad-selector", "scribe", "executor", "router"],
+  role: HANDLER_ROLES,
   resume: cfg.convId,
 });
 

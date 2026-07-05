@@ -1,11 +1,20 @@
-// The skill set each actor/role loads, hard-coded.
+// The skill set each actor/role loads, read from the ACTOR.md / ROLE.md
+// frontmatter.
 //
-// This is a MIRROR of the `## Skills` sections in the ACTOR.md / ROLE.md files
-// and the `Load:` lines in ~/.claude/CLAUDE.md. It is duplicated here on purpose,
-// for now: the start scripts inject these as user context (--prompt) so the
-// skills land in the cached prefix, before the first real message. Keep it in
-// sync with those sources by hand until the link is made dynamic (likely via
-// frontmatter). The CLAUDE.md note records the coupling.
+// The `skills:` lists (and each actor's `roles:`) live in the identity files
+// themselves — each file is the single source for what it loads. This module
+// parses them at load time from ~/.claude (the same base envelope.mjs reads),
+// replacing the hand-kept mirror that used to be hard-coded here.
+//
+// FOUNDATIONAL stays hard-coded: it mirrors the `Load:` lines in
+// ~/.claude/CLAUDE.md, which has no frontmatter to read.
+
+import { readFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
+import { parse } from "yaml";
+
+const BASE = join(homedir(), ".claude");
 
 // Loaded by every session (the CLAUDE.md `Load:` lines).
 const FOUNDATIONAL = [
@@ -25,35 +34,37 @@ const FOUNDATIONAL = [
 // not. (co-working is the one foundational skill that is not universal.)
 const COWORKING_ACTORS = new Set(["planner"]);
 
-// Actor-level skills — the ACTOR.md `## Skills` sections.
-const ACTOR_SKILLS = {
-  planner: ["testament", "tmux"],
-  handler: ["testament", "project-memory", "issue-writing", "tmux"],
-  supervisor: ["testament", "tmux"],
-};
+// Parse the YAML frontmatter block of an identity file. A named actor/role
+// whose file is missing is a critical failure — the identity cannot be
+// composed — so this throws rather than silently returning nothing.
+function frontmatter(path) {
+  const src = readFileSync(path, "utf8");
+  const m = src.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
+  return m ? (parse(m[1]) ?? {}) : {};
+}
 
-// Role-level skills — the ROLE.md `## Skills` sections.
-const ROLE_SKILLS = {
-  scheduler: ["mission-boards"],
-  launcher: ["standing-up-handlers"],
-  coach: ["drive-post-mortem"],
-  interlocutor: ["active-listening", "sc-ghostwriting", "mission-artefacts"],
-  "squad-selector": ["squad-selection", "mission-artefacts"],
-  scribe: ["prompt-authoring", "mission-grounding", "mission-artefacts"],
-  executor: ["worktrees", "post-mortem", "mission-artefacts", "prompt-authoring", "mission-verification"],
-  router: ["dispatch"],
-};
+const actorMeta = (actor) => frontmatter(join(BASE, "actors", actor, "ACTOR.md"));
+const roleMeta = (role) => frontmatter(join(BASE, "roles", role, "ROLE.md"));
+
+// The handler's full role set, from its ACTOR.md `roles:`. One session carries
+// all of them because there is no dynamic role switching yet: the handler moves
+// through its roles within one session, so all must be present at launch.
+// Exported so every handler launch path (start-handler, launch-handler)
+// composes the same identity.
+export const HANDLER_ROLES = actorMeta("handler").roles ?? [];
 
 /**
  * The full skill set for a session: foundational, plus co-working when the actor
- * co-works, plus the actor's own skills, plus each role's skills. De-duplicated,
- * order preserved (foundational first). `role` accepts a single name or an array.
+ * co-works, plus the actor's own skills (ACTOR.md frontmatter), plus each role's
+ * skills (ROLE.md frontmatter). De-duplicated, order preserved (foundational
+ * first). `role` accepts a single name or an array. Throws if a named actor or
+ * role file is missing.
  */
 export function skillsFor({ actor, role }) {
   const roles = Array.isArray(role) ? role : role ? [role] : [];
   const names = [...FOUNDATIONAL];
   if (COWORKING_ACTORS.has(actor)) names.push("co-working");
-  if (ACTOR_SKILLS[actor]) names.push(...ACTOR_SKILLS[actor]);
-  for (const r of roles) if (ROLE_SKILLS[r]) names.push(...ROLE_SKILLS[r]);
+  if (actor) names.push(...(actorMeta(actor).skills ?? []));
+  for (const r of roles) names.push(...(roleMeta(r).skills ?? []));
   return [...new Set(names)];
 }
