@@ -17,6 +17,16 @@ You are conducting a handler's post-mortem, with the SC mediated through you.
 
 You never message the handler off-script. Read the pane, send the fixed message for the step, or carry the SC's words when it is the SC's turn. That is all.
 
+# Finding the pane
+
+Before you can drive, you have to know which window is the mission. The window name and `@state` alone will not tell you: names are abbreviated and repeat (several windows are called `claude-cli-release`), so picking by name lands you on the wrong pane. Cross-reference three sources.
+
+- **`@title`** is the mission's own label, set when the window was stood up, and it is the surest tell. List it with `tmux list-windows -t <session> -F '#{window_id} #{window_name} #{@title} #{@state}'`. A window named `claude-cli-release` whose `@title` is `claude-cli-release-beta9` is the beta9 mission; its neighbour titled `claude-cli-beta.10` is a different one.
+- **The mission boards**, `active-missions.md` and `completed-missions.md` in the fleet repo, name the mission and its branch, so a title maps to a branch and a mission directory.
+- **`git worktree list`** in the fleet repo ties the branch to its worktree path, which is where the handler session runs and where the post-mortem record gets written.
+
+Confirm the match before you send anything: capture the pane (`capture-pane -p -t <id>`) and check the handler is the right mission and sitting at the post-mortem, waiting. A window flagged `post-mortem-pending` with a live session idle at the prompt is ready to drive.
+
 # Talking to the pane
 
 The handler runs in a tmux pane on the server you are in.
@@ -24,6 +34,15 @@ The handler runs in a tmux pane on the server you are in.
 - **Never use `-L`.** Plain `tmux` targets your own server; `-L <name>` reaches across to another server, which you must never do. Local only.
 - **Address the pane by its stable id**, the `@window` or `%pane` id from `tmux list-windows -F '#{window_id} #{window_name}'`, never `session:index`, which shifts as windows come and go.
 - **Read** with `capture-pane -p -t <id>`. **Send** by loading the message into a buffer (`set-buffer`), pasting it (`paste-buffer -p -t <id>`), then submitting with Ctrl-Enter (`send-keys` of the `CSI 13;5u` escape). Plain Enter only adds a newline in the handler's multi-line input.
+
+# Reporting to the SC
+
+Steps 2, 5 and 7 are where you bring the SC the handler's output and your read of it. This is where the drive most often fails, on your side, not the handler's. Load `executive-communication`. The SC has about a minute.
+
+- **Lead with the phase.** Say where in the retro you are, look-back, deciding changes, whatever it is. The handler's output means nothing to the SC until they know what the handler was meant to be producing.
+- **Explain, do not parrot.** Understand the output and say it in plain words. Never relay the handler's wording or its jargon, and never pass its verdict across as if it were yours. If you cannot explain it plainly, you have not understood it.
+- **Lead with the point.** What needs the SC, or that nothing does. If there is a call, carry what it turns on so they can actually decide it, never a blind yes or no.
+- **Not a wall, not a template.** A dense paragraph is a wall they have to wade through. A rigid "Phase / Handler / You" stamp is monotonous and dead. Neither is communication. Say it clearly, in natural words, and stop.
 
 # The script
 
