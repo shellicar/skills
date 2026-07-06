@@ -249,33 +249,35 @@ The cast-launch scripts (`new-operator-cast`, `new-supervisor-cast`, `next-phase
 
 #### What to pass
 
-Two sources, both required:
+The role's own craft skills ride the identity and are added automatically — you do not pass them. `launchCli` unions `roleSkills(role)` (from `roles/<role>/ROLE.md`) and `actorSkills(actor)` (from the ACTOR.md) into every cast's set, so a Maker gets its `tdd`, `tech-debt`, `typescript-standards`, `technical-writing`, `sc-commit-writing`, `sc-ghostwriting` whether or not the handler remembers them. Hand-listing them was the gap that shipped a Maker with none of its craft.
+
+The `skills` array you pass is additive on top of that — two sources:
 
 **a) Foundational skills** — from the operator's `~/.claude/CLAUDE.md`. These are the `Load:` lines that every session is told to load. Read them from the file at dispatch time; they can change.
 
-**b) Per-phase skills** — from the mission file. Each phase has a `## SKILLS` section listing the skills specific to that phase's work. Read the section for the phase being dispatched.
+**b) Per-phase extras** — from the mission file. Each phase's `## SKILLS` section lists any skill a specific phase needs *beyond the role's own set* (a one-off like `detect-convention` or `preflight`). Read the section for the phase being dispatched. When a phase needs nothing beyond the role, this is empty.
 
-Both sets are combined into a single `skills` array. Foundational + phase-specific, every dispatch.
+Both are combined into the `skills` array. The role and actor skills are added by `launchCli` on top; you never repeat them.
 
 #### Example
 
-Phase 1 of mission 1089 (infra-pipeline-bicepparam).
+Phase 1 of mission 1089 (infra-pipeline-bicepparam), dispatched as a Maker (`role: "maker"`).
 
 Foundational (from `~/.claude/CLAUDE.md`):
 
-`claude-philosophy`, `specification-discipline`, `transparency`, `commander-protocol`, `teapot-protocol`, `executive-communication`, `safe-operations`
+`claude-philosophy`, `specification-discipline`, `transparency`, `commander-protocol`, `teapot-protocol`, `executive-communication`, `clear-communication`, `system-glossary`, `safe-operations`
 
-Phase 1 skills (from the mission's `## SKILLS` section):
+Per-phase extras (from the mission's `## SKILLS` section — only what the Maker role does not already carry):
 
-`typescript-standards`, `tdd`, `detect-convention`, `technical-writing`, `sc-commit-writing`, `sc-ghostwriting`, `tech-debt`
-
-Plus `preflight` (from the phase's Preflight section).
+`detect-convention`, `preflight`
 
 The `skills` array in the JSON config:
 
 ```json
-"skills": ["claude-philosophy", "specification-discipline", "transparency", "commander-protocol", "teapot-protocol", "executive-communication", "safe-operations", "typescript-standards", "tdd", "detect-convention", "technical-writing", "sc-commit-writing", "sc-ghostwriting", "tech-debt", "preflight"]
+"skills": ["claude-philosophy", "specification-discipline", "transparency", "commander-protocol", "teapot-protocol", "executive-communication", "clear-communication", "system-glossary", "safe-operations", "detect-convention", "preflight"]
 ```
+
+The Maker's own `typescript-standards`, `tdd`, `technical-writing`, `sc-commit-writing`, `sc-ghostwriting`, `tech-debt` are added automatically from `roles/maker/ROLE.md` — absent from the array above by design.
 
 ### Router scripts
 

@@ -57,6 +57,18 @@ export function actorSkills(actor) {
 }
 const roleMeta = (role) => frontmatter(join(BASE, "roles", role, "ROLE.md"));
 
+/**
+ * The role-level `skills:` from ROLE.md frontmatter — the craft skills a cast
+ * loads by virtue of the role it runs (a Maker's tdd, tech-debt, ...). Exported
+ * so the dispatch path (launchCli) unions them into every cast's skill set the
+ * same way actorSkills rides the actor identity. The role's skills ride the role
+ * identity, so no hand-assembled mission list can forget them; the handler's own
+ * list becomes purely additive (foundational plus any per-phase extras).
+ */
+export function roleSkills(role) {
+  return role ? (roleMeta(role).skills ?? []) : [];
+}
+
 // The handler's full role set, from its ACTOR.md `roles:`. One session carries
 // all of them because there is no dynamic role switching yet: the handler moves
 // through its roles within one session, so all must be present at launch.
