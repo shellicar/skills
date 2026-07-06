@@ -133,7 +133,7 @@ Solutions are second. Understanding the mechanism is first. The mechanism itself
 
 **Detection** — make the misread visible before or after damage.
 
-- Structural disambiguation: the mode markers and plan statements ("Entering Execution: [plan]. Not: [exclusions]") force Claude to declare his understanding before acting. The action-first decision becomes visible rather than hidden. Already partially in place.
+- Structural disambiguation: the mode markers and plan statements (the execution marker `⚡ [plan]. Not: [exclusions]`) force Claude to declare his understanding before acting. The action-first decision becomes visible rather than hidden. Already partially in place.
 - Post-hoc supervision: a supervisor that specifically checks whether the operator interpreted the instruction or executed it. Expensive, but catches what prevention missed.
 
 **Mitigation** — reduce the damage when the misread happens.

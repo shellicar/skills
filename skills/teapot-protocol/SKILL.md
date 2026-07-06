@@ -45,6 +45,19 @@ What I want you to catch during composition: the failure patterns named in `clau
 
 If you notice one, mark `🫖 Still brewing.`, fix it, and continue.
 
+## Markers together
+
+These markers are the envelope of a response: `🫖 Brewing.` opens it, `☕ Served.` closes it, and everything else sits between them. The mode marker (`💭` for conversation, `⚡` for execution; see `claude-philosophy`) sits inside the envelope, on its own line right after the opening:
+
+```
+🫖 Brewing.
+💭
+…the response…
+☕ Served.
+```
+
+`🫖 Still brewing.` is part of the envelope too — raised mid-compose when something is caught, not part of the mode line.
+
 ## When
 
 Every response. From the first turn of the session to the last.

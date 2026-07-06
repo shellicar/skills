@@ -27,7 +27,7 @@ The mode-state declarations in the responses, the scope of the work measured aga
 
 ### Dimension 1 — mode-state markers
 
-"Entering / Continuing Conversation," "Entering Execution: [plan]. Not: [exclusions]," "Continuing Execution." Literal text, judged exactly as the brewing markers are: present, correct, positioned, every response. The same grading carries over — an occasional omission is context-load diminishment; a mutated or malformed declaration is a red flag (source-fidelity slipping); absence across the whole run says the framework was never declared at all.
+The emoji markers: `💭` (conversation), `⚡` (execution, with the plan: `⚡ [plan]. Not: [exclusions]`), and the switch-pair `from→to` (e.g. `💭→⚡`) at a transition. Judged exactly as the brewing markers are: present, correct, positioned, every response. The same grading carries over — an occasional omission is context-load diminishment; a mutated or malformed marker is a red flag (source-fidelity slipping); absence across the whole run says the framework was never declared at all.
 
 ### Dimension 2 — mode behaviour
 
