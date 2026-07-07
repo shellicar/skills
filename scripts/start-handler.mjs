@@ -13,16 +13,16 @@
  * There is one Planner, but handlers are many, so the name is what tells
  * one handler from another. Falls back to `handler` if the cwd has no `--`.
  *
- * A thin wrapper. Presets: --name handler-<worktree> and the composed --system.
- * On a fresh conversation (--no-resume) it also injects the skill set via
- * --prompt as cached user context, which fires one first turn on a seed message
- * ("reorient" by default, or the value of --message); on a resume the skills are
- * already in the conversation, so they are not re-sent. Everything else
+ * A thin wrapper. Presets: --name handler-<worktree>, the composed --system,
+ * and the skill set via --claudeMd — cached context assembled per session, no
+ * turn fired, sent on every launch (fresh or resumed). On a fresh conversation
+ * (--no-resume) with --message, that message is sent via --prompt as the first
+ * message; otherwise the session opens idle. Everything else
  * (including --model) is forwarded verbatim:
  *
  *   start-handler.mjs                      # CLI default resume
  *   start-handler.mjs --no-resume          # force a brand-new conversation
- *   start-handler.mjs --no-resume --message "..."  # override the seed message
+ *   start-handler.mjs --no-resume --message "..."  # send a first message
  *   start-handler.mjs --resume <conv-id>   # rehydrate a Handler after a death
  *   start-handler.mjs --model claude-...   # override the default model
  *
@@ -33,7 +33,7 @@
 
 import { basename } from "node:path";
 import { spawnSync } from "node:child_process";
-import { buildSystemInline, buildPrompt } from "../shared/pane/envelope.mjs";
+import { buildSystemInline, buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
 import { skillsFor, HANDLER_ROLES } from "../shared/pane/skills.mjs";
 
 // The composition preset: the Handler's actor + its five roles into --system.
@@ -51,26 +51,25 @@ const name = sep >= 0 ? `handler-${dir.slice(sep + 2)}` : "handler";
 const passthrough = process.argv.slice(2);
 if (passthrough[0] === "--") passthrough.shift();
 
-// Pull an optional --message <value> out of the passthrough: it overrides the
-// default seed message ("reorient") for the first-turn prompt. Extracted here so
-// it is not forwarded to claude-sdk-cli, which does not understand it. Only has
-// an effect on --no-resume, the sole path that builds a prompt.
-let message = "reorient";
+// Pull an optional --message <value> out of the passthrough: when given (and
+// the conversation is fresh), it is sent as the first message. Extracted here
+// so it is not forwarded to claude-sdk-cli, which does not understand it.
+let message;
 const mi = passthrough.indexOf("--message");
 if (mi >= 0) {
   message = passthrough[mi + 1] ?? message;
   passthrough.splice(mi, 2);
 }
 
-const args = ["--name", name, "--system", system];
+// The skill set rides --claudeMd: assembled into the session's CLAUDE.md
+// content on every launch (fresh or resumed), cached, no turn fired.
+const skills = skillsFor({ actor: "handler", role: roles });
+const args = ["--name", name, "--system", system, "--claudeMd", buildSkillsBlock(skills)];
 
-// Seed the skill set as cached user context only on a fresh conversation
-// (--no-resume). On a resume the session already carries its skills from the
-// first turn, so re-injecting would fire a spurious turn and miss the cache it
-// was meant to seed. skillsFor mirrors the ACTOR/ROLE `## Skills` (see skills.mjs).
-if (passthrough.includes("--no-resume")) {
-  const skills = skillsFor({ actor: "handler", role: roles });
-  args.push("--prompt", buildPrompt({ from: "the Supreme Commander", message, skills }));
+// On a fresh conversation with an explicit --message, send it as the first
+// message. No default: the session opens idle otherwise.
+if (message && passthrough.includes("--no-resume")) {
+  args.push("--prompt", buildPrompt({ from: "the Supreme Commander", message }));
 }
 
 args.push(...passthrough);

@@ -7,21 +7,15 @@ import { join } from 'node:path';
 import { shq } from './shared.mjs';
 
 /**
- * Read skill files and build the combined --prompt content. Skills are injected
- * as structured XML so the model can parse boundaries; each skill's SUCCESS.md is
- * embedded as <success> when present. Skills array is required (exit 2 if empty).
+ * Read skill files and build the <skills> block. Skills are injected as
+ * structured XML so the model can parse boundaries; each skill's SUCCESS.md is
+ * embedded as <success> when present. Skills array is required (exit 2 if
+ * empty). This is the content for --claudeMd: it lands in the session's
+ * assembled CLAUDE.md, cached context on every launch, no turn fired.
  */
-export function buildPrompt({ from, message, skills, missionPath }) {
-  if (!from) {
-    console.error('from is required');
-    process.exit(2);
-  }
+export function buildSkillsBlock(skills) {
   if (!skills || skills.length === 0) {
     console.error('skills array is required and must not be empty');
-    process.exit(2);
-  }
-  if (!message) {
-    console.error('message is required');
     process.exit(2);
   }
 
@@ -45,8 +39,28 @@ export function buildPrompt({ from, message, skills, missionPath }) {
     return `<skill name="${name}">\n${content}${successBlock}\n</skill>`;
   });
 
+  return `<skills>\n${blocks.join('\n')}\n</skills>`;
+}
+
+/**
+ * Build the --prompt content: the envelope (from, message, optional mission
+ * pointer). Skills no longer ride the prompt — they go through --claudeMd via
+ * buildSkillsBlock — but an optional `skills` array is still accepted for any
+ * caller that needs the old single-message form.
+ */
+export function buildPrompt({ from, message, skills, missionPath }) {
+  if (!from) {
+    console.error('from is required');
+    process.exit(2);
+  }
+  if (!message) {
+    console.error('message is required');
+    process.exit(2);
+  }
+
+  const skillsBlock = skills && skills.length > 0 ? `\n${buildSkillsBlock(skills)}` : '';
   const missionBlock = missionPath ? `\n<mission>\n${missionPath}\n</mission>` : '';
-  return `<from>\n${from}\n</from>\n<skills>\n${blocks.join('\n')}\n</skills>\n<message>\n${message}\n</message>${missionBlock}`;
+  return `<from>\n${from}\n</from>${skillsBlock}\n<message>\n${message}\n</message>${missionBlock}`;
 }
 
 /**

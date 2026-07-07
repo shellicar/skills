@@ -9,7 +9,7 @@ import { join } from 'node:path';
 import { expandPath, shq } from './shared.mjs';
 import { paneProcessName, waitForClaudeSdkCli, PREFERRED } from './process.mjs';
 import { findPaneByRole, paneCwd } from './lookup.mjs';
-import { buildPrompt, buildSystem } from './envelope.mjs';
+import { buildPrompt, buildSystem, buildSkillsBlock } from './envelope.mjs';
 import { getSupervisorContext } from './templates.mjs';
 import { actorSkills, roleSkills } from './skills.mjs';
 import { effortFlag } from './effort.mjs';
@@ -49,17 +49,22 @@ export function launchCli(paneId, { from, model, missionFile, name, message, ski
   // forget them; the caller's list is purely additive — foundational plus any
   // per-phase extras from the mission.
   const finalSkills = [...new Set([...(skills ?? []), ...actorSkills(actor), ...roleSkills(role)])];
-  const prompt = buildPrompt({ from, message: finalMessage, skills: finalSkills, missionPath: expandedMissionFile });
+  // Skills ride --claudeMd (cached session context, assembled per launch, no
+  // turn fired); the prompt carries only the envelope: from, message, mission
+  // pointer. Both are written to temp files the launch line cats in.
+  const prompt = buildPrompt({ from, message: finalMessage, missionPath: expandedMissionFile });
   const tmp = mkdtempSync(join(tmpdir(), 'router-prompt-'));
   const promptPath = join(tmp, 'prompt');
   writeFileSync(promptPath, prompt);
+  const skillsPath = join(tmp, 'claudemd');
+  writeFileSync(skillsPath, buildSkillsBlock(finalSkills));
 
   const system = buildSystem({ actor, role });
   // Inline (see buildSystem): no system temp file, so up-arrow re-reads the source.
   const systemFlag = system ? ` --system "${system}"` : '';
 
   const resumeFlag = resume ? ` --resume ${shq(resume)}` : ' --no-resume';
-  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(model)}${effortFlag(effort)}${systemFlag} --prompt "$(cat ${shq(promptPath)})"${resumeFlag}`;
+  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(model)}${effortFlag(effort)}${systemFlag} --claudeMd "$(cat ${shq(skillsPath)})" --prompt "$(cat ${shq(promptPath)})"${resumeFlag}`;
 
   execFileSync('tmux', ['send-keys', '-t', paneId, launch, 'Enter']);
 

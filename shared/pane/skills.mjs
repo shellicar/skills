@@ -66,7 +66,8 @@ const roleMeta = (role) => frontmatter(join(BASE, "roles", role, "ROLE.md"));
  * list becomes purely additive (foundational plus any per-phase extras).
  */
 export function roleSkills(role) {
-  return role ? (roleMeta(role).skills ?? []) : [];
+  const roles = Array.isArray(role) ? role : role ? [role] : [];
+  return roles.flatMap((r) => roleMeta(r).skills ?? []);
 }
 
 // The handler's full role set, from its ACTOR.md `roles:`. One session carries
