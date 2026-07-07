@@ -118,8 +118,9 @@ if (cfg.colour) {
 
 // 3. Launch through the shared primitive. The handler's identity is its actor
 //    plus all its roles — loaded every time because there is no dynamic role
-//    switching yet (it moves interlocutor -> squad-selector -> scribe ->
-//    executor -> router within one session, so all must be present at launch).
+//    switching yet (it moves through its roles within one session, so all
+//    must be present at launch). The list is HANDLER_ROLES, read from the
+//    handler ACTOR.md frontmatter.
 //    resume (not no-resume): the handler adopts its pre-generated conv id.
 //    --system is the primitive's concern, not this script's.
 const result = launchCli(paneId, {

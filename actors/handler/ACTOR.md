@@ -3,7 +3,6 @@ name: handler
 roles:
   - interlocutor
   - squad-selector
-  - scribe
   - executor
   - router
 skills:
