@@ -30,7 +30,7 @@ The temporal order matters. Each step happens before the next.
 1. **Draft the prompt.** Set `Deliver to:` to a path that does not yet exist. The prompt is the source of truth for what the worktree will be called.
 2. **Review with the SC.** The path may change as scope changes. Renaming a string in a draft costs nothing.
 3. **Commit the prompt.** Only after commit is the path stable.
-4. **Create the worktree.** Run [scripts/dispatch-worktree.mjs](../scripts/dispatch-worktree.mjs) (see "Creating", below). It creates the branch and the worktree and sets it up (project memory, dependencies); the operator's actor and role arrive separately via `--system` at launch.
+4. **Create the worktree.** Run [scripts/dispatch-worktree.mjs](scripts/dispatch-worktree.mjs) (see "Creating", below). It creates the branch and the worktree and sets it up (project memory, secrets, dependencies); the operator's actor and role arrive separately via `--system` at launch.
 5. **Deliver.** The operator opens the worktree at the path the prompt already names.
 6. **Operator works.** The cast operates against the worktree branch; its identity (actor + role) is composed into `--system` at launch, not read from a file in the worktree.
 7. **Cleanup.** When the prompt is complete, remove the worktree (see "Cleanup", below).
@@ -47,19 +47,19 @@ Double-dash makes the worktree directory visually distinct from the main checkou
 
 ## Creating
 
-Run `dispatch-worktree.mjs` from the Handler repo to create the worktree:
+Run `dispatch-worktree.mjs` to create the worktree:
 
 ```bash
 echo '{
   "repoPath": "~/repos/<org>/<repo>",
   "worktreePath": "~/repos/<org>/<repo>--<description>",
   "branch": "<branch-name>"
-}' | node scripts/dispatch-worktree.mjs
+}' | node ~/.claude/skills/worktrees/scripts/dispatch-worktree.mjs
 ```
 
 Required: `repoPath`, `worktreePath`, `branch`. Optional: `startingPoint` (defaults to `origin/main`).
 
-It creates the worktree on a new branch at `origin/main` (`--no-track`, so the branch doesn't adopt main as its upstream), copies project memory and any root `.env` files, and installs dependencies when the repo declares pnpm. Writes go only to the worktree; the operator's main checkout is read but never written.
+It creates the worktree on a new branch at `origin/main` (`--no-track`, so the branch doesn't adopt main as its upstream), copies project memory and any root `.env` files, and installs dependencies when the repo declares pnpm. The memory copy is `CLAUDE.local.md`, and it only matters for repos that still carry the gitignored file (adoption Stage 0) — a repo whose memory lives in a committed `./CLAUDE.md` gets it through git. Writes go only to the worktree; the operator's main checkout is read but never written.
 
 The operator's actor and role arrive via `--system` at launch — the script delivers no harness file into the worktree. The script is the source of truth for exactly what it does; read its docblock rather than a copy here.
 
