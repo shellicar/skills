@@ -15,7 +15,7 @@ metadata:
 
 The `./CLAUDE.md` file in each operator repo is the project-authored memory: what the repo is, how it's built, what conventions apply, what's currently in flight. It is tracked in git, separate from the actor and role identity, which arrives ephemerally per cast via `--system`.
 
-You own `./CLAUDE.md` across your fleet. See [starter-CLAUDE.md](starter-CLAUDE.md) for the section structure.
+You own `./CLAUDE.md` across your fleet. See [templates/starter-CLAUDE.md](templates/starter-CLAUDE.md) for the section structure.
 
 ## Maintenance is judgment, not just mechanics
 

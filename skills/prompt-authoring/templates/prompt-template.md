@@ -1,4 +1,4 @@
-<!-- Before composing this prompt, read references/prompt-authoring.md. The guide is required; pattern-matching on previous prompts is not a substitute. -->
+<!-- Before composing this prompt, read the prompt-authoring skill (~/.claude/skills/prompt-authoring/SKILL.md). The guide is required; pattern-matching on previous prompts is not a substitute. -->
 ---
 Type: worker
 Status: ready
@@ -29,7 +29,7 @@ Load all skills using their full path, from `/full/path/to/<skill>/SKILL.md`.
 
 ## Foundational Skills
 
-Load: [verify each per prompt; see references/prompt-authoring.md > Skills > Foundational skills per prompt for the default set and applicability]
+Load: [verify each per prompt; see the prompt-authoring skill > Skills > Foundational skills per prompt for the default set and applicability]
 
 ---
 

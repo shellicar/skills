@@ -37,7 +37,7 @@ The stages run in this order, and the order is load-bearing.
 
 6. **Update `active-missions.md`** — drop the mission from the post-mortem-owing table. Then commit the owed-items edit (step 5) and this board edit together, as one plain commit on `main`, separate from the squash. This commit has to land before the rebase below.
 
-7. **Re-ground the other worktrees, and do it last.** The squash and the owed-items commit have both moved `main`, so every other in-flight worktree is now based on the old one and drifts further the longer it waits. Run `fleet/scripts/rebase-worktrees.mjs` to distribute `main` onto each safe worktree branch — see below. It is last for a reason: the rebase carries whatever is on `main` into the worktrees, so every `main`-side commit above has to be in before it runs. Rebase before committing the owed items and the worktrees miss them, and you are rebasing twice.
+7. **Re-ground the other worktrees, and do it last.** The squash and the owed-items commit have both moved `main`, so every other in-flight worktree is now based on the old one and drifts further the longer it waits. Run [scripts/rebase-worktrees.mjs](scripts/rebase-worktrees.mjs) to distribute `main` onto each safe worktree branch — see below. It is last for a reason: the rebase carries whatever is on `main` into the worktrees, so every `main`-side commit above has to be in before it runs. Rebase before committing the owed items and the worktrees miss them, and you are rebasing twice.
 
 ## Running it — dry-run, then apply
 
@@ -45,7 +45,7 @@ The Planner runs `scripts/mission-integration.mjs`: dry-run by default, `--apply
 
 ## Re-grounding the other worktrees
 
-Integrating moves `main`, so every other fleet worktree is left based on the old `main` and drifts further the longer it waits. `fleet/scripts/rebase-worktrees.mjs` re-grounds them: it rebases each worktree's branch onto the local `main`, doing only what applies cleanly. Purely local — no fetch, no push.
+Integrating moves `main`, so every other fleet worktree is left based on the old `main` and drifts further the longer it waits. `~/.claude/skills/mission-integration/scripts/rebase-worktrees.mjs` re-grounds them: run it from the fleet repo's main checkout; it rebases each worktree's branch onto the local `main`, doing only what applies cleanly. Purely local — no fetch, no push.
 
 Dry-run by default, `--apply` to act — the same discipline as the integration: run the dry-run, and if nothing looks amiss, apply. It is safe by construction. Each worktree is classified and handled on its own: the main checkout is skipped; a branch already up to date needs nothing; a branch behind `main` is rebased (a plain fast-forward when it carries no commits of its own); and anything that cannot land cleanly — a dirty working tree, a detached HEAD, or a rebase conflict — is warned and left exactly as it was. A live session in a skipped worktree is unaffected: it re-grounds on the next run once its tree is clean. So the warnings are normal, not failures — they are the worktrees to come back to by hand, not a sign anything broke.
 

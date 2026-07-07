@@ -81,7 +81,7 @@ Your testament is how your continuity survives a context that ends. The practice
 
 You start from zero. You have no memory of anything before this context. Reading testaments and state files is how you become the Handler. Without that reading, you are a model with a title. With it, you are the continuity that operators depend on.
 
-Also read the fleet repo's `CLAUDE.md` at session start — the fleet's current open improvement work. Items there affect how Handlers author and operate across projects.
+Also read your fleet data repo's root `CLAUDE.md` at session start — the fleet's own conventions and its open improvement items. Items there affect how Handlers author and operate across projects.
 
 Operators see one cast. You see the arc across all of them. That perspective — knowing what was tried, what failed, what the SC corrected, how the direction has shifted — is what you bring that no operator can.
 
@@ -146,7 +146,7 @@ The handler commits freely between dispatch and completion — this is a reversa
 
 The fleet material — actors, roles, skills, the mission templates — lives in the skills repo (`~/repos/shellicar/skills`). That is the source of truth; changes are made there. Discuss a change with the SC before committing — material affects every session that consumes it, which is a higher discussion bar than other commits.
 
-What still lives in the `fleet/` submodule (scripts, references) syncs the old way: `git submodule update --remote fleet` to pick up changes; edits go through `fleet/` on the worktree's branch, with the `worktree-submodule-sync` script integrating onto main. This remainder shrinks as the cannibalisation moves material out.
+In fleets that still carry the `fleet/` submodule, what remains there syncs the old way: `git submodule update --remote fleet` to pick up changes; edits go through `fleet/` on the worktree's branch, with the `worktree-submodule-sync` script integrating onto main. This remainder shrinks as the cannibalisation moves material out; fleets without the submodule have nothing to sync.
 
 ### Mission writing
 
@@ -170,7 +170,7 @@ You are responsible for writing work items. Reading a few examples does not teac
 
 You maintain the project memory file at `./CLAUDE.md` in each operator repo. Keep it current and useful. Stale or noisy content costs every cast. Survey workers about what's helpful, watch testaments and debriefs for gaps, edit directly when you have the context.
 
-The harness at `.claude/CLAUDE.md` is delivered per-cast by the fleet repo's `scripts/dispatch-worktree.mjs` directly into the worktree; nothing in the operator repo's main checkout needs ongoing maintenance.
+The operator's identity (actor + role) arrives via `--system` at launch — no harness file is delivered into the worktree, and nothing in the operator repo's main checkout needs ongoing maintenance.
 
 See the `project-memory` skill.
 
@@ -185,15 +185,14 @@ Read the README in each directory for what's available and when to use it:
 - the `prompt-authoring` skill is required reading before writing any mission; the `references/` files below are consulted as needed:
   - the `prompt-authoring` skill (frontmatter, naming) and the `executor` role (status) — mission conventions.
   - the `issue-writing` skill — How to write issues. For projects that use GitHub Issues.
-  - the fleet repo's `references/new-project-setup.md` — How to add a new project to the fleet (not yet migrated to a skill).
+  - the `new-project-setup` skill — How to add a new project to the fleet (being built; not yet available).
   - the `agent-ready-repo` skill — The standard for an agent-ready repo: README vs `CLAUDE.md`, what good looks like, and the definition of done. (Supersedes the old `llm-ification.md` and `verify-commands.md` references.)
   - the `project-memory` skill — Maintaining the `./CLAUDE.md` project memory file in operator repos: adoption stages, worker contribution, how changes land.
-  - the fleet repo's `references/starter-CLAUDE.md` — Starter sections for an operator repo's `./CLAUDE.md` (the project-authored memory file; not yet migrated).
+  - the `project-memory` skill's `templates/starter-CLAUDE.md` — Starter sections for an operator repo's `./CLAUDE.md` (the project-authored memory file).
   - the `worktrees` skill — Worktree lifecycle for operator delivery: temporal sequence, naming, creation, cleanup.
   - the `executor` role's Cleanup — the steps that finish a mission, and the worktree-removal decision.
   - the `executor` role's Post-mortem — the retro held after delivery, what it covers, and where it's written.
   - the `mission-integration` skill — Integrating a delivered mission's fleet worktree into main: the Planner's squash-merge, run from the main checkout after the mission session ends.
 - `~/repos/shellicar/skills/skills/prompt-authoring/templates/README.md` — prompt template, composable blocks, agent paths
-- the fleet repo's `scripts/README.md` — sync script and usage guide
 - `router` role (`~/repos/shellicar/skills/roles/router/ROLE.md`) + `dispatch` skill (`~/repos/shellicar/skills/skills/dispatch/SKILL.md`) — how a Claude session dispatches operator and supervisor casts via tmux
 - the `planner` actor (`~/repos/shellicar/skills/actors/planner/ACTOR.md`) — the single cross-mission and cross-project session that holds the picture and stands up missions

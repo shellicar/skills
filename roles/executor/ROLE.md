@@ -163,4 +163,4 @@ The heading carries the mission's **name** — `# Post-mortem: <name> (<project>
 
 Cover the mission in a line or two, then what went well, what didn't, and what we'll change. Record the root cause if there is one.
 
-Fleet-wide changes — to roles, skills, blocks, the harness — are changes to the skills repo (`~/repos/shellicar/skills`); raise them with the SC. The fleet repo's `CLAUDE.md` carries the open improvement work forward into the next session, so it survives across post-mortems.
+Fleet-wide changes — to roles, skills, blocks, the harness — are changes to the skills repo (`~/repos/shellicar/skills`); raise them with the SC. Your fleet data repo's root `CLAUDE.md` carries the open improvement work forward into the next session, so it survives across post-mortems.
