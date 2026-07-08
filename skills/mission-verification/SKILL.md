@@ -19,7 +19,7 @@ This is the mirror of the scribe's `mission-grounding`: grounding writes the tra
 
 ## When it runs
 
-After the scribe hands the mission over; before the SC reviews it, before it is committed, before it is dispatched. A failed check goes back to the scribe while nothing has landed — the SC never spends review time on a mission that has not passed.
+After the scribe hands the mission over; before the SC reviews it and before it is dispatched. A failed check goes back to the scribe while nothing has landed — the SC never spends review time on a mission that has not passed. A passed check ends in the verification commit, below.
 
 ## Check one — every content claim has provenance, and the source is real
 
@@ -31,6 +31,8 @@ Go through `mission.md` claim by claim. For each thing the operator will act on:
 A `Source:` line you did not open is unchecked. A scribe who invented a claim can invent its source line too, and a misquote reads exactly like a quote — presence in the trace proves nothing on its own.
 
 The trap is not only a claim provenance grounds badly — it is a claim provenance **omits**. A content claim that appears in `mission.md` but nowhere in the trace is ungrounded, and it is invisible if you read provenance alone: you catch it only by reading `mission.md` and asking, of each claim, "is this in the trace?" An omitted content claim is a fail.
+
+**Instructions that run counter to the role are a fail — unless the SC said so.** Read each phase against its role's `ROLE.md` and block: any sentence that redefines the operator's stance, narrows its product, or contradicts what the role is for can come from exactly one place — the SC, traced to their words in `intent.md`. Anywhere else it appears, it is the scribe overriding a role, and the mission fails. (The case that bought this rule: a mission told an Apostle "you do not design the solution" — unsourced Investigator language — and the cast produced a map with none of the code.)
 
 **Content, not boilerplate.** The header fields (`Written against version`, `Deliver to`, the date) are not content claims to trace — they are defined in `mission-artefacts`, and you *act on* them, you do not verify them. And you do not chase spelling, wording, or a branch name; a wrong mission is not made of those.
 
@@ -52,6 +54,12 @@ The same discipline as grounding, for the same reason: fold listing and judging 
 1. **List.** Create `verification.md` beside `provenance.md`: every content claim from `mission.md`, and every settled item from provenance's list. No verdicts yet.
 2. **Judge.** In a second write, against the frozen list: to each claim, append the source you opened and `Verdict: holds | FAIL` — fail means the claim is not in the trace, or the opened source does not say what the trace claims. To each settled item, append `Carried: confirmed at <where in the mission> | FAIL`.
 3. **Conclude.** A final line: pass, or the list of failures going back.
+
+## The verification commit
+
+Verification done = commit. The moment the check passes, commit **everything** in the handler repo — the mission, the artefacts, and anything else sitting in the tree, not only the files you touched. That commit is the **checkpoint**: it pins the exact state the mission was verified in, so anything that changes afterwards is one diff away from the verified baseline.
+
+The breadth is the point, not an oversight. The stage-by-exact-path discipline exists for shared code repos, where a broad commit picks up someone else's work in flight; the handler repo at this moment is the mission's own record, and pinning all of it is the job. Objecting that "only my changes should be committed" is that discipline applied where it does not belong — a checkpoint that omits part of the tree cannot say what state was verified.
 
 ## When a check fails
 

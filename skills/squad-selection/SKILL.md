@@ -62,6 +62,10 @@ A lineup with no *why* is one the SC cannot check. Each role in the proposal is 
 - **Bad:** "Squad: Scaffolder, Builder, Maker, Courier."
 - **Good:** "Scaffolder first, to write the failing tests, because the SC wants the design proven test-first; then a Maker to build them green."
 
+**The reason explains why we want that operator.** That is the whole job of the reason: name the need in the work this operator meets, so the SC can check the pick. It is an explanation — not a justification to sell the pick, and not instructions for the operator. What the operator *is* and *produces* already lives in its `ROLE.md` and block; the reason leaves that alone and speaks only about the work. Write the file from [TEMPLATE.md](TEMPLATE.md) — one phase block per pick, the `why:` line carrying the explanation.
+
+Why the line matters: everything downstream inherits what you write. A reason that describes the role — "grounds the class design against what is really there… produces the plan" — was carried by a scribe into a mission as "you do not design the solution," and an Apostle, whose entire product is the code, delivered a map with none in it. If a role as defined does not fit the need, surface the gap to the SC; explaining the want is yours, defining the role is not.
+
 ## Lay the choice along what the SC values — don't recommend
 
 Do not hand the SC a raw fork ("A or B?") and do not answer it for them ("use A"). Map the options to what they care about — cost, risk, fit — so the decision goes clear on its own.

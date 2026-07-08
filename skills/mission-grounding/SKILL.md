@@ -37,7 +37,7 @@ Every claim traces to exactly one of three:
 
 1. **SC** — the SC decided it in the conversation; `intent.md` carries it.
 2. **Project** — the project's own agent-facing files carry it: its `README.md`, its `CLAUDE.md`, and its brief. Those are the whole of what a project tells you — you do **not** read the code. A fact you would have to open the worktree to confirm is not grounded here; it is the operator's to establish.
-3. **Fleet** — a harness rule or reference declares it.
+3. **Fleet** — the fleet material declares it: a skill, a harness rule, or — for anything about a role's stance — the role's own `ROLE.md` and its phase block. A sentence that tells the operator what kind of thing it is or how it works traces here or to the SC, or it is invented: the scribe never authors a role's stance (see `prompt-authoring` > The blocks own the stance).
 
 No fourth source exists. A claim that traces to none is invented. "It follows from X," "the natural consequence," "presumably," "it should" — these are invention dressed as logic, not a fourth source.
 

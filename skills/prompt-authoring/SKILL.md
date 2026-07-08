@@ -150,6 +150,16 @@ The output `mission.md` has the right frontmatter (with `Written against version
 
 The script commits the `mission.md` it writes before it returns. This is purely a review mechanism, not the content commit: the skeleton is boilerplate, so committing it makes your review surface the filled-in content diffed against that commit, rather than the boilerplate as well. Without the commit the SC would be reading everything, skeleton included. The filled mission is committed separately, after the SC reviews, per *Writing a prompt* (step 8). `scaffold-mission` commits its placeholders for the same reason; `update-mission` does not commit, since an existing `mission.md` already lives in whatever state the scribe or a prior run left it.
 
+## The blocks own the stance — you never write it
+
+Before composing any phase, **read the block and the `ROLE.md` of every role in the squad** — actually open them, this session; having seen them in a listing is not having read them. The block and the role are the source for what each operator *is* and how it works.
+
+You never write role-stance prose. A sentence that tells the operator what kind of thing it is, what it produces, or how it relates to its work — that is the block's text or it does not appear. Your job is the mission-level content that fills the block's slots: the problem, the paths, the specifics. Stance written from your own generation is invention, and it is how an Apostle was told "you map the problem; you do not design the solution" — Investigator language pasted onto a role whose entire product is the code, by a scribe that never opened `apostle.md`. Four hours of the SC's time went to that sentence.
+
+Only the SC can countermand a role. If the intent genuinely narrows or overrides what a role does, that instruction enters the mission as the SC's words, traced to `intent.md` — never as stance you composed.
+
+**The squad is the squad.** From `squad.md` you take the selection — the roles, their order, model, effort, and skill overrides — and nothing else. Its `why:` lines explain to the SC why each operator was wanted; they are the selection's record, not content for `mission.md`, and they are not a source for anything you write.
+
 ## Guardrails are infrastructure
 
 Real guardrails — preflight, "stop and ask," critical-failure stop, explicit staging — live in the harness. They are silent until the operator hits them. They catch a defined failure mode without telling the operator how to walk through the work. The Handler does not write guardrails. If a recurring failure mode wants a structural rail, raise it with the SC; the rail belongs in the harness, not in every prompt as a re-statement.

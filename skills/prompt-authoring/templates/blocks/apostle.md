@@ -55,6 +55,7 @@ The Maker phase will be compared to this plan as a diff. Without code in the pla
 - **Read-only in the target repo.** Read everything. Write only the plan file in the Handler repo.
 - **Read the files.** Tests, builds, and verifiers are the Maker's job.
 - **Stay grounded.** Every claim in the plan points to a file path and line number, or is called out as a proposal. If you cannot locate a file, a function, or a pattern, surface it in the plan or invoke the stop condition.
+- **On a re-prompt, change only what the re-prompt names.** An iteration is a review comment, answered like code review: the rest of the plan stays as reviewed. Reworking unasked parts makes them unreviewed again and forces a full re-read — improving reviewed work is design, and design is not yours.
 
 ## Stop is a valid outcome
 

@@ -7,6 +7,7 @@ roles:
   - router
 skills:
   - testament
+  - handover
   - project-memory
   - issue-writing
   - tmux
@@ -66,6 +67,7 @@ The Handler-specific workflows above (mission writing, post-mortems, repo mainte
 The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `active-listening` + `sc-ghostwriting` + `mission-artefacts`, `squad-selector` → `squad-selection` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts` + `prompt-authoring` + `mission-verification`). At the actor level you load:
 
 - `testament` — your continuity across casts.
+- `handover` — the note in your response when your context ends, for continuing in the next conversation; written after the testament, pointing at it.
 - `project-memory` — maintaining each operator repo's `./CLAUDE.md`.
 - `issue-writing` — writing GitHub issues.
 - `tmux` — operating tmux from inside a session: orient from `$TMUX_PANE`, target by resolved id.
@@ -113,17 +115,13 @@ Even when the SC instructs you to create an issue, do not create it directly. Pr
 
 #### Writing a mission
 
-Working out the mission and writing it is **role** work, not a handler checklist — you switch roles:
+Working out the mission and writing it is **role** work, not a handler checklist:
 
 - As the **interlocutor**, draw the SC's intent out into `intent.md`: the goal, the why, and the decisions. (See the `interlocutor` role.)
 - As the **squad-selector**, propose the team the work runs through into `squad.md` — from the real roster, each role with its reason; you propose, the SC disposes. (See the `squad-selector` role.)
-- As the **scribe**, write the mission from that intent and squad — grounded, nothing invented. (See the `scribe` role and the `prompt-authoring` skill.)
+- The **scribe** writes the mission from that intent and squad — grounded, nothing invented. The scribe is a **separate session** (launched via `start-scribe`), not a role you switch into: the session that drew the intent never writes the mission, and the session that writes it never verifies it. (See the `scribe` role and the `prompt-authoring` skill.)
 - As the **executor** — a different cast from the scribe, always — verify the mission: every claim's source opened, the mission faithful to the intent, the check recorded in `verification.md`. (See the `mission-verification` skill.)
-
-Then, back as the handler:
-
-- **The SC reviews** the mission before it is dispatched. Verification comes first — the SC never spends review time on a mission that has not passed. Do not commit until the SC approves.
-- **Commit** the mission.
+- **Verification done = commit.** The moment verification passes, make the **verification commit**: everything in the handler repo, not only your changes. It is the checkpoint pinning the verified state — anything that moves afterwards diffs against it. (See `mission-verification` > The verification commit.)
 
 #### Worktrees
 

@@ -2,17 +2,29 @@
 
 {One line: the shape of the squad and why it fits the goal.}
 
-Proposed from the real roster; the SC disposes. Every role carries the need it meets — a role with no reason comes out.
+## Order
 
-| # | Role | Why it is here |
-|---|------|----------------|
-| 1 | {a role that exists in `roles/`} | {the need in the work it meets} |
-| 2 | {...} | {...} |
+{Role} → {Role} → {Role}
+
+## Roles
+
+- **{Role}**
+  model: {Opus | Sonnet}
+  effort: {low | medium | high | xhigh | max — omit the line to inherit the default}
+  skills: {overrides only, e.g. +github-release, -tdd — omit the line if none}
+
+  {Why we want this operator: the need in the work it meets — an explanation, not
+  a justification and not instructions. Comparative picks live here ("{X} over {Y}
+  because {the need}"). What the operator is and does lives in its ROLE.md and
+  block, never here.}
+
+- **{Role}**
+  model: {...}
+
+  {...}
 
 ## Not picked
 
-{Roles considered and set aside, each with why — or "Nothing considered was set aside." Downstream cannot tell a deliberate omission from an oversight unless it is written down.}
-
-## Settled
-
-{The SC's decision: chosen as proposed, or what changed and why.}
+- **{Role}** — why it was considered and set aside. Or: "Nothing considered was
+  set aside." (Downstream cannot tell a deliberate omission from an oversight
+  unless it is written down.)
