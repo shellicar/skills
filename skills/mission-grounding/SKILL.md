@@ -31,6 +31,10 @@ That "short is correct" holds for one kind of shortness only: shortness from cut
 
 So the trace runs in two directions, and both are part of the mechanical pass below. Mission → source proves nothing in the mission is unsourced. Intent → mission proves nothing the intent settled is missing: every settled thing — decision, illustration, and the `blueprint.md` reference when the file exists — is confirmed to have a home in the mission. A settled thing with no home is a drop, and it goes back in — dropping what the SC decided is as much a failure as inventing what they did not.
 
+Carried means carried **intact** — in the intent's own words, the requirement whole. A paraphrase that appears in the mission but drops the requirement is a drop with a citation; "appears somewhere" is not the check, "appears intact" is.
+
+The upward trace is also a **coverage trace**. The goal and every objective trace further than having a home: each must name the phase that *does* it and the place it is *proven*. Stage2-speak (2026-07) carried the tap removal as Objective 1 and assigned it to no phase, and carried a behavioural goal ("one conversation asks another and reads the answer") that no phase demonstrated — and every downward trace passed. A mission can cite every claim and still be a checklist that never touches its own purpose; the coverage trace is what catches that. An uncovered goal or objective goes back upstream like a drop — how it gets done or proven is a decision for the SC, never filled in here.
+
 ## The three sources
 
 Every claim traces to exactly one of three:
@@ -41,6 +45,8 @@ Every claim traces to exactly one of three:
 
 No fourth source exists. A claim that traces to none is invented. "It follows from X," "the natural consequence," "presumably," "it should" — these are invention dressed as logic, not a fourth source.
 
+**A governing document joins the sources.** When a source names a document that governs or overrides it ("the blueprint governs; the spec wins on conflict"), that document becomes mandatory reading and a source in its own right — and the summary that named it stops being sufficient. A claim grounded in `intent.md`'s summary of a governing document is ungrounded. Stage2-speak (2026-07): the intent said "the blueprint governs" and summarised its conformance contract as "the three roles"; the scribe never opened the blueprint, which required a fourth piece (a real-wire integration check), and instead invented a test that surface-matched the requirement while diverging in substance — the near-right invention that sails through every check. Read what governs, or the trace runs against a paraphrase.
+
 **True is not a source either.** PBI 1089 (2026-06): a planning session wrote "credential-shaped" variables into the prompt as the secrets to map — name-vibes, never queried, never discussed. Told to audit them out, the audit *added* a package.json finding — verified, true, and still wrong, because nobody had agreed it. A verified fact that traces to none of the three sources is still cut; if it matters, it goes back upstream as a question, never in as a fact.
 
 ## The mechanical pass — list first, judge second
@@ -50,8 +56,8 @@ The mission body is written first (scaffold, then fill — you MUST use `create-
 The sequence:
 
 1. **List.** Create `provenance.md` from `TEMPLATE.md` with both lists complete and unjudged: every **Claim** — one line per statement in the mission the operator will act on, quoted from the draft — and every **Settled item** — one line per decision or illustration the SC pinned in `intent.md`, plus one line for `blueprint.md` when it exists (its `Carried` is the mission's reference to the file — the blueprint is referenced, never reproduced). No sources, no verdicts yet.
-2. **Judge.** In a second write, against the frozen lists: to every claim, append `Source:` (`SC — "<their words from intent.md>"`, `Project — <the CLAUDE.md / README / brief line>`, `Fleet — <ref>`, or `INVENTED`) and `Verdict: keep | cut` — `cut` = `INVENTED`, or a source you cannot actually point to. To every settled item, append `Carried: <where in the mission>` or `DROPPED`.
-3. **Apply.** Edit `mission.md`: remove every `cut` claim, restore every `DROPPED` item.
+2. **Judge.** In a second write, against the frozen lists: to every claim, append `Source:` (`SC — "<their words from intent.md>"`, `Project — <the CLAUDE.md / README / brief line>`, `Fleet — <ref>`, or `INVENTED`) and `Verdict: keep | cut` — `cut` = `INVENTED`, or a source you cannot actually point to. To every settled item, append `Carried: <where in the mission, intact>` or `DROPPED` — a paraphrase that lost the requirement is `DROPPED`, not carried. To the goal and each objective, additionally append `Done by: <phase>` and `Proven at: <where>`, or `UNCOVERED`.
+3. **Apply.** Edit `mission.md`: remove every `cut` claim, restore every `DROPPED` item. An `UNCOVERED` goal or objective is not yours to resolve — it goes back upstream to the SC.
 
 The separation between listing and judging is the defence. Judging happens against a written list — not against a claim you are inventing as you justify it, and not against a memory of the intent that recalls selectively. Fold the pass into a single write and generation composes each claim and its source together, which is exactly where invention hides; the end-state mission looks identical either way, so the collapse is the path of least resistance. The file, not the head, because the pass must be visible from outside: the list write and the judge write either appear in the tool log or they do not.
 

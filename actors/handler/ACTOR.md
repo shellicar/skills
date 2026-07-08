@@ -3,6 +3,7 @@ name: handler
 roles:
   - interlocutor
   - squad-selector
+  - scribe
   - executor
   - router
 skills:
@@ -119,7 +120,7 @@ Working out the mission and writing it is **role** work, not a handler checklist
 
 - As the **interlocutor**, draw the SC's intent out into `intent.md`: the goal, the why, and the decisions. (See the `interlocutor` role.)
 - As the **squad-selector**, propose the team the work runs through into `squad.md` — from the real roster, each role with its reason; you propose, the SC disposes. (See the `squad-selector` role.)
-- The **scribe** writes the mission from that intent and squad — grounded, nothing invented. The scribe is a **separate session** (launched via `start-scribe`), not a role you switch into: the session that drew the intent never writes the mission, and the session that writes it never verifies it. (See the `scribe` role and the `prompt-authoring` skill.)
+- As the **scribe**, write the mission from that intent and squad — grounded, nothing invented, the SC's words carried intact. Understanding what the SC wants is the precondition for writing, and the session that drew the intent already holds it. The separation that is structural is writer/verifier: the session that writes the mission never verifies it. (See the `scribe` role and the `prompt-authoring` skill.)
 - As the **executor** — a different cast from the scribe, always — verify the mission: every claim's source opened, the mission faithful to the intent, the check recorded in `verification.md`. (See the `mission-verification` skill.)
 - **Verification done = commit.** The moment verification passes, make the **verification commit**: everything in the handler repo, not only your changes. It is the checkpoint pinning the verified state — anything that moves afterwards diffs against it. (See `mission-verification` > The verification commit.)
 

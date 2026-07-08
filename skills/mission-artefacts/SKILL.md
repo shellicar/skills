@@ -43,6 +43,8 @@ Missions live directly under `projects/<project>/missions/`.
 
 This is the completeness test. When the intent and the squad, plus the reusable fleet material (the scaffold, the templates, the skills), are enough to produce the mission with nothing invented to fill a gap, the front of the pipeline is done. If the `scribe` has to invent to finish the mission, a decision was missed upstream — it goes back to the `interlocutor` or the `squad-selector` to be settled, never filled in.
 
+The equation runs one way: the front artefacts exist to *create* the mission. Once it is written, the mission stands alone — discard `intent.md` and `squad.md` and its chance of success must not change. The operator reads `mission.md` and nothing else, so the mission never references the front artefacts by filename; it carries their content. `blueprint.md` is the one deliberate exception: referenced, never reproduced (see below).
+
 ## `intent.md` — what the SC wants, and why
 
 The goal and the reason under it — the enduring objective an operator reconciles against when an instruction turns out wrong on contact. Not the approach (that is the plan), not the implementation (that is the code). Every line traces to the SC, the project, or a fleet rule; nothing is invented.

@@ -19,6 +19,22 @@ A mission is what you hand to the operator. It carries three things: what to do,
 - `mission-grounding` — tracing every claim to its source; the provenance pass that keeps invention out of the mission.
 - `mission-artefacts` — what a mission's artefacts are on disk and the directory they live in.
 
+## Understanding before writing
+
+Understanding is the precondition, not a by-product. Read every file in the mission directory — not just `intent.md` and `squad.md` — and every document a source names as governing, before writing a line. Then answer for yourself, as if the mission were your own: what is this for, why does the SC want it, what does the world look like when it is done, and how would anyone know? If you cannot answer those, you are not ready to write — the gap goes back upstream, never filled in. A scribe without the understanding can only do one of two things: transcribe mechanically, or translate into its own words. Both drain the mission of what the SC actually wants.
+
+## Carry the words
+
+The goal, the vision, and every settled decision land in the mission in the intent's own words. Add nothing, take nothing away. Paraphrase is not a style choice — each rewording is a chance for a requirement to drift or quietly drop, and a behavioural goal summarised into a checklist loses exactly the thing the mission exists for. Your understanding is what lets you compose the connective tissue around the SC's words; it is never a licence to re-author them.
+
+## The mission stands alone
+
+The front artefacts exist to create the mission. Once it is written, `intent.md` and `squad.md` could be discarded and the mission's chance of success must not change. The operator reads the mission, nothing else — so never reference `intent.md`, `squad.md`, or `influence.md` by filename; carry the content itself. `blueprint.md` is the one deliberate exception: referenced, never reproduced (see `mission-artefacts`).
+
+## The goal lives in the mission
+
+The mission opens with the goal and its why, in the SC's words, and every phase reads as serving it. A mission can carry every objective and still be a checklist nobody can steer by — the objectives are what to deliver; the goal is what the operator recovers to when an instruction turns out wrong on contact. Where the goal is behavioural, the mission says where it is demonstrated, not only what gets built — the coverage trace in `mission-grounding` checks exactly this.
+
 ## Writing the mission
 
 The mission is produced from a skeleton, not free-written. The mission directory already exists — the interlocutor created it, holding `intent.md`, `squad.md`, and a `mission.md` placeholder — and you are handed that directory. You MUST use the `create-mission.mjs` script to write the skeleton into it — the frontmatter, the phases composed from blocks, the standard sections. The mission file is written by the script and by no other means: not by hand, not with a file-creation tool, not by copying another mission, not by driving the script in a mode that dodges how it writes and commits the file. You have no authority to circumvent it. You do not name the path or the date — they come from the directory you are given, set once when it was created; if the script's output is not what you expected, you stop and ask the SC, you do not work around it. Then fill it in; the craft of filling it well is the `prompt-authoring` skill, and the discipline that keeps everything you fill in grounded is the `mission-grounding` skill.

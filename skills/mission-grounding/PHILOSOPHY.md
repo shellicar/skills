@@ -22,3 +22,11 @@ The scribe kept inventing — inflating a compact intent into prescriptive detai
 
 - The fixed call-count is the mechanism — it makes the discipline countable from outside. Don't soften it into "trace your claims".
 - The examples are real (the #303 hook prompt); keep them grounded.
+
+## 2026-07-08: governing sources, intact-carriage, and the coverage trace
+
+Three additions after the stage2-speak mission (claude-cli), where every downward trace passed and the mission was still wrong:
+
+- **A governing document joins the sources.** The intent said "the blueprint governs"; the scribe grounded against the intent's summary of it and never opened the blueprint — then invented a requirement that surface-matched the real one while diverging in substance. Grounding is the act of reading the source, not the property of accidentally matching it; a near-right invention is the worst case because it sails through every check.
+- **Carried means intact.** The old upward trace checked "appears somewhere," which a paraphrase passes. Paraphrase is where the behavioural requirement dropped — a drop with a citation. The check is now "appears intact, in the intent's own words."
+- **The coverage trace.** Both old directions trace content; neither asked "where does this get done, and where does this get proven?" Stage2-speak carried an objective assigned to no phase and a behavioural goal no phase demonstrated. The Coverage table (goal and each objective → Done by / Proven at) is the upward trace extended to accountability; UNCOVERED goes back upstream to the SC, never resolved by the scribe — resolving it alone is exactly how the invented test happened.
