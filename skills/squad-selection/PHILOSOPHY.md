@@ -11,6 +11,7 @@ Built alongside the `squad-selector` role, mirroring how the interlocutor was bu
 - Named `squad-selection` — what the skill is. It was first `propose-and-dispose`, which named the move (propose, the SC disposes) rather than the thing; the SC renamed it to say plainly what it is.
 - Taught with real bad→good pairs, not adjectives.
 - The legitimate way to contribute is the values-conditional (lay the options along what the SC values), never a recommendation.
+- Model defaults live here as a table (2026-07-08, sonnet-5's arrival): the pick is right-sizing capability to the work, not buying certainty with resources. Sonnet is the operator and supervisor default; Opus for medium-difficulty work; Fable only for the extremely complex. The supervisor stays on Sonnet because the investment belongs with the one doing the work — safety net, not tightrope. The table sits in this skill because the model is part of the phase spec the squad-selector proposes.
 
 ## What was rejected
 

@@ -15,7 +15,7 @@ metadata:
 
 ## Writing for a literal reader
 
-Operators run on the current top model (Opus 4.8). Older models are a false economy: in benchmarking, each pre-4.8 model resolved fewer problems, and the cheaper ones often cost *more* per resolved unit, not less. Drop to a cheaper model only when the absolute cost of the work is trivial regardless, where the choice doesn't matter. Either way, the operator follows prompts literally. Every fabricated specific ends up in the code. Write accordingly.
+Whichever model an operator runs on — the pick is made upstream, in `squad.md` — the operator follows prompts literally. Every fabricated specific ends up in the code. Write accordingly.
 
 ### Say what to do
 
@@ -92,9 +92,7 @@ Deliver to: ~/repos/<org>/<repo>--<short-description>
 | Created | YYYY-MM-DD | Date the prompt was written |
 | Deliver to | worktree path | Worker prompts only. The worktree the operator delivers to. See the `worktrees` skill for naming and lifecycle. |
 
-Model is specified per-phase in phase headings, not in frontmatter. Valid values: `Sonnet`, `Opus`.
-
-Default to the current top model (Opus 4.8). Older models are a false economy (fewer resolved, often higher cost per resolved), so use `Sonnet` only when the absolute cost is trivial regardless.
+Model is specified per-phase in phase headings, not in frontmatter. Valid values: `Sonnet`, `Opus`, `Fable`. The model comes from `squad.md` — choosing it is squad selection, not writing; the defaults table lives in the `squad-selection` skill.
 
 Effort is optional per-phase, set as an `Effort:` line beside `Model:`. Valid values: `low`, `medium`, `high`, `xhigh`, `max`. It dials how much time and tokens the cast spends, not its capability. Omitted → the cast inherits `claude-sdk-cli`'s configured default. The scaffold emits the line when a phase names it, and the cast-launch scripts thread it through as `--config '{"thinking":{"effort":"<value>"}}'`.
 
@@ -135,7 +133,7 @@ Example:
     { "role": "Investigator", "model": "Opus" },
     { "role": "Apostle",      "model": "Opus" },
     { "role": "Maker",        "model": "Opus" },
-    { "role": "Courier",      "model": "Opus", "variant": "github" }
+    { "role": "Courier",      "model": "Sonnet", "variant": "github" }
   ]
 }
 ```

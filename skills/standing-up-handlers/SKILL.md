@@ -53,7 +53,7 @@ The more you hand it, the more it behaves as if in command. Hand it the least. T
   "windowName": "<project>-<mission>",
   "title": "<project>-<mission>",
   "colour": "<per the Window Colours table>",
-  "model": "claude-opus-4-8"
+  "model": "opus"
 }
 ```
 
@@ -62,7 +62,7 @@ The more you hand it, the more it behaves as if in command. Hand it the least. T
 - **convId** — `crypto.randomUUID()`, recorded in `active-missions.md`. The recovery anchor.
 - **session** — one tmux session per project; windows are missions. `launch-handler` creates the session on the first handler for that project.
 - **cwd** — the fleet-repo worktree from step 2.
-- **model** — handlers default to Opus (`claude-opus-4-8`).
+- **model** — required, never defaulted. A family name (`sonnet` | `opus` | `fable`), resolved to the current identifier at the launch seam (`shared/pane/models.mjs`); handlers run `opus`.
 - **colour** — per the Window Colours table in the project `CLAUDE.md`; add a row for a new project, distinct from the others.
 - **windowName / title** — `<project>-<mission>`.
 - **branch / worktree** — `feature/<mission>` (or per the target repo's convention skill); worktree `claude-fleet-shellicar--<mission>`.

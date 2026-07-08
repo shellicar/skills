@@ -41,6 +41,21 @@ These are the operator roles a squad is built from. Each is a phase where the op
 
 Two are not squad roles you pick: **Preflight** (a step, always first, catching inherited git state) and **SKILLS Override** (a prompt preamble). Those are the scribe's to place, not yours.
 
+## Model defaults — right-sizing
+
+Three models, a capability ladder: **Sonnet** → **Opus** → **Fable**. Throwing more resources at a problem does not make it more efficient — the pick is right-sizing: match the capability to the difficulty of the work.
+
+| Work | Default |
+| --- | --- |
+| Operators, most work | Sonnet |
+| Medium-difficulty work — coding, investigating, the Apostle | Opus |
+| Extremely complex circumstances — rare; most work won't need it | Fable |
+| Supervisors | Sonnet |
+
+Where the stakes raise the pick, say so and let the SC dispose — a code review picks Opus or Fable depending on how critical finding bugs is.
+
+Supervisors run Sonnet because it is better to invest in the one doing the work than the one catching it: the supervisor is a safety net, not the tightrope.
+
 ## Read the material before you propose
 
 The proposal starts from what is written, not from a picture in your head. Read `intent.md` — the goal and why — and the roster of roles that exist. You do not open the operator's code to work out the squad; the handler boundary holds here, and what you need about the work comes from the intent and from what the SC tells you, not from the source.

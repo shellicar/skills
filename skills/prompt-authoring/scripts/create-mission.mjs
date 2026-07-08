@@ -18,7 +18,7 @@
  *     "skillsDir":    "~/repos/shellicar/skills/skills",
  *     "phases": [
  *       { "role": "Investigator", "model": "Opus", "effort": "high" },
- *       { "role": "Courier",      "model": "Opus", "variant": "github" }
+ *       { "role": "Courier",      "model": "Sonnet", "variant": "github" }
  *     ]
  *   }
  *

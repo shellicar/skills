@@ -9,7 +9,7 @@
 ## Roles
 
 - **{Role}**
-  model: {Opus | Sonnet}
+  model: {Sonnet | Opus | Fable}
   effort: {low | medium | high | xhigh | max — omit the line to inherit the default}
   skills: {overrides only, e.g. +github-release, -tdd — omit the line if none}
 

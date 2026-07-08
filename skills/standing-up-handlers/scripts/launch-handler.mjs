@@ -3,7 +3,7 @@
  * Launch a per-mission Handler (Executor) cast in its own tmux window.
  *
  * WHY THIS EXISTS
- * The Router scripts (new-operator-cast, new-supervisor-cast, next-phase-cast)
+ * The Router scripts (scaffold-panes, cast-operator, cast-supervisor)
  * cast operators and supervisors *inside* an existing Handler window: each keys
  * off TMUX_PANE being the Handler's own pane and splits within that window.
  * Nothing creates the Handler window or launches the Handler itself — that step
@@ -63,15 +63,17 @@
  *     "windowName": "claude-cli-system-prompt",
  *     "title":      "claude-cli-system-prompt",
  *     "colour":     "cyan",
- *     "model":      "claude-opus-4-8"
+ *     "model":      "opus"
  *   }
  *
- * Required: session, cwd, convId, task, project, name, windowName.
+ * Required: session, cwd, convId, task, project, name, windowName, model
+ * (no default — every launch names its model, as a family name (sonnet |
+ * opus | fable) resolved to the current identifier by the launch seam via
+ * shared/pane/models.mjs; the recommended picks live in squad-selection).
  * The skill set is not an input: it is derived from the handler's actor + roles
  * via the shared skillsFor mirror, so the Planner cannot hand a handler a skill
  * list that drifts from the material.
- * Optional: title (defaults to windowName), colour (unset if omitted),
- *           model (defaults to claude-opus-4-8 — handlers default to Opus).
+ * Optional: title (defaults to windowName), colour (unset if omitted).
  *
  * Stdout: the new window's pane id (e.g. %123).
  * Exit codes: 0 launched & stable; 1 CLI never stabilised; 2 bad input.
@@ -90,13 +92,13 @@ function expandPath(p) {
 }
 
 const cfg = JSON.parse(readFileSync(0, "utf8"));
-for (const k of ["session", "cwd", "convId", "task", "project", "name", "windowName"]) {
+for (const k of ["session", "cwd", "convId", "task", "project", "name", "windowName", "model"]) {
   if (!cfg[k]) {
     console.error(`config missing required field: ${k}`);
     process.exit(2);
   }
 }
-const model = cfg.model || "claude-opus-4-8";
+const model = cfg.model;
 const title = cfg.title || cfg.windowName;
 
 // 1. Create the handler window and capture its pane id. If the target session

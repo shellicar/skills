@@ -74,6 +74,7 @@ function readConfig() {
   }
   for (const [i, phase] of config.phases.entries()) {
     if (!phase.role) die(`Phase ${i + 1}: missing role`);
+    if (!phase.model) die(`Phase ${i + 1}: missing model`);
     if (phase.effort && !EFFORT_VALUES.includes(phase.effort)) {
       die(
         `Phase ${i + 1}: invalid effort "${phase.effort}" ` +
@@ -161,9 +162,17 @@ function reconcilePhases(existing, jsonPhases, baseRepo) {
             `this position.`,
         );
       }
+      // No default: a phase block without a Model line is a broken mission,
+      // not one to silently patch — the model is always named explicitly.
+      if (!fromFile.model) {
+        throw new Error(
+          `Phase ${pos} in the existing mission.md has no Model line; ` +
+            `add one — the model is never defaulted.`,
+        );
+      }
       finalPhases.push({
         role: fromFile.role,
-        model: fromFile.model || "Opus",
+        model: fromFile.model,
         block: fromFile.block,
       });
     } else if (fromJson) {
