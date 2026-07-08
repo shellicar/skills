@@ -4,6 +4,7 @@ Type: supervision
 roles: []
 skills:
   - testament
+  - handover
   - tmux
 ---
 

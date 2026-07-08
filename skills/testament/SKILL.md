@@ -33,6 +33,24 @@ Be precise about what that means, because most of what happened this session alr
 
 What the record cannot hold is the reasoning. Why the decision went the way it did and not the other way. What the SC corrected, and what the correction revealed about what they actually want. The approach you tried that looked right and failed, so the next session does not burn its budget failing the same way. The trap that was invisible until you walked into it. The constraint that is real but written down nowhere. These are the things that exist only in your head, and only for as long as this context lasts. That is the substance of your testament: not the what and the where, which survive on their own, but the why and the hard-won, which do not.
 
+## The kinds — which word to use
+
+Every memory carries a `type`, and the word is not decoration: it separates the perishable from the durable, and it is how a later search knows what it is holding. These are the kinds, drawn from what real testaments actually contain. Use these words; do not coin near-duplicates.
+
+- **trap** — a non-obvious behaviour that will bite the next session if unwarned.
+- **constraint** — a rule about how something must or must not be used; the invariant written down nowhere else.
+- **decision** — a choice, its reasoning, and the road not taken. Often the SC's; irreplaceable.
+- **correction** — overturns an earlier recorded claim (a prior memory's, or the brief's). Say what was wrong and what replaces it — the record repairing itself.
+- **reference** — the durable how-it-works map of a subsystem: the mental model, the key facts. Not a warning, a manual. Least perishable.
+- **debt** — work deliberately deferred, flagged so the next session does not mistake it for a bug or rediscover it.
+- **pattern** — the generalised rule lifted out of a specific incident; the distilled lesson.
+
+Two words to refuse:
+
+- **work-log** is not a kind — "what I did" is the backward diary the git log already holds. If an entry's natural heading is a timestamp or "what was done," it is a work-log; distil the forward claim out of it or do not write it.
+- **testament** is not a type. Every memory is testament; typing one "testament" says nothing. Name the specific kind.
+- **handover** is not a good type either. A handover is not a memory — it is the note in your *response* that lets you continue in the next conversation (see the `handover` skill). The in-flight state it carries is perishable; what belongs in the store is the general memories any future cast can use. Write those, and let the handover point at them.
+
 ## Why
 
 A context ends and takes its contents with it. That is the fact everything here answers to, and there are two distinct reasons to write against it.
@@ -54,6 +72,24 @@ Then, as you go: record what you learn the moment you learn it, not at the end. 
 ## How
 
 The memory tools do the work. They carry their own instructions, and you already know how to use them; this skill does not restate their manual. What matters here is not the mechanism but the instinct: continuity is memories. "Write your testament" means reach for the memory tools and record what you learned. It does not mean open a file, keep a document, or append to a dated log. There is no file. There is the memory store, and there is what you decide to put in it.
+
+**Put the long parameter last.** A known Messages API bug mishandles very long parameter values in multi-parameter tool calls: everything after the long value is dropped. On `WriteMemory` that means a long `body` written before `keywords` silently empties the keywords and can splice tool-call syntax into the stored text — or the call is rejected outright with an error naming whichever field fell off the end (e.g. "expected string, received undefined" for `type`). The workaround: order the call so `body` comes last — title, type, intent, keywords, then body. If a memory call fails this way, reorder and retry; never trim the body to make it fit — trimming sheds the content the memory exists to keep.
+
+Concretely, emit the parameters in this order — the long one (`body`) written last:
+
+```xml
+<function_calls>
+  <invoke name="WriteMemory">
+    <parameter name="title">One-line handle for the memory</parameter>
+    <parameter name="type">trap</parameter>
+    <parameter name="intent">why you are writing it, in a sentence</parameter>
+    <parameter name="keywords">["term-one", "term-two"]</parameter>
+    <parameter name="body">The long content goes here, last, so nothing after it can be dropped however long it runs.</parameter>
+  </invoke>
+</function_calls>
+```
+
+Had `body` come before `keywords`, the overflow would swallow the `</parameter>` that closes it plus the whole `keywords` parameter — the store keeps a body with tool-call syntax spliced onto its end and an empty keywords array, and no error is raised. Body last is what prevents it.
 
 So the shape is simple. At the start, search for what is already known. As you learn, record it. Let the tools guide what a good memory looks like; let the What above guide what belongs in one.
 
