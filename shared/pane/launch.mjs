@@ -13,6 +13,7 @@ import { buildPrompt, buildSystem, buildSkillsBlock } from './envelope.mjs';
 import { getSupervisorContext } from './templates.mjs';
 import { actorSkills, roleSkills } from './skills.mjs';
 import { effortFlag } from './effort.mjs';
+import { resolveModel } from './models.mjs';
 
 /**
  * Remove the temp prompt directory after a launch, but only when it verified.
@@ -31,9 +32,9 @@ function cleanupPrompt(tmpDir, promptPath, launchResult) {
 export function launchCli(paneId, { from, model, missionFile, name, message, skills, effort, actor, role, resume }) {
   const expandedMissionFile = expandPath(missionFile);
   // When this is a supervisor cast, append the operator-debrief pointer and the
-  // target-repo note the supervisor needs, resolved from the live panes, so a
-  // supervisor relaunch (next-phase-cast) gets them too, not only the first
-  // new-supervisor-cast. Operators get nothing extra.
+  // target-repo note the supervisor needs, resolved from the live panes. Every
+  // supervisor cast is fresh (cast-supervisor), so every one needs the
+  // pointers. Operators get nothing extra.
   let finalMessage = message;
   if (actor === 'supervisor') {
     const operatorPane = findPaneByRole(paneId, 'operator');
@@ -64,7 +65,9 @@ export function launchCli(paneId, { from, model, missionFile, name, message, ski
   const systemFlag = system ? ` --system "${system}"` : '';
 
   const resumeFlag = resume ? ` --resume ${shq(resume)}` : ' --no-resume';
-  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(model)}${effortFlag(effort)}${systemFlag} --claudeMd "$(cat ${shq(skillsPath)})" --prompt "$(cat ${shq(promptPath)})"${resumeFlag}`;
+  // The caller passes a model family (sonnet | opus | fable); the versioned
+  // identifier is resolved here, at the one seam every launch goes through.
+  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(resolveModel(model))}${effortFlag(effort)}${systemFlag} --claudeMd "$(cat ${shq(skillsPath)})" --prompt "$(cat ${shq(promptPath)})"${resumeFlag}`;
 
   execFileSync('tmux', ['send-keys', '-t', paneId, launch, 'Enter']);
 

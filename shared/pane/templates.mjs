@@ -10,9 +10,10 @@ export function operatorCastMessage({ phase, name, iteration = 1 }) {
 
 // Supervisor cast: the temporal line plus the fixed load/mission boilerplate.
 // The operator-debrief footer and target-repo note are appended in launchCli,
-// not here.
-export function supervisorCastMessage({ phase }) {
-  return `You are the Phase ${phase} Supervisor.\n\nThe mission file the operator worked from is in \`<mission>\`.`;
+// not here. Supervisors are only ever a cast — there is no recast supervisor —
+// and the envelope says so, so the cast knows its context is the whole of it.
+export function supervisorCastMessage({ phase, iteration = 1 }) {
+  return `You are the Phase ${phase} Supervisor, iteration ${iteration}.\n\nYou are only ever a cast: supervisors are never re-prompted. Every verification is a fresh cast with fresh eyes, and this context is the whole of yours.\n\nThe mission file the operator worked from is in \`<mission>\`.`;
 }
 
 // Handler launch: the bare mission line, parameterised by task and project, so
@@ -38,7 +39,9 @@ export function getSupervisorContext({ operatorPane, targetRepo }) {
   return `${operatorDebriefFooter(operatorPane)}\n\n${targetRepoNote}`;
 }
 
-// Operator recast: why the operator is being re-prompted. Returns undefined for
+// Operator recast reason: why the operator is being re-triggered at iteration >1.
+// Used by cast-operator for both resume:true (pasted into the running cast) and
+// resume:false (appended to the fresh cast's envelope). Returns undefined for
 // an unknown template (the caller reports it).
 export function operatorRecastMessage(template) {
   switch (template) {
@@ -51,14 +54,16 @@ export function operatorRecastMessage(template) {
   }
 }
 
-// Supervisor recast: why the supervisor is being re-prompted. `verify` needs the
-// operator pane for the debrief footer. Returns undefined for an unknown template.
-export function supervisorRecastMessage(template, { operatorPane } = {}) {
+// Supervisor iteration reason: why this iteration exists, appended to the
+// fresh cast's envelope at iteration >1. Not a recast — the cast is always
+// fresh; the template is the reason it was dispatched. Returns undefined for
+// an unknown template (the caller reports it).
+export function supervisorReasonMessage(template) {
   switch (template) {
+    case 'verify':
+      return 'The operator has completed a new iteration. Verify it against the mission file and record your verdict in a new iteration block under `## Supervisor Verification`.';
     case 'mission-updated':
       return MISSION_UPDATED;
-    case 'verify':
-      return `The operator has been re-prompted and completed a new iteration.\n\n${operatorDebriefFooter(operatorPane)}\n\nVerify this iteration against the mission file and record your verdict in a new iteration block under \`## Supervisor Verification\`.`;
     default:
       return undefined;
   }
