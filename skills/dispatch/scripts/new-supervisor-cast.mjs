@@ -26,8 +26,16 @@
  *     "missionFile": "/path/to/mission.md",
  *     "from": "the claude-cli-cve-fix Handler",
  *     "phase": 1,                       // phase number; the envelope is fixed
+ *     "skills": ["claude-philosophy"],  // MANDATORY; may be empty, never absent
+ *     "operatorRole": "maker",          // MANDATORY; the operator's role — the
+ *                                       // supervisor loads the same role skills
+ *                                       // the operator was launched with,
+ *                                       // because that set is what it judges by
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
  *   }
+ *
+ * The config is validated against a zod schema (config.mjs); any missing or
+ * unknown field exits 2.
  *
  * Stdout: pane id (e.g. %902).
  *
@@ -40,12 +48,13 @@
  *   2  TMUX_PANE missing, or bad config
  */
 
-import { readFileSync, mkdtempSync } from 'node:fs';
+import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { ensureCast } from '../../../shared/pane/launch.mjs';
 import { getOperatorPane } from '../../../shared/pane/lookup.mjs';
 import { supervisorCastMessage } from '../../../shared/pane/templates.mjs';
+import { readConfig, supervisorConfig } from './config.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -53,13 +62,7 @@ if (!pm) {
   process.exit(2);
 }
 
-const cfg = JSON.parse(readFileSync(0, 'utf8'));
-for (const k of ['from', 'cwd', 'model', 'missionFile', 'phase']) {
-  if (!cfg[k]) {
-    console.error(`config missing required field: ${k}`);
-    process.exit(2);
-  }
-}
+const cfg = readConfig(supervisorConfig);
 
 const operatorPane = getOperatorPane(pm);
 if (!operatorPane) {
@@ -90,6 +93,9 @@ const { paneId, launchResult } = ensureCast({
   message: supervisorCastMessage({ phase: cfg.phase }),
   skills: cfg.skills,
   effort: cfg.effort,
+  // Mirror the operator's role: launchCli unions roleSkills(role) into the
+  // cast, so the supervisor judges with the same skill set the operator had.
+  role: cfg.operatorRole,
 });
 
 if (launchResult && !launchResult.ok) {

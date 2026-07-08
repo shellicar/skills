@@ -84,7 +84,7 @@ Invoke:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-operator-cast.mjs", "stdin": "{\"from\":\"<from>\",\"cwd\":\"<cwd>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"name\":\"<name>\",\"phase\":<phase>}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-operator-cast.mjs", "stdin": "{\"from\":\"<from>\",\"cwd\":\"<cwd>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"name\":\"<name>\",\"phase\":<phase>,\"skills\":[<skills>]}"}
 ]}
 ```
 
@@ -95,10 +95,13 @@ JSON config:
 - `model` — `claude-sonnet-4-6` or `claude-opus-4-8`
 - `missionFile` — absolute path to the mission file (emitted as `<mission>`, read by the cast)
 - `name` — phase role (Maker, Apostle, Investigator, …); passed as `--name`
+- `skills` — **mandatory**, even when empty (`[]`). The foundational set plus any per-phase extras (see Skills below). An absent field is a broken dispatch and exits 2 — it is how casts have launched with no skills at all.
 - `effort` — optional thinking effort from the phase's `Effort:` field (`low|medium|high|xhigh|max`); omitted → CLI default
 - `phase` — phase number; the envelope is a fixed template, so the Handler passes the number, not message prose
 - `iteration` — optional iteration within the phase (defaults to 1)
 - `role` — optional operator sub-role (`maker`, `builder`, …) resolved to `roles/<role>/ROLE.md`
+
+Configs are validated against zod schemas (`scripts/config.mjs`): a missing mandatory field or an unknown key exits 2 before anything launches. This applies to all three cast-launch scripts.
 
 Envelope message (built by the script from `phase`, `name`, and `iteration`; shown for reference):
 
@@ -118,7 +121,7 @@ Serialised into the Exec call:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-operator-cast.mjs", "stdin": "{\"from\":\"the easyquote-cves Handler\",\"cwd\":\"/Users/stephen/repos/eagers/easyquote--cves\",\"model\":\"claude-sonnet-4-6\",\"missionFile\":\"/Users/stephen/repos/fleet/claude-fleet-eagers/projects/easyquote/missions/easyquote-cves/mission.md\",\"name\":\"Maker\",\"phase\":1,\"iteration\":1}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-operator-cast.mjs", "stdin": "{\"from\":\"the easyquote-cves Handler\",\"cwd\":\"/Users/stephen/repos/eagers/easyquote--cves\",\"model\":\"claude-sonnet-4-6\",\"missionFile\":\"/Users/stephen/repos/fleet/claude-fleet-eagers/projects/easyquote/missions/easyquote-cves/mission.md\",\"name\":\"Maker\",\"phase\":1,\"iteration\":1,\"skills\":[\"claude-philosophy\",\"specification-discipline\",\"transparency\",\"commander-protocol\",\"teapot-protocol\",\"executive-communication\",\"clear-communication\",\"system-glossary\",\"safe-operations\"]}"}
 ]}
 ```
 
@@ -132,7 +135,7 @@ Invoke:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-supervisor-cast.mjs", "stdin": "{\"from\":\"<from>\",\"cwd\":\"<cwd>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"phase\":<phase>}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/new-supervisor-cast.mjs", "stdin": "{\"from\":\"<from>\",\"cwd\":\"<cwd>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"phase\":<phase>,\"skills\":[<skills>],\"operatorRole\":\"<operatorRole>\"}"}
 ]}
 ```
 
@@ -143,6 +146,8 @@ JSON config:
 - `model` — typically Opus (`claude-opus-4-8`) for supervisors
 - `missionFile` — the operator's mission file (emitted as `<mission>`; the supervisor reviews against it)
 - `phase` — phase number; the envelope is a fixed template. The supervisor cast takes no `name` or `message` — the script builds the supervisor envelope itself.
+- `skills` — **mandatory**, even when empty (`[]`). Same list the operator's dispatch carried: foundational plus the phase's extras. A supervisor without the foundational set judges on trained defaults.
+- `operatorRole` — **mandatory**. The role the operator was dispatched with (`maker`, `apostle`, …). The script passes it through so the supervisor's cast unions the same role skills the operator got — the supervisor judges skill application, so it must hold the same set the operator was judged-worthy of holding.
 
 Envelope message (built by the script):
 
@@ -174,7 +179,7 @@ Invoke:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/next-phase-cast.mjs", "stdin": "{\"from\":\"<from>\",\"actor\":\"<actor>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"name\":\"<name>\",\"phase\":<phase>,\"iteration\":<iteration>}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/next-phase-cast.mjs", "stdin": "{\"from\":\"<from>\",\"actor\":\"<actor>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"name\":\"<name>\",\"phase\":<phase>,\"iteration\":<iteration>,\"skills\":[<skills>]}"}
 ]}
 ```
 
@@ -183,7 +188,8 @@ JSON config:
 - `actor` — `operator` or `supervisor` (which pane to reuse, resolved by `@role`)
 - `phase` — phase number; the envelope is a fixed template
 - `from`, `model`, `missionFile`, `name` — same as new-operator-cast (`name` is `supervisor` for a supervisor cast)
-- `iteration`, `role`, `effort` — optional; same as new-operator-cast
+- `skills` — **mandatory**, even when empty (`[]`); same as new-operator-cast
+- `iteration`, `role`, `effort` — optional; same as new-operator-cast. For a supervisor cast, pass `role` as the operator's role so the supervisor mirrors the operator's skill set.
 
 Returns the target pane id (same as the existing pane) on stdout.
 

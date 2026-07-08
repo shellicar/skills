@@ -29,9 +29,13 @@
  *     "role": "maker",                // operator phase sub-role → roles/<role>/ROLE.md
  *     "from": "the claude-cli-cve-fix Handler",
  *     "phase": 1,                       // phase number; the envelope is fixed
+ *     "skills": ["claude-philosophy"],  // MANDATORY; may be empty, never absent
  *     "iteration": 1,                   // optional, defaults to 1
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
  *   }
+ *
+ * The config is validated against a zod schema (config.mjs); any missing or
+ * unknown field exits 2.
  *
  * Stdout: pane id (e.g. %901). Same id whether newly created or reused.
  *
@@ -44,9 +48,9 @@
  *   2  TMUX_PANE missing, or bad config
  */
 
-import { readFileSync } from 'node:fs';
 import { ensureCast } from '../../../shared/pane/launch.mjs';
 import { operatorCastMessage } from '../../../shared/pane/templates.mjs';
+import { readConfig, operatorConfig } from './config.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -54,13 +58,7 @@ if (!pm) {
   process.exit(2);
 }
 
-const cfg = JSON.parse(readFileSync(0, 'utf8'));
-for (const k of ['from', 'cwd', 'model', 'missionFile', 'name', 'phase']) {
-  if (!cfg[k]) {
-    console.error(`config missing required field: ${k}`);
-    process.exit(2);
-  }
-}
+const cfg = readConfig(operatorConfig);
 
 const { paneId, launchResult } = ensureCast({
   pm,

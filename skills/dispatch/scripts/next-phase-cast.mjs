@@ -26,9 +26,14 @@
  *     "role": "builder",              // operator phase sub-role → roles/<role>/ROLE.md; omit for supervisor
  *     "from": "the claude-cli-cve-fix Handler",
  *     "phase": 2,                       // phase number; the envelope is fixed
+ *     "skills": ["claude-philosophy"],  // MANDATORY; may be empty, never absent
  *     "iteration": 1,                   // optional, defaults to 1
  *     "effort": "high"               // optional: low|medium|high|xhigh|max
  *   }
+ *
+ * The config is validated against a zod schema (config.mjs); any missing or
+ * unknown field exits 2. For a supervisor cast, pass `role` as the operator's
+ * role so the supervisor mirrors the operator's skill set.
  *
  * Stdout: target pane id.
  *
@@ -42,9 +47,9 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
 import { launchCli } from '../../../shared/pane/launch.mjs';
 import { operatorCastMessage, supervisorCastMessage } from '../../../shared/pane/templates.mjs';
+import { readConfig, nextPhaseConfig } from './config.mjs';
 
 const pm = process.env.TMUX_PANE;
 if (!pm) {
@@ -52,13 +57,7 @@ if (!pm) {
   process.exit(2);
 }
 
-const cfg = JSON.parse(readFileSync(0, 'utf8'));
-for (const k of ['from', 'actor', 'model', 'missionFile', 'name', 'phase']) {
-  if (!cfg[k]) {
-    console.error(`config missing required field: ${k}`);
-    process.exit(2);
-  }
-}
+const cfg = readConfig(nextPhaseConfig);
 
 const list = execFileSync('tmux', ['list-panes', '-t', pm, '-F', '#{pane_id} #{@role}'], { encoding: 'utf8' });
 const target = list.split('\n').map(l => l.trim()).filter(Boolean)
