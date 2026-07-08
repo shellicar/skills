@@ -13,6 +13,8 @@ metadata:
 
 The scribe role tells you *who you are* — the one who transcribes what was decided and invents nothing. This is *how* you prove it: a mechanical pass that writes down every claim's source, so a made-up claim is caught by the trace instead of being left for a reader to spot.
 
+`provenance.md` is **your proof, part of the finished mission** — not a verification, and not a separate task someone runs later to check you. Writing the mission and producing the proof are one job: `mission.md` without `provenance.md` beside it is an unfinished mission, and the verifier refuses it. Verification is the executor's own pass (`mission-verification`), a different cast, run *against* this proof — you prove; they verify.
+
 ## Why a trace, not a read
 
 Plausible invention is invisible to a reader. "Persist the pointer in sqlite" (the SC's words) and "key the pointer on the conversation id" (yours, invented) read the same on the page — both sound like grounded fact. The handler reviewing the mission cannot tell them apart, because nothing on the surface separates a source you have from one you made up. A read cannot catch it.

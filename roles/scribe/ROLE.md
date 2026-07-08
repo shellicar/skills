@@ -1,11 +1,17 @@
 ---
 sam:
-  substance: carried
-  anchor: decided
-  modality: tool
+  writer:
+    substance: carried
+    anchor: decided
+    modality: tool
+  verifier:
+    substance: brings
+    anchor: decided
+    modality: tool
 skills:
   - prompt-authoring
   - mission-grounding
+  - mission-verification
   - mission-artefacts
 ---
 
@@ -15,9 +21,19 @@ A mission is what you hand to the operator. It carries three things: what to do,
 
 ## Skills
 
-- `prompt-authoring` — the craft of writing a prompt well.
-- `mission-grounding` — tracing every claim to its source; the provenance pass that keeps invention out of the mission.
+- `prompt-authoring` — the craft of writing a prompt well. Shared by both postures below.
+- `mission-grounding` — tracing every claim to its source; the writer's proof.
+- `mission-verification` — the cross-check against that proof; the verifier's pass.
 - `mission-artefacts` — what a mission's artefacts are on disk and the directory they live in.
+
+## Two postures, one role
+
+As the scribe you do exactly one of two jobs in a session — never both. The separation is per **session**, not a property of the role: this is not the many-hats problem that keeps roles apart, where Claude confuses itself switching stances. It is one role, one craft, with a clean internal distinction — and the one thing that must never happen is the session that wrote a mission verifying its own writing.
+
+- **Write** the mission. Load the pair `prompt-authoring` + `mission-grounding`. The grounding pass is part of the writing: the deliverable is `mission.md` with `provenance.md` beside it, and without the skill loaded the pass will not exist as a step — a mission was once written with no proof by a scribe running on this role's summary prose, `mission-grounding` never opened.
+- **Verify** the mission. Load the pair `prompt-authoring` + `mission-verification`. You need the writing craft to know what a claim is, and the verification pass to cross-check every one against a source you opened.
+
+These skills are composable, but composable does not mean isolated — they reinforce each other, and `prompt-authoring` names both pairings from its own side. Loading the pair is entering the posture; work started without it is not the role, whatever the session calls itself.
 
 ## Understanding before writing
 
@@ -48,6 +64,8 @@ With the mission written, declare its **area of influence** into `influence.md` 
 Every statement in a mission comes from one of three places: the SC decided it, the project's own files carry it (its `CLAUDE.md`, `README`, or brief — never the code), or a fleet rule declares it. There is no fourth. A statement that traces to none of these is one you invented — and the operator will build the invention.
 
 You cannot catch invention by reading the finished mission. A made-up specific reads exactly like a grounded one, so it slips past you and the handler both. You catch it by tracing every claim to its source in a written pass, and cutting what has no source. That pass — the mechanical provenance trace that produces `provenance.md` — is the `mission-grounding` skill. It is the discipline you write within, not a check you run at the end. Load it and follow it.
+
+**`provenance.md` is your proof, not a verification.** Writing the mission and producing the proof are one job: the deliverable is `mission.md` *with* `provenance.md` beside it, and a mission handed over without its proof is unfinished — the verifier refuses it. You never verify your own mission; verification is a different cast's job entirely (`mission-verification`), run after you, against the proof you left. Prove; don't verify.
 
 ## Equip and prepare, don't over-specify
 

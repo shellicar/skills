@@ -13,6 +13,15 @@ metadata:
 
 **Skill** (loaded by the `scribe` role). The reusable craft of writing a prompt well — true for any prompt, anywhere. The *shape* of a mission (which phases, roles, models, skills) is decided upstream and recorded in `squad.md` — see the `squad-selection` skill. This skill is the writing.
 
+## This skill is shared — it never works alone
+
+This is the craft skill both sides of a mission load, and it is not sufficient on its own for either side. It pairs with one of two disciplines, by posture:
+
+- **Writing** the mission: this skill + `mission-grounding`. The grounding pass is part of writing — `provenance.md` is the writer's proof, and a mission produced with this skill alone is unfinished: it has no proof, and the verifier refuses it. If you are writing and `mission-grounding` is not loaded this session, stop and load it before filling a single slot — a skill you have not opened is a word, not a step, and "done" will fire without it.
+- **Verifying** the mission: this skill + `mission-verification`. The verifier needs the writing craft to judge what a claim is, and the verification pass to cross-check it against opened sources.
+
+Why the reinforcement is here: these skills are composable, but composable does not mean isolated. This is the one skill both postures are guaranteed to have open, so it is the place the pairing cannot be missed — a session that reached this text and proceeds bare has been told.
+
 ## Writing for a literal reader
 
 Whichever model an operator runs on — the pick is made upstream, in `squad.md` — the operator follows prompts literally. Every fabricated specific ends up in the code. Write accordingly.
@@ -106,7 +115,7 @@ A new prompt starts from the scaffold script, not from a previous prompt. Readin
 
 ### Recurring mission types
 
-The rule above — scaffold from the blocks, don't read old prompts — is right for *feature* missions, where a prior prompt's specifics contaminate the new one. Some types are the exception: maintenance releases, security audits, version-bump releases recur with a fixed shape, and that shape is canonical. For these, read the most recent prior instance (or a recipe under `templates/prompt-authoring/recipes/`, if one has been canonised) for the **shape** — which phases, which roles, which skills, in what order. Take the skeleton and nothing else: leave the advisories, versions, package names, and context. The contamination guard is still live — if you find yourself carrying anything across but the phase/role/skill structure, stop; that is contamination, not shape.
+The rule above — scaffold from the blocks, don't read old prompts — is right for *feature* missions, where a prior prompt's specifics contaminate the new one. Some types are the exception: maintenance releases, security audits, version-bump releases recur with a fixed shape, and that shape is canonical. For these, read the most recent prior instance (or a recipe under this skill's `recipes/`, if one has been canonised — `recipes/release.md` is the release squad) for the **shape** — which phases, which roles, which skills, in what order. Take the skeleton and nothing else: leave the advisories, versions, package names, and context. The contamination guard is still live — if you find yourself carrying anything across but the phase/role/skill structure, stop; that is contamination, not shape.
 
 The scribe's script is `create-mission.mjs`, run through the `scribe` role. It is one of three that carry a mission's file across its life, each *handed* the mission directory rather than composing a path from parts:
 

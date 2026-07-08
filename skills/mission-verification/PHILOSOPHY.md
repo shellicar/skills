@@ -22,3 +22,7 @@ A handler verifying a mission did a genuinely good trace by *improvising* it —
 
 - The danger the skill guards is the *omitted* claim, not the badly-grounded one. If an edit reframes check one as "is the provenance trace honest," it has lost the point — the check is "does every mission claim appear in the trace."
 - Keep it two checks. More checks dilute the two that actually prove the mission.
+
+## 2026-07-08: the precondition — no provenance, no verification
+
+Added after verifications kept running on missions with no `provenance.md`. The verifier would improvise its own trace or run check two alone and record a pass — which turns check one into grounding done by the wrong cast: the author's inventions stay invisible, and the artefact says "verified" over nothing. The precondition makes the missing proof a hard stop: the mission goes back to the scribe as *unfinished*, not failed. The matching change lands on the scribe's side (ROLE.md, `mission-grounding`): `provenance.md` is the scribe's proof, part of the deliverable — handlers acting as scribe had been reading it as a separate verification task, writing `mission.md` and stopping.

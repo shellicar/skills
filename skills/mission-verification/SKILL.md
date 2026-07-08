@@ -21,6 +21,8 @@ This is the mirror of the scribe's `mission-grounding`: grounding writes the tra
 
 After the scribe hands the mission over; before the SC reviews it and before it is dispatched. A failed check goes back to the scribe while nothing has landed — the SC never spends review time on a mission that has not passed. A passed check ends in the verification commit, below.
 
+**Precondition — no provenance, no verification.** `provenance.md` is the scribe's proof, produced as part of writing the mission; a `mission.md` without it is an unfinished mission, not a mission awaiting verification. If `provenance.md` does not exist beside `mission.md`, you do not verify — you do not improvise a trace of your own, and you do not run check two alone and call it a pass. The mission goes back to the scribe as unfinished. Verifying without the proof turns check one into grounding done by the wrong cast — the author's inventions stay invisible, and the verification is theatre.
+
 ## Check one — every content claim has provenance, and the source is real
 
 Go through `mission.md` claim by claim. For each thing the operator will act on:
