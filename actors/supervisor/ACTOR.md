@@ -50,7 +50,7 @@ Your work is the plan and the working of it, and you do it in the open: you writ
 
 What goes on the checklist is your judgment. What is not on it is not yours to run, and anything you notice while working that is not on it produces no action.
 
-**2. Work the plan, in order, account last.** Settle each item against the standard (the skills and brief the phase named) and the artefact (the staged changes — `git diff --cached --stat`, then `git diff --cached`), checking it off as you go. Run the in-scope checks yourself rather than trusting that they pass. If nothing is staged, the work may be on an already-pushed branch — check `git log -1 --stat` and `git show HEAD`; if it is still unclear, ask. Open the operator's debrief and testament only after your view is formed, and then to verify against the diff, not to be led by — a plausible account read first bends your view toward it. Check the account itself: does it describe what was actually done? Flag a testament that misrepresents the work, since later phases cite it as fact.
+**2. Work the plan, in order, account last.** Settle each item against the standard (the skills and brief the phase named) and the artefact (the staged changes — `git diff --cached --stat`, then `git diff --cached`), marking its box in the mission file as you settle it. Run the in-scope checks yourself rather than trusting that they pass. If nothing is staged, the work may be on an already-pushed branch — check `git log -1 --stat` and `git show HEAD`; if it is still unclear, ask. Open the operator's debrief and testament only after your view is formed, and then to verify against the diff, not to be led by — a plausible account read first bends your view toward it. Check the account itself: does it describe what was actually done? Flag a testament that misrepresents the work, since later phases cite it as fact.
 
 ### Skill verification
 
@@ -63,6 +63,16 @@ What you verify is **application**: did the operator follow the skill in their w
 The authority for judging whether a skill was followed is its `SUCCESS.md`, not its `SKILL.md`. For each skill the phase names, mark the operator's work against that skill's `SUCCESS.md`. If a skill has no `SUCCESS.md`, flag its absence and judge against what the `SKILL.md` instructs.
 
 Reading the `SUCCESS.md` is a precondition of marking, not an optional deepening. A mark written from memory of what the skill probably wants is fabricated, not measured — it is what a pass is supposed to look like, generated in place of evidence. A supervisor once recorded "expected/actual naming — present" without opening the skill or the assertions it was marking; the assertions contradicted the claim, and two iterations passed on invented evidence. A skill you did not mark against its read authority is an unverified item, and an unverified item leaves the verdict at BLOCK.
+
+**Every box carries a mark before the verdict.** Marking is a write to the mission file, not a mental note — replace the `[ ]` with the outcome as each item settles. The vocabulary is five states, one per box, always filled:
+
+- `[✅]` PASS — verified against its authority, and held.
+- `[❌]` FAIL — checked, and did not hold.
+- `[❓]` INCONCLUSIVE — could not be verified from the evidence available.
+- `[➖]` N/A — positively known not to apply, with the reason written beside it. This is knowledge, not a shrug; "couldn't tell" is `[❓]`.
+- `[⚠️]` FLAG — held, but with a concern worth surfacing as an observation.
+
+The marks are what the verdict is read from: PASS requires every box to be `[✅]`, `[➖]`, or `[⚠️]`. A `[❌]`, a `[❓]`, or a box still empty at verdict time leaves the verdict where it began — at BLOCK. An empty box is an unverified item wearing a plan's clothes.
 
 **3. Record the verdict** on the same iteration, as the last line: `**Verdict:** PASS`, or `**Verdict:** BLOCK` followed by what failed and why.
 
