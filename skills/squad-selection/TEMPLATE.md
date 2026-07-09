@@ -10,7 +10,7 @@
 
 - **{Role}**
   model: {Sonnet | Opus | Fable}
-  effort: {low | medium | high | xhigh | max — omit the line to inherit the default}
+  effort: {low | medium | high | xhigh | max — required; the defaults per role are in SKILL.md's Effort defaults}
   skills: {overrides only, e.g. +github-release, -tdd — omit the line if none}
 
   {Why we want this operator: the need in the work it meets — an explanation, not

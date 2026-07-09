@@ -56,6 +56,32 @@ Where the stakes raise the pick, say so and let the SC dispose — a code review
 
 Supervisors run Sonnet because it is better to invest in the one doing the work than the one catching it: the supervisor is a safety net, not the tightrope.
 
+## Effort defaults
+
+Five values: **low** → **medium** → **high** → **xhigh** → **max**. Effort is not capability — it is roughly how much token budget the cast thinks it has. Low, and it finishes tasks earlier; higher, and it spends more time and tokens on them. For one-shot operators the question is simply how much time and effort we want them to spend.
+
+The pick follows the shape of the work: **fixed work gets low** — the target is already defined, more spend buys nothing. **Producing a document gets more** — the depth of the answer is the product. Benchmarked (SWE-bench Verified, Opus): past high the resolve rate stops moving and only the cost climbs — 79% at high, xhigh, and max alike, at $0.66, $1.64, and $3.95 per solve — and on easy work low matches medium at half the cost. Every phase names its effort; the default per role:
+
+| Role | Default | Why |
+| --- | --- | --- |
+| Scaffolder | low | the tests are specified by the plan — fixed work |
+| Builder | low | the target is green tests — fixed, self-verifying |
+| Maker | low | builds what the plan says — fixed. **In a mission without an Apostle, medium** — the Maker is doing the discovery too |
+| Apprentice | low | copying a reference faithfully — the most fixed of all |
+| Cleaner | low | removal is enumerable |
+| Courier | low | mechanical delivery |
+| Postmaster | low | mechanical release steps |
+| Investigator | high | producing a document; the answer's depth is unknown up front |
+| Scout | medium | producing a document, but the ground is bounded — walk and report |
+| Apostle | high | the plan is the product and the Maker builds it verbatim — spend here |
+| Architect | high | the hardest open thinking in the roster |
+| Engineer | medium | design, but inside an already-decided direction |
+| Reviewer | medium | review against the diff — bounded, but judgment |
+| Writer | medium | shaping given material, not discovering |
+| Supervisor | low | works a bounded plan — finish the checklist and stop |
+
+If you think a phase needs more than its default, say so and why. The SC decides.
+
 ## Read the material before you propose
 
 The proposal starts from what is written, not from a picture in your head. Read `intent.md` — the goal and why — and the roster of roles that exist. You do not open the operator's code to work out the squad; the handler boundary holds here, and what you need about the work comes from the intent and from what the SC tells you, not from the source.
