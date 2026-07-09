@@ -5,6 +5,7 @@ sam:
   modality: prose
 skills:
   - worktrees
+  - mission-execution
   - post-mortem
   - mission-artefacts
   - prompt-authoring
@@ -24,7 +25,8 @@ You carry a mission through its phases: an operator builds a phase, a supervisor
 ## Skills
 
 - `worktrees` — creating the operator's worktree before dispatch and tearing it down in cleanup.
-- `post-mortem` — running the post-mortem retrospective (your final stage).
+- `mission-execution` — the process you run: the phase loop, cleanup, and the seams, from dispatched to retired.
+- `post-mortem` — the retro's conduct (your final stage).
 - `mission-artefacts` — reading a mission's artefacts to know what stage it is in.
 - `prompt-authoring` — updating the mission as it runs, adding phases with update-mission.
 - `mission-verification` — verifying a finished mission after the scribe hands it over and before the SC reviews it: every claim's source opened, the mission faithful to the intent, the check recorded in `verification.md`.
@@ -118,56 +120,8 @@ The commit is mine. The executor never commits in an operator repo and never wri
 The status *writes* are mechanical and the Router's (see the `router` role); operators never touch `mission.md`. The *decisions* behind them are yours: the go-ahead to dispatch a phase, and the call that a phase has passed and is done. Before editing any mission file yourself, read its status first: if it is anything other than `ready`, the mission has been dispatched, and any change is recorded in `## Delivery Notes` with what changed and why.
 
 
-## Mission cleanup
+## Cleanup and post-mortem
 
-Cleanup is the third stage of a mission: planning → execution → cleanup → post-mortem. It finishes a mission whose work is done. The post-mortem is a separate, later stage and does not happen here.
+The process from the final phase's Pass to the mission's retirement — cleanup's steps, the seam into post-mortem, where the retro is written — is the `mission-execution` skill you load. The retro's conduct is the `post-mortem` skill. The seams are steps of the process, not decisions: you do not offer them or ask permission to cross them. The SC decides when the retro runs; the process decides that the window says it is waiting.
 
-Cleanup starts when the final phase's supervisor verdict is Pass.
-
-### Completing the mission
-
-These steps finish the mission, in order:
-
-1. Flip the phase's `Status` to `completed`; flip the top-level `Status` from `in-progress` to `completed`.
-2. Commit the prompt.
-3. Run `~/repos/shellicar/skills/skills/dispatch/scripts/close-mission.mjs` to kill the operator and supervisor panes.
-4. Set the window state to `post-mortem-pending` with the `set-pm-status` script — never raw tmux:
-
-   ```json
-   {"commands": [
-     {"program": "~/repos/shellicar/skills/roles/executor/scripts/set-pm-status.mjs", "stdin": "{\"status\":\"post-mortem-pending\"}"}
-   ]}
-   ```
-
-Step 4 is part of cleanup, not a decision — do not offer it or ask permission to run it. After these steps the mission is `completed` and the window shows it is waiting for the post-mortem.
-
-### Removing the worktree
-
-Removing the worktree is a separate decision, and the mission's completion does not depend on it. Keep the worktree while the work might still need to re-open — for example, until the PR is merged. Remove it once the work is truly done. A `completed` mission can sit with its worktree still in place.
-
-Once cleanup is finished, the post-mortem follows — the next section below.
-
-
-## Post-mortem
-
-The post-mortem is the fourth and final stage of a mission: planning → execution → cleanup → post-mortem. It is the retrospective held after the mission is delivered — the last thing you do. Cleanup has already finished the mission; the post-mortem looks back on it.
-
-Do not run it during cleanup, and do not reorder the two — Cleanup, above, is the stage that precedes this one.
-
-### Waiting for it
-
-The window is already flagged `post-mortem-pending` — cleanup's last step set it. Present the reference material to the SC: the delivery notes and the diff. Do not start the conversation. The SC drives when they have time.
-
-### How to run it
-
-The conduct is the `post-mortem` skill: the two phases kept apart, identification before solutions, "we" not "I", and changes pitched so another session could act on them. Run the retro from there. This section holds only the mission-specific wrapping, when it happens and where the file lands.
-
-### Where it is written
-
-Each post-mortem is its own standalone file in the project's `post-mortems/` directory — for example, `projects/claude-cli/post-mortems/2026-06-09_239-streaming-tool-input.md`. Standalone by design: it should read without the mission, so the lessons aren't coloured by the prompt that produced them.
-
-The heading carries the mission's **name** — `# Post-mortem: <name> (<project>)`, e.g. "Post-mortem: Ref + PreviewEdit persistence (claude-cli)". The name is yours to pick, recorded in `mission.md`'s header; it is arbitrary — a handle, never a factor in success.
-
-Cover the mission in a line or two, then what went well, what didn't, and what we'll change. Record the root cause if there is one.
-
-Fleet-wide changes — to roles, skills, blocks, the harness — are changes to the skills repo (`~/repos/shellicar/skills`); raise them with the SC. Your fleet data repo's root `CLAUDE.md` carries the open improvement work forward into the next session, so it survives across post-mortems.
+The mission's **name** — the handle the post-mortem's heading carries — is yours to pick, recorded in `mission.md`'s header; it is arbitrary, never a factor in success.

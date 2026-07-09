@@ -3,11 +3,11 @@
  * Set @state on the Handler's window.
  *
  * Reads JSON from stdin. If no input is provided, defaults to
- * {"status": "pm-running"}.
+ * {"status": "handler-running"}.
  *
  * Usage:
- *   echo '{}'                                  | set-pm-status  # pm-running
- *   echo '{"status": "post-mortem-pending"}'    | set-pm-status
+ *   echo '{}'                                  | set-handler-status  # handler-running
+ *   echo '{"status": "post-mortem-pending"}'    | set-handler-status
  *
  * Env:
  *   TMUX_PANE — required; pane id of the Handler pane (set by tmux automatically).
@@ -28,7 +28,7 @@ if (!pm) {
 
 const raw = readFileSync(0, 'utf8').trim();
 const input = raw ? JSON.parse(raw) : {};
-const status = input.status ?? 'pm-running';
+const status = input.status ?? 'handler-running';
 
 execFileSync('tmux', ['set-option', '-w', '-t', pm, '@state', status]);
 console.log(`@state=${status} on window of ${pm}`);

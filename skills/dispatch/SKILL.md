@@ -47,7 +47,7 @@ Per phase N:
 
 What happens next is not a step 9. It is a fork on three independent judgements — the supervisor's verdict, the handler's acceptance, and the SC's veto — and the SC decides the route. The router routes.
 
-Once, at mission end: `close-mission`.
+The loop is per-phase; it has no mission-end step. What happens after the final phase's Pass — cleanup, and the mission's winding down — is the `mission-execution` skill's process, not dispatch's.
 
 ### The paths
 
@@ -372,28 +372,12 @@ The status bar combines the `@title` with the active pane's `@role` tag: `<title
 
 **Colour.** British spelling (`@color` is not read). The project → colour mapping lives in the fleet's `CLAUDE.md`.
 
-#### set-pm-status
-
-Set `@state` on the Handler's window. Defaults to `pm-running`. Accepts an optional `status` override via JSON stdin.
-
-```json
-{"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/set-pm-status.mjs", "stdin": "{}"}
-]}
-```
-
-With override:
-
-```json
-{"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/set-pm-status.mjs", "stdin": "{\"status\":\"post-mortem-pending\"}"}
-]}
-```
-
-Other `@state` values are set automatically by the cast scripts:
+`@state` values are set automatically by the cast scripts:
 
 - `op-pending` — set by `cast-operator`
 - `sv-pending` — set by `cast-supervisor`
+
+The handler states (`post-mortem-pending`, `handler-running`) are the `mission-execution` skill's, set by its `set-handler-status` script at that process's seams — not dispatch's to set.
 
 #### read-pane-state
 
@@ -429,18 +413,6 @@ Kill a single pane by `@role`.
 ```
 
 Exits 1 if no pane with that role in this window.
-
-#### close-mission
-
-Kill the operator and supervisor panes in the Handler's window (end-of-mission teardown).
-
-```json
-{"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/close-mission.mjs"}
-]}
-```
-
-Exits 1 if neither pane is present (caller probably called at the wrong time; worth surfacing).
 
 #### query-window
 

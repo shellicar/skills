@@ -39,7 +39,7 @@
  *      session doesn't exist yet (the first handler for a project), create it
  *      together with the window via `new-session`; otherwise `new-window` into
  *      the existing session.
- *   2. Tag the window (window-scoped): @state=pm-running, plus @title and
+ *   2. Tag the window (window-scoped): @state=handler-running, plus @title and
  *      @colour for the SC's status-bar identity — the same fields start-mission
  *      sets for a mission window. British spelling @colour; tmux does not read
  *      @color.
@@ -112,7 +112,7 @@ const makeWindow = sessionExists
 const paneId = execFileSync("tmux", makeWindow, { encoding: "utf8" }).trim();
 
 // 2. Tag the window (status-bar identity + state), window-scoped.
-execFileSync("tmux", ["set-option", "-w", "-t", paneId, "@state", "pm-running"]);
+execFileSync("tmux", ["set-option", "-w", "-t", paneId, "@state", "handler-running"]);
 execFileSync("tmux", ["set-option", "-w", "-t", paneId, "@title", title]);
 if (cfg.colour) {
   execFileSync("tmux", ["set-option", "-w", "-t", paneId, "@colour", cfg.colour]);

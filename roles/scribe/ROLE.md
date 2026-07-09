@@ -9,6 +9,7 @@ sam:
     anchor: decided
     modality: tool
 skills:
+  - mission-preparation
   - prompt-authoring
   - mission-grounding
   - mission-verification
@@ -21,6 +22,7 @@ A mission is what you hand to the operator. It carries three things: what to do,
 
 ## Skills
 
+- `mission-preparation` — the stage you work in: the pipeline from the SC's direction to a ready mission, and where your step sits in it.
 - `prompt-authoring` — the craft of writing a prompt well. Shared by both postures below.
 - `mission-grounding` — tracing every claim to its source; the writer's proof.
 - `mission-verification` — the cross-check against that proof; the verifier's pass.

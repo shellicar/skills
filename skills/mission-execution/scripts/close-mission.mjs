@@ -10,7 +10,7 @@
  * If neither pane is present, the script reports that and exits 1 —
  * called-at-wrong-time is a caller bug worth surfacing, not silent success.
  *
- * For closing a single pane by role, use close-role.
+ * For closing a single pane by role, use the dispatch skill's close-role.
  *
  * Usage:
  *   close-mission

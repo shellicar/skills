@@ -4,6 +4,7 @@ sam:
   anchor: material
   modality: prose
 skills:
+  - mission-preparation
   - squad-selection
   - mission-artefacts
 ---
@@ -14,6 +15,7 @@ skills:
 
 ## Skills
 
+- `mission-preparation` — the stage you work in: the pipeline from the SC's direction to a ready mission, and where your step sits in it.
 - `squad-selection` — the technique of proposing a team for the SC to choose.
 - `mission-artefacts` — what `squad.md` holds and the mission directory it lives in.
 

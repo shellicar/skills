@@ -6,7 +6,8 @@
  * kill-pane SIGHUPs whatever process is running in the pane; no separate
  * Ctrl-C is needed.
  *
- * For closing all mission panes at end of mission, use close-mission.
+ * For closing all mission panes at end of mission, use the mission-execution
+ * skill's close-mission script.
  *
  * Usage:
  *   echo '{"role": "operator"}' | close-role
