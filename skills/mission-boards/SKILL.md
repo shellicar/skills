@@ -5,6 +5,8 @@ description: |
   WHY: Prevents the doctrine scattering across the role and the templates, where it drifts out of sync and fills the templates with instructions instead of leaving them structural.
   WHEN: TRIGGER when reading, maintaining, or reconciling a mission board or a project state file, or when a mission changes lifecycle state.
 user-invocable: false
+diagrams:
+  - lifecycle
 metadata:
   category: reference
 ---

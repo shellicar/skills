@@ -4,12 +4,18 @@
 import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { parse } from 'yaml';
 import { shq } from './shared.mjs';
 
 /**
  * Read skill files and build the <skills> block. Skills are injected as
  * structured XML so the model can parse boundaries; each skill's SUCCESS.md is
- * embedded as <success> when present. Skills array is required (exit 2 if
+ * embedded as <success> when present, and any diagrams the skill declares in
+ * its frontmatter (`diagrams: [lifecycle]`, bare names) are resolved from the
+ * pool at ~/.claude/diagrams and embedded as <diagram name format="d2"> — the
+ * canonical .d2 is both the SC's rendered picture and the text the cast reads,
+ * so they cannot drift. A declared diagram that is missing is a broken compose
+ * (exit 2), same as a missing skill. Skills array is required (exit 2 if
  * empty). This is the content for --claudeMd: it lands in the session's
  * assembled CLAUDE.md, cached context on every launch, no turn fired.
  */
@@ -29,6 +35,18 @@ export function buildSkillsBlock(skills) {
       console.error(`skill not found: ${p}`);
       process.exit(2);
     }
+    let diagramsBlock = '';
+    for (const d of declaredDiagrams(content)) {
+      const dp = join(homedir(), '.claude', 'diagrams', `${d}.d2`);
+      let diagram;
+      try {
+        diagram = readFileSync(dp, 'utf8');
+      } catch {
+        console.error(`diagram not found: ${dp} (declared by skill ${name})`);
+        process.exit(2);
+      }
+      diagramsBlock += `\n<diagram name="${d}" format="d2">\n${diagram}\n</diagram>`;
+    }
     let successBlock = '';
     try {
       const success = readFileSync(join(skillsDir, name, 'SUCCESS.md'), 'utf8');
@@ -36,7 +54,7 @@ export function buildSkillsBlock(skills) {
     } catch {
       // No SUCCESS.md - omit it; the supervisor flags the absence per its ROLE.
     }
-    return `<skill name="${name}">\n${content}${successBlock}\n</skill>`;
+    return `<skill name="${name}">\n${content}${diagramsBlock}${successBlock}\n</skill>`;
   });
 
   return `<skills>\n${blocks.join('\n')}\n</skills>`;
@@ -122,4 +140,12 @@ export function buildSystemInline({ actor, role }) {
 // Strip a leading YAML frontmatter block (--- ... ---) if present; otherwise a no-op.
 function stripFrontmatter(s) {
   return s.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
+}
+
+// The `diagrams:` list from a skill's frontmatter — bare names; the resolver
+// owns the pool directory and the .d2 extension. Empty when absent.
+function declaredDiagrams(content) {
+  const m = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
+  if (!m) return [];
+  return parse(m[1])?.diagrams ?? [];
 }
