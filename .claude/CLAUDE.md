@@ -56,3 +56,11 @@ This frontmatter drives: `shared/pane/skills.mjs` parses it (via the `yaml` depe
 ## The skills module
 
 `shared/pane/skills.mjs` composes the skill set each session loads and injects it as cached context before the first message, so the skills land before the first turn. Actor and role skills (and the handler's `HANDLER_ROLES`) are read from the `ACTOR.md`/`ROLE.md` frontmatter at load time. Only the foundational list stays hard-coded there — it mirrors the `Load:` lines in `~/.claude/CLAUDE.md`, which has no frontmatter to read; keep those two in sync by hand. The `## Skills` prose sections in the identity files describe what the frontmatter declares — when you change one, change both.
+
+## How skills reach `~/.claude`
+
+The skill directories under `~/.claude/skills` are symlinks, and they are managed — never hand-made. `~/.claude/sync-skills.mjs` owns them: it discovers every skill directory in this repo (via `SKILLS_DIR` in `~/.claude/.env`), registers any new one in `~/.claude/skills.json` **disabled by default**, and links only the skills marked `true`. Enabling a skill is the SC's decision, recorded in that config; the symlink is just the executed state.
+
+So a new skill created here is not live until the sync has registered it and the SC has flipped it to `true`. A symlink made by hand bypasses the decision surface and the next sync run removes it, because the config never enabled it. The same script also maintains the `CLAUDE.md`/`PHILOSOPHY.md`/`SYSTEM.md` symlinks at the `~/.claude` root.
+
+Outside the tool's scope: the `~/.claude/actors`, `roles`, and `diagrams` symlinks are standing links to this repo, not per-entry managed. `diagrams` is load-bearing — the envelope resolves a skill's `diagrams:` frontmatter from `~/.claude/diagrams/<name>.d2`, and a skill declaring one fails to compose (exit 2) without it.
