@@ -63,4 +63,6 @@ The skill directories under `~/.claude/skills` are symlinks, and they are manage
 
 So a new skill created here is not live until the sync has registered it and the SC has flipped it to `true`. A symlink made by hand bypasses the decision surface and the next sync run removes it, because the config never enabled it. The same script also maintains the `CLAUDE.md`/`PHILOSOPHY.md`/`SYSTEM.md` symlinks at the `~/.claude` root.
 
+**When you create a new skill**, enabling it is a task to offer the SC: "do you want these enabled in your `~/.claude`?" On yes, the sequence is: run `node ~/.claude/sync-skills.mjs` (the skill registers, disabled), set it to `true` in `~/.claude/skills.json`, run the sync again (it links). The offer is the decision point; the three steps after a yes are mechanical.
+
 Outside the tool's scope: the `~/.claude/actors`, `roles`, and `diagrams` symlinks are standing links to this repo, not per-entry managed. `diagrams` is load-bearing — the envelope resolves a skill's `diagrams:` frontmatter from `~/.claude/diagrams/<name>.d2`, and a skill declaring one fails to compose (exit 2) without it.
