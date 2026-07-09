@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './lib/sc-only.mjs';
 /**
  * Start a Handler session — claude-sdk-cli with the Handler identity preset.
  *

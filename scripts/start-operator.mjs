@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './lib/sc-only.mjs';
 /**
  * Start an Operator session — the Operator actor carrying one operator role,
  * named by --role (maker, courier, builder, apostle, …).

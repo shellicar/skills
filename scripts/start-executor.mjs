@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './lib/sc-only.mjs';
 /**
  * Start an Executor session — the Handler actor carrying the executor and router
  * roles.

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './lib/sc-only.mjs';
 /**
  * Start a Planner session — claude-sdk-cli with the Planner identity preset.
  *

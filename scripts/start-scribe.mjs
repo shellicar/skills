@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import './lib/sc-only.mjs';
 /**
  * Start a Scribe session — the Handler actor carrying only the scribe role.
  *

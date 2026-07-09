@@ -28,7 +28,7 @@ Every time a term is added to or changed in `skills/system-glossary/SKILL.md`, s
 The question is who owns the script's craft, not who runs it.
 
 - **A script a cast runs** lives with the skill whose craft it embodies: `skills/<skill>/scripts/`. The mission scripts sit this way — `create-mission.mjs` and `update-mission.mjs` under `prompt-authoring`, `scaffold-mission.mjs` under `mission-artefacts` — because those skills own the craft, even when a different role runs the script. A script runs by path, so a role that doesn't load the skill can still run a script that lives under it; home tracks the craft, not the runner.
-- **The SC's own scripts** — the session launchers and the like — live in top-level `scripts/`. This directory is the SC's; it is not where cast-run scripts go.
+- **The SC's own scripts** — the session launchers and the like — live in top-level `scripts/`. This directory is the SC's; it is not where cast-run scripts go — and its scripts are **never Claude's to run**. They are how the SC starts sessions; a mention of one anywhere is a description, not an instruction. The launchers refuse any process with `claude-sdk-cli` in its ancestry (`scripts/lib/sc-only.mjs`), and `scripts/README.md` carries the rule.
 
 ## When a module goes to `shared/`
 
