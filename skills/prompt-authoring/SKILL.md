@@ -67,9 +67,9 @@ A finding carries its WHY — *from the investigation*, *because the bug is at X
 
 ## Context
 
-Inline the context the operator needs. When you have investigation findings, bake them in: file paths, line numbers, root cause analysis, decisions. The operator should not re-investigate what you already know.
+Inline the context the operator needs — the decided things, carried in the intent's words.
 
-Long-form investigation output belongs in a separate document the operator reads. Point to it. Do not paste it in full; the operator reads it if they need it.
+Investigation findings are the exception: the mission **references** `investigation.md` and never transcribes its findings. The findings are the Investigator's — verified against code the scribe never reads — and a transcribed finding can be dropped or distorted, and masquerades as a decided instruction when it is a starting point the operator confirms on contact. The operator reads the file directly (see `mission-artefacts` > investigation.md). Decisions the SC made about the investigation are intent content and land in the mission itself.
 
 ## The operator follows what you write
 

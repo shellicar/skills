@@ -25,6 +25,7 @@ A mission is a directory, not a file — `YYYY-MM-DD_NUM_description/` — holdi
 - `provenance.md` — the scribe's per-claim trace of the mission's sources (the `mission-grounding` pass's output).
 - `verification.md` — the executor's record of the cross-check (the `mission-verification` pass's output).
 - `post-mortem.md` — the retrospective, written at the end.
+- `investigation.md` — the Investigator's findings, when an investigation ran (referenced by the mission, like the blueprint — see below).
 - `investigations/`, `plans/` — the mission's other artefacts, colocated alongside.
 
 Naming:
@@ -43,7 +44,7 @@ Missions live directly under `projects/<project>/missions/`.
 
 This is the completeness test. When the intent and the squad, plus the reusable fleet material (the scaffold, the templates, the skills), are enough to produce the mission with nothing invented to fill a gap, the front of the pipeline is done. If the `scribe` has to invent to finish the mission, a decision was missed upstream — it goes back to the `interlocutor` or the `squad-selector` to be settled, never filled in.
 
-The equation runs one way: the front artefacts exist to *create* the mission. Once it is written, the mission stands alone — discard `intent.md` and `squad.md` and its chance of success must not change. The operator reads `mission.md` and nothing else, so the mission never references the front artefacts by filename; it carries their content. `blueprint.md` is the one deliberate exception: referenced, never reproduced (see below).
+The equation runs one way: the front artefacts exist to *create* the mission. Once it is written, the mission stands alone — discard `intent.md` and `squad.md` and its chance of success must not change. The operator reads `mission.md`, so the mission never references the front artefacts by filename; it carries their content. The two deliberate exceptions are the mission's vehicles — `blueprint.md` and `investigation.md` — referenced, never reproduced (see below): they are not consumed inputs but artefacts with their own authors, shipped with the mission and read directly.
 
 ## `intent.md` — what the SC wants, and why
 
@@ -59,6 +60,10 @@ Its anatomy carries the negative space, because a downstream session cannot tell
 Any detailed spec or walkthrough the SC pinned — a model diagram, an element table, an exact function. It is the SC's, settled with the handler in conversation — at the front, or mid-mission when re-engagement settles one — never an operator phase's output.
 
 The file exists only when a blueprint does, so its presence is a hard signal: no file, no blueprint; file present, the mission must use it. And the mission **references** the file — it never reproduces the content. A copy can be dropped or distorted in transcription; a reference cannot. The file itself is the vehicle, and the operator reads it directly.
+
+## `investigation.md` — the findings, when an investigation ran
+
+The Investigator's report: what was found, with paths and line numbers, options with trade-offs, no recommendation. It is the Investigator's — verified against code the scribe never reads — so the mission **references** the file and never transcribes the findings: transcription can drop or distort them, and a transcribed finding masquerades as a decided instruction when it is a starting point the operator confirms on contact. Same treatment as the blueprint, different author: the file is the vehicle, and the operator reads it directly. Decisions the SC made *about* the investigation (build on it, take option two) are intent content and land in the mission as carried rows.
 
 ## `squad.md` — the team, and why
 

@@ -31,11 +31,13 @@ A document a source names as governing ("the blueprint governs; the spec wins on
 
 True is not a source. A verified fact nobody decided is not a row; if it matters, it goes upstream as a question.
 
+**An investigation is a vehicle, not a source.** `investigation.md` is the Investigator's — findings verified against code you never read, so you cannot attest them as Text; extracting them into rows would put an operator's word in the proof wearing the SC's standing. The findings never become rows. Decisions *about* the investigation are SC rows ("the fix follows the investigation", "option two"), because the SC made them and the intent carries them; when `investigation.md` exists it gets a row like the blueprint's, and the mission **references** the file — the operator reads the findings directly, whole, as findings: starting points to confirm on contact, never transcribed instructions.
+
 ## Composing from the rows
 
 The mission is written from the Evidence table and nothing else. A sentence with no row behind it has nothing to be written from — if the mission needs something no source supplies, that is a **gap**: name it under Gaps and send it upstream to the SC. Never fill it.
 
-Composing from rows means the mission **carries the content** — the row's text lands in the mission, in the intent's own words. It never points back at the front artefacts instead: `intent.md` and `squad.md` exist to create the mission, and once it is written they could be discarded with no change to the mission's chance of success. The operator reads `mission.md` and nothing else. `blueprint.md` is the one deliberate exception — referenced, never reproduced.
+Composing from rows means the mission **carries the content** — the row's text lands in the mission, in the intent's own words. It never points back at the front artefacts instead: `intent.md` and `squad.md` exist to create the mission, and once it is written they could be discarded with no change to the mission's chance of success. The operator reads `mission.md` — plus the mission's two possible vehicles, `blueprint.md` and `investigation.md`, which are referenced, never reproduced: they are not discarded inputs but artefacts with their own authors, shipped in the mission directory and read directly.
 
 As each row lands, record where under `Carried` — intact, in the intent's own words. A row with no `Carried` at the end is a drop; it goes in, or the mission is not done.
 

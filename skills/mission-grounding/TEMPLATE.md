@@ -12,6 +12,7 @@ Written **before** the mission. These rows are the evidence extracted from the s
 | {...} | Project | {the CLAUDE.md / README / brief line} | {...} |
 | {...} | Fleet | {the skill / rule reference} | {...} |
 | `blueprint.md` (when the file exists) | SC | the pinned blueprint | referenced at {where} — never reproduced |
+| `investigation.md` (when the file exists) | SC | the decision to build on it, from `intent.md` | referenced at {where} — findings never transcribed |
 
 ## Coverage
 
