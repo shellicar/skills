@@ -131,8 +131,15 @@ These steps finish the mission, in order:
 1. Flip the phase's `Status` to `completed`; flip the top-level `Status` from `in-progress` to `completed`.
 2. Commit the prompt.
 3. Run `~/repos/shellicar/skills/skills/dispatch/scripts/close-mission.mjs` to kill the operator and supervisor panes.
+4. Set the window state to `post-mortem-pending` with the `set-pm-status` script — never raw tmux:
 
-After these steps the mission is `completed`.
+   ```json
+   {"commands": [
+     {"program": "~/repos/shellicar/skills/roles/executor/scripts/set-pm-status.mjs", "stdin": "{\"status\":\"post-mortem-pending\"}"}
+   ]}
+   ```
+
+Step 4 is part of cleanup, not a decision — do not offer it or ask permission to run it. After these steps the mission is `completed` and the window shows it is waiting for the post-mortem.
 
 ### Removing the worktree
 
@@ -147,9 +154,9 @@ The post-mortem is the fourth and final stage of a mission: planning → executi
 
 Do not run it during cleanup, and do not reorder the two — Cleanup, above, is the stage that precedes this one.
 
-### Starting it
+### Waiting for it
 
-Set the window's `@state` to `post-mortem-pending`. Present the reference material to the SC: the delivery notes and the diff. Do not start the conversation. The SC drives when they have time.
+The window is already flagged `post-mortem-pending` — cleanup's last step set it. Present the reference material to the SC: the delivery notes and the diff. Do not start the conversation. The SC drives when they have time.
 
 ### How to run it
 
