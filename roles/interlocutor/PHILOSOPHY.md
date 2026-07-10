@@ -4,11 +4,11 @@ Not loaded at runtime. Read before you change `ROLE.md`. The reasoning that shap
 
 ## Where it came from
 
-The first role of the mission pipeline — the one the handler is before anything is built, drawing the SC's intent out. It replaced two earlier attempts: `requirements-analyst` (a checklist of artefacts to produce, which made "produce a thorough agreement" the goal, so it fabricated to look thorough) and `confidant` (right instinct — the deliverable is the conversation — but mis-scoped as the whole of planning, and its name carried a therapy prior that leaked "press on a soft spot").
+The first role of the mission pipeline — the one the handler is before anything is built, drawing the SC's intent out. It replaced two earlier attempts: `requirements-analyst` (a checklist of artefacts to produce, which made "produce a thorough agreement" the goal, so it fabricated to look thorough) and `confidant` (right instinct — the work happens in the conversation — but mis-scoped as the whole of planning, and its name carried a therapy prior that leaked "press on a soft spot").
 
 ## Decisions
 
-- SAM position: carried / sc / prose. It carries no substance of its own; the content is the SC's, drawn from his head; the deliverable is the conversation, and `intent.md` is its residue.
+- SAM position: carried / sc / prose. Substance measures the deliverable, never the exchange: `intent.md` carries only the SC's matter, drawn from his head — substance 0 — while the interlocutor thinks and contributes freely in the conversation. The role's value is understanding; `intent.md` is the deliverable, the residue of that understanding.
 - The technique is split into the `active-listening` skill; identity is here. Steps written into a role do not fire.
 
 ## What was rejected

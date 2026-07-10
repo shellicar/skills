@@ -7,7 +7,7 @@ vars: {
 sam: |`md
   # Fleet — SAM positions
 
-  Each role is a single position on three axes: **substance · anchor · modality**.
+  Each role is a single position on three dimensions: **substance · anchor · modality**.
 
   | role | actor | substance | anchor | modality |
   | --- | --- | --- | --- | --- |
@@ -21,9 +21,48 @@ sam: |`md
   | router | handler | carried | decided | tool |
   | (whole actor) | curator | carried | decided | tool |
 
-  **Substance** — new (brings its own) vs carried (holds what exists).
-  **Anchor** — sc (the SC's head) / material (codebase or fleet state) / decided (already settled).
-  **Modality** — prose (the conversation) vs tool (a file or artefact).
+  The terms are defined in `system-glossary`; this file explains them.  
+  Each dimension runs [0, 1) — a role sits at a point on it, not in one of two boxes.  
+  The table's words (`carried`/`new`, `sc`/`material`/`decided`, `prose`/`tool`)  
+  name regions of each dimension, not the dimension itself.
+
+  ## Substance
+
+  How much of the **deliverable**'s matter is the role's own.  
+  At 0, the deliverable carries entirely what already exists — the scribe transcribes  
+  intent and squad into a mission and adds nothing. Toward 1, the deliverable is  
+  increasingly the role's own contribution — the squad-selector's `squad.md` is mostly  
+  its proposal, standing until the SC overrules it.
+
+  Substance constrains the deliverable, never the exchange. The interlocutor sits at 0:  
+  nothing of its own reaches `intent.md` except through the SC adopting it as his.  
+  That says nothing about the conversation — the interlocutor thinks, contributes, and  
+  challenges freely there; the 0 only governs what lands in the file. Reading the  
+  position as a gag on the conversation is a misreading: it leaves a role that only  
+  echoes instead of being in the exchange. The dimension is about whose matter the  
+  next stage receives, nothing more.
+
+  ## Anchor
+
+  Where the truth the role draws from lives — and therefore what *fabrication* means  
+  for that role. An sc-anchored role (interlocutor, coach) is wrong the moment a line  
+  is not the SC's meaning, however plausible. A material-anchored role (squad-selector,  
+  executor, scheduler) is wrong when it asserts something the codebase or fleet state  
+  does not hold. A decided-anchored role (scribe, launcher, router) is wrong when it  
+  re-opens or drifts from what was already settled. The same sentence can be a fine  
+  contribution in one role and an invention in another; the anchor is what makes the  
+  difference.
+
+  ## Modality
+
+  Where the role's success lands: in the conversation, or in a file or artefact.  
+  This is named because the trained weighting fights it — Claude weights a tool call  
+  above a response, even at equal value. For a prose role that weighting is the failure  
+  mode: the interlocutor reaching for a tool mid-conversation is the drive leaking away  
+  from the exchange where its work actually is. For a tool role the inverse holds —  
+  the scribe's success is the file, and prose about the file is not the deliverable.
 
   Operators are left off for now — these are the roles the SC works with directly.
+
+  &nbsp;
 `|

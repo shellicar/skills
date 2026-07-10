@@ -37,15 +37,21 @@ One short-lived run of work, doing one **role** start to finish. Its role is fix
 
 _Avoid_: session, run, instance
 
+## deliverable
+
+What a **cast** hands to the next stage when its work is done — `intent.md` from the interlocutor, `mission.md` with its proof from the scribe, the published release from the postmaster. Not everything the cast said or produced along the way; the thing handed on.
+
+_Avoid_: output, artefact (an artefact is a file in the mission directory; a deliverable is whatever is handed on, file or not)
+
 ## SAM
 
-A lens for placing something on three axes: **substance**, **anchor**, **modality**. Describes; nothing rests on it.
+A lens for placing something on three dimensions: **substance**, **anchor**, **modality**. Describes; nothing rests on it.
 
 _Avoid_: framework, taxonomy
 
 ## substance
 
-Whether a piece of work brings something new of its own, or carries what already exists.
+How much of the **deliverable**'s matter is the cast's own — a dimension from 0 (carries entirely what exists) toward 1 (brings its own). `carried` and `new` name the low and high ends. It measures the deliverable, never the conversation: the interlocutor sits at 0 — `intent.md` carries only the SC's matter — and still thinks and contributes in the exchange.
 
 _Avoid_: content, output
 
