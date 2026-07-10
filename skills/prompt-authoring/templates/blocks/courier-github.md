@@ -56,24 +56,24 @@ See #[issue-number]
 
 ### After PR is created
 
-Check the PR status:
-
-```
-gh pr view <number> --json mergeable,mergeStateStatus
-```
-
-`mergeStateStatus: BLOCKED` is expected while CI checks are running.
-
-`mergeable: CONFLICTING` means another PR merged to main while you were working. Merge the latest:
+Bring the branch up to date with `origin/main` before finalising — unconditionally, not only when a conflict is reported:
 
 ```
 git fetch origin
 git merge origin/main
 ```
 
-If the merge applies cleanly, push and re-check. If there are conflicts that require judgment, stop and report to the supervisor.
+Do not gate this merge on `gh pr view --json mergeable`. Files marked `merge=union` (testaments, `changes.jsonl`) never surface as `mergeable: CONFLICTING`, because the union driver runs only locally — GitHub cannot see the conflict. Waiting for CONFLICTING means the branch never integrates main.
 
-Then wait for CI to finish and confirm it passes:
+After merging, verify every union-merge file you touched by diffing the merged result against `origin/main`:
+
+```
+git diff origin/main -- <the union-merge files, e.g. changes.jsonl>
+```
+
+The union driver concatenates both sides, so a removed fragment can strip a trailing newline and leave the boundary line duplicated. Read the diff and confirm each union-merged file reads correctly. If a real conflict needs judgment, or a union result came out wrong, stop and report to the supervisor.
+
+Then push, and wait for CI to finish and confirm it passes:
 
 ```
 gh pr checks <number> --watch
@@ -81,7 +81,7 @@ gh pr checks <number> --watch
 
 `--watch` blocks until every check completes. Do not treat "still running" as done — wait for the result. If a check fails, investigate; when the fix is outside your phase's work or hinges on a decision, stop and report to the supervisor rather than guessing.
 
-**Done when:** PR is open, not conflicting, and every check has completed and passed.
+**Done when:** PR is open, integrated with the latest `origin/main`, union-merge files verified, and every check has completed and passed.
 
 ## Debrief
 
