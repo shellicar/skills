@@ -60,7 +60,12 @@ classes: {
   }
 }
 
-principles: Communication principles {class: foundation}
+fundamentals: communication-fundamentals {class: foundation}
+clear-communication: clear-communication (being understood) {class: foundation}
+specification-discipline: specification-discipline (being true) {class: foundation}
+
+fundamentals -> clear-communication
+fundamentals -> specification-discipline
 
 stephen-voice: "Voice: writing as Stephen" {class: voice}
 claude-voice: "Voice: Claude's own" {class: voice}
@@ -84,13 +89,13 @@ response: Response {class: medium}
 glossary: system-glossary {class: fleet}
 mission-process: Mission process skills {class: fleet}
 
-stephen-voice -> principles
-claude-voice -> principles
+stephen-voice -> fundamentals
+claude-voice -> fundamentals
 
-stephen-person -> principles
-claude-reader -> principles
-technical-reader -> principles
-stakeholder -> principles
+stephen-person -> fundamentals
+claude-reader -> fundamentals
+technical-reader -> fundamentals
+stakeholder -> fundamentals
 
 commit -> technical-reader
 pr -> technical-reader
@@ -106,6 +111,7 @@ handover -> claude-reader
 mission-file -> claude-reader
 response -> stephen-person {class: per-instance}
 response -> claude-reader {class: per-instance}
+response -> fundamentals
 
 sc -> stephen-person {class: extends}
 mission-process -> claude-reader

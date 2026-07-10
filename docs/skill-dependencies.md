@@ -8,7 +8,9 @@ dependency. The drawn model is `docs/diagrams/communication.d2`.
 
 | Skill | Layer | Depends on |
 | --- | --- | --- |
-| `communication-fundamentals` | foundation | `specification-discipline` |
+| `clear-communication` | foundation | — |
+| `communication-fundamentals` | foundation | `clear-communication`, `specification-discipline` |
+| `specification-discipline` | foundation | — |
 | `audience-claude` | audience | `communication-fundamentals` |
 | `audience-developer` | audience | `communication-fundamentals` |
 | `audience-sc` | audience | `audience-stephen` |

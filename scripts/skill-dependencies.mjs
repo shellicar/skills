@@ -27,6 +27,8 @@ const skillsDir = join(REPO, "skills");
 
 const layerOf = (name) => {
   if (name === "communication-fundamentals") return "foundation";
+  if (name === "clear-communication") return "foundation";
+  if (name === "specification-discipline") return "foundation";
   if (name.startsWith("voice-")) return "voice";
   if (name.startsWith("audience-")) return "audience";
   if (name.startsWith("medium-")) return "medium";
