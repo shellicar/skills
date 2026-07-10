@@ -37,7 +37,7 @@ Every field in a dispatch config is a lookup from something already decided:
 |---|---|
 | `model`, `effort` | the mission's phase heading (`Model:`, `Effort:`) |
 | `role`, `name` | the mission's phase (`Role:`) |
-| `skills` | the foundational `Load:` lines in `~/.claude/CLAUDE.md`, plus the phase's `## SKILLS` |
+| `skills` | the phase's `## SKILLS` — extras only; the foundational set and the role's own skills ride the launch seam automatically |
 | `phase`, `iteration` | where the mission actually stands |
 | `missionFile`, `cwd`, `from` | the mission's location and the handler's identity |
 | `template` | the event that occurred: a verdict landed (operator `revise`), a new operator iteration finished (supervisor `verify`), or the mission file changed (`mission-updated`, both) |
@@ -138,7 +138,7 @@ JSON config:
 - `name` — phase role (Maker, Apostle, Investigator, …); passed as `--name`
 - `phase`, `iteration` — required; the envelope is a fixed template built from them
 - `template`, `resume` — iteration >1 only, both required there; forbidden at iteration 1
-- `skills` — **mandatory**, even when empty (`[]`). The foundational set plus any per-phase extras (see Skills below). An absent field is a broken dispatch and exits 2 — it is how casts have launched with no skills at all.
+- `skills` — **mandatory**, even when empty (`[]`). The phase's extras only (see Skills below); the foundational set and the role's skills ride the launch automatically. An absent field is a broken dispatch and exits 2.
 - `role` — operator sub-role (`maker`, `builder`, …) resolved to `roles/<role>/ROLE.md`. **Required wherever a launch happens** — iteration 1, and iteration >1 with `resume: false` — because the role's system prompt and craft skills come from it; a launch without it is a cast with no identity. Optional only with `resume: true`, where nothing launches.
 - `effort` — optional thinking effort from the phase's `Effort:` field (`low|medium|high|xhigh|max`); omitted → CLI default
 
@@ -169,7 +169,7 @@ JSON config:
 - `phase`, `iteration` — required; which verification this cast performs
 - `template` — iteration >1 only, required there; forbidden at iteration 1
 - `operatorRole` — **mandatory**. The role the operator was dispatched with (`maker`, `apostle`, …), passed through so the supervisor's cast unions the same role skills the operator got — the supervisor judges skill application, so it must hold the same set it judges by.
-- `skills` — **mandatory**, even when empty (`[]`). Same list the operator's dispatch carried: foundational plus the phase's extras. A supervisor without the foundational set judges on trained defaults.
+- `skills` — **mandatory**, even when empty (`[]`). The phase's extras, same as the operator's dispatch; the foundational set rides the launch automatically.
 - `effort` — optional
 
 The envelope tells the supervisor it is only ever a cast, and `launchCli` appends the operator-debrief pointer and target-repo note automatically (resolved from the live panes), so the supervisor knows where to capture the debrief.
@@ -182,12 +182,11 @@ Skills are injected into each cast at dispatch time via the envelope's `<skills>
 
 Each skill in the `skills` array is read from `~/.claude/skills/<name>/SKILL.md` at dispatch time. If any skill file is missing, the script exits with code 2 — a missing skill is a broken dispatch, not a degraded one.
 
-**What to pass.** The role's own craft skills ride the identity and are added automatically — you do not pass them. `launchCli` unions `roleSkills(role)` (from `roles/<role>/ROLE.md`) and `actorSkills(actor)` (from the ACTOR.md) into every cast's set. Hand-listing them was the gap that shipped a Maker with none of its craft.
+**What to pass.** Only the phase's extras. `launchCli` unions the `FOUNDATIONAL` set (from `shared/pane/skills.mjs`), `actorSkills(actor)` (from the ACTOR.md), and `roleSkills(role)` (from `roles/<role>/ROLE.md`) into every cast's set automatically — you never pass any of them. Hand-listing was the gap that shipped a Maker with none of its craft, and later a supervisor with no foundational skills at all.
 
-The `skills` array you pass is additive on top of that — two sources:
+The `skills` array you pass is purely additive — one source:
 
-- **Foundational skills** — the `Load:` lines in the operator's `~/.claude/CLAUDE.md`. Read them from the file at dispatch time; they can change.
-- **Per-phase extras** — the phase's `## SKILLS` section in the mission: any skill a specific phase needs *beyond the role's own set* (a one-off like `detect-convention` or `preflight`). When a phase needs nothing beyond the role, this is empty.
+- **Per-phase extras** — the phase's `## SKILLS` section in the mission: any skill a specific phase needs *beyond the role's own set* (a one-off like `detect-convention` or `preflight`). When a phase needs nothing beyond the role, the array is empty (`[]`).
 
 #### start-mission
 

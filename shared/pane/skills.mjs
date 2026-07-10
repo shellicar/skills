@@ -9,8 +9,9 @@
 // whose symlinks always point at the main checkout — keeps every checkout
 // self-consistent: a worktree composes from its own branch.
 //
-// FOUNDATIONAL stays hard-coded: it mirrors the `Load:` lines in
-// ~/.claude/CLAUDE.md, which has no frontmatter to read.
+// FOUNDATIONAL stays hard-coded: it is the single source for the every-session
+// set. (It once mirrored the CLAUDE.md `Load:` lines; those are gone — skills
+// reach sessions by injection, not by hand-loading.)
 
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -21,8 +22,9 @@ import { parse } from "yaml";
 // live under skills/, identities under actors/ and roles/, all beside it.
 const BASE = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
-// Loaded by every session (the CLAUDE.md `Load:` lines).
-const FOUNDATIONAL = [
+// Loaded by every session. Exported so the dispatch path (launchCli) unions it
+// into every cast's set — no caller hand-carries the foundational skills.
+export const FOUNDATIONAL = [
   "claude-philosophy",
   "specification-discipline",
   "transparency",

@@ -12,7 +12,7 @@ import { paneProcessName, waitForClaudeSdkCli, PREFERRED } from './process.mjs';
 import { findPaneByRole, paneCwd } from './lookup.mjs';
 import { buildPrompt, buildSystem, buildSkillsBlock } from './envelope.mjs';
 import { getSupervisorContext } from './templates.mjs';
-import { actorSkills, roleSkills } from './skills.mjs';
+import { FOUNDATIONAL, actorSkills, roleSkills } from './skills.mjs';
 import { effortFlag } from './effort.mjs';
 import { resolveModel } from './models.mjs';
 
@@ -45,12 +45,10 @@ export function launchCli(paneId, { from, model, missionFile, name, message, ski
       console.error('warning: no operator pane in this window; supervisor launched without the operator-debrief pointer.');
     }
   }
-  // Union the caller's skills with the identity's own frontmatter skills: the
-  // actor's (testament, tmux, ...) and the role's craft skills (a Maker's tdd,
-  // tech-debt, ...). Both ride the identity, so no handler-assembled list can
-  // forget them; the caller's list is purely additive — foundational plus any
-  // per-phase extras from the mission.
-  const finalSkills = [...new Set([...(skills ?? []), ...actorSkills(actor), ...roleSkills(role)])];
+  // Foundational, actor, and role skills all ride the launch seam — the caller's
+  // array is purely additive (per-phase extras), and no dispatch can forget the
+  // every-session set.
+  const finalSkills = [...new Set([...FOUNDATIONAL, ...(skills ?? []), ...actorSkills(actor), ...roleSkills(role)])];
   // Skills ride --claudeMd (cached session context, assembled per launch, no
   // turn fired); the prompt carries only the envelope: from, message, mission
   // pointer. Both are written to temp files the launch line cats in.
