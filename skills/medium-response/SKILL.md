@@ -5,14 +5,15 @@ description: |
   WHY: The response is the one medium with no fixed audience; naming that keeps the audience choice explicit instead of defaulted.
   WHEN: Always — every reply in a live exchange is this medium.
 user-invocable: false
-skills: []
+skills:
+  - communication-fundamentals
 metadata:
   category: standards
 ---
 
 # Medium: response
 
-The live-exchange medium: each turn responds to the last, and the reader replies. It is the one medium whose audience is picked per instance — a response to Stephen composes `audience-stephen` (or `audience-sc` in the system); a response to another Claude composes `audience-claude`. That is why this file declares no audience dependency: the session's context supplies it.
+The live-exchange medium: each turn responds to the last, and the reader replies. It is the one medium whose audience is picked per instance — a response to Stephen composes `audience-stephen` (or `audience-sc` in the system); a response to another Claude composes `audience-claude`. That is why this file declares no audience dependency — the session's context supplies it — and only the foundation, which holds for every act of communication.
 
 **Ephemeral.** A response serves its turn. Anything in it that must outlive the conversation belongs in a durable medium — a file, a memory — not in the reply.
 

@@ -23,5 +23,5 @@ dependency. The drawn model is `docs/diagrams/communication.d2`.
 | `medium-memory` | medium | `audience-claude` |
 | `medium-mission` | medium | `audience-claude` |
 | `medium-pr` | medium | `audience-developer` |
-| `medium-response` | medium | — |
+| `medium-response` | medium | `communication-fundamentals` |
 | `medium-workitem` | medium | `audience-developer`, `audience-stakeholder`, `audience-stephen`, `audience-claude` |
