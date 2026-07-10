@@ -24,7 +24,7 @@ These are the operator roles a squad is built from. Each is a phase where the op
 - **Builder** — makes the scaffolded tests pass (green).
 - **Maker** — writes and commits the code. This is the one that **builds the fix**.
 - **Apprentice** — copy / scaffold work: reproduces reference code faithfully (source-to-destination), rather than reimplementing it. Reach for it when the job is "copy this pattern," not "design something new."
-- **Cleaner** — removal and cleanup.
+- **Cleaner** — code quality as the deliverable: lint clean as the floor, refactoring toward the decided standards as the bar. Runs before the Courier so what ships is clean and the commit hooks pass.
 - **Courier** — delivers the work into review: the PR.
 - **Postmaster** — makes the merged work public: tags, releases, publish workflows, the registry. Runs after the merge; commits nothing.
 
@@ -68,7 +68,7 @@ The pick follows the shape of the work: **fixed work gets low** — the target i
 | Builder | low | the target is green tests — fixed, self-verifying |
 | Maker | low | builds what the plan says — fixed. **In a mission without an Apostle, medium** — the Maker is doing the discovery too |
 | Apprentice | low | copying a reference faithfully — the most fixed of all |
-| Cleaner | low | removal is enumerable |
+| Cleaner | low | lint is mechanical; refactoring is bounded by the decided standards and a green suite |
 | Courier | low | mechanical delivery |
 | Postmaster | low | mechanical release steps |
 | Investigator | high | producing a document; the answer's depth is unknown up front |
