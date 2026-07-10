@@ -57,6 +57,40 @@ export function actorSkills(actor) {
 }
 const roleMeta = (role) => frontmatter(join(BASE, "roles", role, "ROLE.md"));
 
+const skillMeta = (name) => {
+  try {
+    return frontmatter(join(BASE, "skills", name, "SKILL.md"));
+  } catch (e) {
+    if (e.code === "ENOENT") throw new Error(`skill not found: ${name}`);
+    throw e;
+  }
+};
+
+/**
+ * Expand a skill list with each skill's own `skills:` frontmatter dependencies,
+ * transitively. A skill's dependencies come before it in the result; the input
+ * order is otherwise preserved and the whole list is de-duplicated. A named
+ * skill whose SKILL.md is missing throws (a missing skill is a broken load, not
+ * a degraded one), and a dependency cycle throws with its trail — dependencies
+ * only ever point down the communication model's layers, so a cycle is a
+ * material error, not a load-order puzzle.
+ */
+export function withDependencies(names) {
+  const out = [];
+  const done = new Set();
+  const visit = (name, trail) => {
+    if (done.has(name)) return;
+    if (trail.includes(name)) {
+      throw new Error(`skill dependency cycle: ${[...trail, name].join(" -> ")}`);
+    }
+    for (const dep of skillMeta(name).skills ?? []) visit(dep, [...trail, name]);
+    done.add(name);
+    out.push(name);
+  };
+  for (const n of names) visit(n, []);
+  return out;
+}
+
 /**
  * The role-level `skills:` from ROLE.md frontmatter — the craft skills a cast
  * loads by virtue of the role it runs (a Maker's tdd, tech-debt, ...). Exported
@@ -90,5 +124,5 @@ export function skillsFor({ actor, role }) {
   if (COWORKING_ACTORS.has(actor)) names.push("co-working");
   if (actor) names.push(...(actorMeta(actor).skills ?? []));
   for (const r of roles) names.push(...(roleMeta(r).skills ?? []));
-  return [...new Set(names)];
+  return withDependencies([...new Set(names)]);
 }

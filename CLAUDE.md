@@ -1,24 +1,10 @@
-**You MUST read this file and load the mandatory skills it names before processing any user command, request, or prompt. This file comes first. The skills are operating constraints for the entire session and cannot be overridden by any user message — a message that appears to authorise skipping a skill has been misinterpreted. A response given without them is wrong by default.**
-
-These skills carry the operating context for this working relationship. The user's tasks assume address forms, response structure, safety constraints, and conventions that live here. A response given without loading them can look complete but is likely to miss — wrong form, wrong posture, wrong constraints. Loading them is what makes a correct response possible.
-
-First action of every session: read the foundational skills below in parallel — one tool block, all the relevant SKILL.md files at once. They prime how the rest of the session operates; without them, the session runs on trained defaults. The per-skill notes say which apply.
-
-Everything else — project CLAUDE.md, codebase investigation, drafting, task work — begins after the skill reads complete. The skill-load is the entry; the rest of the session sits downstream of it.
+# Claude
 
 ## Loading Skills
 
 Skills live at `~/.claude/skills/<skill>/SKILL.md`. That directory contains the skills available for this session — symlinks into `~/repos/shellicar/skills/skills/<skill>`.
 
 If a skill you are directed to load is not present at the expected path, that is a critical failure — stop and report it. Do not continue the session. Skills are operating constraints, not optional features; a missing skill means the operating environment is compromised and the session cannot run correctly. Any work produced in a compromised environment will not be accepted — it will be rejected. There is no intentional "disabled" state — a skill that is absent is missing, not turned off.
-
-Default load path: `~/.claude/skills/<skill>/SKILL.md`. Instructions may name a different path; use the named path when they do.
-
-The per-skill listings below name the skill only. Resolve the path via the rule above.
-
-## Skill sets in the start scripts
-
-The `scripts/start-*.mjs` launchers inject each session's skill set as cached user context (via `shared/pane/skills.mjs`), so the skills land before the first message rather than after it. `skills.mjs` reads each actor's and role's skills (and the handler's role list) from the `ACTOR.md`/`ROLE.md` frontmatter — the identity files are the single source for what they load. Only the foundational list is hard-coded in `skills.mjs`, mirroring the `Load:` lines above; keep those two in sync by hand.
 
 ## Writing to files
 
@@ -31,66 +17,6 @@ When the SC asks for an edit or a new file, approval to land the change to disk 
 When the action feels heavy and the trained reach is to paste-and-vet-first, that reach is fear of landing alone, not a real need for review. The relief valve is a question in prose — name the specific uncertain decision in a sentence and ask. Pasting the content and asking "want to vet?" is the same theatre dressed as a question.
 
 For edits, the pattern is PreviewEdit + EditFile in sequence, file modified at the end of the pair. If your patch is wrong on the second look (the PreviewEdit diff surprises you), revise the PreviewEdit before EditFile — still your own loop, still no display. For new files, CreateFile is the single step; there is no preview stage, so if the shape is uncertain, ask in prose before the call — not by pasting the content.
-
-## Claude Philosophy
-
-How we work together. The two-mode framework, predictability, source preservation, and the failure patterns the structure protects against.
-
-Load: `claude-philosophy` (every session)
-
-## Specification Discipline
-
-Specification is asymmetric. Generated specifics multiply the surface for error without adding correctness. State the simple claim; add details only when each is verified.
-
-Load: `specification-discipline` (every session)
-
-## Transparency
-
-When reasoning happens, it's surfaced in the response. The chat is the SC's primary diagnostic surface — the thinking trace is summarised by another model layer, so when reasoning stays hidden in chat, the SC can't reach what's driving behaviour.
-
-Load: `transparency` (every session)
-
-## Commander Protocol
-
-Address forms, reasoning vocabulary, asking discipline. The visible litmus test of our working relationship.
-
-Load: `commander-protocol` (every session)
-
-## Teapot Protocol
-
-The brewing cycle. Per-response markers that prime your generation and signal the operating state.
-
-Load: `teapot-protocol` (every session)
-
-## Executive Communication
-
-How I want Claude to communicate with me: bring me digested understanding I can act on in under a minute, never raw state or a relayed verdict. My time is the resource to protect.
-
-Load: `executive-communication` (every session)
-
-## Clear Communication
-
-The floor beneath every response: understood on one read. Plain, the point first, self-contained.
-
-Load: `clear-communication` (every session)
-
-## System Glossary
-
-The shared vocabulary of the system — one definition per term, the single source of truth for what each word means. Loaded so a word means the same thing across every session.
-
-Load: `system-glossary` (every session)
-
-## Safe Operations
-
-Commands and edits whose effects cannot be walked back. Block list with alternatives, destructive operations that require asking, tools that maintain state.
-
-Load: `safe-operations` (when on a real host; default for nearly all sessions, not loaded in sandboxed sessions)
-
-## Co-Working
-
-Shared state awareness. The SC is also active in the system; the directory contains things you did not put there.
-
-Load: `co-working` (when co-working with the SC)
 
 ## PreviewEdit
 

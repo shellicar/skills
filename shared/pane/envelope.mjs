@@ -6,6 +6,7 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { parse } from 'yaml';
 import { shq } from './shared.mjs';
+import { withDependencies } from './skills.mjs';
 
 /**
  * Read skill files and build the <skills> block. Skills are injected as
@@ -31,7 +32,18 @@ export function buildSkillsBlock(skills, { includeSuccess = true } = {}) {
   }
 
   const skillsDir = join(homedir(), '.claude', 'skills');
-  const blocks = skills.map(name => {
+  // Expand each skill's `skills:` frontmatter dependencies, transitively —
+  // dependencies come before the skill that needs them. Every injection path
+  // passes through here, so a dispatch that names medium-commit delivers
+  // audience-developer and communication-fundamentals with it.
+  let expanded;
+  try {
+    expanded = withDependencies(skills);
+  } catch (e) {
+    console.error(e.message);
+    process.exit(2);
+  }
+  const blocks = expanded.map(name => {
     const p = join(skillsDir, name, 'SKILL.md');
     let content;
     try {
