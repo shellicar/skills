@@ -1,7 +1,7 @@
 ---
 name: dispatch
 description: |
-  WHAT: The dispatch process — default fresh cast, operator resume the one exception — and its mechanics: CLI flags, pane lifecycle, envelope templates, skill injection, and the scripts.
+  WHAT: The dispatch tool layer — default fresh cast, operator resume the one exception — the scripts, their configs, pane lifecycle, the envelope shape, and skill injection.
   WHY: Dispatch is transport, not decision — one documented mechanism keeps every cast launched the same way, instead of each router re-deriving flags and envelope shapes.
   WHEN: Loaded by the router role, whenever a cast is dispatched.
 user-invocable: false
@@ -11,7 +11,7 @@ metadata:
 
 # Dispatch
 
-**Skill** (loaded by the `router` role). The dispatch process and its mechanics — CLI flags, pane lifecycle, envelope templates, skill injection, and the scripts in `scripts/`.
+**Skill** (loaded by the `router` role). The dispatch tool layer: the scripts in `scripts/`, their configs, pane lifecycle, the envelope shape, and skill injection. The phase loop these tools serve is the `mission-execution` skill's process; dispatch is transport.
 
 ### The process
 
@@ -27,40 +27,7 @@ Three scripts carry the whole flow:
 2. `cast-operator` — every operator dispatch, keyed by `phase` and `iteration`.
 3. `cast-supervisor` — every supervisor dispatch, keyed by `phase` and `iteration`. Always fresh.
 
-### The workflow
-
-The router does what is already decided, in this order. **Every dispatch is preceded by a confirm**: state the dispatch to the SC — script, phase, iteration, role, model, and where each value came from — and wait for the go-ahead. No dispatch fires unconfirmed. The confirmation is not approval of the mechanics; it is where a wrong lookup or a smuggled decision becomes visible before a cast is running instead of after.
-
-Once, at mission start (the mission verified and committed, the worktree created — all upstream of dispatch):
-
-1. `start-mission` — window identity.
-2. `scaffold-panes` — both panes, no cast.
-
-Per phase N:
-
-3. **Resolve** — read phase N from the mission: role, model, effort, `## SKILLS`. Every config value is a lookup (see the table below); nothing is chosen here.
-4. **Confirm** the dispatch with the SC.
-5. `cast-operator` — iteration 1, always fresh.
-6. The operator works, debriefs, sits idle. It is not killed — a later `resume: true` may need its context.
-7. **Confirm**, then `cast-supervisor` — same phase, always fresh.
-8. The supervisor records its verdict in `## Supervisor Verification`. The handler reads it — a claim, not a fact — forms its own judgement, and brings the decision to the SC.
-
-What happens next is not a step 9. It is a fork on three independent judgements — the supervisor's verdict, the handler's acceptance, and the SC's veto — and the SC decides the route. The router routes.
-
-The loop is per-phase; it has no mission-end step. What happens after the final phase's Pass — cleanup, and the mission's winding down — is the `mission-execution` skill's process, not dispatch's.
-
-### The paths
-
-**Happy path** — the supervisor passes, the handler accepts, the SC does not object → the phase is complete. The next phase re-enters at step 3.
-
-**Pass, handler accepts, the SC objects.** The objection routes one of two ways — the SC's pick:
-
-- **Back to the supervisor.** The objection or updated criteria land in the mission file (content lives in the mission, never in the envelope), then a **fresh** `cast-supervisor` at its next iteration re-verifies against it. If that supervisor's verdict changes — the work no longer holds — *that* is what produces the operator's revise: a confirmed `cast-operator` at the operator's next iteration, `template: revise`, `resume` the SC's call.
-- **Back to the operator.** The mission is updated, then a confirmed `cast-operator` at the operator's next iteration with `template: mission-updated`, `resume` the SC's call.
-
-**Pass, handler rejects.** The handler brings the SC its rejection with its reasoning — it does not act on it. Same two routes, same decider.
-
-After any operator iteration that runs, the invariant holds: a fresh `cast-supervisor` at its own next iteration (step 7), every time.
+**Every dispatch is preceded by a confirm**: state the dispatch to the SC — script, phase, iteration, role, model, and where each value came from — and wait for the go-ahead. No dispatch fires unconfirmed. The confirmation is not approval of the mechanics; it is where a wrong lookup or a smuggled decision becomes visible before a cast is running instead of after.
 
 ### Nothing in a dispatch is the router's decision
 
@@ -77,45 +44,6 @@ Every field in a dispatch config is a lookup from something already decided:
 | `resume` | **the SC.** The one genuine decision in a dispatch config — never the router's |
 
 If the router finds itself weighing anything, it has left transport and is holding a decision that belongs upstream: stop, take it to the handler, who takes it to the SC. The canonical failure: a handler recast a supervisor off its own judgement — a router that confirmed "I'm about to re-prompt the supervisor" would have been stopped at the sentence, because that dispatch does not exist.
-
-### Worked example — one phase, two paths
-
-Phase 2 of a mission: `Role: Maker`, `Model: Opus`, `## SKILLS: preflight`. Iterations count each actor's own casts within the phase.
-
-Happy path:
-
-1. Resolve: role `maker`, model `claude-opus-4-8` (phase heading), skills = foundational + `preflight` (`## SKILLS`), phase 2, operator iteration 1.
-2. Confirm: "Dispatching Phase 2 Maker, iteration 1, fresh cast, Opus from the phase heading, skills foundational plus preflight. Go?"
-3. `cast-operator` `{"phase": 2, "iteration": 1, "name": "Maker", "role": "maker", …}`.
-4. The Maker debriefs and sits idle. Confirm, then `cast-supervisor` `{"phase": 2, "iteration": 1, "operatorRole": "maker", …}` — fresh.
-5. The supervisor records a pass. The handler reads it, judges it holds, brings it to the SC. The SC accepts. Phase complete; phase 3 re-enters at Resolve.
-
-Objection path (same phase; the SC objects to the pass):
-
-6. The SC's objection lands in the mission file — updated criteria under the phase. Content in the mission, not in any envelope.
-7. Confirm, then `cast-supervisor` `{"phase": 2, "iteration": 2, "template": "mission-updated", …}` — a fresh cast re-verifying against the changed mission; the first supervisor's context is gone, deliberately.
-8. This supervisor's verdict does not hold the work. The handler brings it to the SC. The SC decides: iterate, and `resume: true` — the Maker's in-flight context is worth carrying.
-9. Confirm, then `cast-operator` `{"phase": 2, "iteration": 2, "template": "revise", "resume": true, …}` — the revise template pasted into the running Maker.
-10. The Maker debriefs iteration 2. Confirm, then a fresh `cast-supervisor` `{"phase": 2, "iteration": 3, "template": "verify", …}`. Pass; the handler accepts; the SC accepts. Phase complete.
-
-At no point did the router choose anything: the objection, both routes, and `resume` were the SC's; the verdicts were the supervisor's; the acceptance was the handler's. The router resolved, confirmed, and ran scripts.
-
-### CLI reference
-
-The cast scripts (`cast-operator`, `cast-supervisor`) wrap `claude-sdk-cli` with these flags:
-
-- `--file <path>` — attach a file as the cast's first message. No longer used by the cast scripts: the mission now rides inside `--prompt` as the `<mission>` element (a path).
-- `--name <label>` — display label for the session, shown in the CLI status bar. Setting `--name` lets the Router put a chosen string there; if the Router reads the pane and sees a different name, the CLI isn't in the state he expected.
-- `--model <model>` — model to use for this session. **Always specify.** The value is a family name — `sonnet`, `opus`, or `fable` — resolved to the family's current versioned identifier by the launch seam (`shared/pane/models.mjs`), so no dispatch remembers version strings; the defaults table lives in `squad-selection`. The CLI has a configured default; the scripts do not rely on it (defaults are unreliable in general — same principle as tmux's `-t`). The model comes from whatever directs the dispatch (mission file's `Model:` field, SC's instruction, or role convention).
-- `--prompt <text>` — send an initial message at launch. The structured message (`<from>`, `<skills>`, `<message>`, `<mission>`) goes here.
-- `--no-resume` — start fresh; skip auto-resume of the last session in the cwd. The CLI auto-resumes by default; `--no-resume` overrides that, which is what the Router wants when launching a new cast.
-- `--config <json>` — override config with a JSON object. The cast scripts use it to set thinking effort (`{"thinking":{"effort":"high"}}`) when a phase names an `Effort:` value; omitted when it doesn't, leaving the CLI's configured default. Valid efforts: `low`, `medium`, `high`, `xhigh`, `max`.
-
-Process control:
-
-- `SIGINT` exits the CLI. The cast scripts send Ctrl-C to the pane before launching a fresh cast.
-
-There are no standalone recast scripts. The operator's `resume: true` path lives inside `cast-operator`: a pre-built template message pasted into the running CLI and submitted — no caller-authored prose; mission content stays in the mission file.
 
 ### Pane lifecycle
 
@@ -146,18 +74,26 @@ the … Handler
 </mission>
 ```
 
-- **`<from>`** — the sender, and the *author* (the Handler), not the delivery mechanism. Never "the Router": the Router only routes, like a postman. Handler-supplied. Quoted voices nest their own `<from>` (see the recast templates).
+- **`<from>`** — the sender, and the *author* (the Handler), not the delivery mechanism. Never "the Router": the Router only routes, like a postman. It is how the cast knows who authored the message, so it can't mistake Router-orchestrated text for direct SC direction. When the message quotes another voice — the SC, verbatim — that voice nests its own `<from>`/`<message>` rather than a fenced block.
 - **`<skills>`** — capabilities, first because they're fundamental (see Skills).
-- **`<message>`** — the signal: what changed, where the cast sits in the workflow, what to act on. Transient, mechanical — placeholders filled from dispatch state, not a decision about the work. The templates below are this element.
+- **`<message>`** — the signal: what changed, where the cast sits in the workflow, what to act on. Built by the script from a fixed template, keyed on the phase number, role name, and iteration — the Handler never writes message prose. The scripts' own source is the reference for the template texts.
 - **`<mission>`** — the substance, last because it's most important. A path; the cast reads the live file (single source of truth, fully traceable).
 
 If a piece of content is the substance the cast needs to act on, it belongs in the mission file. If it's the signal that tells the cast to act, it belongs in the message. Substance in the message works mechanically but creates review burden — the SC re-vets the substance every time it's relayed, instead of once at the source.
 
-The message is mechanical content — placeholders filled from the dispatch state — not a decision about what the work should be.
+### The scripts
 
-`<from>` is how the cast knows who authored the message, so it can't mistake Router-orchestrated text for direct SC direction. It states the sender positively (the Handler), replacing the old negative `[Message from the Router, not the SC.]` marker. When the message quotes another voice — the SC, verbatim — that voice nests its own `<from>`/`<message>` rather than a fenced block (see the recast templates).
+All scripts live in [`scripts/`](scripts/). Each reads `TMUX_PANE` from the env (the Handler's own pane id) and scopes its tmux work to the Handler's window. Target panes are resolved by `@role` filter within the window.
 
-The `<message>` element is built by the script from a fixed template, keyed on the phase number, role name, and iteration the Handler passes in — the Handler no longer writes message prose. The scripts add `<from>`, `<skills>`, and `<mission>`. The template text each script produces is shown below for reference; placeholders in angle brackets are filled in at dispatch time.
+Configs are validated against zod schemas (`scripts/config.mjs`): a missing mandatory field or an unknown key exits 2 before anything launches.
+
+Common exit codes:
+
+- `0` — success
+- `1` — operational failure (no matching role pane, CLI didn't launch, nothing to close, etc.)
+- `2` — bad input (missing `TMUX_PANE`, missing arg, missing or unknown JSON field)
+
+Errors go to stderr; useful output (pane ids, classifications) goes to stdout.
 
 #### scaffold-panes
 
@@ -176,9 +112,9 @@ Stdout: `{"operatorPane":"%X","supervisorPane":"%Y"}`.
 
 #### cast-operator
 
-Dispatch the operator for a phase iteration via [`cast-operator`](scripts/cast-operator.mjs). Requires `phase` and `iteration`; the schema (config.mjs) enforces the process:
+Dispatch the operator for a phase iteration via [`cast-operator`](scripts/cast-operator.mjs). Requires `phase` and `iteration`; the schema enforces the process:
 
-- `iteration: 1` — always a fresh cast. `template` and `resume` are **forbidden** (strict schema; exit 2 if present).
+- `iteration: 1` — always a fresh cast. `template` and `resume` are **forbidden** (exit 2 if present).
 - `iteration: >1` — `template` and `resume` are both **required**.
   - `resume: false` — Ctrl-C, fresh cast; the template rides in the new envelope so the cast knows why it exists.
   - `resume: true` — no new process; the template is pasted into the running cast and submitted. The one recast that exists.
@@ -197,7 +133,7 @@ Templates (fixed; the Handler picks one, never writes prose):
 JSON config:
 
 - `from` — sender identity (e.g. `the claude-cli-cve-fix Handler`)
-- `model` — the family name: `sonnet`, `opus`, or `fable` (sonnet is the operator default)
+- `model` — the family name: `sonnet`, `opus`, or `fable` (sonnet is the operator default), resolved to the family's current versioned identifier by the launch seam (`shared/pane/models.mjs`) — no dispatch remembers version strings; the defaults table lives in `squad-selection`
 - `missionFile` — absolute path to the mission file (emitted as `<mission>`, read by the cast)
 - `name` — phase role (Maker, Apostle, Investigator, …); passed as `--name`
 - `phase`, `iteration` — required; the envelope is a fixed template built from them
@@ -205,22 +141,6 @@ JSON config:
 - `skills` — **mandatory**, even when empty (`[]`). The foundational set plus any per-phase extras (see Skills below). An absent field is a broken dispatch and exits 2 — it is how casts have launched with no skills at all.
 - `role` — operator sub-role (`maker`, `builder`, …) resolved to `roles/<role>/ROLE.md`. **Required wherever a launch happens** — iteration 1, and iteration >1 with `resume: false` — because the role's system prompt and craft skills come from it; a launch without it is a cast with no identity. Optional only with `resume: true`, where nothing launches.
 - `effort` — optional thinking effort from the phase's `Effort:` field (`low|medium|high|xhigh|max`); omitted → CLI default
-
-Configs are validated against zod schemas (`scripts/config.mjs`): a missing mandatory field or an unknown key exits 2 before anything launches. This applies to all three scripts.
-
-Envelope message for a fresh cast (built by the script):
-
-~~~
-You are the Phase <N> <role-name>, iteration <M>.
-~~~
-
-At iteration >1 the template text follows it. For `resume: true` the running cast instead receives:
-
-~~~
-You are now iteration <M>.
-
-<template text>
-~~~
 
 Stdout: the operator pane id. Exits 1 if no operator pane exists — run `scaffold-panes` first.
 
@@ -252,102 +172,22 @@ JSON config:
 - `skills` — **mandatory**, even when empty (`[]`). Same list the operator's dispatch carried: foundational plus the phase's extras. A supervisor without the foundational set judges on trained defaults.
 - `effort` — optional
 
-Envelope message (built by the script):
-
-~~~
-You are the Phase <N> Supervisor, iteration <M>.
-
-You are only ever a cast: supervisors are never re-prompted. Every verification is a fresh cast with fresh eyes, and this context is the whole of yours.
-
-The mission file the operator worked from is in `<mission>`.
-~~~
-
-At iteration >1 the template text follows it.
-
-`launchCli` appends the operator-debrief pointer and target-repo note automatically (resolved from the live panes), so the supervisor knows where to capture the debrief:
-
-~~~
-Operator's debrief is in tmux pane <op-pane>. Read with `tmux capture-pane -t <op-pane> -p -S -500`.
-~~~
+The envelope tells the supervisor it is only ever a cast, and `launchCli` appends the operator-debrief pointer and target-repo note automatically (resolved from the live panes), so the supervisor knows where to capture the debrief.
 
 Stdout: the supervisor pane id. Exits 1 if no supervisor pane exists — run `scaffold-panes` first.
 
 ### Skills
 
-Skills are injected into each cast at dispatch time via `--prompt`. The operator's `~/.claude/CLAUDE.md` tells them to load skills, but operators have skipped them. Injection removes that option — the skills arrive in the prompt content whether the operator loads them or not.
+Skills are injected into each cast at dispatch time via the envelope's `<skills>` element. The operator's `~/.claude/CLAUDE.md` tells them to load skills, but operators have skipped them. Injection removes that option — the skills arrive in the prompt content whether the operator loads them or not.
 
-#### Mechanics
+Each skill in the `skills` array is read from `~/.claude/skills/<name>/SKILL.md` at dispatch time. If any skill file is missing, the script exits with code 2 — a missing skill is a broken dispatch, not a degraded one.
 
-`buildPrompt({ from, message, skills, missionPath })` in `pane.mjs` combines the four elements into the `--prompt` value. When a `skills` array is passed:
-
-1. Each skill is read from `~/.claude/skills/<name>/SKILL.md`.
-2. If any skill file is missing, the script exits with code 2 (hard failure — a missing skill is a broken dispatch, not a degraded one).
-3. The prompt becomes:
-
-```xml
-<from>
-...sender...
-</from>
-<skills>
-<skill name="skill-name">
-...file content...
-</skill>
-</skills>
-<message>
-...message text...
-</message>
-<mission>
-...mission file path...
-</mission>
-```
-
-The cast scripts (`cast-operator`, `cast-supervisor`) require a `skills` array in their JSON config. Every dispatch has skills — at minimum the foundational set.
-
-#### What to pass
-
-The role's own craft skills ride the identity and are added automatically — you do not pass them. `launchCli` unions `roleSkills(role)` (from `roles/<role>/ROLE.md`) and `actorSkills(actor)` (from the ACTOR.md) into every cast's set, so a Maker gets its `tdd`, `tech-debt`, `typescript-standards`, `technical-writing`, `sc-commit-writing`, `sc-ghostwriting` whether or not the handler remembers them. Hand-listing them was the gap that shipped a Maker with none of its craft.
+**What to pass.** The role's own craft skills ride the identity and are added automatically — you do not pass them. `launchCli` unions `roleSkills(role)` (from `roles/<role>/ROLE.md`) and `actorSkills(actor)` (from the ACTOR.md) into every cast's set. Hand-listing them was the gap that shipped a Maker with none of its craft.
 
 The `skills` array you pass is additive on top of that — two sources:
 
-**a) Foundational skills** — from the operator's `~/.claude/CLAUDE.md`. These are the `Load:` lines that every session is told to load. Read them from the file at dispatch time; they can change.
-
-**b) Per-phase extras** — from the mission file. Each phase's `## SKILLS` section lists any skill a specific phase needs *beyond the role's own set* (a one-off like `detect-convention` or `preflight`). Read the section for the phase being dispatched. When a phase needs nothing beyond the role, this is empty.
-
-Both are combined into the `skills` array. The role and actor skills are added by `launchCli` on top; you never repeat them.
-
-#### Example
-
-Phase 1 of mission 1089 (infra-pipeline-bicepparam), dispatched as a Maker (`role: "maker"`).
-
-Foundational (from `~/.claude/CLAUDE.md`):
-
-`claude-philosophy`, `specification-discipline`, `transparency`, `commander-protocol`, `teapot-protocol`, `executive-communication`, `clear-communication`, `system-glossary`, `safe-operations`
-
-Per-phase extras (from the mission's `## SKILLS` section — only what the Maker role does not already carry):
-
-`detect-convention`, `preflight`
-
-The `skills` array in the JSON config:
-
-```json
-"skills": ["claude-philosophy", "specification-discipline", "transparency", "commander-protocol", "teapot-protocol", "executive-communication", "clear-communication", "system-glossary", "safe-operations", "detect-convention", "preflight"]
-```
-
-The Maker's own `typescript-standards`, `tdd`, `technical-writing`, `sc-commit-writing`, `sc-ghostwriting`, `tech-debt` are added automatically from `roles/maker/ROLE.md` — absent from the array above by design.
-
-### Router scripts
-
-All scripts live in [`scripts/`](scripts/). Each reads `TMUX_PANE` from the env (the Handler's own pane id) and scopes its tmux work to the Handler's window. Target panes are resolved by `@role` filter within the window.
-
-Common exit codes:
-
-- `0` — success
-- `1` — operational failure (no matching role pane, CLI didn't launch, nothing to close, etc.)
-- `2` — bad input (missing `TMUX_PANE`, missing arg, missing JSON field)
-
-Errors go to stderr; useful output (pane ids, classifications) goes to stdout.
-
-The scaffold and cast scripts are covered in the Envelopes section above. The rest:
+- **Foundational skills** — the `Load:` lines in the operator's `~/.claude/CLAUDE.md`. Read them from the file at dispatch time; they can change.
+- **Per-phase extras** — the phase's `## SKILLS` section in the mission: any skill a specific phase needs *beyond the role's own set* (a one-off like `detect-convention` or `preflight`). When a phase needs nothing beyond the role, this is empty.
 
 #### start-mission
 
@@ -361,14 +201,7 @@ Set the Handler window's mission identity (`@title` and `@colour`). Called once 
 
 **Window naming.** Session = the fleet (e.g. `claude-fleet-eagers`). Window = the mission. The `@title` value is for the SC's tmux status bar — the Router finds panes by id, not by name.
 
-Format: `<project>-<mission>`
-
-- `<project>` — the project/system the mission belongs to (e.g. `easyquote`, `customer-payments`, `easypass`)
-- `<mission>` — short topic for the mission (e.g. `cves`, `smsid`, `uploads`)
-
-Examples: `easyquote-cves`, `customer-payments-smsid`, `easypass-loose-schema`.
-
-The status bar combines the `@title` with the active pane's `@role` tag: `<title>:<role>`. Keep the combined length around 40 characters. If a project or mission name pushes the combined string past ~40, abbreviate.
+Format: `<project>-<mission>` — e.g. `easyquote-cves`, `customer-payments-smsid`, `easypass-loose-schema`. The status bar combines the `@title` with the active pane's `@role` tag: `<title>:<role>`. Keep the combined length around 40 characters; abbreviate past that.
 
 **Colour.** British spelling (`@color` is not read). The project → colour mapping lives in the fleet's `CLAUDE.md`.
 
@@ -428,7 +261,7 @@ Stdout: one line per pane with `pane_id`, `pid`, `role`, `window` (name), `cmd`,
 
 #### Helpers (internal)
 
-- **`pane-process-name`** — get the comm of a pane's foreground process. Takes `{"paneId": "<pane_id>"}` via stdin. Mirrors `pane-name.sh` in dotfiles, with one adjustment: returns `claude-sdk-cli` when pane_pid itself is that, rather than descending into its node-worker child. Used internally by the cast-launch verification; exposed as a CLI for debugging.
+- **`pane-process-name`** — get the comm of a pane's foreground process. Takes `{"paneId": "<pane_id>"}` via stdin. Returns `claude-sdk-cli` when pane_pid itself is that, rather than descending into its node-worker child. Used internally by the cast-launch verification; exposed as a CLI for debugging.
 - **`pane.mjs`** — shared Node module exporting `paneProcessName(paneId)` and `waitForClaudeSdkCli(paneId, opts)`. Imported by the cast scripts for post-launch verification.
 
 After launching a fresh `claude-sdk-cli`, each cast script calls `waitForClaudeSdkCli`, which polls the pane's foreground process every 250ms and waits for `claude-sdk-cli` to be stable for 1 second within a 10-second timeout. If the user's shell becomes stable for 1 second instead (CLI exited or never started), or the pane is gone, or the timeout fires, the launch script exits 1 with a diagnostic.
