@@ -18,6 +18,12 @@ Replace <…> placeholders. Delete the example row once you have real ones. Keep
 |---|---|---|---|---|---|
 | <name> | <project> | `<uuid>` | `…--<worktree>` | `<branch>` | <why held; the event/condition that un-parks it> |
 
+## Post-mortem-owing missions (in the `post-mortem` tmux session)
+
+| Mission | Project | PR · merged | Handler conv id | Handler worktree | Branch | Phase |
+|---|---|---|---|---|---|---|
+| <name> | <project> | #<n> · <date> | `<uuid>` | `…--<worktree>` | `<branch>` | pending / wip |
+
 ## Collisions & ordering
 
 1. <surface> — <mission A> vs <mission B> — <ordering decision, or "no live collision">.

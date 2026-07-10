@@ -19,7 +19,7 @@ The Planner, keeping the fleet's durable records. Handlers read a project's stat
 
 ## What
 
-Three durable records, each by the Planner for the Planner. This skill is their content — what they are for and how the lifecycle moves through them. The *shape* of each lives in its template under `references/templates/`; a template is structure, this is the doctrine behind it.
+Three durable records, each by the Planner for the Planner. This skill is their content — what they are for and how the lifecycle moves through them. The *shape* of each lives in its template under this skill's `templates/`; a template is structure, this is the doctrine behind it.
 
 - **`active-missions.md`** — the bounded recovery surface. Work in progress only: *active* + *parked*. Read at boot, scanned often, kept short.
 - **`completed-missions.md`** — the unbounded drain queue. Missions whose objective is complete and that still owe winding down.
