@@ -74,10 +74,6 @@ The material must be self-contained: a skill or identity file pointing casts at 
 
 When mission verification passes, the executor commits **everything** in the handler repo, immediately — the verification commit. It is a checkpoint, not a changes-commit: it pins the state the mission was verified in, so later changes diff against the verified baseline. Not gated on the SC's review or anything else — verification done = commit, end of story. Reason: handlers kept objecting ("only my changes should be committed") by applying the shared-repo staging discipline where it does not belong; the material now carries the reasoning so it stops being re-derived. In `mission-verification` and the handler ACTOR.
 
-### The scribe is a separate session, and mission writing says so
-
-The scribe left the handler's default role set (commit 844b9e1); the handler ACTOR's "Writing a mission" now reflects it — the scribe is a dispatched session via start-scribe, never the session that drew the intent or the one that verifies. The writer/verifier separation is structural, the operator/supervisor pattern at the mission-writing layer.
-
 ### The scribe never writes a role's stance; only the SC countermands a role
 
 Four rules, landed together after a scribe pasted Investigator language ("you map the problem; you do not design the solution") into an Apostle phase without ever opening `apostle.md` — the cast obeyed it and produced a plan with none of the code, costing the SC hours. (1) The scribe never writes role-stance prose — the block owns the stance; the scribe fills mission-level content into its slots (`prompt-authoring` > The blocks own the stance). (2) Provenance's Fleet source explicitly includes the role's `ROLE.md` and phase block — a stance sentence traces there or to the SC, or it is invented (`mission-grounding`). (3) The scribe must actually open the block and `ROLE.md` of every role in the squad before composing — a listing is not a read. (4) Verification fails any instruction that runs counter to the phase's role unless it traces to the SC's words in `intent.md` — an override of a role can only come from the SC (`mission-verification`, check one).

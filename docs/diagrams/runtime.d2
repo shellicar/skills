@@ -18,7 +18,7 @@ scripts: "launch scripts" {
   style.fill: transparent; style.stroke: "#444A5A"; style.stroke-dash: 4; style.font-color: "#7F8C8D"
   start_planner: "start-planner.mjs" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   launch_handler: "launch-handler.mjs" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
-  cast_scripts: "new-operator-cast.mjs\nnew-supervisor-cast.mjs\nnext-phase-cast.mjs" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  cast_scripts: "scaffold-panes.mjs\ncast-operator.mjs\ncast-supervisor.mjs" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
 }
 
 # ---- tmux: where casts live ----
@@ -51,8 +51,8 @@ scripts.start_planner -> tmux.planner_session.planner_cast: "creates" { style.st
 tmux.planner_session.planner_cast -> scripts.launch_handler: "runs" { style.stroke: "#2ECC71"; style.stroke-dash: 2 }
 scripts.launch_handler -> tmux.handler_window.handler_pane: "new window + cast" { style.stroke: "#5DADE2"; style.stroke-dash: 2 }
 tmux.handler_window.handler_pane -> scripts.cast_scripts: "Router runs" { style.stroke: "#F1C40F"; style.stroke-dash: 2 }
-scripts.cast_scripts -> tmux.handler_window.operator_pane: "splits pane" { style.stroke: "#E67E22"; style.stroke-dash: 2 }
-scripts.cast_scripts -> tmux.handler_window.supervisor_pane: "splits pane" { style.stroke: "#E74C3C"; style.stroke-dash: 2 }
+scripts.cast_scripts -> tmux.handler_window.operator_pane: "scaffold once, then cast per iteration" { style.stroke: "#E67E22"; style.stroke-dash: 2 }
+scripts.cast_scripts -> tmux.handler_window.supervisor_pane: "scaffold once, then a fresh cast every verification" { style.stroke: "#E74C3C"; style.stroke-dash: 2 }
 
 # ---- where each cast operates ----
 tmux.handler_window.handler_pane -> disks.fleet_wt: "cwd" { style.stroke: "#566573" }

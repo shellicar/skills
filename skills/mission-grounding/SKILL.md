@@ -11,13 +11,27 @@ metadata:
 
 # Mission grounding
 
-You write `provenance.md` **first**. Then you write `mission.md` from it.
+## Who
 
-The order is the whole skill. A trace written after the mission is a bibliography for a text that already says whatever it wanted — every fleet provenance file written that way approved its own author, including the one on a mission that was wrong. No procedure can force generation to take the right order; what this skill does is make the extraction the first deliverable, so you are thinking from the sources *while* the mission forms, not judging your own draft afterwards. Grounding happens before or during writing. Afterwards there is only justifying.
+You are the scribe, writing. Your job is translation: the SC's wants and intent become the artefacts an operator acts on. The decisions were all made upstream — you carry them into the mission whole, in the SC's words. A translator who adds something of his own is inventing; one who drops something is losing what the SC decided. Both betray the text, and the operator builds the betrayal.
 
-`provenance.md` is your proof, part of the finished mission. `mission.md` without it is unfinished, and the verifier refuses it. You prove; the verifier — a different session — verifies.
+## Why
 
-## The extraction
+You write `provenance.md` **first**. Then you write `mission.md` from it. The order is the whole skill.
+
+A trace written after the mission is a bibliography for a text that already says whatever it wanted — every fleet provenance file written that way approved its own author, including the one on a mission that was wrong. No procedure can force generation to take the right order; what this skill does is make the extraction the first deliverable, so you are thinking from the sources *while* the mission forms, not judging your own draft afterwards. Grounding happens before or during writing. Afterwards there is only justifying.
+
+## What
+
+`provenance.md` is your proof, part of the finished mission: the Evidence table (every decided thing, its source, its text, and where it landed), the Coverage table (the goal and each objective — done by which phase, proven where), and the Gaps (what no source supplies, sent upstream). `mission.md` without it is unfinished, and the verifier refuses it. You prove; the verifier — a different session — verifies.
+
+## When
+
+Writing posture, before `mission.md` exists. You have read everything in the mission directory and everything a source names as governing (see the scribe role: understanding before writing); the extraction is the first thing you produce.
+
+## How
+
+### The extraction
 
 Sit with the sources and pull out every decided thing — each decision, illustration, and fact the mission will carry — into the Evidence table, with its text. `Source` is an enum, exactly three values:
 
@@ -33,7 +47,7 @@ True is not a source. A verified fact nobody decided is not a row; if it matters
 
 **An investigation is a vehicle, not a source.** `investigation.md` is the Investigator's — findings verified against code you never read, so you cannot attest them as Text; extracting them into rows would put an operator's word in the proof wearing the SC's standing. The findings never become rows. Decisions *about* the investigation are SC rows ("the fix follows the investigation", "option two"), because the SC made them and the intent carries them; when `investigation.md` exists it gets a row like the blueprint's, and the mission **references** the file — the operator reads the findings directly, whole, as findings: starting points to confirm on contact, never transcribed instructions.
 
-## Composing from the rows
+### Composing from the rows
 
 The mission is written from the Evidence table and nothing else. A sentence with no row behind it has nothing to be written from — if the mission needs something no source supplies, that is a **gap**: name it under Gaps and send it upstream to the SC. Never fill it.
 
@@ -43,11 +57,11 @@ As each row lands, record where under `Carried` — intact, in the intent's own 
 
 Precision test for every line you compose: could the operator reasonably choose differently? If yes, you stated the problem — grounded. If no, you designed the solution, and no row carries design unless a decided blueprint does. "It follows from X", "presumably", "the operator will need to…" are not rows — they are downstream roles' jobs leaking into the mission.
 
-## Coverage
+### Coverage
 
 The goal and every objective get a Coverage row: the phase that **does** it, and the place it is **proven**. A mission can carry every claim and still be a checklist that never touches its own purpose. An uncovered goal or objective goes upstream — how it gets done or proven is the SC's decision, never filled in here.
 
-## What the verifier checks
+### What the verifier checks
 
 Two legs, both mechanical, both able to fail visibly:
 
