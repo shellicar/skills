@@ -1,13 +1,15 @@
 ---
 name: sc-pr-writing
 description: |
-  WHAT: PR titles and descriptions that communicate what changed, scannable and effect-focused, in Stephen's voice.
-  WHY: The default produces implementation-heavy descriptions that make reviewers do the work of understanding.
-  WHEN: TRIGGER when writing a PR title, description, or body.
+  DEPRECATED. Superseded by medium-pr.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: standards
+  deprecated: medium-pr
 ---
+
+> **DEPRECATED**: superseded by `medium-pr`. Do not load this skill.
 
 # SC PR Writing
 

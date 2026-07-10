@@ -1,13 +1,15 @@
 ---
 name: technical-writing
 description: |
-  WHAT: Output that describes what changed and why it matters, not how it was built.
-  WHY: Claude defaults to describing implementation. Technical readers already have the diff; they need the meaning.
-  WHEN: TRIGGER when writing for a technical audience — commits, PRs, code comments, work items, technical docs.
+  DEPRECATED. Superseded by audience-developer.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: standards
+  deprecated: audience-developer
 ---
+
+> **DEPRECATED**: superseded by `audience-developer`. Do not load this skill.
 
 # Technical Writing
 

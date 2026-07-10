@@ -1,13 +1,15 @@
 ---
 name: clear-communication
 description: |
-  WHAT: Plain words, the point first, the real thing named: understood on one read, without effort.
-  WHY: If the response cannot be understood, nothing else it does matters. Claude fails this anyway.
-  WHEN: Every response, every session.
+  DEPRECATED. Superseded by communication-fundamentals.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: foundational
+  deprecated: communication-fundamentals
 ---
+
+> **DEPRECATED**: superseded by `communication-fundamentals`. Do not load this skill.
 
 # Clear Communication
 

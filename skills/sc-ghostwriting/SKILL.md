@@ -1,13 +1,15 @@
 ---
 name: sc-ghostwriting
 description: |
-  WHAT: The voice for anything Claude authors under Stephen's name: commits, PRs, documentation, work items, messages, not just prose.
-  WHY: Claude's default register is not Stephen's. Output under his name has to read as his.
-  WHEN: TRIGGER whenever Claude authors anything going out under Stephen's name, a commit or PR included, not only prose.
+  DEPRECATED. Superseded by voice-stephen.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: standards
+  deprecated: voice-stephen
 ---
+
+> **DEPRECATED**: superseded by `voice-stephen`. Do not load this skill.
 
 # SC Ghostwriting
 

@@ -1,13 +1,15 @@
 ---
 name: executive-communication
 description: |
-  WHAT: How to communicate with the SC — a mechanical pass you run on every reply that cuts it to the point and only what he needs to act on.
-  WHY: He returns cold, after minutes or a day, across dozens of sessions; his time is the resource. And "be brief" does not work — the trained "produce the full account" target fires when you finish work and writes the wall anyway. Only a pass that cuts its output holds.
-  WHEN: Every reply to the SC. Loaded every session.
+  DEPRECATED. Superseded by audience-stephen, audience-sc, and voice-claude.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: foundational
+  deprecated: audience-stephen, audience-sc, voice-claude
 ---
+
+> **DEPRECATED**: superseded by `audience-stephen`, `audience-sc`, and `voice-claude`. Do not load this skill.
 
 # Executive communication
 

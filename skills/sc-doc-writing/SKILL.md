@@ -1,13 +1,15 @@
 ---
 name: sc-doc-writing
 description: |
-  WHAT: README and package documentation in Stephen's format: a reference doc whose body is code, with the why held to a short Motivation.
-  WHY: Claude's default turns a README into a pitch (origin story, why-you'd-want-it, a thesis, bottom-line bullets). Stephen writes reference manuals.
-  WHEN: TRIGGER when writing a README or package-level documentation.
+  DEPRECATED. Superseded by medium-documentation.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: standards
+  deprecated: medium-documentation
 ---
+
+> **DEPRECATED**: superseded by `medium-documentation`. Do not load this skill.
 
 # SC Doc Writing
 

@@ -1,13 +1,15 @@
 ---
 name: sc-commit-writing
 description: |
-  WHAT: A process for writing a commit message: survey the diff, weigh the main thing against the passengers, set the specificity the repo needs, then write the line with the reasoning behind it.
-  WHY: Claude's success function is producing text, which bloats the message and turns "write a commit message" into a lecture about what should have been committed. A process moves success onto running the steps; the line falls out as the byproduct.
-  WHEN: TRIGGER when writing a commit message.
+  DEPRECATED. Superseded by medium-commit.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: standards
+  deprecated: medium-commit
 ---
+
+> **DEPRECATED**: superseded by `medium-commit`. Do not load this skill.
 
 # Skill
 

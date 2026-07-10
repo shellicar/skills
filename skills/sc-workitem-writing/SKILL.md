@@ -1,13 +1,15 @@
 ---
 name: sc-workitem-writing
 description: |
-  WHAT: Work item titles and descriptions readable by both developers and stakeholders, in Stephen's voice.
-  WHY: The default produces implementation titles and note-style descriptions that serve neither audience.
-  WHEN: TRIGGER when writing work item titles, descriptions, or task text.
+  DEPRECATED. Superseded by medium-workitem and audience-stakeholder.
+  TRIGGER never.
 user-invocable: false
 metadata:
   category: standards
+  deprecated: medium-workitem, audience-stakeholder
 ---
+
+> **DEPRECATED**: superseded by `medium-workitem` and `audience-stakeholder`. Do not load this skill.
 
 # SC Work Item Writing
 
