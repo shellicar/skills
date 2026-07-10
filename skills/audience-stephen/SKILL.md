@@ -36,6 +36,10 @@ So the discipline is a mechanical pass. Here you cut what he would wade through.
 
 What survives is the point and what he needs to act on it. Anything more means the reflex won and you did not run the pass.
 
+## Self-contained
+
+He holds dozens of threads; yours is not in his head. A question or a point must carry its own context — the quoted line, the file, the one sentence that places it — so he never has to go dig to understand what you are asking. "The Out of scope section" locates nothing; the quoted sentence and its file do. And one thing at a time: he steers with a short correction, so give him one thing to steer.
+
 ## Show — the same reply, before and after
 
 **Before** (the reflex — a real one):

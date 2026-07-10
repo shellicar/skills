@@ -193,3 +193,43 @@ Two rules keep the layers honest:
 - **A fence does not stop everyone; put it up anyway.** The recurring fallacy is declining a weaker layer because it is not a wall: "the doc will not fully prevent it, so don't bother tightening the doc; only structure works." Replacing the success function *is* the strongest fence — that is a true ranking, not a licence to build only the best one. The move is *and*, not *or*: tighten the doc AND replace the success function AND add the mechanical check AND separate the postures. Any layer that catches some fraction of the reflex is worth building.
 
 The grounding: on 2026-06-19, five handler panes failed the same way on the same day — each could read its own role doc mid-failure and correctly name its own violation, and failed anyway. Description loses to the reflex; knowing the rule does not run the check. That is why no single layer suffices — and why each one still gets built.
+
+## The communication model (2026-07-10)
+
+Worked out in a session on 2026-07-10, replacing the taxonomy above where they conflict. The trigger: the SC kept having to point sessions at `sc-doc-writing`, because general communication principles were encoded inside a README format skill. Organising the skills does not fix Claude's failures on its own — the same session that prompted this had every skill in context and failed anyway — but it improves their effectiveness: each principle lives once, where the writing happens.
+
+### The model
+
+Every act of communication composes as **foundation + voice + audience(s) + medium**.
+
+- **Foundation** — the principles that hold for every act of communication, unqualified (`communication-fundamentals`).
+- **Voice** — whose name the output goes out under: Stephen or Claude. Two skills, `voice-stephen` and `voice-claude`. The `sc-` prefix was a naming convention, not the model; the model names the dimension.
+- **Audience** — the role types reading it. Not the person: the same human is a developer in blame, Stephen reading a reply, the SC receiving a phase report. Not the reading-situation either — the SC corrected both. Role types, and a **set** per artefact: a work item is read by developers, product owners, stakeholders, Stephen, and Claude at once, and the text serves all of them.
+- **Medium** — the form the artefact takes: commit, PR, work item, issue, documentation, memory, handover, mission, response. Format only; audience knowledge stripped out and composed in.
+
+**The placement rule** is the model's payoff: a rule lives at the most general layer where it holds unqualified. Strip the medium — does the rule survive? Strip the audience, the voice? Where it breaks is its layer. This is what answers "where should this information go," and it is testable on any line of any skill.
+
+### Decisions and their reasons
+
+- **Audience skills stand alone; media declare their audiences.** An early draft collapsed audience into medium where they pair one-to-one. Rejected by the SC: that re-encodes audience knowledge per medium — the duplication the model exists to kill. A skill costs almost nothing at rest here (skills are injected, not model-discovered, so there is no always-loaded description competing for attention); duplication costs on every edit. Cheap skill, expensive duplication: split.
+- **Voice is never a medium dependency.** An artefact's voice is chosen per instance — an issue is sometimes written from Claude's perspective, a commit is usually Stephen's. Media declare audiences in `skills:`; voice composes at load. The old "load sc-ghostwriting alongside" headers dissolve rather than becoming dependencies.
+- **Response is the one medium with no fixed audience.** To Stephen or to a Claude, picked per instance; its `skills:` is empty and the session's context supplies the audience.
+- **voice-claude exists from day one, even thin.** "Even if it's one line, it's still there, rather than having to add the plumbing later" — every artefact composes a voice explicitly, the loader never special-cases "no voice." And it is not "how to write as Claude" (a persona) but "how to write *when you are writing as* Claude": the register corrections — jargon, theatre, shape — that apply whoever reads.
+- **Stephen the person and the SC are two audiences.** The person is global and shareable: plain words, point first, seconds. The SC is a fleet system role that *extends* the person: commander-protocol plus digest-never-relay and the phase report. The existing skills conflated them because he was always both readers at once; the model separates them so the global layer carries nothing of the fleet.
+- **Global versus fleet.** Communication skills are global and shareable. `system-glossary` is fleet vocabulary, `teapot-protocol` is not communication, `commander-protocol` stays as the SC extension — none of them fold in. "Foundational" is a loading tier, not a position in the model: `specification-discipline` is loaded always *and* is model-foundation; the SC-audience cluster is loaded always because every session talks to him, not because it is foundational.
+- **Source-fidelity is not a dimension.** It looked like a missing home ("whose words the content carries"), but the strips sorted it: carry-words-intact is Claude-audience knowledge (the reader executes literally and cannot ask), digest is Stephen-audience knowledge (he can read the original; his budget rules). The per-medium mechanisms (reference the blueprint, never copy) enforce the audience-level rule.
+- **Time is not a dimension.** When the reading happens (the blame reader years later, the how-to guide implicitly written for today) is part of knowing the audience for that medium, carried in the audience and medium skills' content, not in the model's frame.
+- **Cross-references are frontmatter, rendered.** Skills declare dependencies in a `skills:` frontmatter key, pointing down the model only — media on audiences, audiences and voices on the foundation, never sideways or up. The rendering of the whole graph is generated from the frontmatter, never hand-kept, so it is current by construction; `docs/diagrams/communication.d2` is the drawn model.
+- **Words, analogies, and the glossary.** An analogy is a picture used as an explanation — it belongs where a concept is learned, once. The glossary pins the word, so every use after is the bare word, shared, with no decoding. The failure is the analogy reused as the word: "the north star" is a good analogy when explained, and a label when repeated — doing badly the job the glossary does well. This is why the fundamentals carry the analogy/label distinction and the glossary carries the words.
+
+### How the refactor was run
+
+Two steps, deliberately. **Step 1, the pure refactor:** the seventeen skills built only from content moved out of the existing skills, then a separate session reviewed the result for anything added or lost — the review's flags were all resolved before the checkpoint commit (`3614482`). A first handover to that reviewer pre-classified some differences as "deliberate additions"; the SC rejected that — pre-clearing differences defeats the review; the reviewer reports *everything*, and what was deliberate is judged above them. **Step 2:** the new content (voice-claude's shape and theatre rules, the analogy distinction, the SC's decision-surfacing section) added back on top of the clean baseline, so the diff shows exactly what is new. Mixing the two steps was tried first and unwound: a refactor that adds content cannot be verified as a refactor.
+
+The old skills stay live and unchanged until the SC flips the switches (sync-skills registration and enablement, the `Load:` lines, the role frontmatters); they become pointers — the `writing-style` pattern — only after. The transitional duplication is stated and deliberate: breaking live loaders mid-flight is the worse cost.
+
+### Notes for future editors
+
+- Skills in this layer carry the 4W1H *and* the why behind their decisions. A rule without its reason becomes a rule to work around — that is the layer's own audience-claude principle applied to itself.
+- Do not state a rule as a bare "No." Show what to do instead, and why the default fails — the voice-claude theatre rule is the worked example: "apply a correction by being right the next time," not "no theatre."
+- Before adding a rule to a medium skill, run the strips. Most rules that feel medium-specific are audience knowledge wearing a format.

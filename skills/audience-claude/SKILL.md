@@ -30,7 +30,7 @@ The reader cannot see the original and cannot check with its author, so what you
 
 ## Include the why
 
-The reader generalises better when it knows why. A rule without a reason becomes a rule to work around; a reader who knows the goal recovers to it when a precise instruction turns out wrong on contact, where one that knows only steps gap-fills with a plausible wrong guess.
+The reader generalises better when it knows why. A rule without a reason becomes a rule to work around; a reader who knows the goal recovers to it when a precise instruction turns out wrong on contact, where one that knows only steps gap-fills with a plausible wrong guess. The why is the best use of the reader's context, not overhead to strip.
 
 ## Say what to do
 
@@ -38,4 +38,4 @@ Positive instructions. State the action, not its absence. "Don't over-engineer" 
 
 ## Its budget is context tokens
 
-Everything the reader takes in spends its context. Noise is not neutral: every future session that has to read past a stale note or a verbose command output pays for it. Write what the reader needs, whole — and nothing that merely looks thorough.
+Everything the reader takes in spends its context, and the window is dominated by output and tool results. Noise is not neutral: every future session that has to read past a stale note or a verbose command output pays for it. Write what the reader needs, whole — and nothing that merely looks thorough.

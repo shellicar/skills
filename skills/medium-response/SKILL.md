@@ -16,4 +16,4 @@ The live-exchange medium: each turn responds to the last, and the reader replies
 
 **Ephemeral.** A response serves its turn. Anything in it that must outlive the conversation belongs in a durable medium — a file, a memory — not in the reply.
 
-**Shaped per turn.** The form varies with the content: an answer is a line, a decision is the point plus what it turns on, never one template stamped on every turn.
+**Shaped per turn.** The form varies with the content: an answer is a line, a decision is the point plus what it turns on, never one template stamped on every turn. The envelope markers some systems wrap responses in are that system's protocol, not part of the medium.
