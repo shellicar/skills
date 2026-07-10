@@ -4,11 +4,12 @@
  * Nothing else spells a full model string, so a version bump is a one-line
  * change here, and no Claude has to remember identifier values.
  *
- * The pick is right-sizing capability to the work, not buying certainty with
- * resources: Sonnet is the default for operators; Opus for medium-difficulty
- * work; Fable only in extremely complex circumstances. Supervisors always run
- * Opus — fixed in cast-supervisor, not a dispatch choice. The
- * defaults/recommended table lives in the squad-selection skill.
+ * Opus for everything. Sonnet 5 is considered harmful — tested 4/4, it
+ * dropped the protocols mid-session — and is not used; the family stays in
+ * the map only so old dispatches fail loudly rather than mysteriously. Fable
+ * is for extremely complex circumstances, rare. Supervisors always run Opus —
+ * fixed in cast-supervisor, not a dispatch choice. The defaults table lives
+ * in the squad-selection skill.
  */
 
 // Identifiers are always claude-[model-family]-[version].

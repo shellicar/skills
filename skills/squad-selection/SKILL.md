@@ -43,12 +43,11 @@ Two are not squad roles you pick: **Preflight** (a step, always first, catching 
 
 ## Model defaults — right-sizing
 
-Three models, a capability ladder: **Sonnet** → **Opus** → **Fable**. Throwing more resources at a problem does not make it more efficient — the pick is right-sizing: match the capability to the difficulty of the work.
+Opus for everything. **Sonnet 5 is considered harmful** — tested 4/4, it dropped the protocols mid-session even addressed as the SC — and is not used. Fable remains for extremely complex circumstances, rare; most work won't need it.
 
 | Work | Default |
 | --- | --- |
-| Operators, most work | Sonnet |
-| Medium-difficulty work — coding, investigating, the Apostle | Opus |
+| Everything | Opus |
 | Extremely complex circumstances — rare; most work won't need it | Fable |
 | Supervisors | Opus — fixed, not a pick |
 

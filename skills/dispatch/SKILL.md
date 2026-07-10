@@ -128,7 +128,7 @@ Templates (fixed; the Handler picks one, never writes prose):
 JSON config:
 
 - `from` — sender identity (e.g. `the claude-cli-cve-fix Handler`)
-- `model` — the family name: `sonnet`, `opus`, or `fable` (sonnet is the operator default), resolved to the family's current versioned identifier by the launch seam (`shared/pane/models.mjs`) — no dispatch remembers version strings; the defaults table lives in `squad-selection`
+- `model` — the family name: `opus` or `fable` (Opus for everything; Sonnet 5 is considered harmful and is not used), resolved to the family's current versioned identifier by the launch seam (`shared/pane/models.mjs`) — no dispatch remembers version strings; the defaults table lives in `squad-selection`
 - `missionFile` — absolute path to the mission file (emitted as `<mission>`, read by the cast)
 - `name` — phase role (Maker, Apostle, Investigator, …); passed as `--name`
 - `phase`, `iteration` — required; the envelope is a fixed template built from them
