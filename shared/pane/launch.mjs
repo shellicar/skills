@@ -3,8 +3,9 @@
 // over it.
 
 import { execFileSync } from 'node:child_process';
-import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { randomUUID } from 'node:crypto';
+import { writeFileSync, mkdtempSync, rmSync, existsSync } from 'node:fs';
+import { homedir, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expandPath, shq } from './shared.mjs';
 import { paneProcessName, waitForClaudeSdkCli, PREFERRED } from './process.mjs';
@@ -60,20 +61,37 @@ export function launchCli(paneId, { from, model, missionFile, name, message, ski
   const skillsPath = join(tmp, 'claudemd');
   writeFileSync(skillsPath, buildSkillsBlock(finalSkills));
 
-  const system = buildSystem({ actor, role });
+  // The actor is the cast's standing identity, so it rides --system-identity:
+  // bound to the conversation, persisted, restored on resume, and read live
+  // from the ACTOR.md file every query. The role still rides --system — it is
+  // per-launch composition, not conversation identity.
+  let identityFlag = '';
+  if (actor) {
+    const actorPath = join(homedir(), '.claude', 'actors', actor, 'ACTOR.md');
+    if (!existsSync(actorPath)) {
+      console.error(`actor identity file not found: ${actorPath}`);
+      process.exit(2);
+    }
+    identityFlag = ` --system-identity ${shq(actorPath)}`;
+  }
+  const system = buildSystem({ role });
   // Inline (see buildSystem): no system temp file, so up-arrow re-reads the source.
   const systemFlag = system ? ` --system "${system}"` : '';
 
-  const resumeFlag = resume ? ` --resume ${shq(resume)}` : ' --no-resume';
+  // Never --no-resume: every cast launches with a conversation id, generated
+  // here when the caller has none. The CLI adopts the id whether or not the
+  // conversation exists yet, and the id is returned to the caller — so the
+  // durable anchor for resume and recovery exists by construction.
+  const convId = resume || randomUUID();
   // The caller passes a model family (sonnet | opus | fable); the versioned
   // identifier is resolved here, at the one seam every launch goes through.
-  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(resolveModel(model))}${effortFlag(effort)}${systemFlag} --claudeMd "$(cat ${shq(skillsPath)})" --prompt "$(cat ${shq(promptPath)})"${resumeFlag}`;
+  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(resolveModel(model))}${effortFlag(effort)}${identityFlag}${systemFlag} --claudeMd "$(cat ${shq(skillsPath)})" --prompt "$(cat ${shq(promptPath)})" --resume ${shq(convId)}`;
 
   execFileSync('tmux', ['send-keys', '-t', paneId, launch, 'Enter']);
 
   const result = waitForClaudeSdkCli(paneId);
   cleanupPrompt(tmp, promptPath, result);
-  return result;
+  return { ...result, convId };
 }
 
 /**

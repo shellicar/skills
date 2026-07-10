@@ -40,6 +40,7 @@ import './lib/sc-only.mjs';
  * Exit 2 if an identity file is missing (via buildSystemInline).
  */
 
+import { homedir } from "node:os";
 import { basename } from "node:path";
 import { spawnSync } from "node:child_process";
 import { buildSystemInline, buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
@@ -49,7 +50,8 @@ import { skillsFor, HANDLER_ROLES } from "../shared/pane/skills.mjs";
 // The role list is the shared HANDLER_ROLES constant, so every handler launch
 // path composes the same identity.
 const roles = HANDLER_ROLES;
-const system = buildSystemInline({ actor: "handler", role: roles });
+const identity = `${homedir()}/.claude/actors/handler/ACTOR.md`;
+const system = buildSystemInline({ role: roles });
 
 // Name after the worktree: a `<base>--<worktree>` cwd becomes handler-<worktree>.
 const dir = basename(process.cwd());
@@ -86,7 +88,7 @@ if (passthrough.includes("--doctor")) {
   process.exit(0);
 }
 
-const args = ["--name", name, "--system", system, "--claudeMd", claudeMd];
+const args = ["--name", name, "--system-identity", identity, "--system", system, "--claudeMd", claudeMd];
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.

@@ -34,11 +34,14 @@ import './lib/sc-only.mjs';
  */
 
 import { execFileSync, spawnSync } from "node:child_process";
+import { homedir } from "node:os";
 import { buildSystemInline, buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
 
-// The composition preset: the Planner's actor + its three roles into --system.
-const system = buildSystemInline({ actor: "planner", role: ["scheduler", "launcher", "coach"] });
+// The actor is the standing identity — bound to the conversation via
+// --system-identity, persisted, restored on resume. The roles ride --system.
+const identity = `${homedir()}/.claude/actors/planner/ACTOR.md`;
+const system = buildSystemInline({ role: ["scheduler", "launcher", "coach"] });
 
 // Tag the current pane so the status bar reads "Planner". Pane/window creation
 // is the SC's; this only labels what already exists. Skipped cleanly outside tmux.
@@ -68,7 +71,7 @@ if (mi >= 0) {
 // The skill set rides --claudeMd: assembled into the session's CLAUDE.md
 // content on every launch (fresh or resumed), cached, no turn fired.
 const skills = skillsFor({ actor: "planner", role: ["scheduler", "launcher", "coach"] });
-const args = ["--name", "planner", "--system", system, "--claudeMd", buildSkillsBlock(skills)];
+const args = ["--name", "planner", "--system-identity", identity, "--system", system, "--claudeMd", buildSkillsBlock(skills)];
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.

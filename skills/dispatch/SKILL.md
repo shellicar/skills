@@ -142,7 +142,7 @@ JSON config:
 - `role` — operator sub-role (`maker`, `builder`, …) resolved to `roles/<role>/ROLE.md`. **Required wherever a launch happens** — iteration 1, and iteration >1 with `resume: false` — because the role's system prompt and craft skills come from it; a launch without it is a cast with no identity. Optional only with `resume: true`, where nothing launches.
 - `effort` — optional thinking effort from the phase's `Effort:` field (`low|medium|high|xhigh|max`); omitted → CLI default
 
-Stdout: the operator pane id. Exits 1 if no operator pane exists — run `scaffold-panes` first.
+Stdout: `{"pane":"%X","convId":"<uuid>"}` for a fresh cast — keep the conversation id; it is the cast's recovery anchor. A `resume: true` re-trigger prints the pane id only (the conversation already exists). Exits 1 if no operator pane exists — run `scaffold-panes` first.
 
 #### cast-supervisor
 
@@ -174,7 +174,7 @@ JSON config:
 
 The envelope tells the supervisor it is only ever a cast, and `launchCli` appends the operator-debrief pointer and target-repo note automatically (resolved from the live panes), so the supervisor knows where to capture the debrief.
 
-Stdout: the supervisor pane id. Exits 1 if no supervisor pane exists — run `scaffold-panes` first.
+Stdout: `{"pane":"%X","convId":"<uuid>"}` — keep the conversation id; it is the cast's recovery anchor. Exits 1 if no supervisor pane exists — run `scaffold-panes` first.
 
 ### Skills
 

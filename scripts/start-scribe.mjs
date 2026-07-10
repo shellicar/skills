@@ -19,13 +19,16 @@ import './lib/sc-only.mjs';
  * Exit 2 if an identity file is missing (via buildSystemInline).
  */
 
+import { homedir } from "node:os";
 import { basename } from "node:path";
 import { spawnSync } from "node:child_process";
 import { buildSystemInline, buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
 
-// The composition preset: the handler actor + the scribe role into --system.
-const system = buildSystemInline({ actor: "handler", role: "scribe" });
+// The actor is the standing identity — bound to the conversation via
+// --system-identity, persisted, restored on resume. The role rides --system.
+const identity = `${homedir()}/.claude/actors/handler/ACTOR.md`;
+const system = buildSystemInline({ role: "scribe" });
 
 // Name after the worktree: a `<base>--<worktree>` cwd becomes scribe-<worktree>.
 const dir = basename(process.cwd());
@@ -49,7 +52,7 @@ if (mi >= 0) {
 // The skill set rides --claudeMd: assembled into the session's CLAUDE.md
 // content on every launch (fresh or resumed), cached, no turn fired.
 const skills = skillsFor({ actor: "handler", role: "scribe" });
-const args = ["--name", name, "--system", system, "--claudeMd", buildSkillsBlock(skills, { includeSuccess: false })];
+const args = ["--name", name, "--system-identity", identity, "--system", system, "--claudeMd", buildSkillsBlock(skills, { includeSuccess: false })];
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.

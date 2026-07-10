@@ -22,6 +22,7 @@ import './lib/sc-only.mjs';
  *   start-claude.mjs --no-resume          # force a brand-new conversation
  *   start-claude.mjs --no-resume --message "..."  # send a first message
  *   start-claude.mjs --model claude-...   # override the default model
+ *   start-claude.mjs --actor handler      # optional: actor identity via --system-identity, actor skills included
  *   start-claude.mjs --doctor             # print what would be sent, then exit
  *
  * --doctor composes exactly what a real launch would (same skillsFor and
@@ -34,17 +35,40 @@ import './lib/sc-only.mjs';
  * Exit 2 if a skill file is missing (via buildSkillsBlock).
  */
 
+import { homedir } from "node:os";
 import { basename } from "node:path";
+import { existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
 
-// Name after the directory: sessions in different projects tell apart.
-const name = `claude-${basename(process.cwd())}`;
-
 // Forward everything else verbatim to claude-sdk-cli. A leading `--` is dropped.
 const passthrough = process.argv.slice(2);
 if (passthrough[0] === "--") passthrough.shift();
+
+// Pull an optional --actor <name> out of the passthrough: when given, the
+// actor's ACTOR.md rides --system-identity (bound to the conversation,
+// persisted, restored on resume) and its frontmatter skills join the
+// foundational set. Extracted here so it is not forwarded to claude-sdk-cli.
+let actor;
+const ai = passthrough.indexOf("--actor");
+if (ai >= 0) {
+  actor = passthrough[ai + 1];
+  passthrough.splice(ai, 2);
+  if (!actor) {
+    console.error("start-claude: --actor requires a name (e.g. --actor handler).");
+    process.exit(2);
+  }
+}
+const identity = actor ? `${homedir()}/.claude/actors/${actor}/ACTOR.md` : undefined;
+if (identity && !existsSync(identity)) {
+  console.error(`actor identity file not found: ${identity}`);
+  process.exit(2);
+}
+
+// Name after the directory: sessions in different projects tell apart. With an
+// actor, the name says who it is: <actor>-<dir>.
+const name = `${actor ?? "claude"}-${basename(process.cwd())}`;
 
 // Pull an optional --message <value> out of the passthrough: when given (and
 // the conversation is fresh), it is sent as the first message. Extracted here
@@ -56,20 +80,22 @@ if (mi >= 0) {
   passthrough.splice(mi, 2);
 }
 
-// No actor, no roles: skillsFor({}) is the foundational set, expanded through
-// each skill's `skills:` dependencies. Rides --claudeMd: assembled into the
-// session's CLAUDE.md content on every launch, cached, no turn fired.
-const skills = skillsFor({});
+// Foundational skills, plus the actor's own when --actor is given — expanded
+// through each skill's `skills:` dependencies. Rides --claudeMd: assembled into
+// the session's CLAUDE.md content on every launch, cached, no turn fired.
+const skills = skillsFor(actor ? { actor } : {});
 const claudeMd = buildSkillsBlock(skills, { includeSuccess: false });
 
 if (passthrough.includes("--doctor")) {
   console.log(`name: ${name}`);
+  if (actor) console.log(`actor: ${actor} (${identity})`);
   console.log(`skills (${skills.length}): ${skills.join(", ")}`);
   console.log(`--claudeMd: ${claudeMd.length.toLocaleString("en-US")} chars`);
   process.exit(0);
 }
 
 const args = ["--name", name, "--claudeMd", claudeMd];
+if (identity) args.push("--system-identity", identity);
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.

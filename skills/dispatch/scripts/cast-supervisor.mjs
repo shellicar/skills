@@ -40,7 +40,8 @@
  *     "effort": "high"                  // optional: low|medium|high|xhigh|max
  *   }
  *
- * Stdout: the supervisor pane id.
+ * Stdout: {"pane":"%X","convId":"<uuid>"} — the caller keeps the conversation
+ * id; it is the cast's recovery anchor.
  *
  * Env:
  *   TMUX_PANE — required (the Handler's pane id).
@@ -104,4 +105,6 @@ if (!result.ok) {
   process.exit(1);
 }
 
-console.log(target);
+// The pane and the conversation id — the caller keeps the id; it is the
+// durable anchor for resuming or recovering this cast.
+console.log(JSON.stringify({ pane: target, convId: result.convId }));

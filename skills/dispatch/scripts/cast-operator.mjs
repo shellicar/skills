@@ -37,7 +37,9 @@
  *     "effort": "high"                  // optional: low|medium|high|xhigh|max
  *   }
  *
- * Stdout: the operator pane id.
+ * Stdout: {"pane":"%X","convId":"<uuid>"} for a fresh cast — the caller keeps
+ * the conversation id; it is the cast's recovery anchor. A resume: true
+ * re-trigger prints the pane id only (the conversation already exists).
  *
  * Env:
  *   TMUX_PANE — required (the Handler's pane id).
@@ -104,5 +106,7 @@ if (cfg.iteration > 1 && cfg.resume) {
     console.error(`claude-sdk-cli launch failed in ${target}: ${result.reason}${result.name ? ` (saw ${result.name})` : ''}`);
     process.exit(1);
   }
-  console.log(target);
+  // The pane and the conversation id — the caller keeps the id; it is the
+  // durable anchor for resuming or recovering this cast.
+  console.log(JSON.stringify({ pane: target, convId: result.convId }));
 }
