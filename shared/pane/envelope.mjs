@@ -1,19 +1,25 @@
 // Build the --prompt and --system content for a cast, plus the supervisor's
-// message context. Callers pass names; this reads from ~/.claude.
+// message context. Callers pass names; this reads from its own repo checkout
+// (skills/, actors/, roles/, docs/diagrams/ beside this module), so a worktree
+// composes from its own branch rather than through ~/.claude's symlinks, which
+// always point at the main checkout.
 
 import { readFileSync } from 'node:fs';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
 import { shq } from './shared.mjs';
 import { withDependencies } from './skills.mjs';
+
+// The repo root this module lives in: shared/pane/ → two levels up.
+const REPO = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 /**
  * Read skill files and build the <skills> block. Skills are injected as
  * structured XML so the model can parse boundaries; each skill's SUCCESS.md is
  * embedded as <success> when present, and any diagrams the skill declares in
  * its frontmatter (`diagrams: [lifecycle]`, bare names) are resolved from the
- * pool at ~/.claude/diagrams and embedded as <diagram name format="d2"> — the
+ * repo's docs/diagrams pool and embedded as <diagram name format="d2"> — the
  * canonical .d2 is both the SC's rendered picture and the text the cast reads,
  * so they cannot drift. A declared diagram that is missing is a broken compose
  * (exit 2), same as a missing skill. Skills array is required (exit 2 if
@@ -31,7 +37,7 @@ export function buildSkillsBlock(skills, { includeSuccess = true } = {}) {
     process.exit(2);
   }
 
-  const skillsDir = join(homedir(), '.claude', 'skills');
+  const skillsDir = join(REPO, 'skills');
   // Expand each skill's `skills:` frontmatter dependencies, transitively —
   // dependencies come before the skill that needs them. Every injection path
   // passes through here, so a dispatch that names medium-commit delivers
@@ -54,7 +60,7 @@ export function buildSkillsBlock(skills, { includeSuccess = true } = {}) {
     }
     let diagramsBlock = '';
     for (const d of declaredDiagrams(content)) {
-      const dp = join(homedir(), '.claude', 'diagrams', `${d}.d2`);
+      const dp = join(REPO, 'docs', 'diagrams', `${d}.d2`);
       let diagram;
       try {
         diagram = readFileSync(dp, 'utf8');
@@ -110,7 +116,7 @@ export function buildPrompt({ from, message, skills, missionPath }) {
  * missing.
  */
 export function buildSystem({ actor, role }) {
-  const base = join(homedir(), '.claude');
+  const base = REPO;
   const part = (kind, name, file, tag) => {
     const p = join(base, kind, name, file);
     try {
@@ -139,7 +145,7 @@ export function buildSystem({ actor, role }) {
  * file is missing. `role` accepts a single name or an array.
  */
 export function buildSystemInline({ actor, role }) {
-  const base = join(homedir(), '.claude');
+  const base = REPO;
   const read = (kind, name, file) => {
     const p = join(base, kind, name, file);
     try {

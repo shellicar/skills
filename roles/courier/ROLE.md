@@ -1,10 +1,9 @@
 ---
 skills:
-  - technical-writing
-  - sc-pr-writing
-  - sc-workitem-writing
-  - sc-commit-writing
-  - sc-ghostwriting
+  - medium-pr
+  - medium-workitem
+  - medium-commit
+  - voice-stephen
   - pre-commit
   - git-workflow
   - git-knowledge

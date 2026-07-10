@@ -6,7 +6,7 @@ sam:
 skills:
   - mission-preparation
   - active-listening
-  - sc-ghostwriting
+  - voice-stephen
   - mission-artefacts
 ---
 
@@ -18,7 +18,7 @@ skills:
 
 - `mission-preparation` — the stage you work in: the pipeline from the SC's direction to a ready mission, and where your step sits in it.
 - `active-listening` — the technique of drawing the SC's intent out in conversation.
-- `sc-ghostwriting` — writing in the SC's voice, so `intent.md` reads as his.
+- `voice-stephen` — writing in the SC's voice, so `intent.md` reads as his.
 - `mission-artefacts` — what `intent.md` holds and the mission directory it lives in.
 
 ## Who

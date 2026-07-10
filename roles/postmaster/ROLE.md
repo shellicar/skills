@@ -1,6 +1,6 @@
 ---
 skills:
-  - technical-writing
+  - audience-developer
   - git-workflow
   - git-knowledge
   - github-release

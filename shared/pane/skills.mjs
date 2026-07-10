@@ -3,18 +3,23 @@
 //
 // The `skills:` lists (and each actor's `roles:`) live in the identity files
 // themselves — each file is the single source for what it loads. This module
-// parses them at load time from ~/.claude (the same base envelope.mjs reads),
-// replacing the hand-kept mirror that used to be hard-coded here.
+// parses them at load time from its own repo checkout (the same base
+// envelope.mjs reads), replacing the hand-kept mirror that used to be
+// hard-coded here. Resolving relative to the module — not through ~/.claude,
+// whose symlinks always point at the main checkout — keeps every checkout
+// self-consistent: a worktree composes from its own branch.
 //
 // FOUNDATIONAL stays hard-coded: it mirrors the `Load:` lines in
 // ~/.claude/CLAUDE.md, which has no frontmatter to read.
 
 import { readFileSync } from "node:fs";
-import { homedir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
 
-const BASE = join(homedir(), ".claude");
+// The repo root this module lives in: shared/pane/ → two levels up. Skills
+// live under skills/, identities under actors/ and roles/, all beside it.
+const BASE = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 // Loaded by every session (the CLAUDE.md `Load:` lines).
 const FOUNDATIONAL = [
@@ -23,8 +28,10 @@ const FOUNDATIONAL = [
   "transparency",
   "commander-protocol",
   "teapot-protocol",
-  "executive-communication",
-  "clear-communication",
+  "communication-fundamentals",
+  "voice-claude",
+  "audience-stephen",
+  "audience-sc",
   "system-glossary",
   "safe-operations",
 ];

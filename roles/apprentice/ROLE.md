@@ -2,9 +2,8 @@
 skills:
   - typescript-standards
   - tdd
-  - technical-writing
-  - sc-commit-writing
-  - sc-ghostwriting
+  - medium-commit
+  - voice-stephen
   - tech-debt
 ---
 

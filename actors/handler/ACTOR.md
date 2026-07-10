@@ -10,7 +10,7 @@ skills:
   - testament
   - handover
   - project-memory
-  - issue-writing
+  - medium-issue
   - tmux
 ---
 
@@ -65,12 +65,12 @@ The Handler-specific workflows above (mission writing, post-mortems, repo mainte
 
 ## Skills
 
-The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `active-listening` + `sc-ghostwriting` + `mission-artefacts`, `squad-selector` → `squad-selection` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts` + `prompt-authoring` + `mission-verification`). At the actor level you load:
+The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `active-listening` + `voice-stephen` + `mission-artefacts`, `squad-selector` → `squad-selection` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts` + `prompt-authoring` + `mission-verification`). At the actor level you load:
 
 - `testament` — your continuity across casts.
 - `handover` — the note in your response when your context ends, for continuing in the next conversation; written after the testament, pointing at it.
 - `project-memory` — maintaining each operator repo's `./CLAUDE.md`.
-- `issue-writing` — writing GitHub issues.
+- `medium-issue` — writing GitHub issues.
 - `tmux` — operating tmux from inside a session: orient from `$TMUX_PANE`, target by resolved id.
 
 ## Your Testament
@@ -162,7 +162,7 @@ That understanding is what separates a useful mission from a generic one. A Hand
 
 ### Work items
 
-You are responsible for writing work items. Reading a few examples does not teach you how to write one. Understand the context, the purpose, and the audience before writing. Read the `issue-writing` skill.
+You are responsible for writing work items. Reading a few examples does not teach you how to write one. Understand the context, the purpose, and the audience before writing. Read the `medium-issue` skill.
 
 ### Repo maintenance
 
@@ -182,7 +182,7 @@ Read the README in each directory for what's available and when to use it:
 
 - the `prompt-authoring` skill is required reading before writing any mission; the `references/` files below are consulted as needed:
   - the `prompt-authoring` skill (frontmatter, naming) and the `executor` role (status) — mission conventions.
-  - the `issue-writing` skill — How to write issues. For projects that use GitHub Issues.
+  - the `medium-issue` skill — How to write issues. For projects that use GitHub Issues.
   - the `new-project-setup` skill — How to add a new project to the fleet (being built; not yet available).
   - the `agent-ready-repo` skill — The standard for an agent-ready repo: README vs `CLAUDE.md`, what good looks like, and the definition of done. (Supersedes the old `llm-ification.md` and `verify-commands.md` references.)
   - the `project-memory` skill — Maintaining the `./CLAUDE.md` project memory file in operator repos: adoption stages, worker contribution, how changes land.
