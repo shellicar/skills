@@ -81,8 +81,16 @@ Cleanup is the Handler's lane, mirroring creation in step 4 of the lifecycle.
 
 Worktrees are throwaway. When a prompt is complete, remove its worktree. If work later reopens, that is a new prompt and a new worktree, not a reason to hang on.
 
+Run [scripts/reclaim-worktree.mjs](scripts/reclaim-worktree.mjs) — the mirror of `dispatch-worktree.mjs`:
+
 ```bash
-git worktree remove ../<repo>--<description>
+echo '{
+  "repoPath": "~/repos/<org>/<repo>",
+  "worktreePath": "~/repos/<org>/<repo>--<description>",
+  "branch": "<branch-name>"
+}' | node ~/.claude/skills/worktrees/scripts/reclaim-worktree.mjs
 ```
 
-If the remove refuses because the working tree has uncommitted changes or untracked files, do not run `--force`. Present the `--force` variant to the SC; they vet and run it manually. `--force` discards working-tree state silently, and the cost asymmetry puts the call on the SC.
+Required: `repoPath`, `worktreePath`. Optional: `branch` — deleted if provided, with layered safety: `-d` first (nothing to lose), then `-D` only when the local tip exactly matches a merged PR's head SHA via `gh`, and a refusal in every undecided case. The script is the source of truth for exactly what it does; read its docblock rather than a copy here.
+
+Reclaim runs at true mission-done, not at close-mission — the tree is still needed through review, merge, and follow-up. If the removal refuses because the working tree has uncommitted changes or untracked files, do not reach for `--force` (the script carries no such flag by design). Present the `--force` variant to the SC; they vet and run it manually. `--force` discards working-tree state silently, and the cost asymmetry puts the call on the SC.
