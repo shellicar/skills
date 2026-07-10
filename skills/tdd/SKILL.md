@@ -59,7 +59,24 @@ describe('formatPhoneE164', () => {
 
 ## Expected/actual pattern
 
-Use explicit variables so the test reads clearly:
+This is a **readability** rule, not a rule about the failure message. A reader scanning a test top to bottom should know what it is proving *as they read it* — not reach the final line and reconstruct the intent from whatever got inlined into `expect()`.
+
+So name the expectation, and declare it early, right where the pieces it is built from already exist. If `IDep` is defined on the first line of the test, the expectation belongs there too — `const expected = [IDep]` — not hidden inside `expect(x).toEqual([IDep])` seven lines later. Pull the result into a named `actual` on its own line, then compare two named values:
+
+```typescript
+it('reads an @dependsOn class dependency off definition-time metadata', () => {
+  abstract class IDep {}
+  const expected = [IDep];
+  // ... arrange and act ...
+  const actual = svcFacts?.deps;
+
+  expect(actual).toEqual(expected);
+});
+```
+
+The inline form `expect(svcFacts?.deps).toEqual([IDep])` still *diagnoses* fine when it breaks — that is not the point. The point is the reader should not have to hold `svcFacts?.deps` in their head and wait until the last line to learn what it is meant to be. Navigation inside `expect()` (`expect(x.field)`, `expect(x.length)`, `expect(x.indexOf(y))`) is the same fault: the value being checked is assembled at the assertion instead of named before it.
+
+Standard examples:
 
 ```typescript
 it('formats Australian mobile to E.164', () => {
@@ -76,6 +93,8 @@ it('throws on invalid phone number', () => {
   expect(actual).toThrow();
 });
 ```
+
+Leave the pattern only where leaving it reads *better*, not worse: `toEqual` for deep equality, `toThrow(NotFoundError)` for errors.
 
 ## Test naming
 
