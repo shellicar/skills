@@ -204,3 +204,9 @@ _Avoid_: summary, recap, handoff, briefing
 What a **cast** does on waking: read the prior picture — its **testament**, the durable records, and what is actually running — before it acts.
 
 _Avoid_: startup, init, bootstrap
+
+## generate
+
+To create a value or artefact that did not exist before — an id, a file, a schema.
+
+_Avoid_: mint, minting, coin

@@ -54,4 +54,4 @@ The redesign, and its honest limit:
 - No verdict column anywhere: the author judges nothing. The verifier walks two legs — provenance ← sources, mission ← provenance.
 - Nothing can *force* generation to take the order; Claude can still compose everything at once. The SC's ruling: this direction is the only way the skill provides value — it puts the sources in front of the scribe before/while the words form, which is the only moment grounding can happen. It primes; it does not enforce. Same mechanism-class as the teapot markers.
 
-Rejected en route: keeping a `Verdict: keep | cut` column (self-verdict, 100% pass rate across the fleet); an `INVENTED` enum value (unreachable in a finished file — nobody ever writes it about their own claim); free-written source labels (the fleet minted seven categories in four days).
+Rejected en route: keeping a `Verdict: keep | cut` column (self-verdict, 100% pass rate across the fleet); an `INVENTED` enum value (unreachable in a finished file — nobody ever writes it about their own claim); free-written source labels (the fleet invented seven categories in four days).

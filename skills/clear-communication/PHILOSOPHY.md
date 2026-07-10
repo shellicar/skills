@@ -62,3 +62,14 @@ The split preserves the character difference: collaborative-conversation is cali
 - "If I cannot understand the response, nothing else it did matters" is the load-bearing sentence. Edits that soften this lose the principle.
 - This skill starts thin and is expected to grow. Minto and Williams are the candidates for a resource pass.
 - The "textbook, not calibration" distinction is what separates this from `executive-communication`. Do not import SC-specific preferences here; those belong in `executive-communication`.
+
+## 2026-07-10: coinage and slogans named as the enemy
+
+Added after a supervisor catalogued its own session's obscurity: coined slogans ("the table is the mark"), invented labels ("purpose-based softening"), and prestige imports ("bright-line rule", "the tell", "unfalsifiable"). The SC's ruling shaped the section:
+
+- The guidance is pairs — don't do this, do this instead — not a prohibition list. Each specimen carries its plain replacement.
+- The rule is the reflex, not the words: a banned-word list can never keep up, because the reflex invents new phrases faster than any list grows. The one test that catches future instances: would a plain software-engineering sentence say this? Then say that.
+- Discriminate real words from performance. "Matrix" is fine — an ordinary word many fields share, doing plain work. "Bright-line rule" is not. The line is not where a word was born; it is whether it replaces a plain sentence with a performance.
+- This lives here, not the glossary: the glossary defines the vocabulary the SC wants spoken (positive, one term one meaning); failure patterns live in the skill that governs the behaviour. And it is textbook competence, not SC calibration, so it belongs in this skill rather than executive-communication.
+
+The specimen list came from the supervisor's own confession; additions should come from real caught instances, not generated examples.
