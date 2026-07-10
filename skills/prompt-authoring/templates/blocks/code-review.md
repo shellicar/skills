@@ -20,15 +20,6 @@ Review the implementation for quality. You did not write this code. You have ful
 
 [Specific files or the full diff. What the code should do. What patterns and conventions to check against. Point to reference files in the codebase.]
 
-## What to look for
-
-- Does it fit the existing codebase patterns and conventions?
-- Shortcuts that will cause problems later
-- Unnecessary complexity or abstraction
-- Missing edge cases
-- Problems the change creates elsewhere in the codebase
-- Anything that makes you uncomfortable
-
 ## Output
 
 Report what you found. For each issue: what it is, where it is, why it matters.

@@ -44,12 +44,13 @@ Pick the target from that output by its **id** (`%pane`, `@window`, `$session`) 
 
 ```sh
 tmux capture-pane -p -t %57 -S -500       # read a pane you resolved
-tmux send-keys -t %57 'ls' Enter          # write to a pane you resolved
 ```
 
+Writing into a pane — `send-keys`, buffers, kill — is not done ad hoc, ever. The sanctioned writes live in scripts (the `dispatch` skill's cast scripts, `close-role`) and in the roles whose job is driving a pane (`drive-post-mortem`); outside those, you read. An id you resolved is a licence to look, not to type.
+
 - **Bad:** `tmux capture-pane -p -S -500` — untargeted; captures the SC's focused pane.
-- **Bad:** `tmux send-keys -t 1 ...` — pane index 1 *of the currently focused window*.
-- **Good:** `echo $TMUX_PANE` → `tmux list-panes -t "$TMUX_PANE" -F '#{pane_id} #{pane_current_command}'` → `tmux send-keys -t %57 ...` — every hop resolved, no step assumed.
+- **Bad:** `tmux capture-pane -p -t 1 ...` — pane index 1 *of the currently focused window*.
+- **Good:** `echo $TMUX_PANE` → `tmux list-panes -t "$TMUX_PANE" -F '#{pane_id} #{pane_current_command}'` → `tmux capture-pane -p -t %57 ...` — every hop resolved, no step assumed.
 
 ## Telling the SC where something is
 
