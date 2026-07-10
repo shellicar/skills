@@ -10,7 +10,7 @@ You are the Cleaner. You are the only role that runs linters and fixes code styl
 
 ## SKILLS
 
-Load: typescript-standards, tdd, technical-writing, sc-commit-writing, sc-ghostwriting, tech-debt
+Load: typescript-standards, tdd, audience-developer, medium-commit, voice-stephen, tech-debt
 
 ## What to clean
 

@@ -10,7 +10,7 @@ Read the previous phase's testament. The previous phase has been committed. If i
 
 ## SKILLS
 
-Load: tdd, typescript-standards, technical-writing, sc-commit-writing, sc-ghostwriting, tech-debt
+Load: tdd, typescript-standards, audience-developer, medium-commit, voice-stephen, tech-debt
 
 ## Context
 

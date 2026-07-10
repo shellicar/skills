@@ -6,7 +6,7 @@ description: >-
   planner sends the handler a fixed, copy-pasteable message, word for word, and
   carries the SC's own words in the discussion. No improvising, no judgment. Use
   when driving a handler's retro rather than the handler running it directly with
-  the SC. Load sc-ghostwriting alongside, for the SC's voice to the handler.
+  the SC. Load voice-stephen alongside, for the SC's voice to the handler.
 ---
 
 # Skill
@@ -37,7 +37,7 @@ The handler runs in a tmux pane on the server you are in.
 
 # Reporting to the SC
 
-Steps 2, 5 and 7 are where you bring the SC the handler's output and your read of it. This is where the drive most often fails, on your side, not the handler's. Load `executive-communication`. The SC has about a minute.
+Steps 2, 5 and 7 are where you bring the SC the handler's output and your read of it. This is where the drive most often fails, on your side, not the handler's. Load `audience-sc` and `voice-claude`. The SC has about a minute.
 
 - **Mark the step.** Open every report with `[<n>/8]: <step name>` — where you are in the eight-step script (e.g. `[3/8]: Check what's already covered`). One glance tells the SC how far the retro has moved, which they need before the rest of your words land.
 - **Lead with the phase.** Say where in the retro you are, look-back, deciding changes, whatever it is. The handler's output means nothing to the SC until they know what the handler was meant to be producing.
@@ -84,7 +84,7 @@ Read the pane. Bring the SC the handler's three and your read of them. **The SC 
 
 1. Ask the handler to explain it: what does it mean, why did you name it, how would being better at it help? That draws the real thing out.
 2. If it reaches for jargon to sound thought-through, name that and send it to `system-glossary`.
-3. Then ask it to write it plainly as one short "we can do better at" — plain enough to say to a person, no jargon, no cleverness. The handler will not have the communication skills loaded, so when it stays dressed up, tell it to load `clear-communication` and `sc-ghostwriting` and read `sc-doc-writing` for what plain looks like, then say each again. Keep pushing until it is plain.
+3. Then ask it to write it plainly as one short "we can do better at" — plain enough to say to a person, no jargon, no cleverness. The handler will not have the communication skills loaded, so when it stays dressed up, tell it to load `communication-fundamentals` and `voice-stephen` and read `medium-documentation` for what plain looks like, then say each again. Keep pushing until it is plain.
 
 Worked example: "catching the exact instant we don't know something, and naming the gap out loud" became, through those three questions, "we can do better at saying 'I don't know' instead of guessing".
 
@@ -130,7 +130,7 @@ Once the handler has committed the record and its testament, close its pane by i
 
 - **Read the pane before every send, without exception.** Capture it and act on where the handler actually is, not where you left it, not where you assume it landed after a reset. Sending on a stale or assumed picture is how you restart a settled phase or talk past the handler. Reading first is not optional.
 - **Send the fixed message, do not rewrite it.** The messages above are copy-pasteable and word-for-word. You do not improve them, shorten them, or restate the handler's own words back at it. The wording is fixed so the retro is the same every time.
-- **Carry the SC's words, never your paraphrase.** When it is the SC's turn, you send what the SC said, in their voice. You do not compress their decision into your own, and you do not decide for them. Load `sc-ghostwriting`.
+- **Carry the SC's words, never your paraphrase.** When it is the SC's turn, you send what the SC said, in their voice. You do not compress their decision into your own, and you do not decide for them. Load `voice-stephen`.
 - **Never stand in.** The calls, the shaping, the tone are the SC's. The moment you decide for them to save a round, you and the handler are two Claudes converging on a hollow file.
 
 # Philosophy

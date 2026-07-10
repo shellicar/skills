@@ -32,7 +32,7 @@ One mistake is not a reason to rewrite the material. The outcome is the recorded
 
 - Driving a post-mortem through a pane, planner to handler with the SC mediated — a separate skill, still to be written.
 - Where the post-mortem sits in the mission lifecycle — the executor role's post-mortem stage, and mission-cleanup.
-- Stephen's voice when a cast relays for him — `sc-ghostwriting`, which applies when driving, not when the handler talks to the SC directly.
+- Stephen's voice when a cast relays for him — `voice-stephen`, which applies when driving, not when the handler talks to the SC directly.
 
 ## Notes for future editors
 

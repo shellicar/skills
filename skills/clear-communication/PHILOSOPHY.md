@@ -2,7 +2,7 @@
 
 This file is the editorial context for the `clear-communication` skill. It is not loaded at runtime. Read it before modifying `SKILL.md` so changes stay aligned with the reasoning that produced it.
 
-> **Succession:** `collaborative-conversation` — the SC-communication skill this one was split from — has since been retired and replaced by `executive-communication`. The dated history below names it under its old name; where this file points at the *live* SC-communication skill, that is now `executive-communication`.
+> **Succession:** `collaborative-conversation` — the SC-communication skill this one was split from — was retired and replaced by `executive-communication`, itself since superseded by `audience-stephen`, `audience-sc`, and `voice-claude`. The dated history below names the old names; where this file points at the *live* SC-communication skills, those are now `audience-sc` and `audience-stephen`.
 
 ## Why this skill exists
 
@@ -53,15 +53,15 @@ The split preserves the character difference: collaborative-conversation is cali
 
 ## What this skill does NOT cover
 
-- The SC's communication preferences (carry the load, bring a digested understanding, collaborate to reach the solution). Those are `executive-communication`.
-- Writing style for commits, PR titles, and work item text. That is `writing-style`.
+- The SC's communication preferences (carry the load, bring a digested understanding, collaborate to reach the solution). Those are `audience-sc` and `audience-stephen`.
+- Writing style for commits, PR titles, and work item text. That is `voice-stephen` and the `medium-*` skills.
 - Reasoning being visible in the response. That is `transparency`.
 
 ## Notes for future editors
 
 - "If I cannot understand the response, nothing else it did matters" is the load-bearing sentence. Edits that soften this lose the principle.
 - This skill starts thin and is expected to grow. Minto and Williams are the candidates for a resource pass.
-- The "textbook, not calibration" distinction is what separates this from `executive-communication`. Do not import SC-specific preferences here; those belong in `executive-communication`.
+- The "textbook, not calibration" distinction is what separates this from the SC-audience skills. Do not import SC-specific preferences here; those belong in `audience-sc` and `audience-stephen`.
 
 ## 2026-07-10: coinage and slogans named as the enemy
 

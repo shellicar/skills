@@ -10,13 +10,13 @@ Read the previous phase's testament. The previous phase has been committed. If i
 
 ## SKILLS
 
-Load: technical-writing, sc-pr-writing, sc-workitem-writing, sc-commit-writing, sc-ghostwriting, pre-commit, git-workflow, git-knowledge, azure-devops, azure-devops-pr, ado-work-items
+Load: audience-developer, medium-pr, medium-workitem, audience-stakeholder, medium-commit, voice-stephen, pre-commit, git-workflow, git-knowledge, azure-devops, azure-devops-pr, ado-work-items
 
 ## Ship
 
 ### Skills
 
-Load the `azure-devops-pr` skill and the SC writing skills: `sc-pr-writing`, `sc-workitem-writing`, `sc-commit-writing`, and `sc-ghostwriting`.
+Load the `azure-devops-pr` skill and the writing skills: `medium-pr`, `medium-workitem`, `medium-commit`, and `voice-stephen`.
 
 ### Create PR Task
 

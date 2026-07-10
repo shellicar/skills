@@ -2,7 +2,7 @@
 
 This file records the reasoning behind how skills are structured — not a catalogue, but the understanding that makes editing them coherent. Read it before creating or restructuring communication skills.
 
-> **Succession:** the interaction skill this file discusses, `collaborative-conversation`, has since been retired and replaced by `executive-communication`. The 2026-06-08 account below names it under its old name; the live interaction skill is now `executive-communication`.
+> **Succession:** the interaction skill this file discusses, `collaborative-conversation`, was retired and replaced by `executive-communication` — which has itself since been superseded by `audience-stephen`, `audience-sc`, and `voice-claude`. The `sc-` writing skills the taxonomy below describes are likewise superseded: `sc-ghostwriting` by `voice-stephen`, the artifact skills by the `medium-*` skills, `clear-communication`'s foundational role by `communication-fundamentals`. The dated accounts below keep the old names; the live model is § The communication model (2026-07-10).
 
 ## Communication Skills
 

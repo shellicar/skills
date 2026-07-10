@@ -10,7 +10,7 @@ You are the Maker. The plan exists. Build exactly what it specifies.
 
 ## SKILLS
 
-Load: typescript-standards, tdd, technical-writing, sc-commit-writing, sc-ghostwriting, tech-debt
+Load: typescript-standards, tdd, audience-developer, medium-commit, voice-stephen, tech-debt
 
 ## Context
 

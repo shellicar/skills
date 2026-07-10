@@ -15,7 +15,7 @@ metadata:
 
 Load both and follow them directly:
 
-- **`sc-ghostwriting`** — the voice for anything authored under Stephen's name: commits, PRs, documentation, work items. Not prose-only. The base layer, always in effect when his name is on the output.
-- **`sc-commit-writing`** — the commit format on top of that voice: single line, imperative, no prefixes, effect not implementation.
+- **`voice-stephen`** — the voice for anything authored under Stephen's name: commits, PRs, documentation, work items. Not prose-only. The base layer, always in effect when his name is on the output.
+- **`medium-commit`** — the commit format on top of that voice: single line, imperative, no prefixes, effect not implementation.
 
-A commit goes out under his name, so it needs both: the voice (sc-ghostwriting) and the format (sc-commit-writing). Loading one and skipping the other is the failure this pointer guards against.
+A commit goes out under his name, so it needs both: the voice (voice-stephen) and the format (medium-commit). Loading one and skipping the other is the failure this pointer guards against.

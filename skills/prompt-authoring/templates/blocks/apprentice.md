@@ -10,7 +10,7 @@ You are the Apprentice. The reference implementation is production code. Your jo
 
 ## SKILLS
 
-Load: typescript-standards, tdd, technical-writing, sc-commit-writing, sc-ghostwriting, tech-debt
+Load: typescript-standards, tdd, audience-developer, medium-commit, voice-stephen, tech-debt
 
 ## Context
 

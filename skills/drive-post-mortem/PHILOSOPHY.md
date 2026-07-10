@@ -12,7 +12,7 @@ The hard part of driving is that the planner is faster without the SC in the loo
 
 ## Language is a lever
 
-A late and important point in the session: the register the planner writes in is not cosmetic. Claude mirrors the language it is addressed in, the way people mirror each other. Plain, collaborative wording draws a colleague's answer from the handler; PM jargon draws jargon; blame draws self-flagellation. So the planner's choice of words becomes the handler's, then the post-mortem file's, then the corpus the next cast trains on. Carrying the SC's voice intact is steering, not courtesy, and `sc-ghostwriting` is a hard dependency, not a nicety.
+A late and important point in the session: the register the planner writes in is not cosmetic. Claude mirrors the language it is addressed in, the way people mirror each other. Plain, collaborative wording draws a colleague's answer from the handler; PM jargon draws jargon; blame draws self-flagellation. So the planner's choice of words becomes the handler's, then the post-mortem file's, then the corpus the next cast trains on. Carrying the SC's voice intact is steering, not courtesy, and `voice-stephen` (originally `sc-ghostwriting`) is a hard dependency, not a nicety.
 
 ## What was rejected
 
@@ -22,7 +22,7 @@ A late and important point in the session: the register the planner writes in is
 ## What this skill does NOT cover
 
 - The handler's own conduct in the retro — `post-mortem`.
-- The SC's voice, and the plain, no-em-dash, no-jargon register the planner writes in — `sc-ghostwriting`, loaded alongside.
+- The SC's voice, and the plain, no-em-dash, no-jargon register the planner writes in — `voice-stephen`, loaded alongside.
 - The tmux mechanics of capturing a pane and dispatching casts — the router role.
 
 ## Notes for future editors

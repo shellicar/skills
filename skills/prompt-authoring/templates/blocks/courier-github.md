@@ -10,7 +10,7 @@ Read the previous phase's testament. The previous phase has been committed. If i
 
 ## SKILLS
 
-Load: technical-writing, sc-pr-writing, sc-workitem-writing, sc-commit-writing, sc-ghostwriting, pre-commit, git-workflow, git-knowledge, github-pr
+Load: audience-developer, medium-pr, medium-workitem, audience-stakeholder, medium-commit, voice-stephen, pre-commit, git-workflow, git-knowledge, github-pr
 
 ## Ship
 
@@ -32,7 +32,7 @@ git add [path/to/changes.jsonl]
 
 ### Skills
 
-Load the `github-pr` skill and the SC writing skills: `sc-pr-writing`, `sc-workitem-writing`, `sc-commit-writing`, and `sc-ghostwriting`.
+Load the `github-pr` skill and the writing skills: `medium-pr`, `medium-workitem`, `medium-commit`, and `voice-stephen`.
 
 Push the branch to origin, then open the PR.
 
