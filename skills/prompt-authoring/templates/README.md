@@ -54,7 +54,7 @@ A block is a *role* the operator takes for a phase; a skill is a *body of instru
 
 A *recipe* is the canonical phase spine for a mission type that **recurs with a fixed shape** — maintenance releases, security audits, version-bump releases. Where a composition (above) names the role sequence in a line, a recipe is the detailed source: per phase, the role, the skills, and what it does. It exists so a recurring mission's shape is **read, not re-derived** — re-deriving it is how a recurring mission ends up with a freshly-invented, wrong structure.
 
-Recipes live as files in a `recipes/` directory beside this one (none has been canonised yet). A recipe is the skeleton, not the mission: the author still fills the mission-level deltas (goal, why, branch, the specific context). Take the shape; never carry another instance's specifics.
+Recipes live as files in a `recipes/` directory beside this one. A recipe is the skeleton, not the mission: the author still fills the mission-level deltas (goal, why, branch, the specific context). Take the shape; never carry another instance's specifics.
 
 (A scaffold step that expands a named recipe into phases is deferred; for now a recipe is a document you follow when composing.)
 
