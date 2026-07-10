@@ -145,6 +145,12 @@ The supervisor's PASS/FAIL judgement on a **phase** — an input to the handler'
 
 _Avoid_: decision, ruling, approval
 
+## marking template
+
+A structure a skill's `SUCCESS.md` prescribes for recording its marking, item by item against each criterion. The operator's work is marked against it; the supervisor reproduces it filled as the coverage surface. Required wherever a `SUCCESS.md` defines one.
+
+_Avoid_: matrix, rubric, table, grid
+
 ## phase report
 
 The executor's own report to the SC on a verified **phase**: whether the verdict holds, and the decision or action that follows. Never a relay of the **verdict** itself, and not the per-cast **debrief**.

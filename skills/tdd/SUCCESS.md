@@ -14,6 +14,10 @@ The test code the session wrote or modified.
 
 ## How to judge
 
+### The marking template
+
+The table below is `tdd`'s **marking template** (see the glossary): the required surface for recording the marking. Reproduce it filled in your Working — it is part of the check, not a summary of it.
+
 Mark every `it` block against every criterion below, individually. Build this table before writing the verdict, and fill each cell:
 
 | Test (name / line) | Real coverage | Consistency | Expected/actual | One assertion | Structural |
