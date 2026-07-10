@@ -27,7 +27,6 @@
  * Stdin (JSON):
  *   {
  *     "from": "the claude-cli-cve-fix Handler",
- *     "model": "sonnet",
  *     "missionFile": "/path/to/mission.md",
  *     "phase": 1,
  *     "iteration": 2,                   // which verification this cast performs
@@ -39,6 +38,9 @@
  *     "skills": ["claude-philosophy"],  // MANDATORY; may be empty, never absent
  *     "effort": "high"                  // optional: low|medium|high|xhigh|max
  *   }
+ *
+ * No `model` field: the supervisor's model is fixed here (opus), not the
+ * dispatcher's to pick — the schema rejects a config that names one.
  *
  * Stdout: {"pane":"%X","convId":"<uuid>"} — the caller keeps the conversation
  * id; it is the cast's recovery anchor.
@@ -89,7 +91,8 @@ if (cfg.iteration > 1) {
 
 const result = launchCli(target, {
   from: cfg.from,
-  model: cfg.model,
+  // Fixed, not configurable: supervisors always run opus.
+  model: 'opus',
   missionFile: cfg.missionFile,
   name: 'supervisor',
   message,

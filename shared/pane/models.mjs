@@ -5,9 +5,10 @@
  * change here, and no Claude has to remember identifier values.
  *
  * The pick is right-sizing capability to the work, not buying certainty with
- * resources: Sonnet is the default for operators and supervisors; Opus for
- * medium-difficulty work; Fable only in extremely complex circumstances.
- * The defaults/recommended table lives in the squad-selection skill.
+ * resources: Sonnet is the default for operators; Opus for medium-difficulty
+ * work; Fable only in extremely complex circumstances. Supervisors always run
+ * Opus — fixed in cast-supervisor, not a dispatch choice. The
+ * defaults/recommended table lives in the squad-selection skill.
  */
 
 // Identifiers are always claude-[model-family]-[version].

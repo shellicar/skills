@@ -1,7 +1,7 @@
 ---
 name: dispatch
 description: |
-  WHAT: The dispatch tool layer — default fresh cast, operator resume the one exception — the scripts, their configs, pane lifecycle, the envelope shape, and skill injection.
+  WHAT: The dispatch tool layer — every dispatch a fresh cast, no recast — the scripts, their configs, pane lifecycle, the envelope shape, and skill injection.
   WHY: Dispatch is transport, not decision — one documented mechanism keeps every cast launched the same way, instead of each router re-deriving flags and envelope shapes.
   WHEN: Loaded by the router role, whenever a cast is dispatched.
 user-invocable: false
@@ -15,11 +15,9 @@ metadata:
 
 ### The process
 
-**Every dispatch is a new cast — a fresh CLI process, a fresh context. That is the default, always.**
+**Every dispatch is a new cast — a fresh CLI process, a fresh context. No exceptions: there is no recast.** Neither config schema has a `resume` field, so a recast cannot be expressed. The previous cast's context dies with its CLI, deliberately — what the next cast needs rides in the envelope and the mission file.
 
-The one exception is the operator at iteration >1 dispatched with `resume: true`: the running cast is re-triggered in place, because the operator's in-flight context is sometimes the point — a revise resumes the work in progress. That is the only recast that exists.
-
-The supervisor has no exception. A supervisor is only ever a fresh cast — its value is fresh eyes, and a supervisor that re-judges with its own last verdict in context is not that. There is no recast supervisor: `cast-supervisor`'s config has no `resume` field, so one cannot be expressed. It does take a `template` at iteration >1 — the reason the iteration exists, riding in the fresh cast's envelope.
+For the supervisor the reason is fresh eyes: a supervisor that re-judges with its own last verdict in context is not a check. For the operator it is the same discipline — the mission file carries the work's state, and a cast rebuilt from it is grounded in the record instead of its own conversation. At iteration >1 both take a `template` — the reason the iteration exists, riding in the fresh cast's envelope.
 
 Three scripts carry the whole flow:
 
@@ -41,7 +39,6 @@ Every field in a dispatch config is a lookup from something already decided:
 | `phase`, `iteration` | where the mission actually stands |
 | `missionFile`, `cwd`, `from` | the mission's location and the handler's identity |
 | `template` | the event that occurred: a verdict landed (operator `revise`), a new operator iteration finished (supervisor `verify`), or the mission file changed (`mission-updated`, both) |
-| `resume` | **the SC.** The one genuine decision in a dispatch config — never the router's |
 
 If the router finds itself weighing anything, it has left transport and is holding a decision that belongs upstream: stop, take it to the handler, who takes it to the SC. The canonical failure: a handler recast a supervisor off its own judgement — a router that confirmed "I'm about to re-prompt the supervisor" would have been stopped at the sentence, because that dispatch does not exist.
 
@@ -53,7 +50,7 @@ The layout: Handler full-width at the top, operator and supervisor side-by-side 
 
 **Each pane is created with the user's shell as its primary process.** `claude-sdk-cli` runs as a child of that shell. The shell survives Ctrl-C, so the pane survives Ctrl-C too — the cast scripts Ctrl-C the running CLI (shell stays) and launch a fresh CLI in the same pane. The pane's cwd, `@role` tag, and window properties persist; only the CLI process changes.
 
-An operator cast remains alive after its debrief — idle, waiting for the supervisor's verdict — because a revise verdict may resume it (`cast-operator`, `resume: true`), and killing it at debrief would lose the running context that resume exists for. The supervisor cast is never held for reuse: every verification is a fresh cast, and the previous supervisor's context dies with it, deliberately.
+No cast is held for reuse. An operator's next iteration and a supervisor's next verification are both fresh casts — the previous cast's context dies with its CLI, and what the next one needs rides in the envelope and the mission file.
 
 ### Envelopes
 
@@ -114,10 +111,8 @@ Stdout: `{"operatorPane":"%X","supervisorPane":"%Y"}`.
 
 Dispatch the operator for a phase iteration via [`cast-operator`](scripts/cast-operator.mjs). Requires `phase` and `iteration`; the schema enforces the process:
 
-- `iteration: 1` — always a fresh cast. `template` and `resume` are **forbidden** (exit 2 if present).
-- `iteration: >1` — `template` and `resume` are both **required**.
-  - `resume: false` — Ctrl-C, fresh cast; the template rides in the new envelope so the cast knows why it exists.
-  - `resume: true` — no new process; the template is pasted into the running cast and submitted. The one recast that exists.
+- `iteration: 1` — `template` is **forbidden** (exit 2 if present); the mission is reason enough.
+- `iteration: >1` — `template` is **required**: the reason this iteration exists, riding in the fresh cast's envelope.
 
 Templates (fixed; the Handler picks one, never writes prose):
 
@@ -137,16 +132,16 @@ JSON config:
 - `missionFile` — absolute path to the mission file (emitted as `<mission>`, read by the cast)
 - `name` — phase role (Maker, Apostle, Investigator, …); passed as `--name`
 - `phase`, `iteration` — required; the envelope is a fixed template built from them
-- `template`, `resume` — iteration >1 only, both required there; forbidden at iteration 1
+- `template` — iteration >1 only, required there; forbidden at iteration 1
 - `skills` — **mandatory**, even when empty (`[]`). The phase's extras only (see Skills below); the foundational set and the role's skills ride the launch automatically. An absent field is a broken dispatch and exits 2.
-- `role` — operator sub-role (`maker`, `builder`, …) resolved to `roles/<role>/ROLE.md`. **Required wherever a launch happens** — iteration 1, and iteration >1 with `resume: false` — because the role's system prompt and craft skills come from it; a launch without it is a cast with no identity. Optional only with `resume: true`, where nothing launches.
+- `role` — operator sub-role (`maker`, `builder`, …) resolved to `roles/<role>/ROLE.md`. **Required always**: the role's system prompt and craft skills come from it; a launch without it is a cast with no identity.
 - `effort` — optional thinking effort from the phase's `Effort:` field (`low|medium|high|xhigh|max`); omitted → CLI default
 
-Stdout: `{"pane":"%X","convId":"<uuid>"}` for a fresh cast — keep the conversation id; it is the cast's recovery anchor. A `resume: true` re-trigger prints the pane id only (the conversation already exists). Exits 1 if no operator pane exists — run `scaffold-panes` first.
+Stdout: `{"pane":"%X","convId":"<uuid>"}` — keep the conversation id; it is the cast's recovery anchor. Exits 1 if no operator pane exists — run `scaffold-panes` first.
 
 #### cast-supervisor
 
-Dispatch the supervisor for a phase iteration via [`cast-supervisor`](scripts/cast-supervisor.mjs). **Always a fresh cast, every iteration, no exceptions.** The schema has no `resume` field, so a recast supervisor is unrepresentable; the previous supervisor's context dies with its CLI, deliberately.
+Dispatch the supervisor for a phase iteration via [`cast-supervisor`](scripts/cast-supervisor.mjs). Always a fresh cast, like every dispatch; the previous supervisor's context dies with its CLI, deliberately — its value is fresh eyes.
 
 The template rule, enforced by the schema:
 
@@ -157,14 +152,14 @@ The template rule, enforced by the schema:
 
 ```json
 {"commands": [
-  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/cast-supervisor.mjs", "stdin": "{\"from\":\"<from>\",\"model\":\"<model>\",\"missionFile\":\"<missionFile>\",\"phase\":<phase>,\"iteration\":<iteration>,\"skills\":[<skills>],\"operatorRole\":\"<operatorRole>\"}"}
+  {"program": "~/repos/shellicar/skills/skills/dispatch/scripts/cast-supervisor.mjs", "stdin": "{\"from\":\"<from>\",\"missionFile\":\"<missionFile>\",\"phase\":<phase>,\"iteration\":<iteration>,\"skills\":[<skills>],\"operatorRole\":\"<operatorRole>\"}"}
 ]}
 ```
 
 JSON config:
 
 - `from` — sender identity
-- `model` — the family name; supervisors run `sonnet`: invest in the one doing the work, not the one catching it — the supervisor is a safety net, not the tightrope
+- no `model` field — the supervisor's model is not the dispatcher's to pick; it is fixed in the script (opus), and the schema rejects a config that names one
 - `missionFile` — the operator's mission file (emitted as `<mission>`; the supervisor reviews against it)
 - `phase`, `iteration` — required; which verification this cast performs
 - `template` — iteration >1 only, required there; forbidden at iteration 1

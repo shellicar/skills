@@ -22,7 +22,7 @@ export function handlerLaunchMessage({ task, project }) {
   return `I have a mission ${task} for ${project}.`;
 }
 
-// Shared between cast and recast: the "re-read the mission" line.
+// Shared reason line: the mission changed; the cast re-reads it.
 const MISSION_UPDATED = 'The mission file has been updated. Re-read it before continuing.';
 
 // The pointer telling a supervisor where to read the operator's debrief.
@@ -39,11 +39,11 @@ export function getSupervisorContext({ operatorPane, targetRepo }) {
   return `${operatorDebriefFooter(operatorPane)}\n\n${targetRepoNote}`;
 }
 
-// Operator recast reason: why the operator is being re-triggered at iteration >1.
-// Used by cast-operator for both resume:true (pasted into the running cast) and
-// resume:false (appended to the fresh cast's envelope). Returns undefined for
-// an unknown template (the caller reports it).
-export function operatorRecastMessage(template) {
+// Operator iteration reason: why this iteration exists, appended to the fresh
+// cast's envelope at iteration >1. Not a recast — the cast is always fresh;
+// the template is the reason it was dispatched. Returns undefined for an
+// unknown template (the caller reports it).
+export function operatorReasonMessage(template) {
   switch (template) {
     case 'mission-updated':
       return MISSION_UPDATED;

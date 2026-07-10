@@ -50,11 +50,11 @@ Three models, a capability ladder: **Sonnet** → **Opus** → **Fable**. Throwi
 | Operators, most work | Sonnet |
 | Medium-difficulty work — coding, investigating, the Apostle | Opus |
 | Extremely complex circumstances — rare; most work won't need it | Fable |
-| Supervisors | Sonnet |
+| Supervisors | Opus — fixed, not a pick |
 
 Where the stakes raise the pick, say so and let the SC dispose — a code review picks Opus or Fable depending on how critical finding bugs is.
 
-Supervisors run Sonnet because it is better to invest in the one doing the work than the one catching it: the supervisor is a safety net, not the tightrope.
+Supervisors always run Opus, and it is not the selector's or the dispatcher's to choose — the model is fixed in the dispatch script (`cast-supervisor`), which takes no model field. A squad names models for operators only.
 
 ## Effort defaults
 

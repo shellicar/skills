@@ -44,17 +44,15 @@ const operatorCommon = {
   name: nonEmpty,
 };
 
-// cast-operator: iteration 1 is always a fresh cast — `template` and `resume`
-// are forbidden (strict object). Iteration >1 requires both: the template says
-// why the cast is re-triggered, `resume` decides whether the existing context
-// carries forward (paste into the running CLI) or a fresh cast starts (the
-// template rides in the new envelope instead).
+// cast-operator: always a fresh cast, every iteration — `resume` does not
+// exist in this schema, so a recast operator is unrepresentable, the same as
+// the supervisor. Iteration 1 forbids `template` (a first cast needs no reason
+// beyond the mission); iteration >1 requires it — the reason this iteration
+// exists, riding in the fresh cast's envelope.
 //
-// `role` is required wherever a launch happens — iteration 1, and iteration >1
-// with resume: false — because launchCli composes the role's system prompt and
+// `role` is required always: launchCli composes the role's system prompt and
 // unions its craft skills from it; a launch without it is a cast with no
-// identity. With resume: true nothing launches (the running cast already has
-// its role), so the field is optional there.
+// identity.
 export const castOperatorConfig = z.union([
   z.strictObject({
     ...operatorCommon,
@@ -65,15 +63,7 @@ export const castOperatorConfig = z.union([
     ...operatorCommon,
     iteration: z.number().int().min(2),
     template: z.enum(['mission-updated', 'revise']),
-    resume: z.literal(false),
     role: nonEmpty,
-  }),
-  z.strictObject({
-    ...operatorCommon,
-    iteration: z.number().int().min(2),
-    template: z.enum(['mission-updated', 'revise']),
-    resume: z.literal(true),
-    role: nonEmpty.optional(),
   }),
 ]);
 
@@ -85,8 +75,12 @@ export const castOperatorConfig = z.union([
 // re-verify against — and rides in the fresh cast's envelope: required at
 // iteration >1, forbidden at iteration 1 (the first verification is
 // self-evident).
+// No `model` field: the supervisor's model is not the dispatcher's to pick.
+// It is fixed in cast-supervisor itself (opus) — a dispatch naming one is a
+// decision smuggled into transport, and the strict object rejects it.
+const { model: _model, ...commonSansModel } = common;
 const supervisorCommon = {
-  ...common,
+  ...commonSansModel,
   // The role the operator was dispatched with. Mandatory: the supervisor
   // judges the operator's work against the operator's skills, so it must be
   // launched with the same role skill set the operator got.
