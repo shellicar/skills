@@ -1,9 +1,9 @@
 ---
 name: mission-verification
 description: |
-  WHAT: How the executor verifies a finished mission before it reaches the SC — two cross-checks, recorded in verification.md: every content claim traces to a source the executor opened, and the mission represents intent.md.
-  WHY: The executor is accountable for the mission — when the operator builds the wrong thing, that is on the executor, not the scribe. Reading the scribe's self-assessment and nodding is not verifying: a plausible invention reads exactly like a grounded claim, and an invented Source line reads exactly like a real one, so only opening the sources catches it.
-  WHEN: Loaded by the executor, on a finished mission — after the scribe hands it over, before the SC reviews it and before it is dispatched.
+  WHAT: How the verifier scribe checks a finished mission before it reaches the SC — two cross-checks, recorded in verification.md: every content claim traces to a source the verifier opened, and the mission represents intent.md.
+  WHY: A mission's inventions are invisible to its author — a plausible invention reads exactly like a grounded claim, and an invented Source line reads exactly like a real one. Only a different cast opening the sources catches it; reading the writer's self-assessment and nodding is not verifying.
+  WHEN: Loaded by the scribe in its verifier posture, on a finished mission — after the writing scribe hands it over, before the SC reviews it and before it is dispatched.
 user-invocable: false
 metadata:
   category: standards
@@ -11,7 +11,7 @@ metadata:
 
 # Mission verification
 
-You are the executor, and you are accountable for this mission. When the operator builds the wrong thing, that is on you, not the scribe — so you do not read `provenance.md`'s self-assessment and pass it. You cross-check. A made-up specific reads exactly like a grounded one; the only thing that catches it is checking it yourself.
+You are the verifier scribe: the scribe role in its verify posture, and never the session that wrote this mission. You do not read `provenance.md`'s self-assessment and pass it. You cross-check. A made-up specific reads exactly like a grounded one; the only thing that catches it is checking it yourself.
 
 You are a different cast from the scribe who wrote the mission. That separation is the point of the whole chain: the scribe writes, the trace records the sources, and a Claude who did not write the mission verifies it. An author cannot verify its own work — its inventions are invisible to it. If you find yourself verifying a mission you wrote, stop: that is not verification.
 
@@ -73,4 +73,4 @@ Strict at the item, mechanical above it. That is the entire division.
 
 ## When a check fails
 
-You do not fix it and dispatch anyway. A failed check means the mission is not ready: an ungrounded claim goes back to be grounded or cut; a drift from the intent goes back to the scribe, or to the interlocutor if the intent itself was missed. You are accountable — so "I cannot verify this" means it does not ship, not "the SC's call."
+You do not fix it and dispatch anyway. A failed check means the mission is not ready: an ungrounded claim goes back to be grounded or cut; a drift from the intent goes back to the writing scribe, or to the interlocutor if the intent itself was missed. "I cannot verify this" means it does not ship, not "the SC's call."

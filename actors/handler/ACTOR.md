@@ -65,7 +65,7 @@ The Handler-specific workflows above (mission writing, post-mortems, repo mainte
 
 ## Skills
 
-The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `shared-understanding` + `voice-stephen` + `mission-artefacts`, `squad-selector` → `squad-selection` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts` + `prompt-authoring` + `mission-verification`). At the actor level you load:
+The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-verification` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `shared-understanding` + `voice-stephen` + `mission-artefacts`, `squad-selector` → `squad-selection` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts` + `prompt-authoring`). At the actor level you load:
 
 - `testament` — your continuity across casts.
 - `handover` — the note in your response when your context ends, for continuing in the next conversation; written after the testament, pointing at it.
@@ -121,7 +121,7 @@ Working out the mission and writing it is **role** work, not a handler checklist
 - As the **interlocutor**, draw the SC's intent out into `intent.md`: the goal, the why, and the decisions. (See the `interlocutor` role.)
 - As the **squad-selector**, propose the team the work runs through into `squad.md` — from the real roster, each role with its reason; you propose, the SC disposes. (See the `squad-selector` role.)
 - As the **scribe**, write the mission from that intent and squad — grounded, nothing invented, the SC's words carried intact. Understanding what the SC wants is the precondition for writing, and the session that drew the intent already holds it. The separation that is structural is writer/verifier: the session that writes the mission never verifies it. (See the `scribe` role and the `prompt-authoring` skill.)
-- As the **executor** — a different cast from the scribe, always — verify the mission: every claim's source opened, the mission faithful to the intent, the check recorded in `verification.md`. (See the `mission-verification` skill.)
+- As the **verifier scribe** — the scribe role in its verify posture, always a different cast from the one who wrote the mission — verify it: every claim's source opened, the mission faithful to the intent, the check recorded in `verification.md`. (See the `mission-verification` skill.)
 - **Verification done = commit.** The moment verification passes, make the **verification commit**: everything in the handler repo, not only your changes. It is the checkpoint pinning the verified state — anything that moves afterwards diffs against it. (See `mission-verification` > The verification commit.)
 
 #### Worktrees
@@ -138,7 +138,7 @@ Dispatching is the **router** role: the cast lifecycle, envelope templates, and 
 
 Bringing the result back to the SC is the **executor** role — and the discipline is the opposite of relaying. You own the pass, active-read the verdict (it is a claim, not a fact, never repeated back as-is), and compress to the one decision the SC can make rather than handballing the situation. The disposition lives there.
 
-The handler commits freely between dispatch and completion — this is a reversal of the old rule that made edits accumulate uncommitted until the mission was completed. The working tree must be clean before every operator dispatch, because the operator builds from committed state and, under micro-sessions, the next cast has to work out where the mission stands by reading what is committed, not from a memory it does not have. So commit at each state or phase transition. The old rule existed to keep this churn off main; the worktree now isolates it and the mission is squash-merged when it completes, so the individual commits cost nothing.
+The working tree must be clean before every operator dispatch, because the operator builds from committed state and, under micro-sessions, the next cast has to work out where the mission stands by reading what is committed, not from a memory it does not have.
 
 #### Fleet changes
 
