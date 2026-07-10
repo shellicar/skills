@@ -107,7 +107,11 @@ A new prompt starts from the scaffold script, not from a previous prompt. Readin
 
 ### Recurring mission types
 
-The rule above — scaffold from the blocks, don't read old prompts — is right for *feature* missions, where a prior prompt's specifics contaminate the new one. Some types are the exception: maintenance releases, security audits, version-bump releases recur with a fixed shape, and that shape is canonical. For these, read the most recent prior instance (or a recipe under this skill's `recipes/`, if one has been canonised — `recipes/release.md` is the release squad) for the **shape** — which phases, which roles, which skills, in what order. Take the skeleton and nothing else: leave the advisories, versions, package names, and context. The contamination guard is still live — if you find yourself carrying anything across but the phase/role/skill structure, stop; that is contamination, not shape.
+The rule above — scaffold from the blocks, don't read old prompts — is right for *feature* missions, where a prior prompt's specifics contaminate the new one. Some types are the exception: maintenance releases, security audits, version-bump releases recur with a fixed shape, and that shape is canonical. For these, read the canonised recipe (table below), or the most recent prior instance if none exists, for the **shape** — which phases, which roles, which skills, in what order. Take the skeleton and nothing else: leave the advisories, versions, package names, and context. The contamination guard is still live — if you find yourself carrying anything across but the phase/role/skill structure, stop; that is contamination, not shape.
+
+| Recipe | Description |
+| ------ | ----------- |
+| [release](recipes/release.md) | Version-bump release: Maker bumps and updates changelogs, Courier delivers the version PR, Postmaster publishes leaves-first. |
 
 The scribe's script is `create-mission.mjs`, run through the `scribe` role. It is one of three that carry a mission's file across its life, each *handed* the mission directory rather than composing a path from parts:
 
@@ -165,4 +169,4 @@ Real guardrails — preflight, "stop and ask," critical-failure stop, explicit s
 
 ## Verify commands
 
-The commands in the Verify section are run by the operator and their output is consumed as tokens. If a command produces verbose output (turbo preamble, full test suite logs), the operator burns context on noise. Check that verify commands are configured for minimal output. See [verify-commands.md](verify-commands.md).
+The commands in the Verify section are run by the operator and their output is consumed as tokens. If a command produces verbose output (turbo preamble, full test suite logs), the operator burns context on noise. Check that verify commands are configured for minimal output. See the [`agent-ready-repo`](../agent-ready-repo/SKILL.md) skill, which carries the quiet-command standard.
