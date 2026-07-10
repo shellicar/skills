@@ -59,12 +59,21 @@ If any `changes.jsonl` is present in the repo (typically per-package under `pack
 
 A repo releases in one of two modes. Determine which before bumping versions.
 
-**Independent** — each package is versioned on its own. Bump only the packages with source changes since their last release; leave the rest untouched. A single-package repo is always independent, and it is the default for a multi-package repo unless the repo's conventions say otherwise.
+### Which packages release is a judgment, not a formula
 
-**Lockstep** — every released package shares one version number. When a release goes out, all participating packages move to the same next version. Two kinds of package get bumped:
+In either mode, the signals below — source changes since the last release, new `changes.jsonl` entries, a dependency that is bumping — produce a **candidate list, not a verdict**. They tell you which packages to consider; someone still decides each one, because each signal can mislead on its own:
+
+- **A `changes.jsonl` entry is evidence, not a trigger.** An entry records that a change reached the package, but not every entry is a reason to release: an internal note ("updated build pipeline") delivers nothing to a consumer; a user-facing fix does. Telling them apart is the judgment.
+- **A source diff can be trivial.** A comment or formatting change shows up in `git diff` but ships nothing worth a version.
+
+The line to hold: **don't publish a package that is no different from what is already on the registry.** That is the only hard floor — this is not "release the bare minimum." Over-releasing is noise, not wrong; when a real fix is in the balance, err toward shipping it.
+
+**Independent** — each package is versioned on its own. The candidates are the packages with source changes since their last release; leave the rest untouched. A single-package repo is always independent, and it is the default for a multi-package repo unless the repo's conventions say otherwise.
+
+**Lockstep** — every released package shares one version number. When a release goes out, all participating packages move to the same next version. Two kinds of package are candidates:
 
 - Every package with source changes since the last release.
-- Every package whose released workspace dependency is bumping, even with no source change of its own. Republishing re-pins it to the new dependency version, so consumers of that package resolve the new dependency. This is the *transitive bump*.
+- Every package whose released workspace dependency is bumping, even with no source change of its own. This is the *transitive bump*, and it exists because of how consumers' lockfiles work: a lockfile pins the whole resolved tree, `pnpm i` will not move an already-resolved transitive dependency, and `pnpm update -iL` shows a consumer only their *direct* dependencies. So a fix in a transitive package never reaches an existing consumer unless a package they directly depend on republishes — the republish re-pins the dependency, and the consumer's next update carries the fix through. A security fix in the transitive package is the sharp case: skip the transitive bump and locked-in consumers stay on the vulnerable version with no visible way to move off it. An otherwise-unchanged dependent republished for this reason is a real delivery, not noise.
 
 The result is that all released packages carry the same version, and no published package references an unpublished dependency. When publishing a lockstep release, publish dependencies before dependents (leaves first) so that ordering also holds on the registry.
 
