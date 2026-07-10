@@ -25,6 +25,8 @@ Enough to reorient, and no more — a handover should be short:
 - **What is in flight** — the next thread, in order; what is waiting on the SC.
 - **What to search the memory store for** — the searches, by name, that surface the memories this thread needs. This is the heart of the handover: the durable knowledge lives in the store; the handover carries the keys to it.
 
+Write it to the shape in [templates/handover.md](templates/handover.md) — the three parts, wrapped in `---` fences so the next conversation can spot it at a glance.
+
 ## The testament comes first
 
 The handover and the testament go together, in that order. The testament carries the learning into the knowledge base — general memories, useful to *any* future cast, typed by kind. The handover exists only for continuity into the next conversation: it points at the right memories and carries the little that is purely in-flight.
