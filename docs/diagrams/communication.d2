@@ -1,0 +1,112 @@
+vars: {
+  d2-config: {
+    theme-id: 200
+  }
+}
+
+# The communication model — layers and dependencies.
+# Layers are colours, not groups, so related nodes cluster naturally.
+# Global layers: foundation (gold), voice (green), audience (blue), medium (purple).
+# Fleet layer (grey): outside the model, extends it.
+# Dependencies point down the model only.
+# The hollow-triangle edge is inheritance: the SC extends Stephen the person, so it is an audience.
+# Dashed edges are per-instance: a response reaches one of its audiences, chosen at composition time.
+
+direction: up
+
+classes: {
+  foundation: {
+    style: {
+      fill: "#4A3B12"
+      stroke: "#C9A227"
+    }
+  }
+  voice: {
+    style: {
+      fill: "#1F3D33"
+      stroke: "#4FA487"
+    }
+  }
+  audience: {
+    style: {
+      fill: "#1E2E4A"
+      stroke: "#5B8DD9"
+    }
+  }
+  medium: {
+    style: {
+      fill: "#33244A"
+      stroke: "#9B72CF"
+    }
+  }
+  fleet: {
+    style: {
+      fill: "#2A2A33"
+      stroke: "#8A8A99"
+    }
+  }
+  extends: {
+    target-arrowhead: {
+      shape: triangle
+      style: {
+        filled: false
+      }
+    }
+  }
+  per-instance: {
+    style: {
+      stroke-dash: 3
+    }
+  }
+}
+
+principles: Communication principles {class: foundation}
+
+stephen-voice: "Voice: writing as Stephen" {class: voice}
+claude-voice: "Voice: Claude's own" {class: voice}
+
+stephen-person: "Audience: Stephen the person" {class: audience}
+claude-reader: "Audience: Claude" {class: audience}
+technical-reader: "Audience: technical readers" {class: audience}
+stakeholder: "Audience: product owners & stakeholders" {class: audience}
+sc: "Audience: the SC" {class: audience}
+
+commit: Commit {class: medium}
+pr: PR {class: medium}
+work-item: Work item {class: medium}
+issue: Issue {class: medium}
+documentation: Documentation {class: medium}
+memory: Memory {class: medium}
+handover: Handover {class: medium}
+mission-file: Mission file {class: medium}
+response: Response {class: medium}
+
+glossary: system-glossary {class: fleet}
+mission-process: Mission process skills {class: fleet}
+
+stephen-voice -> principles
+claude-voice -> principles
+
+stephen-person -> principles
+claude-reader -> principles
+technical-reader -> principles
+stakeholder -> principles
+
+commit -> technical-reader
+pr -> technical-reader
+work-item -> technical-reader
+work-item -> stakeholder
+work-item -> stephen-person
+work-item -> claude-reader
+issue -> technical-reader
+issue -> claude-reader
+documentation -> technical-reader
+memory -> claude-reader
+handover -> claude-reader
+mission-file -> claude-reader
+response -> stephen-person {class: per-instance}
+response -> claude-reader {class: per-instance}
+
+sc -> stephen-person {class: extends}
+mission-process -> claude-reader
+mission-process -> mission-file
