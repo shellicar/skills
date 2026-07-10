@@ -34,6 +34,8 @@
  * Mode:
  *   (default)  dry run — classify and report only, no mutation
  *   --apply    do the rebases
+ *   --stash    (TEMPORARY) also rebase dirty worktrees: stash -u, rebase, pop.
+ *              Only safe when every session is idle — opt in deliberately.
  *
  * Usage (from the fleet repo's main checkout):
  *   node ~/.claude/skills/mission-integration/scripts/rebase-worktrees.mjs            # dry run
@@ -86,24 +88,86 @@ function classify(wt) {
   // Behind main — main's content needs bringing in, by a rebase, or a plain
   // fast-forward when the branch has nothing of its own. What blocks that, and so is
   // worth flagging: a dirty tree can't rebase, and a detached HEAD has no branch.
-  if ((out(wt, ["status", "--porcelain"]) || "").length > 0)
-    return { wt, name, done: { name, level: "warn", msg: `dirty working tree — skipped${trail}` } };
+  const dirty = (out(wt, ["status", "--porcelain"]) || "").length > 0;
   if (!branch) return { wt, name, done: { name, level: "warn", msg: `detached HEAD — skipped${trail}` } };
+  // A dirty tree can't rebase. Default: skip it. With --stash: stash, rebase, pop
+  // (only safe when the session is idle — the SC opts in when they know it is).
+  if (dirty && !STASH)
+    return { wt, name, done: { name, level: "warn", msg: `dirty working tree — skipped${trail}` } };
 
-  return { wt, name, behind };
+  return { wt, name, behind, dirty };
 }
 
-function rebase(wt, name, behind) {
-  const rb = git(wt, ["rebase", TARGET], { env: NONINTERACTIVE });
-  if (rb.status !== 0) {
-    git(wt, ["rebase", "--abort"]);
-    return { name, level: "warn", msg: `rebase conflict (-${behind}) — aborted, left untouched` };
+// TEMPORARY: auto-resolve the two known-safe conflict classes the testament
+// removal creates on these old branches. Any other unmerged path -> abort.
+//   testament/*.md deleted by us -> accept the delete (git rm). main deleted the
+//     migrated testaments; old branches carry commits that modified them.
+//   the `fleet` submodule gitlink -> accept it (git add). fleet is kept on its
+//     own main and its drift is ignored noise, so there is nothing real to merge.
+// Returns:
+//   "resolved" — every unmerged path was one of the two, and was staged
+//   "other"    — some other conflict is present; caller must abort
+//   "none"     — no unmerged paths (unexpected mid-conflict); caller must abort
+function resolveConflict(wt) {
+  const lines = (out(wt, ["status", "--porcelain"]) || "").split("\n").filter(Boolean);
+  const unmerged = lines.filter((l) => ["DD", "AU", "UD", "UA", "DU", "AA", "UU"].includes(l.slice(0, 2)));
+  if (unmerged.length === 0) return "none";
+  for (const l of unmerged) {
+    const code = l.slice(0, 2);
+    const path = l.slice(3);
+    if (code === "DU" && path.startsWith("testament/") && path.endsWith(".md")) {
+      if (git(wt, ["rm", "-f", "--", path]).status !== 0) return "other";
+    } else if (path === "fleet") {
+      if (git(wt, ["add", "--", path]).status !== 0) return "other";
+    } else {
+      return "other";
+    }
   }
-  return { name, level: "ok", msg: `rebased onto ${TARGET} (-${behind})` };
+  return "resolved";
+}
+
+function rebase(wt, name, behind, dirty) {
+  // --stash mode: a dirty tree is set aside so the rebase can run, then restored.
+  let stashed = false;
+  if (dirty) {
+    const s = git(wt, ["stash", "push", "-u", "-m", "rebase-worktrees auto-stash"]);
+    if (s.status !== 0)
+      return { name, level: "warn", msg: `stash failed (-${behind}) — skipped, left untouched` };
+    stashed = !/No local changes/.test((s.stdout || "") + (s.stderr || ""));
+  }
+
+  let rb = git(wt, ["rebase", TARGET], { env: NONINTERACTIVE });
+  let accepted = false;
+  while (rb.status !== 0) {
+    if (resolveConflict(wt) !== "resolved") {
+      git(wt, ["rebase", "--abort"]);
+      if (stashed) git(wt, ["stash", "pop"]);
+      return { name, level: "warn", msg: `rebase conflict (-${behind}) — aborted, left untouched` };
+    }
+    accepted = true;
+    // Accepting the delete can empty a commit that only touched the testament:
+    // continue, and skip it if git reports it now has nothing to apply.
+    let step = git(wt, ["rebase", "--continue"], { env: NONINTERACTIVE });
+    if (step.status !== 0 && /empty/i.test((step.stderr || "") + (step.stdout || "")))
+      step = git(wt, ["rebase", "--skip"], { env: NONINTERACTIVE });
+    rb = step;
+  }
+
+  const parts = [];
+  if (accepted) parts.push("testament/fleet conflicts accepted");
+  if (stashed) {
+    const p = git(wt, ["stash", "pop"]);
+    if (p.status !== 0)
+      return { name, level: "warn", msg: `rebased (-${behind}) but stash pop conflicted — resolve by hand` };
+    parts.push("stashed");
+  }
+  const note = parts.length ? `, ${parts.join(", ")}` : "";
+  return { name, level: "ok", msg: `rebased onto ${TARGET} (-${behind}${note})` };
 }
 
 // ---- run ----
 const apply = process.argv.slice(2).includes("--apply");
+const STASH = process.argv.slice(2).includes("--stash");
 
 // The superproject is wherever this is run from — the script's own path lives
 // in the skills repo and says nothing about the target fleet.
@@ -126,8 +190,8 @@ for (const wt of wts) {
   const result = c.done
     ? c.done
     : apply
-      ? rebase(c.wt, c.name, c.behind)
-      : { name: c.name, level: "plan", msg: `would rebase onto ${TARGET} (-${c.behind})` };
+      ? rebase(c.wt, c.name, c.behind, c.dirty)
+      : { name: c.name, level: "plan", msg: `would rebase onto ${TARGET} (-${c.behind}${c.dirty ? ", stashing first" : ""})` };
   if (result.level === "warn") warns++;
   console.log(`${sym[result.level]}  ${result.name.padEnd(52)} ${result.msg}`);
 }
