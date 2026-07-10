@@ -5,16 +5,16 @@
  * change here, and no Claude has to remember identifier values.
  *
  * Opus for everything. Sonnet 5 is considered harmful — tested 4/4, it
- * dropped the protocols mid-session — and is not used; the family stays in
- * the map only so old dispatches fail loudly rather than mysteriously. Fable
- * is for extremely complex circumstances, rare. Supervisors always run Opus —
- * fixed in cast-supervisor, not a dispatch choice. The defaults table lives
- * in the squad-selection skill.
+ * dropped the protocols mid-session — and cannot be dispatched: its line is
+ * commented out, so the schema enum rejects it and resolveModel throws.
+ * Fable is for extremely complex circumstances, rare. Supervisors always run
+ * Opus — fixed in cast-supervisor, not a dispatch choice. The defaults table
+ * lives in the squad-selection skill.
  */
 
 // Identifiers are always claude-[model-family]-[version].
 export const MODELS = {
-  sonnet: "claude-sonnet-5",
+  // sonnet: "claude-sonnet-5", // considered harmful — not dispatchable
   opus: "claude-opus-4-8",
   fable: "claude-fable-5",
 };
