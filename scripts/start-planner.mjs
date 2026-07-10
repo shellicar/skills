@@ -22,6 +22,7 @@ import './lib/sc-only.mjs';
  *   start-planner.mjs --no-resume --message "..."  # send a first message
  *   start-planner.mjs --resume <conv-id>   # rehydrate a Planner after a death
  *   start-planner.mjs --model claude-...   # override the default model
+ *   start-planner.mjs --doctor             # print what would be sent, then exit
  *
  * A leading `--` separator is accepted and stripped.
  *
@@ -46,7 +47,7 @@ const system = buildSystemInline({ role: ["scheduler", "launcher", "coach"] });
 // Tag the current pane so the status bar reads "Planner". Pane/window creation
 // is the SC's; this only labels what already exists. Skipped cleanly outside tmux.
 const pane = process.env.TMUX_PANE;
-if (pane) {
+if (pane && !process.argv.includes("--doctor")) {
   execFileSync("tmux", ["set-option", "-p", "-t", pane, "@role", "planner"]);
   execFileSync("tmux", ["set-option", "-w", "-t", pane, "@title", "Planner"]);
   execFileSync("tmux", ["set-option", "-w", "-t", pane, "@colour", "green"]);
@@ -71,7 +72,20 @@ if (mi >= 0) {
 // The skill set rides --claudeMd: assembled into the session's CLAUDE.md
 // content on every launch (fresh or resumed), cached, no turn fired.
 const skills = skillsFor({ actor: "planner", role: ["scheduler", "launcher", "coach"] });
-const args = ["--name", "planner", "--system-identity", identity, "--system", system, "--claudeMd", buildSkillsBlock(skills)];
+const claudeMd = buildSkillsBlock(skills);
+
+if (passthrough.includes("--doctor")) {
+  console.log(`name: planner`);
+  console.log(`actor: planner`);
+  console.log(`roles: scheduler, launcher, coach`);
+  console.log(`skills (${skills.length}): ${skills.join(", ")}`);
+  console.log(`--system: ${system.length.toLocaleString("en-US")} chars`);
+  console.log(`--claudeMd: ${claudeMd.length.toLocaleString("en-US")} chars`);
+  console.log(`total: ${(system.length + claudeMd.length).toLocaleString("en-US")} chars`);
+  process.exit(0);
+}
+
+const args = ["--name", "planner", "--system-identity", identity, "--system", system, "--claudeMd", claudeMd];
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.

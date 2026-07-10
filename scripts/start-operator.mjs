@@ -22,6 +22,9 @@ import './lib/sc-only.mjs';
  * the session opens idle. Everything else is forwarded verbatim, including
  * --model; a leading `--` separator is accepted and stripped.
  * Runs interactively in the current pane and exits with claude-sdk-cli's status.
+ * --doctor composes exactly what a real launch would and prints the resolved
+ * name, role, skill list, and --system / --claudeMd sizes, then exits without
+ * touching claude-sdk-cli.
  * Exit 2 if --role is missing or an identity file is missing (via buildSystemInline).
  */
 
@@ -73,7 +76,20 @@ if (mi >= 0) {
 // The skill set rides --claudeMd: assembled into the session's CLAUDE.md
 // content on every launch (fresh or resumed), cached, no turn fired.
 const skills = skillsFor({ actor: "operator", role });
-const args = ["--name", name, "--system-identity", identity, "--system", system, "--claudeMd", buildSkillsBlock(skills)];
+const claudeMd = buildSkillsBlock(skills);
+
+if (passthrough.includes("--doctor")) {
+  console.log(`name: ${name}`);
+  console.log(`actor: operator`);
+  console.log(`role: ${role}`);
+  console.log(`skills (${skills.length}): ${skills.join(", ")}`);
+  console.log(`--system: ${system.length.toLocaleString("en-US")} chars`);
+  console.log(`--claudeMd: ${claudeMd.length.toLocaleString("en-US")} chars`);
+  console.log(`total: ${(system.length + claudeMd.length).toLocaleString("en-US")} chars`);
+  process.exit(0);
+}
+
+const args = ["--name", name, "--system-identity", identity, "--system", system, "--claudeMd", claudeMd];
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.
