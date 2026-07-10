@@ -23,7 +23,7 @@ This skill covers **stage 1 — planning** only: from the SC's direction to the 
 
 Four steps, in order, each owned by the skill named — this skill sequences them, it does not restate them:
 
-1. **Intent** — drawn out of the SC's head, never invented: `active-listening` (the interlocutor). Lands as `intent.md`; a pinned blueprint lands whole as `blueprint.md` beside it.
+1. **Intent** — drawn out of the SC's head, never invented: `shared-understanding` (the interlocutor). Lands as `intent.md`; a pinned blueprint lands whole as `blueprint.md` beside it.
 2. **Squad** — the roles proposed from the roster and settled with the SC: `squad-selection`. Lands as `squad.md`.
 3. **Mission** — written from what was settled, every line traced: `prompt-authoring` and `mission-grounding`. Lands as `mission.md` and `influence.md`.
 4. **Verification** — every claim's source opened, the mission faithful to the intent, before the SC's review: `mission-verification`. Lands as `verification.md`.

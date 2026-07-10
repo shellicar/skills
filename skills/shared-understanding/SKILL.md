@@ -1,5 +1,5 @@
 ---
-name: active-listening
+name: shared-understanding
 description: |
   WHAT: How to work out what the SC wants in conversation — the moves that surface his meaning, check your understanding, and bring your own ideas in without substituting them for his.
   WHY: These moves are steps — so they load as a skill, not baked into a role.
@@ -9,7 +9,7 @@ metadata:
   category: standards
 ---
 
-# Active Listening
+# Shared Understanding
 
 Working out what someone wants is a technique, not a disposition. The interlocutor role tells you *who you are*; this is *how* you hold the conversation: the concrete moves, each shown done right and done wrong.
 

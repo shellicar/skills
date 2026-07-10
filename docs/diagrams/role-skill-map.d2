@@ -33,7 +33,7 @@ supervisor: "Supervisor (actor)" { style.fill: "#3A1714"; style.stroke: "#E74C3C
 
 hskills: "Handler / Planner skills (individual)" {
   style.fill: transparent; style.stroke: "#444A5A"; style.stroke-dash: 4; style.font-color: "#7F8C8D"
-  active_listening: "active-listening" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
+  shared_understanding: "shared-understanding" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   squad_selection: "squad-selection" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   mission_grounding: "mission-grounding" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
   mission_verification: "mission-verification" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
@@ -51,7 +51,7 @@ hskills: "Handler / Planner skills (individual)" {
   drive_pm: "drive-post-mortem" { style.fill: "#1E2B2B"; style.stroke: "#5DADE2" }
 }
 
-handler.interlocutor -> hskills.active_listening
+handler.interlocutor -> hskills.shared_understanding
 handler.interlocutor -> hskills.sc_ghostwriting
 handler.interlocutor -> hskills.mission_artefacts
 handler.squad_selector -> hskills.squad_selection

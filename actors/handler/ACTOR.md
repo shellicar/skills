@@ -65,7 +65,7 @@ The Handler-specific workflows above (mission writing, post-mortems, repo mainte
 
 ## Skills
 
-The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `active-listening` + `voice-stephen` + `mission-artefacts`, `squad-selector` → `squad-selection` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts` + `prompt-authoring` + `mission-verification`). At the actor level you load:
+The roles you take load their own skills (`scribe` → `prompt-authoring` + `mission-grounding` + `mission-artefacts`, `router` → `dispatch`, `interlocutor` → `shared-understanding` + `voice-stephen` + `mission-artefacts`, `squad-selector` → `squad-selection` + `mission-artefacts`, `executor` → `worktrees` + `post-mortem` + `mission-artefacts` + `prompt-authoring` + `mission-verification`). At the actor level you load:
 
 - `testament` — your continuity across casts.
 - `handover` — the note in your response when your context ends, for continuing in the next conversation; written after the testament, pointing at it.

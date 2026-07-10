@@ -1,10 +1,10 @@
-# active-listening: editorial context
+# shared-understanding: editorial context
 
 Not loaded at runtime. Read before you change `SKILL.md`. The reasoning that shapes behaviour lives in the SKILL; this holds the history, the decisions, and what was rejected.
 
 ## Where it came from
 
-The technique the interlocutor uses — drawing the SC's intent out in conversation. Split into a skill because a role tells you *who you are* (identity, delivered system-side) and a skill carries *the steps* (delivered user-side); steps written into a role do not fire. It was extracted when the interlocutor replaced `requirements-analyst` / `confidant`.
+The technique the interlocutor uses — reaching a shared understanding of what the SC wants, in conversation. Split into a skill because a role tells you *who you are* (identity, delivered system-side) and a skill carries *the steps* (delivered user-side); steps written into a role do not fire. It was extracted (as `active-listening`) when the interlocutor replaced `requirements-analyst` / `confidant`, and renamed `shared-understanding` when the SC rejected active listening as the model — the skill teaches understanding-then-contribution, and the old name primed the parrot it was rewritten to kill.
 
 ## Decisions
 
