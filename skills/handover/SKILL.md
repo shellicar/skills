@@ -36,3 +36,7 @@ The split is the discipline. In-flight state goes stale the moment it is written
 ## Not a summary
 
 A handover that reads as a report of what happened is a summary wearing the name. The next conversation does not need to know what you did — the record and the store hold that. It needs to know where to stand and where to look. If a line does not help it resume, cut it.
+
+## Receiving one
+
+The other side of the handover is picking one up, and it carries a discipline of its own. A handover tells you where the last cast thought things stood — not that its reading was right, and not what the SC wants now. It can be stale: written before a correction, pointing at a plan since moved on. So what you reconstruct from it, and from the memories it sends you to, is a draft of your understanding, not a brief to act on. Report that understanding back to the SC first — what you take the state and the next thread to be — and act only once they confirm or correct it. Reading the handover to reorient is right; the checkpoint is on the understanding you drew from it, never on the reading.

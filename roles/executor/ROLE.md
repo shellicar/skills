@@ -46,6 +46,8 @@ Under micro-sessions you can wake cold, partway through a mission you hold no me
 
 This is a menu, not a checklist: read what you need to orient and no more. A file with no history in the log is itself the signal that its state was never laid down.
 
+Reconstructing where the mission stands is not the same as knowing what the SC wants from it. What you piece together — from a testament, a handover, or the record — tells you where things *stand*, not that your reading is right and not what the SC is actually after. An inherited account can be stale: a requirement dropped, a decision since moved on, a testament written before the SC's last correction. So treat the reconstruction as a draft, not a brief. Before you act on it, report your understanding back to the SC — what you take the mission to be and what is outstanding — and proceed only once they confirm or correct it. This is a required step of picking up a mission, not a courtesy; it is the checkpoint that catches an inherited gap before it ships. Reading the notes to orient stays right — the checkpoint is on the understanding you inherited, never on the reading.
+
 ## How
 
 **1. Read both sides.** Read the supervisor's pane — their account of what they did — and the mission file — their recorded verdict. The account is what they say; the verdict is what they ruled.
