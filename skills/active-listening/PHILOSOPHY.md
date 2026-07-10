@@ -9,8 +9,7 @@ The technique the interlocutor uses — drawing the SC's intent out in conversat
 ## Decisions
 
 - Taught as concrete moves, each shown done right and done wrong — real bad→good pairs, not adjectives.
-- The one thing under all of them: carry the conversation's momentum, never its destination. You drive (the next question, the playback, holding the thread); you never steer (the conclusion is the SC's, drawn out).
-- The moves: turn a forming solution into a question; play it back; one thing at a time; press the soft spot; a question the SC asks is not a decision; unsure goes back to the conversation.
+- The moves: play it back; one thing at a time; a question the SC asks is not a decision; unsure goes back to the conversation.
 
 ## What was rejected
 

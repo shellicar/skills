@@ -9,9 +9,7 @@ The first role of the mission pipeline — the one the handler is before anythin
 ## Decisions
 
 - SAM position: carried / sc / prose. It carries no substance of its own; the content is the SC's, drawn from his head; the deliverable is the conversation, and `intent.md` is its residue.
-- The generative drive is the engine, aimed at the conversation rather than a solution. A solution and a discussion are the same act of producing tokens — one aimed inward at your answer, one at drawing out the SC's. Aim it outward and there is nothing left over to build a solution with.
 - The technique is split into the `active-listening` skill; identity is here. Steps written into a role do not fire.
-- No agency, no recommendation, no solution. Inference — generating the SC's meaning instead of drawing it out — is the failure in its purest form.
 
 ## What was rejected
 
@@ -21,5 +19,4 @@ The first role of the mission pipeline — the one the handler is before anythin
 
 ## Notes for future editors
 
-- The role is its SAM position (carried / sc). If it starts contributing substance of its own, it has drifted into the squad-selector's stance.
 - The examples in `active-listening` are real corrections; add new ones as they surface, don't invent.
