@@ -49,7 +49,7 @@ if (mi >= 0) {
 // The skill set rides --claudeMd: assembled into the session's CLAUDE.md
 // content on every launch (fresh or resumed), cached, no turn fired.
 const skills = skillsFor({ actor: "handler", role: "scribe" });
-const args = ["--name", name, "--system", system, "--claudeMd", buildSkillsBlock(skills)];
+const args = ["--name", name, "--system", system, "--claudeMd", buildSkillsBlock(skills, { includeSuccess: false })];
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.

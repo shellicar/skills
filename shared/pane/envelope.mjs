@@ -18,8 +18,13 @@ import { shq } from './shared.mjs';
  * (exit 2), same as a missing skill. Skills array is required (exit 2 if
  * empty). This is the content for --claudeMd: it lands in the session's
  * assembled CLAUDE.md, cached context on every launch, no turn fired.
+ *
+ * SUCCESS.md is verification material — how a supervisor judges whether a
+ * skill was followed. `includeSuccess` (default true) gates whether it is
+ * embedded at all; callers whose cast never verifies against it (the handler
+ * family) pass false so it is not paid for and not carried.
  */
-export function buildSkillsBlock(skills) {
+export function buildSkillsBlock(skills, { includeSuccess = true } = {}) {
   if (!skills || skills.length === 0) {
     console.error('skills array is required and must not be empty');
     process.exit(2);
@@ -48,11 +53,13 @@ export function buildSkillsBlock(skills) {
       diagramsBlock += `\n<diagram name="${d}" format="d2">\n${diagram}\n</diagram>`;
     }
     let successBlock = '';
-    try {
-      const success = readFileSync(join(skillsDir, name, 'SUCCESS.md'), 'utf8');
-      successBlock = `\n<success>\n${success}\n</success>`;
-    } catch {
-      // No SUCCESS.md - omit it; the supervisor flags the absence per its ROLE.
+    if (includeSuccess) {
+      try {
+        const success = readFileSync(join(skillsDir, name, 'SUCCESS.md'), 'utf8');
+        successBlock = `\n<success>\n${success}\n</success>`;
+      } catch {
+        // No SUCCESS.md - omit it; the supervisor flags the absence per its ROLE.
+      }
     }
     return `<skill name="${name}">\n${content}${diagramsBlock}${successBlock}\n</skill>`;
   });

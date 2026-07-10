@@ -26,6 +26,14 @@ import './lib/sc-only.mjs';
  *   start-handler.mjs --no-resume --message "..."  # send a first message
  *   start-handler.mjs --resume <conv-id>   # rehydrate a Handler after a death
  *   start-handler.mjs --model claude-...   # override the default model
+ *   start-handler.mjs --doctor             # print what would be sent, then exit
+ *
+ * --doctor composes exactly what a real launch would (same roles, same
+ * skillsFor, same buildSystemInline/buildSkillsBlock calls, includeSuccess:
+ * false) and prints the resolved name, role list, full skill list, and the
+ * --system / --claudeMd character counts — then exits without touching
+ * claude-sdk-cli. Built for when the composition looks wrong and the question
+ * is what this exact script would actually send, not what it should send.
  *
  * A leading `--` separator is accepted and stripped. The session runs
  * interactively in the current pane and exits with claude-sdk-cli's status.
@@ -65,7 +73,20 @@ if (mi >= 0) {
 // The skill set rides --claudeMd: assembled into the session's CLAUDE.md
 // content on every launch (fresh or resumed), cached, no turn fired.
 const skills = skillsFor({ actor: "handler", role: roles });
-const args = ["--name", name, "--system", system, "--claudeMd", buildSkillsBlock(skills)];
+const claudeMd = buildSkillsBlock(skills, { includeSuccess: false });
+
+if (passthrough.includes("--doctor")) {
+  console.log(`name: ${name}`);
+  console.log(`actor: handler`);
+  console.log(`roles: ${roles.join(", ")}`);
+  console.log(`skills (${skills.length}): ${skills.join(", ")}`);
+  console.log(`--system: ${system.length.toLocaleString("en-US")} chars`);
+  console.log(`--claudeMd: ${claudeMd.length.toLocaleString("en-US")} chars`);
+  console.log(`total: ${(system.length + claudeMd.length).toLocaleString("en-US")} chars`);
+  process.exit(0);
+}
+
+const args = ["--name", name, "--system", system, "--claudeMd", claudeMd];
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.

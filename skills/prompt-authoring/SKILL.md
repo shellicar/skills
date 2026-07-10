@@ -20,8 +20,6 @@ This is the craft skill both sides of a mission load, and it is not sufficient o
 - **Writing** the mission: this skill + `mission-grounding`. The grounding pass is part of writing — `provenance.md` is the writer's proof, and a mission produced with this skill alone is unfinished: it has no proof, and the verifier refuses it. If you are writing and `mission-grounding` is not loaded this session, stop and load it before filling a single slot — a skill you have not opened is a word, not a step, and "done" will fire without it.
 - **Verifying** the mission: this skill + `mission-verification`. The verifier needs the writing craft to judge what a claim is, and the verification pass to cross-check it against opened sources.
 
-Why the reinforcement is here: these skills are composable, but composable does not mean isolated. This is the one skill both postures are guaranteed to have open, so it is the place the pairing cannot be missed — a session that reached this text and proceeds bare has been told.
-
 ## Writing for a literal reader
 
 Whichever model an operator runs on — the pick is made upstream, in `squad.md` — the operator follows prompts literally. Every fabricated specific ends up in the code. Write accordingly.
@@ -30,18 +28,12 @@ Whichever model an operator runs on — the pick is made upstream, in `squad.md`
 
 Positive instructions. State the action, not its absence.
 
-**Weak**: "Don't create helper scripts."
-**Strong**: "Use the tools that already exist. If you reach for a helper, stop and report."
-
 **Weak**: "Don't over-engineer."
 **Strong**: "Build only what this mission names. If you notice something else that should change, record it in the debrief as a gap."
 
 ### Give the reason
 
 The operator generalises better when they know why. A rule without a reason becomes a rule to work around.
-
-**Rule only**: "Use `expandPath`."
-**Rule with reason**: "Use `expandPath`. It already handles `~` and `$VAR` expansion via `IFileSystem`. Reimplementing produces a second path utility that can drift."
 
 **Rule only**: "Stage explicitly. No `git add .`."
 **Rule with reason**: "Stage by explicit filename. `git add .` pulls in files you didn't intend to commit, including unrelated work that was in the tree when you started."
@@ -155,13 +147,13 @@ echo '<json>' | node ~/repos/shellicar/skills/skills/prompt-authoring/scripts/cr
 
 The output `mission.md` has the right frontmatter (with `Written against version` set to the material short SHA captured at write time), the standard patterns block, the phases summary, every phase composed from its block, and Delivery Notes at the bottom. The operator role arrives via `--system` at launch; the script no longer substitutes agent paths. Mission content is the work that follows.
 
-The script commits the `mission.md` it writes before it returns. This is purely a review mechanism, not the content commit: the skeleton is boilerplate, so committing it makes your review surface the filled-in content diffed against that commit, rather than the boilerplate as well. Without the commit the SC would be reading everything, skeleton included. The filled mission is committed separately, after the SC reviews, per *Writing a prompt* (step 8). `scaffold-mission` commits its placeholders for the same reason; `update-mission` does not commit, since an existing `mission.md` already lives in whatever state the scribe or a prior run left it.
+The script commits the `mission.md` it writes before it returns — a review mechanism, not the content commit: committing the boilerplate skeleton first means the SC's later review diffs only the filled-in content against it, not the boilerplate too. The filled mission is committed separately, after review, per *Writing a prompt* (step 8). `scaffold-mission` commits its placeholders for the same reason; `update-mission` does not commit, since an existing `mission.md` already lives in whatever state a prior run left it.
 
 ## The blocks own the stance — you never write it
 
 Before composing any phase, **read the block and the `ROLE.md` of every role in the squad** — actually open them, this session; having seen them in a listing is not having read them. The block and the role are the source for what each operator *is* and how it works.
 
-You never write role-stance prose. A sentence that tells the operator what kind of thing it is, what it produces, or how it relates to its work — that is the block's text or it does not appear. Your job is the mission-level content that fills the block's slots: the problem, the paths, the specifics. Stance written from your own generation is invention, and it is how an Apostle was told "you map the problem; you do not design the solution" — Investigator language pasted onto a role whose entire product is the code, by a scribe that never opened `apostle.md`. Four hours of the SC's time went to that sentence.
+You never write role-stance prose. A sentence that tells the operator what kind of thing it is, what it produces, or how it relates to its work — that is the block's text or it does not appear. Your job is the mission-level content that fills the block's slots: the problem, the paths, the specifics. Stance written from your own generation is invention — an Apostle was once told "you map the problem; you do not design the solution", Investigator language pasted onto a role whose entire product is the code, by a scribe that never opened `apostle.md`.
 
 Only the SC can countermand a role. If the intent genuinely narrows or overrides what a role does, that instruction enters the mission as the SC's words, traced to `intent.md` — never as stance you composed.
 
