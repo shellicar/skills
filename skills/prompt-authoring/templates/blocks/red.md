@@ -24,10 +24,6 @@ Load: tdd, typescript-standards, audience-developer, medium-commit, voice-stephe
 
 Before writing any tests, read `[specific test reference file]` as the reference example.
 
-- One assertion per `it` block
-- Describe blocks for groupings, descriptions say what is being tested
-- Always use `expected`/`actual` variables
-
 [Prescriptive test list. What each test checks. File paths. Minimum count.]
 
 ## Verify
