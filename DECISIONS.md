@@ -168,6 +168,6 @@ A skill names what it rests on in a `skills:` frontmatter key, dependencies poin
 
 ## 2026-07-11
 
-### A skill not worth marking gets no SUCCESS.md; absence is the statement
+### A SUCCESS.md is added only where it is needed
 
-The original rule — a SUCCESS.md for every skill, some saying "not marked" — was written when there were six skills. Past a hundred, SUCCESS files are loaded surfaces: a file whose whole content is "look elsewhere" pays tokens on every load to say nothing. So a skill not worth marking gets no file at all, and absence means not marked. The existing not-marked files predate the change and stand until removed; no new ones are added. Reason: the SC — "consider that all these success files get loaded; if a file is not needed, don't add it" — the every-skill rule predates the scale.
+The original rule — a SUCCESS.md for every skill — was written when there were six skills. Past a hundred, SUCCESS files are loaded surfaces, so a file also has to be needed. A not-marked file is still needed where its skill reaches a supervisor: it says "don't mark this" where a missing file would read as a gap to flag. What is not needed — a file no verifier will ever load, or one whose whole content is "look elsewhere" — is not added. Reason: the SC — "consider that all these success files get loaded; if a file is not needed, don't add it" — the every-skill rule predates the scale.

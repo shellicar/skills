@@ -175,7 +175,7 @@ Some skills govern only certain sessions — specification-discipline governs au
 
 The test is what the PASS/FAIL buys. A reference or knowledge skill — git-knowledge, which corrects git misconceptions so an operator avoids a pitfall — exists to *help* them avoid it, not to penalise them for falling in. Marking it provides nothing: a misconception-driven misstep is a learning gap, not a finding against the work. And where such a misstep does real harm, the harm is caught by the skill with teeth — a destructive operation under safe-operations, a polluted commit under pre-commit — not by penalising the knowledge.
 
-A skill not worth marking gets **no SUCCESS.md at all**. The original rule — a file for every skill, some saying "not marked" — was written when there were six; past a hundred skills, SUCCESS files are loaded surfaces, and a file whose whole content is "look elsewhere" pays tokens on every load to say nothing (2026-07-11). Absence is the statement now. The existing not-marked files predate the change and stand until removed; do not add new ones.
+SUCCESS files are loaded surfaces, so a file also has to be **needed** (2026-07-11 — the every-skill rule was written when there were six skills; past a hundred, the load cost is real). A not-marked file is needed where the skill reaches a supervisor — it says "don't mark this" where a missing file would read as a gap to flag. What is not needed is a file that no verifier will ever load, or one whose whole content is "look elsewhere": do not add those.
 
 ### Behaviour by default, outcome where the harm is irreversible
 
