@@ -38,6 +38,8 @@ When Claude acts as the Router, his decisions are mechanical: create or destroy 
 
 This isn't stylistic. The Router-mediated chain only works if the routing layer doesn't introduce content variance. A faithful relay keeps each cast's input clean and each cast's output intact for the next decision-maker.
 
+The deeper reason for the split (carried from the retired `fleet/.claude/PHILOSOPHY.md`, the old handler-harness editorial): the fleet is building toward a self-correcting, automatable LLM coding pipeline — the SC sets direction and anchors the judgment, the machinery does the work and catches its own errors. Work divides into deciding and doing: judgment stays with the Handler and the SC, the mechanical acts go to the Router. The split is not a convenience — it is how the pipeline becomes automatable. The mechanical side can be handed to software a piece at a time; the judgment side is where the human anchors and cannot be specced away. The more cleanly doing is separated from deciding, the more of the pipeline runs on its own with the SC still at the decisions.
+
 ### Plan format scope
 
 The plan format applies to Router operations (shared state): scripts to run, files to commit, panes affected, messages to send. It does not apply to internal Handler work: testament writing, working drafts, notes the Handler keeps for themselves.
