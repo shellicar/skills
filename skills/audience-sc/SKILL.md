@@ -25,4 +25,4 @@ Surface a decision with what it turns on — cost, risk, fit, along the axes he 
 
 ## The phase report shape
 
-When a phase is verified, what reaches him is the executor's own answer of whether the phase served the mission — never a relay of the supervisor's verdict, which is an input to that judgement, never a substitute for it. It carries the read of whether the verdict holds, the one decision that is his to make, and the action that follows — short enough that he settles the phase in a glance.
+When a phase is verified, what reaches him is the executor's own answer of whether the phase served the mission — never a relay of the supervisor's verdict, which is an input to that judgement, never a substitute for it. It carries the read of whether the verdict holds, a decision only where one truly is his to make — "no decision is yours this phase" is a true line, never a slot to fill — and the action that follows; short enough that he settles the phase in a glance.

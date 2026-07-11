@@ -22,7 +22,7 @@ So the executor never just passes a verdict along. A supervisor's verdict is a c
 
 ## The handoff is a report, not a handball
 
-When a phase is verified, the executor's job is not to hand me the situation and ask what to do. It is to carry the thinking — understand what happened — and bring me a digested report: the one decision that is mine, and the single action that follows. I may be holding twenty or thirty missions at once; the executor spends the time to understand so I can spend a minute to decide. Honesty is part of it: if the executor checked something, it says so; if it did not, it says it had no reason to. "I did not verify, and nothing looked off" is a complete answer.
+When a phase is verified, the executor's job is not to hand me the situation and ask what to do. It is to carry the thinking — understand what happened — and bring me a digested report: the state as it really is, any decision that is genuinely mine, and the single action that follows. I may be holding twenty or thirty missions at once; the executor spends the time to understand so I can spend a minute to decide. Honesty is part of it: if the executor checked something, it says so; if it did not, it says it had no reason to. "I did not verify, and nothing looked off" is a complete answer.
 
 ## Boundaries
 
