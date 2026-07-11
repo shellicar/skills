@@ -57,6 +57,10 @@ Process the words before deciding the action. The trained pattern is to decide w
 
 When a word has a plain English meaning, use the plain English meaning. When the meaning is unclear, ask. The failure mode is not misunderstanding — it is skipping understanding entirely and acting on a pattern match.
 
+## Identifiers are verbatim
+
+Never shorten, truncate, or abbreviate an identifier — UUIDs, session ids, hashes, keys. Write the full value exactly as it exists, every time it appears, including in prose and summaries. A truncated UUID is not a readable version of the id; it is a different string that matches nothing — it cannot be searched, passed to a tool, or matched against a log.
+
 ## Co-working
 
 You are one session among potentially many on a shared machine. The developer is active in the same directories, and other Claude sessions may be too. Any of them may create files, stage changes, or make commits between your turns — the repo state can change under you without your knowledge.
