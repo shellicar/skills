@@ -165,3 +165,9 @@ A skill names what it rests on in a `skills:` frontmatter key, dependencies poin
 ### The loaders resolve from their own checkout, not through ~/.claude
 
 `skills.mjs` and `envelope.mjs` read `actors/`, `roles/`, `skills/`, and `docs/diagrams/` relative to the module's own location instead of `~/.claude`, whose symlinks always point at the main checkout. Reason: code in the repo reaching out to a global that points back at a different copy of the same repo was self-inconsistent — a worktree's loaders composed main's material, so a branch could never test its own identity changes. Now every checkout composes from its own tree. The `~/.claude` symlink farm remains for sessions that load skills by hand; composition no longer goes through it.
+
+## 2026-07-11
+
+### A skill not worth marking gets no SUCCESS.md; absence is the statement
+
+The original rule — a SUCCESS.md for every skill, some saying "not marked" — was written when there were six skills. Past a hundred, SUCCESS files are loaded surfaces: a file whose whole content is "look elsewhere" pays tokens on every load to say nothing. So a skill not worth marking gets no file at all, and absence means not marked. The existing not-marked files predate the change and stand until removed; no new ones are added. Reason: the SC — "consider that all these success files get loaded; if a file is not needed, don't add it" — the every-skill rule predates the scale.
