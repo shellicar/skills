@@ -25,7 +25,19 @@ Enough to reorient, and no more — a handover should be short:
 - **What is in flight** — the next thread, in order; what is waiting on the SC.
 - **What to search the memory store for** — the searches, by name, that surface the memories this thread needs. This is the heart of the handover: the durable knowledge lives in the store; the handover carries the keys to it.
 
-Write it to the shape in [templates/handover.md](templates/handover.md) — the three parts, wrapped in `---` fences so the session picking it up can spot it at a glance.
+Write it to this shape — the three parts, wrapped in `---` fences so the session picking it up can spot it at a glance:
+
+```
+---
+
+**Where things stand** — the state of the work, in a few lines.
+
+**What is in flight** — the next thread, in order; what is waiting on whom.
+
+**What to search the memory store for** — the searches, by name, that surface the memories this thread needs.
+
+---
+```
 
 ## The testament comes first
 
