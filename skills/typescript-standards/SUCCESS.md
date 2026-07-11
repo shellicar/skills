@@ -12,6 +12,22 @@ The TypeScript the session wrote or modified, checked against the compiler where
 
 ## How to judge
 
+### The marking template
+
+typescript-standards' **marking template** (see the glossary): one line per criterion below, filled in your Working — the criteria are the lines, never the files, so the record stays seven lines whether the diff is one file or a hundred. Each line carries its mark and its evidence: the occurrences found (file:line) and the judgment on each, or "none found" — which is the claim that you hunted and found none, not a shrug. ➖ where the criterion has no occasion in this diff. A line left off means that check was not done — not a pass.
+
+```
+1. any (own definitions)  — ✅/❌/➖ — occurrences, file:line each
+2. any (constraints)      — … — each occurrence, and the does-the-type-matter call
+3. Casts                  — … — each cast and the diagnostic that justifies it; pre-emptive and `as unknown as T` named
+4. ! vs ?                 — … — each ! and whether ? would do
+5. satisfies vs as        — …
+6. Refactor hygiene       — one check over the diff: imports moved, no re-exports left
+7. Temporal naming        — one check over the diff
+```
+
+The criteria for each line are defined in the sections below.
+
 ### `any` — the rule that resists the easy rationalisation
 
 For types, functions, and code **we are defining**: never `any`. It circumvents the type system, discarding the whole benefit of TypeScript. If an escape is genuinely needed, `unknown` — which forbids using the value until it is narrowed — not `any`. A `: any` or `as any` on our own value or declaration is a FAIL, and the "do we care?" judgment does **not** apply here: that door is exactly what gets rationalised into a codebase full of `any`.
