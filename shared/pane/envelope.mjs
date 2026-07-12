@@ -113,7 +113,7 @@ export function buildSkillsBlock(skills, { includeSuccess = true } = {}) {
  * buildSkillsBlock — but an optional `skills` array is still accepted for any
  * caller that needs the old single-message form.
  */
-export function buildPrompt({ from, message, skills, missionPath }) {
+export function buildPrompt({ from, via, message, skills, missionPath }) {
   if (!from) {
     console.error('from is required');
     process.exit(2);
@@ -123,9 +123,10 @@ export function buildPrompt({ from, message, skills, missionPath }) {
     process.exit(2);
   }
 
+  const viaBlock = via ? `\n<via>\n${via}\n</via>` : '';
   const skillsBlock = skills && skills.length > 0 ? `\n${buildSkillsBlock(skills)}` : '';
   const missionBlock = missionPath ? `\n<mission>\n${missionPath}\n</mission>` : '';
-  return `<from>\n${from}\n</from>${skillsBlock}\n<message>\n${message}\n</message>${missionBlock}`;
+  return `<from>\n${from}\n</from>${viaBlock}${skillsBlock}\n<message>\n${message}\n</message>${missionBlock}`;
 }
 
 /**

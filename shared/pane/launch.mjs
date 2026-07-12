@@ -30,7 +30,7 @@ function cleanupPrompt(tmpDir, promptPath, launchResult) {
   }
 }
 
-export function launchCli(paneId, { from, model, missionFile, name, message, skills, effort, actor, role, resume }) {
+export function launchCli(paneId, { from, via, model, missionFile, name, message, skills, effort, actor, role, resume }) {
   const expandedMissionFile = expandPath(missionFile);
   // When this is a supervisor cast, append the operator-debrief pointer and the
   // target-repo note the supervisor needs, resolved from the live panes. Every
@@ -52,7 +52,7 @@ export function launchCli(paneId, { from, model, missionFile, name, message, ski
   // Skills ride --claudeMd (cached session context, assembled per launch, no
   // turn fired); the prompt carries only the envelope: from, message, mission
   // pointer. Both are written to temp files the launch line cats in.
-  const prompt = buildPrompt({ from, message: finalMessage, missionPath: expandedMissionFile });
+  const prompt = buildPrompt({ from, via, message: finalMessage, missionPath: expandedMissionFile });
   const tmp = mkdtempSync(join(tmpdir(), 'router-prompt-'));
   const promptPath = join(tmp, 'prompt');
   writeFileSync(promptPath, prompt);

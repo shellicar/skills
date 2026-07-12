@@ -22,16 +22,19 @@
  * must already exist; its path is passed as `cwd`. Creating that worktree (which
  * involves the fleet/ submodule) is a separate concern, deliberately not here.
  *
- * WHY NO BRIEF — THE BARE LINE
- * The launch line is a fixed bare mission line (from `task` + `project`) ("i have a mission to fix cves in the
- * claude-cli repo") and nothing else. No brief is attached, and the envelope is
- * not an instruction sheet. This is load-bearing. Tested n=4 each way on
- * 2026-06-20: a cast handed a brief that named specifics started interrogating
- * the SC on fix mechanics ("is hono direct or transitive?") — it read
- * having-the-facts as having-the-authority and took the lead. The bare line
- * gives it nothing to mistake for a mandate, so it does what a handler should:
- * read its skills, reorient, and ask the SC to classify the mission. The more
- * you hand it, the more it acts as if in command — so hand it the least.
+ * WHY THE MESSAGE IS THE SC'S OWN WORDS — scMessage
+ * The launch message is the SC's verbatim mission text, passed straight through
+ * as `scMessage` and never authored by the Planner. It rides the envelope as
+ * <message>, framed <from>the SC</from> <via>the Planner</via>: the message is
+ * the SC's, carried by the Planner. This is load-bearing. Two failures it
+ * guards against: (a) the Planner (or any Planner) rewriting the SC's words into
+ * its own version, smuggling in instructions the SC never wanted; and (b) a
+ * brief that names specifics — tested n=4 each way on 2026-06-20, a cast handed
+ * one started interrogating the SC on fix mechanics ("is hono direct or
+ * transitive?"), reading having-the-facts as having-the-authority and taking
+ * the lead. Passing the SC's exact words, and only those, serves both: the
+ * Planner carries but never authors the message, and the SC controls precisely
+ * what the handler wakes to.
  *
  * WHAT IT DOES
  *   1. Create the handler window at the worktree cwd, detached (`-d`, so the
@@ -46,8 +49,9 @@
  *   3. send-keys the claude-sdk-cli launch. The Handler launches with
  *      `--resume <convId>`: the conv id is pre-generated so the recovery anchor
  *      exists by construction, and the CLI adopts the id whether or not the
- *      conversation exists yet. No brief is attached (see WHY NO BRIEF); the
- *      skills + the bare-line envelope go through --prompt, built the same way
+ *      conversation exists yet. No brief is attached (see WHY THE MESSAGE IS
+ *      THE SC'S OWN WORDS); the skills + the scMessage envelope go through
+ *      --prompt, built the same way
  *      the Router builds an operator's prompt (shared buildPrompt). Note:
  *      --resume, NOT --no-resume — operators start fresh, handlers adopt theirs.
  *   4. Verify claude-sdk-cli stabilises (shared waitForClaudeSdkCli).
@@ -57,8 +61,7 @@
  *     "session":    "claude-cli",
  *     "cwd":        "~/repos/fleet/claude-fleet-shellicar--system-prompt",
  *     "convId":     "<pre-generated uuid>",
- *     "task":       "to fix the cves",
- *     "project":    "claude-cli",
+ *     "scMessage":  "<the SC's verbatim mission message>",
  *     "name":       "system-prompt",
  *     "windowName": "claude-cli-system-prompt",
  *     "title":      "claude-cli-system-prompt",
@@ -66,7 +69,7 @@
  *     "model":      "opus"
  *   }
  *
- * Required: session, cwd, convId, task, project, name, windowName, model
+ * Required: session, cwd, convId, scMessage, name, windowName, model
  * (no default — every launch names its model, as a family name (sonnet |
  * opus | fable) resolved to the current identifier by the launch seam via
  * shared/pane/models.mjs; the recommended picks live in squad-selection).
@@ -83,7 +86,6 @@ import { readFileSync } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
 import { homedir } from "node:os";
 import { launchCli } from "../../../shared/pane/launch.mjs";
-import { handlerLaunchMessage } from "../../../shared/pane/templates.mjs";
 import { skillsFor, HANDLER_ROLES } from "../../../shared/pane/skills.mjs";
 
 function expandPath(p) {
@@ -92,7 +94,7 @@ function expandPath(p) {
 }
 
 const cfg = JSON.parse(readFileSync(0, "utf8"));
-for (const k of ["session", "cwd", "convId", "task", "project", "name", "windowName", "model"]) {
+for (const k of ["session", "cwd", "convId", "scMessage", "name", "windowName", "model"]) {
   if (!cfg[k]) {
     console.error(`config missing required field: ${k}`);
     process.exit(2);
@@ -126,10 +128,11 @@ if (cfg.colour) {
 //    resume (not no-resume): the handler adopts its pre-generated conv id.
 //    --system is the primitive's concern, not this script's.
 const result = launchCli(paneId, {
-  from: cfg.from || "the Planner",
+  from: "the SC",
+  via: "the Planner",
   model,
   name: cfg.name,
-  message: handlerLaunchMessage({ task: cfg.task, project: cfg.project }),
+  message: cfg.scMessage,
   skills: skillsFor({ actor: "handler", role: HANDLER_ROLES }),
   actor: "handler",
   role: HANDLER_ROLES,
