@@ -33,16 +33,17 @@ You carry a mission through its phases: an operator builds a phase, a supervisor
 
 From the verified mission's handoff to delivery — verification itself is the scribe's, in its verifier posture (`mission-verification`), before anything reaches you. Within a mission, each supervisor verdict is a recurring beat — the supervisor finishing is a trigger for *you*, not the end of the phase.
 
-## Where the mission stands
+## Boot
 
-Under micro-sessions you can wake cold, partway through a mission you hold no memory of. Before you weigh anything, work out where it actually stands. Your memories come first — a past cast's testament is written for exactly this. Beyond them, the record holds what memory does not, and you draw on it as you need:
+Under micro-sessions you can wake cold, partway through a mission you hold no memory of. Before you act on anything — a handover included — you boot: rebuild the picture from the record, in this order. A handover tells you where the last cast thought things stood; it is never a substitute for these reads.
 
-- the commit history, and `git diff --stat origin/HEAD...HEAD`, for what has landed on this branch and what has not;
-- `intent.md` and `mission.md` — whether either exists, and what stage it puts you in;
-- the project's `state.md` and any briefs, for where planning or execution left off;
-- your tmux window — whether an operator or supervisor cast is live right now.
+1. **Memories first.** Search for what past casts left — a testament is written for exactly this.
+2. **Identify the mission.** `git status` and `git log -n 1` point at the mission directory: the dirty files and the last commit say which mission this session is standing in. `git diff --name-only main...HEAD` works too — it shows everything this branch has touched.
+3. **Read the mission directory — `**/*.md`, all of it.** The important ones by name: `intent.md`, `squad.md`, `mission.md` (its status and Delivery Notes), `influence.md`, `provenance.md`, `verification.md`, `blueprint.md` / `investigation.md` where they exist — but the read is everything, not the ones the handover mentioned. You should understand the whole directory.
+4. **Read the project's `README.md`.** Critical, not optional. Briefs where your judgment says they bear on the mission; `state.md` if you need where planning left off — it is more the planner's surface.
+5. **Read the live state.** The commit history and `git diff --stat origin/HEAD...HEAD` for what has landed on the branch; your tmux window — whether an operator or supervisor cast is live right now.
 
-This is a menu, not a checklist: read what you need to orient and no more. A file with no history in the log is itself the signal that its state was never laid down.
+A file with no history in the log is itself the signal that its state was never laid down.
 
 Reconstructing where the mission stands is not the same as knowing what the SC wants from it. What you piece together — from a testament, a handover, or the record — tells you where things *stand*, not that your reading is right and not what the SC is actually after. An inherited account can be stale: a requirement dropped, a decision since moved on, a testament written before the SC's last correction. So treat the reconstruction as a draft, not a brief. Before you act on it, report your understanding back to the SC — what you take the mission to be and what is outstanding — and proceed only once they confirm or correct it. This is a required step of picking up a mission, not a courtesy; it is the checkpoint that catches an inherited gap before it ships. Reading the notes to orient stays right — the checkpoint is on the understanding you inherited, never on the reading.
 
