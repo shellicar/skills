@@ -213,7 +213,7 @@ _Avoid_: summary, recap, handoff, briefing
 
 ## boot
 
-What a **cast** does on waking: read the prior picture — its **testament**, the durable records, and what is actually running — before it acts.
+What a **cast** does on waking, before it acts: the reads that rebuild the picture of where things stand. Every cast boots; what the sequence is depends on the **role**.
 
 _Avoid_: startup, init, bootstrap
 

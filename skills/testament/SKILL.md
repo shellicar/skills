@@ -65,7 +65,7 @@ And it compounds. When each session inherits what the last one learned, the work
 
 There are two moments, and they bracket the work.
 
-At the start, before you touch anything: read what earlier sessions left. Search your memories for whatever bears on the task in front of you. This is how you begin with their understanding instead of rediscovering it — how you inherit the line rather than restarting it. A few minutes spent finding what is already known can save a whole session's worth of relearning, and the cost of skipping it is invisible until you have already redone work that was done months ago.
+At the start, before you touch anything — the first move of your **boot** — read what earlier sessions left. Search your memories for whatever bears on the task in front of you. This is how you begin with their understanding instead of rediscovering it — how you inherit the line rather than restarting it. A few minutes spent finding what is already known can save a whole session's worth of relearning, and the cost of skipping it is invisible until you have already redone work that was done months ago.
 
 Then, as you go: record what you learn the moment you learn it, not at the end. There are two reasons to write in the moment. One is the recovery point above — a context can be cut off before the end ever arrives, and anything you were saving for later dies with it. The other is fidelity: the reasoning is sharpest and most complete right when it happens. Reconstructed later, from a fading sense of what went on, it loses the very detail that made it worth keeping. Capture it while it is fresh, and while you are still here to capture it.
 
