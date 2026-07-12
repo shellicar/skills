@@ -71,4 +71,4 @@ The shaped direction is worked out in the *conversation after* the cast lands â€
 
 ## Worked example â€” winston-peer-deps (2026-06-19)
 
-convId `c7784c2d-f12f-4581-9dab-8d18c5a82da1`; worktree `claude-fleet-shellicar--winston-peer-deps`; session `ecosystem` (created on launch, colour `colour214`); windowName `ecosystem-winston-peer-deps`; model `claude-opus-4-8`. Launched into pane `%353`, conv id pane-confirmed, recorded in `active-missions.md`. (This one predated the bare-line finding and went out with a brief; launch bare-line now.)
+convId `c7784c2d-f12f-4581-9dab-8d18c5a82da1`; worktree `claude-fleet-shellicar--winston-peer-deps`; session `ecosystem` (created on launch, colour `colour214`); windowName `ecosystem-winston-peer-deps`; model `claude-opus-4-8`. Launched into pane `%353`, conv id pane-confirmed, recorded in `active-missions.md`. (This one predated the current process and went out with a brief; launch on the SC's verbatim `scMessage` now.)
