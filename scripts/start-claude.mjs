@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import './lib/sc-only.mjs';
 /**
  * Start a plain Claude session — claude-sdk-cli with the foundational skills
  * injected, and no actor or role identity.
@@ -38,9 +37,10 @@ import './lib/sc-only.mjs';
 import { homedir } from "node:os";
 import { basename } from "node:path";
 import { existsSync } from "node:fs";
-import { spawnSync } from "node:child_process";
 import { buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
+import { spawnCli } from "./lib/sc-only.mjs";
+import { doctor } from "./lib/doctor.mjs";
 
 // Forward everything else verbatim to claude-sdk-cli. A leading `--` is dropped.
 const passthrough = process.argv.slice(2);
@@ -87,11 +87,7 @@ const skills = skillsFor(actor ? { actor } : {});
 const claudeMd = buildSkillsBlock(skills, { includeSuccess: false });
 
 if (passthrough.includes("--doctor")) {
-  console.log(`name: ${name}`);
-  if (actor) console.log(`actor: ${actor} (${identity})`);
-  console.log(`skills (${skills.length}): ${skills.join(", ")}`);
-  console.log(`--claudeMd: ${claudeMd.length.toLocaleString("en-US")} chars`);
-  process.exit(0);
+  doctor({ name, actor, identity, claudeMd, skills });
 }
 
 const args = ["--name", name, "--claudeMd", claudeMd];
@@ -106,5 +102,4 @@ if (message && passthrough.includes("--no-resume")) {
 args.push(...passthrough);
 
 // Launch interactively in this pane and exit with the CLI's status.
-const result = spawnSync("claude-sdk-cli", args, { stdio: "inherit" });
-process.exit(result.status ?? 1);
+spawnCli(args);

@@ -25,9 +25,7 @@ const BASE = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 // Loaded by every session. Exported so the dispatch path (launchCli) unions it
 // into every cast's set — no caller hand-carries the foundational skills.
 export const FOUNDATIONAL = [
-  "claude-philosophy",
   "specification-discipline",
-  "transparency",
   "commander-protocol",
   "teapot-protocol",
   "communication-fundamentals",
@@ -35,7 +33,6 @@ export const FOUNDATIONAL = [
   "audience-stephen",
   "audience-sc",
   "system-glossary",
-  "safe-operations",
 ];
 
 // Actors that co-work: they share the SC's single repo rather than running in

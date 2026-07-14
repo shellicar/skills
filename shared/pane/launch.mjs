@@ -57,7 +57,7 @@ export function launchCli(paneId, { from, via, model, missionFile, name, message
   const promptPath = join(tmp, 'prompt');
   writeFileSync(promptPath, prompt);
   const skillsPath = join(tmp, 'claudemd');
-  writeFileSync(skillsPath, buildSkillsBlock(finalSkills));
+  writeFileSync(skillsPath, buildSkillsBlock(finalSkills, { includeSuccess: true }));
 
   // The actor is the cast's standing identity, so it rides --system-identity:
   // bound to the conversation, persisted, restored on resume, and read live

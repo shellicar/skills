@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import './lib/sc-only.mjs';
 /**
  * Start a Handler session — claude-sdk-cli with the Handler identity preset.
  *
@@ -28,12 +27,11 @@ import './lib/sc-only.mjs';
  *   start-handler.mjs --model claude-...   # override the default model
  *   start-handler.mjs --doctor             # print what would be sent, then exit
  *
- * --doctor composes exactly what a real launch would (same roles, same
- * skillsFor, same buildSystemInline/buildSkillsBlock calls, includeSuccess:
- * false) and prints the resolved name, role list, full skill list, and the
- * --system / --claudeMd character counts — then exits without touching
- * claude-sdk-cli. Built for when the composition looks wrong and the question
- * is what this exact script would actually send, not what it should send.
+ * --doctor prints a JSON object of everything that would be loaded — the
+ * ~/.claude CLAUDE.md/SYSTEM.md files, --system-identity, --system and
+ * --claudeMd — then exits without touching claude-sdk-cli. Built for when the
+ * composition looks wrong and the question is what this exact script would
+ * actually send, not what it should send.
  *
  * A leading `--` separator is accepted and stripped. The session runs
  * interactively in the current pane and exits with claude-sdk-cli's status.
@@ -42,9 +40,10 @@ import './lib/sc-only.mjs';
 
 import { homedir } from "node:os";
 import { basename } from "node:path";
-import { spawnSync } from "node:child_process";
 import { buildSystemInline, buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
 import { skillsFor, HANDLER_ROLES } from "../shared/pane/skills.mjs";
+import { spawnCli } from "./lib/sc-only.mjs";
+import { doctor } from "./lib/doctor.mjs";
 
 // The composition preset: the Handler's actor + its five roles into --system.
 // The role list is the shared HANDLER_ROLES constant, so every handler launch
@@ -78,14 +77,7 @@ const skills = skillsFor({ actor: "handler", role: roles });
 const claudeMd = buildSkillsBlock(skills, { includeSuccess: false });
 
 if (passthrough.includes("--doctor")) {
-  console.log(`name: ${name}`);
-  console.log(`actor: handler`);
-  console.log(`roles: ${roles.join(", ")}`);
-  console.log(`skills (${skills.length}): ${skills.join(", ")}`);
-  console.log(`--system: ${system.length.toLocaleString("en-US")} chars`);
-  console.log(`--claudeMd: ${claudeMd.length.toLocaleString("en-US")} chars`);
-  console.log(`total: ${(system.length + claudeMd.length).toLocaleString("en-US")} chars`);
-  process.exit(0);
+  doctor({ name, actor: "handler", roles, identity, system, claudeMd, skills });
 }
 
 const args = ["--name", name, "--system-identity", identity, "--system", system, "--claudeMd", claudeMd];
@@ -99,5 +91,4 @@ if (message && passthrough.includes("--no-resume")) {
 args.push(...passthrough);
 
 // Launch interactively in this pane and exit with the CLI's status.
-const result = spawnSync("claude-sdk-cli", args, { stdio: "inherit" });
-process.exit(result.status ?? 1);
+spawnCli(args);

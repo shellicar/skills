@@ -27,13 +27,18 @@ const REPO = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
  * assembled CLAUDE.md, cached context on every launch, no turn fired.
  *
  * SUCCESS.md is verification material — how a supervisor judges whether a
- * skill was followed. `includeSuccess` (default true) gates whether it is
- * embedded at all; callers whose cast never verifies against it (the handler
- * family) pass false so it is not paid for and not carried.
+ * skill was followed. `includeSuccess` is REQUIRED, no default: every caller
+ * states whether its session verifies against SUCCESS.md, so the material is
+ * never injected by omission. Callers whose cast never verifies (the handler
+ * family, the planner) pass false so it is not paid for and not carried.
  */
-export function buildSkillsBlock(skills, { includeSuccess = true } = {}) {
+export function buildSkillsBlock(skills, { includeSuccess } = {}) {
   if (!skills || skills.length === 0) {
     console.error('skills array is required and must not be empty');
+    process.exit(2);
+  }
+  if (typeof includeSuccess !== 'boolean') {
+    console.error('buildSkillsBlock: includeSuccess is required (true or false) — no default.');
     process.exit(2);
   }
 
@@ -124,7 +129,7 @@ export function buildPrompt({ from, via, message, skills, missionPath }) {
   }
 
   const viaBlock = via ? `\n<via>\n${via}\n</via>` : '';
-  const skillsBlock = skills && skills.length > 0 ? `\n${buildSkillsBlock(skills)}` : '';
+  const skillsBlock = skills && skills.length > 0 ? `\n${buildSkillsBlock(skills, { includeSuccess: true })}` : '';
   const missionBlock = missionPath ? `\n<mission>\n${missionPath}\n</mission>` : '';
   return `<from>\n${from}\n</from>${viaBlock}${skillsBlock}\n<message>\n${message}\n</message>${missionBlock}`;
 }

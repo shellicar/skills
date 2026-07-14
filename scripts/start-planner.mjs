@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import './lib/sc-only.mjs';
 /**
  * Start a Planner session — claude-sdk-cli with the Planner identity preset.
  *
@@ -34,10 +33,12 @@ import './lib/sc-only.mjs';
  * buildSystemInline).
  */
 
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { homedir } from "node:os";
 import { buildSystemInline, buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
+import { spawnCli } from "./lib/sc-only.mjs";
+import { doctor } from "./lib/doctor.mjs";
 
 // The actor is the standing identity — bound to the conversation via
 // --system-identity, persisted, restored on resume. The roles ride --system.
@@ -72,17 +73,10 @@ if (mi >= 0) {
 // The skill set rides --claudeMd: assembled into the session's CLAUDE.md
 // content on every launch (fresh or resumed), cached, no turn fired.
 const skills = skillsFor({ actor: "planner", role: ["scheduler", "launcher", "coach"] });
-const claudeMd = buildSkillsBlock(skills);
+const claudeMd = buildSkillsBlock(skills, { includeSuccess: false });
 
 if (passthrough.includes("--doctor")) {
-  console.log(`name: planner`);
-  console.log(`actor: planner`);
-  console.log(`roles: scheduler, launcher, coach`);
-  console.log(`skills (${skills.length}): ${skills.join(", ")}`);
-  console.log(`--system: ${system.length.toLocaleString("en-US")} chars`);
-  console.log(`--claudeMd: ${claudeMd.length.toLocaleString("en-US")} chars`);
-  console.log(`total: ${(system.length + claudeMd.length).toLocaleString("en-US")} chars`);
-  process.exit(0);
+  doctor({ name: "planner", actor: "planner", roles: ["scheduler", "launcher", "coach"], identity, system, claudeMd, skills });
 }
 
 const args = ["--name", "planner", "--system-identity", identity, "--system", system, "--claudeMd", claudeMd];
@@ -96,5 +90,4 @@ if (message && passthrough.includes("--no-resume")) {
 args.push(...passthrough);
 
 // Launch interactively in this pane and exit with the CLI's status.
-const result = spawnSync("claude-sdk-cli", args, { stdio: "inherit" });
-process.exit(result.status ?? 1);
+spawnCli(args);

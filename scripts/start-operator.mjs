@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import './lib/sc-only.mjs';
 /**
  * Start an Operator session — the Operator actor carrying one operator role,
  * named by --role (maker, courier, builder, apostle, …).
@@ -22,17 +21,18 @@ import './lib/sc-only.mjs';
  * the session opens idle. Everything else is forwarded verbatim, including
  * --model; a leading `--` separator is accepted and stripped.
  * Runs interactively in the current pane and exits with claude-sdk-cli's status.
- * --doctor composes exactly what a real launch would and prints the resolved
- * name, role, skill list, and --system / --claudeMd sizes, then exits without
- * touching claude-sdk-cli.
+ * --doctor prints a JSON object of everything that would be loaded — the
+ * ~/.claude CLAUDE.md/SYSTEM.md files, --system-identity, --system and
+ * --claudeMd — then exits without touching claude-sdk-cli.
  * Exit 2 if --role is missing or an identity file is missing (via buildSystemInline).
  */
 
 import { homedir } from "node:os";
 import { basename } from "node:path";
-import { spawnSync } from "node:child_process";
 import { buildSystemInline, buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
+import { spawnCli } from "./lib/sc-only.mjs";
+import { doctor } from "./lib/doctor.mjs";
 
 // Forward everything else verbatim to claude-sdk-cli. A leading `--` is dropped.
 const passthrough = process.argv.slice(2);
@@ -76,17 +76,10 @@ if (mi >= 0) {
 // The skill set rides --claudeMd: assembled into the session's CLAUDE.md
 // content on every launch (fresh or resumed), cached, no turn fired.
 const skills = skillsFor({ actor: "operator", role });
-const claudeMd = buildSkillsBlock(skills);
+const claudeMd = buildSkillsBlock(skills, { includeSuccess: true });
 
 if (passthrough.includes("--doctor")) {
-  console.log(`name: ${name}`);
-  console.log(`actor: operator`);
-  console.log(`role: ${role}`);
-  console.log(`skills (${skills.length}): ${skills.join(", ")}`);
-  console.log(`--system: ${system.length.toLocaleString("en-US")} chars`);
-  console.log(`--claudeMd: ${claudeMd.length.toLocaleString("en-US")} chars`);
-  console.log(`total: ${(system.length + claudeMd.length).toLocaleString("en-US")} chars`);
-  process.exit(0);
+  doctor({ name, actor: "operator", roles: [role], identity, system, claudeMd, skills });
 }
 
 const args = ["--name", name, "--system-identity", identity, "--system", system, "--claudeMd", claudeMd];
@@ -100,5 +93,4 @@ if (message && passthrough.includes("--no-resume")) {
 args.push(...passthrough);
 
 // Launch interactively in this pane and exit with the CLI's status.
-const result = spawnSync("claude-sdk-cli", args, { stdio: "inherit" });
-process.exit(result.status ?? 1);
+spawnCli(args);
