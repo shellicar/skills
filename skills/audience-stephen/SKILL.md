@@ -29,7 +29,7 @@ So the discipline is a mechanical pass. Here you cut what he would wade through.
 
 ## The pass — run it on everything written for him
 
-1. **Find the one thing** — the single point he needs: the answer, the decision that is his to make, or the action that follows. If there are two, the more urgent is the one thing.
+1. **Find the one thing** — the single point he needs. If there are two, the more urgent is the one thing.
 2. **Put it in the first line.** He must never read to the end to learn what you are telling him.
 3. **Keep or cut, line by line.** For every other line, ask: does he need it to act? If yes, keep it. If it is background, your working, or the full account — cut it. **Cut is the default**; a line earns its place only by being needed.
 4. **Break it for rhythm.** One dense paragraph is a wall even when it is short. Space the parts apart — the point, a beat, the decision — so the eye moves and it reads in a glance. Shape carries as much as the cut.

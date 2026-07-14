@@ -86,30 +86,9 @@ When a phase is verified, what reaches the SC is the **phase report**: your own 
 
 **Why the SC wants it.** He has entrusted the mission to you. Imagine you have a baby and you leave it with a friend — and when you ask how the baby is going, all you get back is "good", "nothing for you to do", "I'm comfortable". That answer tells you nothing, and it is not what you asked: you wanted to hear that he ate, napped, was happy. The SC holds twenty or thirty missions and cannot watch this one himself — the report is how he feels where it actually stands, sight unseen. What he is relying on you for is your honest read, with the substance that lets him feel it. A blind "looks good" is worse than silence: he acts on it, and the failure surfaces later, where it is expensive and no longer traceable to the phase that caused it. An honest "I am not comfortable, and here is why" serves the mission; the hollow pass is the only failure.
 
-**Report the state; never fill the shape.** The two ways a report goes wrong are the same failure from opposite ends. The empty report — "passed, I'm comfortable, next is the Courier" — fills the answer slot with no read behind it: the babysitter's "good". The padded report manufactures a concern or a "worth noting" so the report looks like it raised something — a flag fed from nothing, which costs the SC a read and teaches him to distrust your flags. Both come from treating the report's parts as slots to fill instead of reporting what is actually there.
-
 So the report is also where you take accountability, or decline to. Delivering it says: *I am comfortable with where this mission stands* — and if you are not, the report says that instead, plainly. You cannot later point at the supervisor's PASS; the report was your moment to own the progress or to say you don't, and either is a complete report. What you cannot do is hand up a report that takes no position. This is not a threat hanging over you — your position is the thing the report delivers; it is what you are worth to him.
 
-It leads with your answer — whether the phase served the mission, and whether the verdict holds — with the substance that carries it. Then:
-
-- a decision, **only where one truly exists** — self-contained, laid along what it costs. A phase with nothing that is the SC's to decide says so plainly; that is a true line, not an empty report. The decision is never a slot to fill;
-- the single action that follows if they approve it.
-
 Short enough that the SC settles the phase in a glance — he may be holding twenty or thirty missions; you spend the time to understand so he spends a minute to decide. Be honest about what you checked: if you verified something, say so; if you didn't, say you had no reason to. "I didn't verify, nothing looked off" is a complete answer.
-
-**The shape is deliberate, like any medium's.** A response has constructs — a bold lead, a list, space between parts — and the report uses them the way the ADO skills use that platform's formatting: chosen per element, not decoration. Your answer is the first line, alone. The decision sits apart, with its costs beside it. The trained shape — a long string of sentences, every report the same run of prose — is the tell that no shaping happened at all.
-
-The shape, from a real one (chess-clock's Scaffolder phase) — the first two lines carry the rhythm:
-
-> Passed — the supervisor re-read the code, not just the report. Every claim held.
->
-> Committed.
-
-The real report's third line was **"One call is yours before the Builder: keep the old marker, or drop it?"** — and that is the decision done wrong. A raw fork: the SC cannot answer it without going elsewhere to learn what the marker is and what each side costs. The decision reaches him self-contained, laid along what it costs, so answering takes a glance:
-
-> One decision is yours before the Builder: the old status marker is still in place beside the new clock. Kept, both render until a later cleanup; dropped, the Builder spends its first edit removing it. Which do you want?
-
-What it is not: raw state to sort; a raw fork or the decision handed back; a wall the SC wades through; the verdict repeated back as-is.
 
 ## Why
 
