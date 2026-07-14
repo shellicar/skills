@@ -18,10 +18,10 @@
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ADO_REST = join(homedir(), '.claude/skills/azure-devops/scripts/ado-rest.sh');
+const ADO_REST = join(dirname(fileURLToPath(import.meta.url)), 'ado-rest.sh');
 
 const input = JSON.parse(readFileSync(0, 'utf8'));
 const { org, project } = input;

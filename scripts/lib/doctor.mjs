@@ -16,6 +16,7 @@ import { readFileSync, writeSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { withDependencies, FOUNDATIONAL } from "../../shared/pane/skills.mjs";
 
 // Repo root: scripts/lib/ → two levels up. Skills live under skills/.
 const REPO = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -37,9 +38,12 @@ function count(path) {
  *  - --system: the composed actor/role prompt (appended after SYSTEM.md)
  *  - --claudeMd: the assembled <skills> block (appended after the CLAUDE.md files)
  *
- * `skills` breaks the --claudeMd cost down per skill (each SKILL.md's own
- * length; the assembled block adds the preamble and any diagrams/success on
- * top). `system` is null for launchers that pass no --system (start-claude).
+ * `skills` is split by tier, mirroring how buildSkillsBlock emits them:
+ * `inlined` (the foundational closure — full SKILL.md text inside --claudeMd)
+ * and `indexed` (everything else — one <entry> line inside --claudeMd; the
+ * file size shown is what a session pays on disk-read when it uses the skill,
+ * not what the launch injects). `system` is null for launchers that pass no
+ * --system (start-claude).
  */
 export function doctor({ name, actor = null, roles = [], identity = null, system = null, claudeMd, skills = [] }) {
   const home = homedir();
@@ -56,7 +60,12 @@ export function doctor({ name, actor = null, roles = [], identity = null, system
     return { ...o, total: Object.values(o).reduce((a, b) => a + b, 0) };
   };
   const roleChars = withTotal(roles.map((r) => [r, count(join(REPO, "roles", r, "ROLE.md"))]));
-  const skillChars = withTotal(skills.map((s) => [s, count(join(REPO, "skills", s, "SKILL.md"))]));
+  const foundationalSet = new Set(withDependencies(FOUNDATIONAL));
+  const size = (s) => [s, count(join(REPO, "skills", s, "SKILL.md"))];
+  const skillChars = {
+    inlined: withTotal(skills.filter((s) => foundationalSet.has(s)).map(size)),
+    indexed: withTotal(skills.filter((s) => !foundationalSet.has(s)).map(size)),
+  };
 
   const out = { name, actor, chars: { ...chars, total }, roles: roleChars, skills: skillChars };
   writeSync(1, JSON.stringify(out, null, 2) + "\n");
