@@ -3,7 +3,7 @@ name: testament
 description: |
   WHAT: Your testament is the record you leave of what you learned this session, kept as memories, by you and for you.
   WHY: A context ends and takes everything in it. Your memories are how what you learned survives — to recover an interrupted thread, and to reach the sessions that come after. They are your only way to contribute past the boundary of your own context.
-  WHEN: Read what past sessions left before you begin; record what you learn as you learn it. Loaded by any actor whose work persists across casts.
+  WHEN: When you boot, and when you are told to write your testament.
 user-invocable: false
 metadata:
   category: reference

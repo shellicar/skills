@@ -3,7 +3,7 @@ name: mission-artefacts
 description: |
   WHAT: The single source for what a mission is on disk — the directory it lives in, the artefacts it holds (intent, squad, mission, provenance, verification, post-mortem), and the equation that binds them into a mission.
   WHY: Without one definition, the artefacts drift — the role that writes intent.md and the scribe that reads it disagree on what it is, and the concrete shape gets lost (as it did once already).
-  WHEN: Loaded by the roles that produce or consume a mission's artefacts — the interlocutor and squad-selector who write the front two, the scribe who writes the mission from them, and the executor who reads them to know the stage.
+  WHEN: Whenever a mission's artefacts are written or read.
 user-invocable: false
 metadata:
   category: reference

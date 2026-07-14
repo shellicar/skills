@@ -3,7 +3,7 @@ name: mission-grounding
 description: |
   WHAT: Provenance first — the scribe extracts the evidence from the sources into provenance.md, then composes the mission from those rows and nothing else.
   WHY: Written after the mission, a trace justifies anything — the author self-approves, and the file anchors the verifier on the author's account. Written first, it puts the sources in front of the scribe at the moment the words form, which is the only moment grounding can happen.
-  WHEN: Loaded by the scribe role, writing posture — before mission.md is written.
+  WHEN: Before mission.md is written.
 user-invocable: false
 metadata:
   category: standards

@@ -3,7 +3,7 @@ name: shared-understanding
 description: |
   WHAT: How to work out what the SC wants in conversation — the moves that surface his meaning, check your understanding, and bring your own ideas in without substituting them for his.
   WHY: These moves are steps — so they load as a skill, not baked into a role.
-  WHEN: Loaded by the interlocutor role, whenever Claude is drawing intent out of the SC before a mission exists.
+  WHEN: Whenever intent is being drawn out of the SC before a mission exists.
 user-invocable: false
 metadata:
   category: standards

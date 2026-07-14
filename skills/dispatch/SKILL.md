@@ -3,7 +3,7 @@ name: dispatch
 description: |
   WHAT: The dispatch tool layer — every dispatch a fresh cast, no recast — the scripts, their configs, pane lifecycle, the envelope shape, and skill injection.
   WHY: Dispatch is transport, not decision — one documented mechanism keeps every cast launched the same way, instead of each router re-deriving flags and envelope shapes.
-  WHEN: Loaded by the router role, whenever a cast is dispatched.
+  WHEN: Whenever a cast is dispatched.
 user-invocable: false
 metadata:
   category: reference

@@ -3,7 +3,7 @@ name: mission-verification
 description: |
   WHAT: How the verifier scribe checks a finished mission before it reaches the SC — two cross-checks, recorded in verification.md: every content claim traces to a source the verifier opened, and the mission represents intent.md.
   WHY: A mission's inventions are invisible to its author — a plausible invention reads exactly like a grounded claim, and an invented Source line reads exactly like a real one. Only a different cast opening the sources catches it; reading the writer's self-assessment and nodding is not verifying.
-  WHEN: Loaded by the scribe in its verifier posture, on a finished mission — after the writing scribe hands it over, before the SC reviews it and before it is dispatched.
+  WHEN: When verifying a finished mission, before the SC reviews it.
 user-invocable: false
 metadata:
   category: standards

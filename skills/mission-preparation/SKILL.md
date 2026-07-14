@@ -3,7 +3,7 @@ name: mission-preparation
 description: |
   WHAT: The process for preparing a mission — stage 1 of the lifecycle: drawing out intent, picking the squad, writing the mission, and verifying it, from the SC's direction to ready.
   WHY: The pipeline lived only in the roles that run its steps, each seeing its own fragment; one skill holds the whole stage so the seam into execution is exact and nothing is claimed twice.
-  WHEN: When a mission is being prepared — from the SC's direction until the mission is ready.
+  WHEN: When a mission is being prepared.
 user-invocable: false
 diagrams:
   - lifecycle

@@ -3,7 +3,7 @@ name: handover
 description: |
   WHAT: What a cast writes to continue a thread in another session — enough for that session to reorient: where things stand, what is in flight, and above all what to search the memory store for.
   WHY: The testament carries the learning into the store, but a fresh conversation cannot know which memories matter to the thread it is continuing. The handover is the bridge: the durable pointers that let the next cast rebuild from the knowledge base instead of a recap.
-  WHEN: Whenever a thread will be continued in another session — because this context is ending, or because a thread is spun off to continue elsewhere while this session carries on. Written after the testament; the two go together.
+  WHEN: When you are told to write a handover.
 user-invocable: false
 metadata:
   category: reference

@@ -3,7 +3,7 @@ name: standing-up-handlers
 description: |
   WHAT: How the planner stands up a per-mission handler — the fleet-repo worktree, the pre-generated conversation id, the recorded mission line, the launch carrying the SC's verbatim message.
   WHY: The sequence carries the recovery anchors (conversation id, active-missions record) — skip or reorder a step and a dead tmux server or machine takes the mission's thread with it.
-  WHEN: Loaded by the launcher role, whenever a decided mission is brought to life.
+  WHEN: When a decided mission is brought to life.
 user-invocable: false
 metadata:
   category: standards

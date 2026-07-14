@@ -3,7 +3,7 @@ name: mission-execution
 description: |
   WHAT: The process for running a mission — execution (the phase loop), cleanup, and the post-mortem's mission wrapping — from dispatched to retired.
   WHY: The process lived scattered across role files, where each role saw only its fragment and the seams were claimed twice or not at all; one skill holds the whole run so every mission works the same seams.
-  WHEN: Loaded by the executor role, from first dispatch to the mission's retirement.
+  WHEN: Whenever a mission is being executed, from first dispatch to its retirement.
 user-invocable: false
 diagrams:
   - lifecycle

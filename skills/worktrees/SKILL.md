@@ -3,7 +3,7 @@ name: worktrees
 description: |
   WHAT: The worktree practice for operator missions — why, lifecycle, naming, creation, cleanup.
   WHY: The main checkout is the SC's working environment; worktrees keep operator build artefacts and edits out of it, and let missions run in parallel without stomping each other.
-  WHEN: Loaded by the executor role, whenever an operator worktree is created before dispatch or torn down in cleanup.
+  WHEN: When an operator worktree is created before dispatch or torn down in cleanup.
 user-invocable: false
 metadata:
   category: standards

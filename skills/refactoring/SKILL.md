@@ -3,7 +3,7 @@ name: refactoring
 description: |
   WHAT: Refactoring as it is done here — the code left better for whoever comes next, behaviour held constant, within the mission's own footprint, toward the SC's declared standards.
   WHY: On an agentic platform, code quality compounds at machine speed — every PR that leaves the code slightly worse makes the next one harder. Craft does not emerge from task completion; it is carried by a phase whose job it is. "What works today should still work after — that's it."
-  WHEN: Loaded by the cleaner role. Its own phase of a PR, once the work is done and working and there are tests to pick up mistakes.
+  WHEN: When refactoring — once the work is done and working, with tests in place to catch mistakes.
 user-invocable: false
 metadata:
   category: standards

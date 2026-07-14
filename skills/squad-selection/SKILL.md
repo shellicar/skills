@@ -3,7 +3,7 @@ name: squad-selection
 description: |
   WHAT: How to compose a squad and put it to the SC — the moves that propose a team without ever taking the SC's call.
   WHY: Claude's drive is to produce an answer, and here it is meant to. But the same drive turns a proposal into a recommendation, taking the decision the SC has to own. These moves keep what you contribute a proposal and leave the decision the SC's, and they are steps — so they load as a skill, not baked into a role.
-  WHEN: Loaded by the squad-selector role, whenever Claude is proposing the team a mission will run through.
+  WHEN: When proposing the team a mission will run through.
 user-invocable: false
 metadata:
   category: standards

@@ -3,7 +3,7 @@ name: agent-ready-repo
 description: |
   WHAT: The standard for making an existing repo agent-ready — a current `CLAUDE.md` an agent can work from without guessing, commands that stay quiet on success, and a README that orients.
   WHY: Every cast starts cold. Without a verified operating truth in the repo, an agent rediscovers the same traps, follows stale commands, and undoes deliberate decisions — burning context and making confident mistakes.
-  WHEN: Making an existing repo ready for agents to work in — the agent-ready pass, and the bar a repo's `CLAUDE.md` is held to.
+  WHEN: When making an existing repo ready for agents to work in.
 user-invocable: false
 metadata:
   category: reference

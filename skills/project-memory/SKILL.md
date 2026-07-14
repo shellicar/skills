@@ -3,7 +3,7 @@ name: project-memory
 description: |
   WHAT: Maintaining the project-authored ./CLAUDE.md memory file in operator repos — what earns a place, how changes land.
   WHY: Stale or noisy content costs every cast that loads it. Keeping the file useful is judgment, not just mechanics, and the handler owns that judgment across its fleet.
-  WHEN: Loaded by the handler actor, whenever an operator repo's ./CLAUDE.md is created or maintained.
+  WHEN: Whenever an operator repo's ./CLAUDE.md is created or maintained.
 user-invocable: false
 metadata:
   category: standards
