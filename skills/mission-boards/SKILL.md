@@ -1,9 +1,9 @@
 ---
 name: mission-boards
 description: |
-  WHAT: The Planner's durable records — the active and completed mission boards and the per-project state file — and the mission lifecycle that moves through them.
+  WHAT: The Planner's mission boards — active and completed — and the mission lifecycle that moves through them. (Per-project records — README, state.md, briefs — are the planner-office skill.)
   WHY: Prevents the doctrine scattering across the role and the templates, where it drifts out of sync and fills the templates with instructions instead of leaving them structural.
-  WHEN: TRIGGER when reading, maintaining, or reconciling a mission board or a project state file, or when a mission changes lifecycle state.
+  WHEN: TRIGGER when reading, maintaining, or reconciling a mission board, or when a mission changes lifecycle state.
 user-invocable: false
 diagrams:
   - lifecycle
@@ -15,15 +15,16 @@ metadata:
 
 ## Who
 
-The Planner, keeping the fleet's durable records. Handlers read a project's state file before shaping work for it.
+The Planner, keeping the fleet's mission boards.
 
 ## What
 
-Three durable records, each by the Planner for the Planner. This skill is their content — what they are for and how the lifecycle moves through them. The *shape* of each lives in its template under this skill's `templates/`; a template is structure, this is the doctrine behind it.
+Two durable records, each by the Planner for the Planner. This skill is their content — what they are for and how the lifecycle moves through them. The *shape* of each lives in its template under this skill's `templates/`; a template is structure, this is the doctrine behind it.
 
 - **`active-missions.md`** — the bounded recovery surface. Work in progress only: *active* + *parked*. Read at boot, scanned often, kept short.
 - **`completed-missions.md`** — the unbounded drain queue. Missions whose objective is complete and that still owe winding down.
-- **`projects/<project>/state.md`** — the per-project durable record: settled decisions and their reasoning, cross-mission dependencies, tech debt, and SC-captured items not yet scoped into missions.
+
+The per-project records — `README.md`, `state.md`, `briefs/` — are the `planner-office` skill, not here.
 
 ## The mission lifecycle
 
@@ -40,12 +41,6 @@ A mission moves through major states, and the boards split on the load-bearing l
 
 The durable anchor per mission is the **handler conversation id**: `--resume <id>` brings that handler back, and it rebuilds its own operators and supervisors. **Recover handlers only.** tmux state (sessions, windows, panes, `@state`) is rebuilt on recovery, not restored, so it is deliberately not stored in the records. The live conv id is the cast's status line (`tmux capture-pane -p`, the `⚡ model · session · id` line), definitive while the cast runs; `claude-threads` is only a birth anchor and `.claude/.sdk-conversation-history` lists every conversation run in the cwd, so neither alone is reliable. A local commit survives a tmux or server restart; a push is the extra margin for machine loss. To survive a machine death the records must be committed and pushed. **Commit *and push* on every change** — the records are the recovery anchor, not mission work, so the "don't over-commit" discipline (which is about the mission itself, not its bookkeeping) does not apply here. Push as well as commit: a local commit survives a server restart, but a mission's conv id that is committed-but-unpushed is still lost with the machine, so pushing is part of the standing action, not a later chore.
 
-## The project state file
-
-`state.md` holds what lives **nowhere else**: durable decisions and their reasoning, and cross-mission couplings that no single thread makes visible. It is **not** a status board. Per-mission status lives in `active-missions.md` and the running casts; PR history is in the host's repo tooling; open work items are on the board. Don't mirror those into `state.md` — copied status goes stale the moment it is written. Read a project's `state.md` before shaping work for it, and hold only what is durable and would otherwise be lost. It is the fleet-side, by-the-Planner-for-the-Planner record, distinct from the operator-repo `./CLAUDE.md` (that is the project's own doc, governed by the `project-memory` skill).
-
-**Dependency-audit currency** is the sharp example of the durable-fact-vs-mirrored-status line. For pnpm / Node monorepo projects, `state.md` carries one line — `pnpm audit last run YYYY-MM-DD against main@<sha> — <result>`. It belongs because it is a *logged event*, not status: the date the audit ran is permanently true and recorded nowhere else, and the signal is the *gap* between that date and now — a stale line is the health check firing, not a record gone wrong. Produce it with [`scripts/audit-repo.mjs`](scripts/audit-repo.mjs), which audits a throwaway worktree off freshly-fetched `origin/main` (never the working checkout — it can be behind or dirty) and needs no `pnpm install`, since pnpm's audit resolves from the lockfile. Scoped to projects that use pnpm; not every project does.
-
 ## When
 
-When reading, maintaining, or reconciling a mission board or a project state file, and whenever a mission changes lifecycle state. The board structure to fill is in the templates; the reasons are here.
+When reading, maintaining, or reconciling a mission board, and whenever a mission changes lifecycle state. The board structure to fill is in the templates; the reasons are here.
