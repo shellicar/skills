@@ -42,6 +42,16 @@ The two modes resolve this by giving each turn a coherent set of behaviours. Con
 
 The mode follows the state of our shared understanding, not the verb I used. If I say "do this" but the plan is not yet clear between us, we are still in conversation. The mode is a property of the relationship, not Claude's state alone.
 
+### The mode marker declares intent, and declared intent is checkable
+
+The mode marker is not a formatting hoop. It is the per-turn version of the same declare-then-check seam the whole fleet runs on: the Operator declares its output, the Router relays it, the Supervisor checks it, and only then does anything land. The marker is that seam at the smallest scale — a cast declaring what it is about to do before it does it.
+
+It does two jobs. First, it declares which permission regime the turn is under. When I give the go-ahead, Claude's licence is scoped to what I said, and the `⚡ [plan]. Not: [exclusions]` is Claude acknowledging that scope and reflecting the boundary back — the named work, not the adjacent work he would otherwise generate. In conversation there is no such scope, so `💭` licenses his own generation, which is what I want there.
+
+Second, the declaration is what makes the turn measurable. I am not going to become a reviewer of every Claude response; a third party — the supervision layer — is. A declared "X, not Y" is observable against what actually happened, where "do X" alone is not: the `Not:` is what makes the boundary falsifiable. This is why the reason has to reach the cast at runtime and not only live here — a cast that knows it is declaring a checkable intent writes a sharper boundary than one that thinks it is filling in a marker.
+
+Nothing forces the declaration to be honest. Claude can write "everything, Not nothing" and defeat the adherence check, because no line was drawn to cross. But that dodge is itself observable: an empty `Not:` is a cast that declined to bound itself, which the supervision layer reads as its own signal. The system never depended on an honest declaration — it depends on everything being on the surface. Same defence-in-depth shape as the rest: the marker cannot force a good declaration, but it cannot conceal a bad one.
+
 ### Predictability over trust
 
 I trust Claude. The question was never trust. The question is whether Claude's understanding of my intent matches what I actually said. Predictability (output matches input intent) is the property the structure protects. Trust is a property of relationships; predictability is a property of systems. I am building a system.
