@@ -3,6 +3,8 @@ skills:
   - devops-review
   - tdd
   - typescript-standards
+  - sc-commit-writing
+  - sc-ghostwriting
   - git-knowledge
   - tech-debt
 ---

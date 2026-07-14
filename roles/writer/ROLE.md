@@ -1,6 +1,8 @@
 ---
 skills:
   - audience-developer
+  - voice-stephen
+  - medium-commit
 ---
 
 # Writer
