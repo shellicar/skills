@@ -83,7 +83,10 @@ export function launchCli(paneId, { from, via, model, missionFile, name, message
   const convId = resume || randomUUID();
   // The caller passes a model family (sonnet | opus | fable); the versioned
   // identifier is resolved here, at the one seam every launch goes through.
-  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(resolveModel(model))}${effortFlag(effort)}${identityFlag}${systemFlag} --claudeMd "$(cat ${shq(skillsPath)})" --prompt "$(cat ${shq(promptPath)})" --resume ${shq(convId)}`;
+  // Disable the ambient user CLAUDE.md / SYSTEM.md sources — the composer injects
+  // INSTRUCTIONS.md and BASELINE.md from the repo. Project and local stay on.
+  const configFlag = ` --config ${shq(JSON.stringify({ claudeMd: { enabled: true, sources: { user: false, project: true, projectClaude: true, local: true } }, systemPrompt: { enabled: true, sources: { user: false, project: true, projectClaude: true, local: true } } }))}`;
+  const launch = `claude-sdk-cli --name ${shq(name)} --model ${shq(resolveModel(model))}${effortFlag(effort)}${identityFlag}${systemFlag}${configFlag} --claudeMd "$(cat ${shq(skillsPath)})" --prompt "$(cat ${shq(promptPath)})" --resume ${shq(convId)}`;
 
   execFileSync('tmux', ['send-keys', '-t', paneId, launch, 'Enter']);
 

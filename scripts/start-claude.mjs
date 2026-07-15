@@ -37,7 +37,7 @@
 import { homedir } from "node:os";
 import { basename } from "node:path";
 import { existsSync } from "node:fs";
-import { buildPrompt, buildSkillsBlock } from "../shared/pane/envelope.mjs";
+import { buildPrompt, buildSkillsBlock, buildSystemInline } from "../shared/pane/envelope.mjs";
 import { skillsFor } from "../shared/pane/skills.mjs";
 import { spawnCli } from "./lib/sc-only.mjs";
 import { doctor } from "./lib/doctor.mjs";
@@ -91,7 +91,16 @@ if (passthrough.includes("--doctor")) {
 }
 
 const args = ["--name", name, "--claudeMd", claudeMd];
+// BASELINE.md leads the system prompt — buildSystemInline with no actor/role returns it
+// alone. The actor, when present, still rides --system-identity.
+args.push("--system", buildSystemInline({}));
 if (identity) args.push("--system-identity", identity);
+// Disable the ambient user CLAUDE.md / SYSTEM.md sources — the launcher injects
+// INSTRUCTIONS.md and BASELINE.md from the repo. Project and local stay on.
+args.push("--config", JSON.stringify({
+  claudeMd: { enabled: true, sources: { user: false, project: true, projectClaude: true, local: true } },
+  systemPrompt: { enabled: true, sources: { user: false, project: true, projectClaude: true, local: true } },
+}));
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.

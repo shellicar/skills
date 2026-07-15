@@ -26,7 +26,7 @@
  * A leading `--` separator is accepted and stripped.
  *
  * It creates no tmux session/window/pane — that is yours. It only tags the pane
- * it already runs in (@role/@title/@colour) so the status bar reads "Planner";
+ * it already runs in (@role/@colour) so the status bar shows the Planner identity;
  * outside tmux it skips the tags and still launches. The session runs
  * interactively in the current pane; this process waits on claude-sdk-cli and
  * exits with its status. Exit 2 if a planner identity file is missing (via
@@ -50,10 +50,9 @@ const system = buildSystemInline({ role: ["scheduler", "launcher", "coach"] });
 const pane = process.env.TMUX_PANE;
 if (pane && !process.argv.includes("--doctor")) {
   execFileSync("tmux", ["set-option", "-p", "-t", pane, "@role", "planner"]);
-  execFileSync("tmux", ["set-option", "-w", "-t", pane, "@title", "Planner"]);
   execFileSync("tmux", ["set-option", "-w", "-t", pane, "@colour", "green"]);
 } else {
-  console.error("not in tmux (TMUX_PANE unset); skipping @role/@title/@colour tags.");
+  console.error("not in tmux (TMUX_PANE unset); skipping @role/@colour tags.");
 }
 
 // Forward everything else verbatim to claude-sdk-cli. A leading `--` is dropped.
@@ -80,6 +79,12 @@ if (passthrough.includes("--doctor")) {
 }
 
 const args = ["--name", "planner", "--system-identity", identity, "--system", system, "--claudeMd", claudeMd];
+// Disable the ambient user CLAUDE.md / SYSTEM.md sources — the composer injects
+// INSTRUCTIONS.md and BASELINE.md from the repo. Project and local stay on.
+args.push("--config", JSON.stringify({
+  claudeMd: { enabled: true, sources: { user: false, project: true, projectClaude: true, local: true } },
+  systemPrompt: { enabled: true, sources: { user: false, project: true, projectClaude: true, local: true } },
+}));
 
 // On a fresh conversation with an explicit --message, send it as the first
 // message. No default: the session opens idle otherwise.
