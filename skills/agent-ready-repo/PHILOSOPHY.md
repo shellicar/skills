@@ -11,6 +11,7 @@ Migrated from the fleet's `references/llm-ification.md` — the standard for mak
 - Named `agent-ready-repo`, not `llm-ification`. "llm-ification" is jargon, and it named the *process* awkwardly. The skill is named for what it produces — the source's own word for the target state, "agent-ready" — plus the subject it acts on, the repo.
 - `verify-commands` folded in rather than kept as its own skill: making commands quiet is one part of this standard, not a separate thing.
 - Kept distinct from `new-project-setup`: this brings an *existing* repo up to standard; that onboards a *new* project. One improves a repo, the other creates one.
+- Added the *Cache correctness* section (2026-07-16) from a real incident, not the source references — the "add repo-specific gotchas as real ones surface" note being exercised. A `type-check` turbo task whose `inputs` listed only `tsconfig.check.json` replayed a stale pass on every `.ts` edit, because a task's `inputs` *replaces* turbo's default all-files hash set. Kept distinct from *Quiet commands*: that section is the noise axis (`outputLogs`), this is the correctness axis (`inputs`) — a false green is a worse failure than a noisy one. The agent-blindness reasoning (a human re-runs with `--force` for free; an agent in a warm-cache worktree can't tell a replay from a real pass) is why it lives in config, not agent habit.
 
 ## What was rejected
 

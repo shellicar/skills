@@ -27,7 +27,7 @@ The line: a README *orients and onboards* (what / why / get-started); a `CLAUDE.
 - **The two highest-value parts live nowhere else:**
   - **Gotchas** — traps that cause confident mistakes: generated files that look modified (don't stage), CI that doesn't run a test package, code paths disabled in prod (don't trace them), a runtime version that's rejected.
   - **Decisions with rationale** — so an agent doesn't undo a deliberate choice ("the schema is the source of truth; don't hand-write input types").
-- **Commands an agent can trust** — quiet on success, predictable output, single root entry points (see below).
+- **Commands an agent can trust** — quiet on success, predictable output, a cached pass that actually ran, single root entry points (see below).
 
 ## Quiet commands
 
@@ -35,6 +35,38 @@ A verify command's output is consumed as tokens. Most build and test tools were 
 
 - If a command produces more than a few lines on success, find its quiet or errors-only mode. The agent needs to know pass/fail, not watch the tool work.
 - **Turbo** — set `outputLogs` per task in `turbo.json`: `type-check` and `test` → `"errors-only"` (you only care about failures); `build` → `"new-only"` (what actually built, not cached replays). A one-time repo config; after it, every verify command through turbo is minimal.
+
+## Cache correctness — a cached pass must have actually run
+
+A cache replays a stored result when a task's inputs haven't changed. If the input set is wrong, it replays a *pass* for code it never checked — a false green. Worse than a noisy command: noise only wastes tokens, but a false green lies about the one thing the command exists to answer.
+
+Why this has to be fixed in the config, not by the agent staying alert: a human who sees `cached` re-runs with `--force`, because it costs nothing. An agent can't lean on that — it works in a worktree with a warm cache, can't cheaply tell a real pass from a replay, and has no reason to distrust a green. The correctness has to live in `turbo.json`, where it's templated and can't be missed, because the agent won't catch it at runtime.
+
+- **Turbo `inputs`** — a task's `inputs`, once set, *replaces* turbo's default (which hashes every file in the package). So a too-narrow list silently drops files from the cache key: edit a dropped file, get a replayed pass. Each task's `inputs` must cover every file it actually reads — its sources and the configs that drive it. The `type-check` that bit us listed only `tsconfig.check.json`, while that tsconfig's own `"include": ["**/*.ts"]` means tsc compiles every `.ts` file — so no `.ts` edit ever invalidated the cache.
+
+  Before — the broken task, verbatim:
+
+  ```json
+  "type-check": {
+    "dependsOn": ["^build"],
+    "inputs": ["tsconfig.check.json"],
+    "outputs": ["**/node_modules/.cache/tsbuildinfo.json"],
+    "outputLogs": "errors-only"
+  }
+  ```
+
+  After — `inputs` covers what tsc actually reads:
+
+  ```json
+  "type-check": {
+    "dependsOn": ["^build"],
+    "inputs": ["**/*.ts", "tsconfig.json", "tsconfig.check.json"],
+    "outputs": ["**/node_modules/.cache/tsbuildinfo.json"],
+    "outputLogs": "errors-only"
+  }
+  ```
+
+  The one-line diff is the whole fix: `inputs` goes from `["tsconfig.check.json"]` to `["**/*.ts", "tsconfig.json", "tsconfig.check.json"]`. `build` already gets this right — `"inputs": ["tsconfig.json", "src/**/*.ts", "build.ts", "tsup.config.ts"]`, covering everything tsup bundles; `test` runs without an `inputs` key, so it keeps turbo's default all-files hash. Each task's input set is per-task, covering whatever files that task compiles or runs.
 
 ## Failure modes
 
