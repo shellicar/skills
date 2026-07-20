@@ -35,6 +35,17 @@ export const FOUNDATIONAL = [
   "system-glossary",
 ];
 
+// V2: the reduced always-inline set. Only what must bind every turn from the
+// first token — address forms, safety, and the working protocol. Everything
+// else in FOUNDATIONAL moves to the index tier: named and described in the
+// injected block, read from disk on demand (buildSkillsIndex in envelope.mjs).
+export const FOUNDATIONAL_CORE = [
+  "commander-protocol",
+  "voice-claude",
+  "audience-sc",
+  "safe-operations",
+];
+
 // Actors that co-work: they share the SC's single repo rather than running in
 // their own worktree. The planner does; handlers get their own worktree and do
 // not. (co-working is the one foundational skill that is not universal.)
