@@ -73,6 +73,40 @@ When moving types during a refactor, update every import to point to the new loc
 
 The one exception: `index.ts` barrel files in published npm packages. These exist specifically to be a stable public API.
 
+## No async IIFEs
+
+To run async work from a synchronous context — an event handler, a constructor, a callback — do not inline it as an immediately-invoked async function expression:
+
+```typescript
+// Don't: an anonymous async IIFE with no error handling.
+// This is async-void — an unhandled rejection has nowhere to land
+// and can take the process down.
+void (async () => {
+  await doSomething();
+  await doAnother();
+})();
+```
+
+Extract a named function that owns its error handling, then call it:
+
+```typescript
+// Do: a named function, safe by construction — it handles its own errors,
+// so no call site can forget to.
+const reloadOnChange = async (): Promise<void> => {
+  try {
+    await doSomething();
+    await doAnother();
+  } catch (err) {
+    logger.error(err);
+  }
+};
+void reloadOnChange();
+```
+
+The name says what the work is, the function is testable, and — the point — it is safe by construction: it owns its failure, so every caller is safe without remembering anything. Putting the `.catch` at the call site instead relies on every caller adding it, and the one who forgets is back to an unhandled rejection. Make the function safe, not the callers. The anonymous IIFE gives you none of this and hides the unhandled rejection.
+
+This is the JavaScript form of C#'s `async void`: fire-and-forget with no way to observe failure. There is no case where the anonymous IIFE is the right tool — the historical uses (module scoping, private scope, top-level await in CommonJS) are all superseded by ES modules, block scoping, and top-level await. Extract the function every time.
+
 ## Temporal naming
 
 When storing temporal values as plain strings or numbers (entity types, DB documents), the suffix communicates what the value represents. Without it, `string` is ambiguous.
