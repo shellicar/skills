@@ -289,20 +289,18 @@ For each affected package, stage `package.json`, `changes.jsonl`, and `CHANGELOG
 
 ## Phase 4: Bump Package.json Version
 
-Use `pnpm version` to bump the version (avoids needing direct edit access to package.json):
+Set the target version (computed in Phase 2) directly with `pnpm pkg set`, which writes the `version` field without touching git:
 
 ```bash
 # From the package directory
 cd packages/<package-name>
-pnpm version patch --no-git-tag-version   # 1.2.1 → 1.2.2
-pnpm version minor --no-git-tag-version   # 1.2.1 → 1.3.0
-pnpm version major --no-git-tag-version   # 1.2.1 → 2.0.0
-
-# For pre-releases, use explicit version
-pnpm version 1.2.1-preview.1 --no-git-tag-version
+pnpm pkg set version=1.2.2            # explicit target
+pnpm pkg set version=1.2.1-preview.1  # pre-release
 ```
 
-Use `--no-git-tag-version` to prevent pnpm from creating a git tag and commit automatically.
+Do **not** use `pnpm version <patch|minor|major|x.y.z>` for this. `pnpm version` keeps a clean-working-tree guard **even with `--no-git-tag-version`**: the first package bumps, but once the tree is dirty every subsequent package aborts with `ERR_PNPM_UNCLEAN_WORKING_TREE`. That silently breaks a lockstep multi-package bump partway through. `pnpm pkg set` has no such guard, so it works whether the tree is clean or dirty, and across every package in one pass.
+
+`pnpm pkg set` takes an explicit version, not a `patch`/`minor`/`major` keyword — use the next version determined in Phase 2.
 
 ## Phase 5: Stage Changes
 
